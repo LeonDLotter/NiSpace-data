@@ -1,0 +1,10 @@
+parcellation,space,n_parcels,resolution,publication,license
+Schaefer100MelbourneS1,MNI152NLin2009cAsym,116,1mm,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
+Schaefer100MelbourneS1,MNI152NLin6Asym,116,1mm,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
+Schaefer200MelbourneS2,MNI152NLin2009cAsym,232,1mm,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
+Schaefer200MelbourneS2,MNI152NLin6Asym,232,1mm,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
+Schaefer400MelbourneS3,MNI152NLin2009cAsym,450,1mm,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
+Schaefer400MelbourneS3,MNI152NLin6Asym,450,1mm,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
+HCPex,MNI152NLin2009cAsym,426,1mm,10.1038/nature18933; 10.1007/s00429-021-02421-6,GPL-3.0
+DesikanKilliany,fsaverage,70,41k,https://doi.org/10.1016/j.neuroimage.2006.01.021,free
+Destrieux,fsaverage,152,41k,10.1016/j.neuroimage.2010.06.010,free

@@ -1,0 +1,52 @@
+atlas,target,tracer,metric,publication,diagnosis,sample_size,n_female,age_mean,age_sd,age_min,age_max,doi,download_source,license,note
+target-5HT1a_tracer-cumi101_n-8_dx-hc_pub-beliveau2017,5HT1a,[11C]CUMI-101,Bmax,beliveau2017,hc,8,5,28.4,8.8,,,10.1523/JNEUROSCI.2830-16.2016,neuromaps,CC BY-NC-SA 4.0,"Processed in fsaverage space, use  volumetric maps only for subcortex!"
+target-5HT1a_tracer-way100635_n-35_dx-hc_pub-savli2012,5HT1a,[11C]WAY-100635,BPnd,savli2012,hc,35,17,26.3,5.2,21,47,10.1016/j.neuroimage.2012.07.001,neuromaps,CC BY-NC-SA 4.0,
+target-5HT1b_tracer-az10419369_n-36_dx-hc_pub-beliveau2017,5HT1b,[11C]AZ10419369,Bmax,beliveau2017,hc,36,12,27.8,6.9,,,10.1523/JNEUROSCI.2830-16.2016,neuromaps,CC BY-NC-SA 4.0,"Processed in fsaverage space, use  volumetric maps only for subcortex!"
+target-5HT1b_tracer-p943_n-23_dx-hc_pub-savli2012,5HT1b,[11C]P943,BPnd,savli2012,hc,23,8,28.7,7,18,44,10.1016/j.neuroimage.2012.07.001,neuromaps,CC BY-NC-SA 4.0,
+target-5HT1b_tracer-p943_n-65_dx-hc_pub-gallezot2010,5HT1b,[11C]P943,BPnd,gallezot2010,hc,65,16,33.7,9.7,,,10.1038/jcbfm.2009.195; 10.1007/s00213-010-1881-0; 10.1001/archgenpsychiatry.2011.91; 10.1016/j.biopsych.2013.11.022; 10.1016/j.jad.2016.02.021; 10.1007/s00259-014-2958-5; 10.1002/syn.22159,neuromaps,CC BY-NC-SA 4.0,
+target-5HT2a_tracer-altanserin_n-19_dx-hc_pub-savli2012,5HT2a,[18F]Altanserin,BPnd,savli2012,hc,19,8,28.2,5.7,21,40,10.1016/j.neuroimage.2012.07.001,neuromaps,CC BY-NC-SA 4.0,
+target-5HT2a_tracer-cimbi36_n-29_dx-hc_pub-beliveau2017,5HT2a,[11C]Cimbi-36,Bmax,beliveau2017,hc,29,14,22.6,2.7,,,10.1523/JNEUROSCI.2830-16.2016,neuromaps,CC BY-NC-SA 4.0,"Processed in fsaverage space, use  volumetric maps only for subcortex!"
+target-5HT4_tracer-sb207145_n-59_dx-hc_pub-beliveau2017,5HT4,[11C]SB207145,Bmax,beliveau2017,hc,59,18,25.9,5.3,,,10.1523/JNEUROSCI.2830-16.2016,neuromaps,CC BY-NC-SA 4.0,"Processed in fsaverage space, use  volumetric maps only for subcortex!"
+target-5HT6_tracer-gsk215083_n-30_dx-hc_pub-radhakrishnan2018,5HT6,[11C]GSK215083,BPnd,radhakrishnan2018,hc,30,0,36.6,9.04,,,10.2967/jnumed.117.206516; 10.1016/j.pscychresns.2019.111007,neuromaps,CC BY-NC-SA 4.0,
+target-5HTT_tracer-dasb_n-100_dx-hc_pub-beliveau2017,5HTT,[11C]DASB,Bmax,beliveau2017,hc,100,71,25.1,5.8,,,10.1523/JNEUROSCI.2830-16.2016,neuromaps,CC BY-NC-SA 4.0,"Processed in fsaverage space, use  volumetric maps only for subcortex!"
+target-5HTT_tracer-dasb_n-18_dx-hc_pub-savli2012,5HTT,[11C]DASB,BPnd,savli2012,hc,18,12,30.5,9.5,19,54,10.1016/j.neuroimage.2012.07.001,neuromaps,CC BY-NC-SA 4.0,
+target-5HTT_tracer-madam_n-10_dx-hc_pub-fazio2016,5HTT,[11C]MADAM,BPnd,fazio2016,hc,10,2,,,51,67,10.1016/j.neuroimage.2016.03.019,neuromaps,CC BY-NC-SA 4.0,
+target-A4B2_tracer-flubatine_n-30_dx-hc_pub-hillmer2016,A4B2,[18F]Flubatine,Vt,hillmer2016,hc,30,10,33.5,10.71,,,10.1016/j.neuroimage.2016.07.026; 10.1093/ntr/ntx091,neuromaps,CC BY-NC-SA 4.0,
+target-CB1_tracer-fmpepd2_n-22_dx-hc_pub-laurikainen2019,CB1,[18F]FMPEP-d2,Vt,laurikainen2019,hc,22,11,27.5,8.05,,,10.1016/j.neuroimage.2018.10.013,neuromaps,CC BY-NC-SA 4.0,
+target-CB1_tracer-omar_n-77_dx-hc_pub-normandin2015,CB1,[11C]OMAR,Vt,normandin2015,hc,77,28,30.01,8.87,,,10.1038/jcbfm.2015.46; 10.1016/j.bpsc.2015.09.008; 10.1016/j.biopsych.2015.08.021; 10.1111/j.1530-0277.2012.01815.x,neuromaps,CC BY-NC-SA 4.0,
+target-CMRglu_tracer-fdg_n-20_dx-hc_pub-castrillon2023,CMRglu,[18F]FDG,CMRglu,castrillon2023,hc,20,10,34.45,9.96,22,52,10.1126/sciadv.adi7632,neuromaps,CC BY-NC-SA 4.0,
+target-CMRglu_tracer-fdg_n-28_dx-hc_pub-shokrikojori2019,CMRglu,[18F]FDG,CMRglu,shokrikojori2019,hc,28,11,36,12,,,10.1038/s41467-019-08546-x,private NiSpace OSF; GitHub,no reupload,
+target-COX1_tracer-ps13_n-11_dx-hc_pub-kim2020,COX1,[11C]PS13,Vt,kim2020,hc,11,4,30.82,6.69,23,42,10.1007/s00259-020-04855-2; 10.18112/openneuro.ds004401.v1.0.1,openneuro,CC0 1.0,
+target-D1_tracer-sch23390_n-13_dx-hc_pub-kaller2017,D1,[11C]SCH23390,BPnd,kaller2017,hc,13,6,33,13,,,10.1007/s00259-017-3645-0,neuromaps,CC BY-NC-SA 4.0,
+target-D23_tracer-fallypride_n-49_dx-hc_pub-jaworska2020,D23,[18F]Fallypride,BPnd,jaworska2020,hc,49,,18.41,0.57,,,10.1038/s41386-020-0662-7,neuromaps,CC BY-NC-SA 4.0,
+target-D23_tracer-flb457_n-37_dx-hc_pub-smith2017,D23,[11C]FLB-457,BPnd,smith2017,hc,37,20,48.36,16.93,,,10.1177/0271678X17737693,neuromaps,CC BY-NC-SA 4.0,
+target-D23_tracer-flb457_n-55_dx-hc_pub-sandiego2015,D23,[11C]FLB-457,BPnd,sandiego2015,hc,55,29,32.45,9.69,,,10.1038/jcbfm.2014.237; 10.1177/0271678X17737693; 10.1038/s41386-019-0456-y; 10.1001/jamapsychiatry.2014.2414; 10.1038/npp.2017.223  ,neuromaps,CC BY-NC-SA 4.0,
+target-D2_tracer-raclopride_n-156_dx-hc_pub-malen2022,D23,[11C]Raclopride,BPnd,malen2022,hc,156,36,27.76,9.44,19,71,10.1016/j.neuroimage.2022.119149,neuromaps,CC0 1.0,
+target-D2_tracer-raclopride_n-7_dx-hc_pub-alarkurtti2015,D23,[11C]Raclopride,BPnd,alarkurtti2015,hc,7,0,24,2,,,10.1038/jcbfm.2015.53 ,neuromaps,CC BY-NC-SA 4.0,
+target-DAT_tracer-fepe2i_n-6_dx-hc_pub-sasaki2012,DAT,[18F]FE-PE2I,BPnd,sasaki2012,hc,6,,31.06,7.7,,,10.2967/jnumed.111.101626,neuromaps,CC BY-NC-SA 4.0,
+target-DAT_tracer-fpcit_n-174_dx-hc_pub-dukart2018,DAT,[123I]-FP-CIT,SUVR,dukart2018,hc,174,65,61,11,,,10.1038/s41598-018-22444-0,neuromaps,CC BY-NC-SA 4.0,"SPECT, not PET!"
+target-DAT_tracer-fpcit_n-30_dx-hc_pub-garciagomez2013,DAT,[123I]-FP-CIT,SUVR,garciagomez2013,hc,30,,,,,,10.1016/j.remn.2013.02.009,author repository,free,"SPECT, not PET!"
+target-FDOPA_tracer-fluorodopa_n-12_dx-hc_pub-garciagomez2018,FDOPA,[18F]DOPA,,garciagomez2018,hc,12,,,,,,10.33588/imagendiagnostica.901.2,author repository,free,
+target-GABAa_tracer-flumazenil_n-16_dx-hc_pub-norgaard2021,GABAa,[11C]Flumazenil,Bmax,norgaard2021,hc,16,9,26.6,8,19,46,10.1016/j.neuroimage.2021.117878,neuromaps,CC BY-NC-SA 4.0,"Processed in fsaverage space, use  volumetric maps only for subcortex!"
+target-GABAa_tracer-flumazenil_n-6_dx-hc_pub-dukart2018,GABAa,[11C]Flumazenil,BPnd,dukart2018,hc,6,,43,4,,,10.1038/s41598-018-22444-0,neuromaps,CC BY-NC-SA 4.0,
+target-GABAa_tracer-flumazenil_n-10_dx-hc_pub-kaulen2022,GABAa,[11C]Flumazenil,BPnd,kaulen2022,hc,10,0,26.6,7,,,10.1002/hbm.25778; 10.1016/j.neuroimage.2020.117160,private NiSpace OSF; Juelich-data,on application,
+target-GABAa5_tracer-ro154513_n-10_dx-hc_pub-lukow2022,GABAa5,[11C]Ro15-4513,BPnd,lukow2022,hc,10,4,25.4,3.2,22,30,10.1038/s42003-022-03268-1,neuromaps,CC BY 4.0,
+target-H3_tracer-gsk189254_n-8_dx-hc_pub-gallezot2017,H3,[11C]GSK189254,Vt,gallezot2017,hc,8,1,31.69,8.95,,,10.1177/0271678X16650697; 10.1038/jcbfm.2009.195 ,neuromaps,CC BY-NC-SA 4.0,
+target-HDAC_tracer-martinostat_n-8_dx-hc_pub-wey2016,HDAC,[11C]Martinostat,SUVR,wey2016,hc,8,4,28.6,7.6,18,44,10.1126/scitranslmed.aaf7551,neuromaps,CC0 1.0,
+target-KOR_tracer-ly2795050_n-28_dx-hc_pub-vijay2018,KOR,[11C]LY2795050,Vt,vijay2018,hc,28,9,33.5,11.3,,,10.1038/s41386-018-0199-1,neuromaps,CC BY-NC-SA 4.0,
+target-M1_tracer-lsn3172176_n-24_dx-hc_pub-naganawa2020,M1,[11C]LSN3172176,BPnd,naganawa2020,hc,24,11,40.45,11.71,,,10.2967/jnumed.120.246967,neuromaps,CC BY-NC-SA 4.0,
+target-mGluR5_tracer-abp688_n-22_dx-hc_pub-rosaneto,mGluR5,[11C]ABP688,BPnd,rosaneto,hc,22,10,67.9,9.6,,,10.1101/2021.10.28.466336,neuromaps,CC BY-NC-SA 4.0,
+target-mGluR5_tracer-abp688_n-28_dx-hc_pub-dubois2015,mGluR5,[11C]ABP688,BPnd,dubois2015,hc,28,13,33.1,11.2,,,10.1007/s00259-015-3167-6,neuromaps,CC BY-NC-SA 4.0,
+target-mGluR5_tracer-abp688_n-73_dx-hc_pub-smart2019,mGluR5,[11C]ABP688,BPnd,smart2019,hc,73,48,19.9,3.04,,,10.1007/s00259-018-4252-4,neuromaps,CC BY-NC-SA 4.0,
+target-mGluR5_tracer-abp688_n-13_dx-hc_pub-kaulen2022,mGluR5,[11C]ABP688,BPnd,kaulen2022,hc,13,0,25.8,3,,,10.1002/hbm.25778; 10.1002/hbm.24976,private NiSpace OSF; Juelich-data,on application,
+target-MOR_tracer-carfentanil_n-204_dx-hc_pub-kantonen2020,MOR,[11C]Carfentanil,BPnd,kantonen2020,hc,204,72,32.3,10.8,20,59,10.1038/mp.2017.183,neuromaps,CC BY-NC-SA 4.0,
+target-MOR_tracer-carfentanil_n-39_dx-hc_pub-turtonen2021,MOR,[11C]Carfentanil,BPnd,turtonen2021,hc,39,19,39.38,5.05,,,10.1016/j.bpsc.2020.10.013,neuromaps,CC BY-NC-SA 4.0,
+target-NET_tracer-mrb_n-10_dx-hc_pub-hesse2017,NET,[11C]MRB,BPnd,hesse2017,hc,10,4,33.3,10,21,40,10.1007/s00259-016-3590-3,neuromaps,CC BY-NC-SA 4.0,
+target-NET_tracer-mrb_n-77_dx-hc_pub-ding2010,NET,[11C]MRB,BPnd,ding2010,hc,77,27,33.4,9.17,,,10.1002/syn.20696; 10.1016/j.neuroimage.2013.10.004; 10.1038/s41366-019-0471-4; 10.1210/jc.2017-02717 ,neuromaps,CC BY-NC-SA 4.0,
+target-NMDA_tracer-ge179_n-29_dx-hc_pub-galovic2021,NMDA,[18F]GE-179,Vt,galovic2021,hc,29,8,40.9,12.7,,,10.1001/jamaneurol.2022.4352; 10.1016/j.neuroimage.2021.118194; 10.2967/jnumed.113.130641,neuromaps,CC BY-NC-SA 4.0,"Unlike other tracers, [18F]GE-179 binds to open (active) NMDA receptors!"
+target-SV2A_tracer-ucbj_n-76_dx-hc_pub-finnema2016,SV2A,[11C]UCB-J,BPnd,finnema2016,hc,76,,48.9,18.4,,,10.1177/0271678X17724947; 10.2967/jnumed.120.246967; 10.1177/0271678X211004312; 10.1186/s13195-020-00742-y; 10.1177/0271678X20946198; 10.1093/cid/ciab484; 10.1038/s41380-021-01184-0; 10.1016/j.bpsc.2015.09.008; 10.1111/epi.16653; 10.1186/s13550-020-00670-w; 10.1002/alz.12097; 10.1111/epi.14701; 10.1038/s41467-019-09562-7; 10.1001/jamaneurol.2018.1836  ,neuromaps,CC BY-NC-SA 4.0,
+target-TSPO_tracer-pbr28_n-6_dx-hc_pub-lois2018,TSPO,[ 11C]PBR28,SUVR,lois2018,hc,6,4,57.8,8.1,,,10.1021/acschemneuro.8b00072; 10.5281/zenodo.1174364,neuromaps,MIT,
+target-VAChT_tracer-feobv_n-18_dx-hc_pub-aghourian2017,VAChT,[18F]FEOBV,SUVR,aghourian2017,hc,18,13,66.8,6.8,,,10.1038/mp.2017.183,neuromaps,CC BY-NC-SA 4.0,
+target-VAChT_tracer-feobv_n-4_dx-hc_pub-tuominen,VAChT,[18F]FEOBV,SUVR,tuominen,hc,4,1,37,10.2,,,10.1101/2021.10.28.466336,neuromaps,CC BY-NC-SA 4.0,
+target-VAChT_tracer-feobv_n-5_dx-hc_pub-bedard2019,VAChT,[18F]FEOBV,SUVR,bedard2019,hc,5,1,68.3,3.1,,,10.1016/j.sleep.2018.12.020,neuromaps,CC BY-NC-SA 4.0,
+target-VMAT2_tracer-dtbz_n-76_dx-hc_pub-larsen2020,VMAT2,[11C]DTBZ,BPnd,larsen2020,hc,76,37,23.4,3.63,18.11,30.97,10.18112/openneuro.ds002385.v1.1.0; 10.1038/s41467-020-14693-3,openneuro,CC0 1.0,
