@@ -69,36 +69,71 @@ for schaefer, tian in [(100, "S1"), (200, "S2"), (400, "S3")]:
     print("new labels: ", labs[:5], "...")
     
     # Load parcellation and reorder labels and save all data
-    for space in ["MNI152NLin2009cAsym", "MNI152NLin6Asym"]:
+    for space in ["MNI152NLin2009cAsym", "MNI152NLin6Asym", "fsLR"]:
         save_dir = nispace_source_data_path / "parcellation" / name / space
         if not save_dir.exists():
             save_dir.mkdir(parents=True, exist_ok=True)
-        
-        # PARCELLATION
-        save_path = save_dir / f"parc-{name}_space-{space}.label.nii.gz"
-        print(f"Loading parcellation {name}, {space}...")
-        parc = images.load_nifti(
-            download_file(
-                host="github",
-                remote=("yetianmed/subcortex", 
-                        "master", 
-                        f"Group-Parcellation/3T/Cortex-Subcortex/MNIvolumetric/"
-                        f"Schaefer2018_{schaefer}Parcels_7Networks_order_Tian_Subcortex_{tian}_{'3T_' if space == 'MNI152NLin2009cAsym' else ''}{space}_1mm.nii.gz"),
+                
+        # MNI spaces
+        if "MNI152" in space:
+            
+            # PARCELLATION
+            save_path = save_dir / f"parc-{name}_space-{space}.label.nii.gz"
+            print(f"Loading parcellation {name}, {space}...")
+            # download image
+            parc = images.load_nifti(
+                download_file(
+                    host="github",
+                    remote=("yetianmed/subcortex", 
+                            "master", 
+                            f"Group-Parcellation/3T/Cortex-Subcortex/MNIvolumetric/"
+                            f"Schaefer2018_{schaefer}Parcels_7Networks_order_Tian_Subcortex_{tian}_{'3T_' if space == 'MNI152NLin2009cAsym' else ''}{space}_1mm.nii.gz"),
+                )
             )
-        )
-        # reorder labels
-        parc = relabel_nifti_parc(parc, new_order=[labs_old.index(l_new) + 1 for l_new in labs])
-        # save
-        print(f"Saving relabeled parcellation {name}, {space}...")
-        parc.to_filename(save_path)
+            # reorder labels
+            parc = relabel_nifti_parc(parc, new_order=[labs_old.index(l_new) + 1 for l_new in labs])
+            # save
+            print(f"Saving relabeled parcellation {name}, {space}...")
+            parc.to_filename(save_path)
         
-        # LABELS
-        save_path = save_dir / f"parc-{name}_space-{space}.label.txt"
-        # add index to labels and save
-        with open(save_path, "w") as f:
-            f.write("\n".join([f"{i}_{l}" for i, l in enumerate(labs, start=1)]))
-        
-        # write info and labels, we have the same labels (obiously) for both resolutions
+            # LABELS
+            save_path = save_dir / f"parc-{name}_space-{space}.label.txt"
+            # add index to labels and save
+            with open(save_path, "w") as f:
+                f.write("\n".join([f"{i}_{l}" for i, l in enumerate(labs, start=1)]))
+            
+        # fslr space
+        if space == "fsLR":
+            
+            # PARCELLATION
+            save_path = (save_dir / f"parc-{name}_space-{space}_hemi-L.label.gii.gz",
+                         save_dir / f"parc-{name}_space-{space}_hemi-R.label.gii.gz")
+            print(f"Loading parcellation {name}, {space}...")
+            # download, convert to gifti and relabel
+            parc = images.relabel_gifti(
+                images.dlabel_to_gifti(
+                    download_file(
+                    host="github",
+                    remote=("yetianmed/subcortex", 
+                            "master", 
+                            f"Group-Parcellation/3T/Cortex-Subcortex/"
+                            f"Schaefer2018_{schaefer}Parcels_7Networks_order_Tian_Subcortex_{tian}.dlabel.nii"),
+                    )
+                )                
+            )
+            # save
+            parc[0].to_filename(save_path[0])
+            parc[1].to_filename(save_path[1])
+            
+            # LABELS
+            save_path = (save_dir / f"parc-{name}_space-{space}_hemi-L.label.txt",
+                         save_dir / f"parc-{name}_space-{space}_hemi-R.label.txt")
+            with open(save_path[0], "w") as f:
+                f.write("\n".join([f"{i}_{l}" for i, l in enumerate([l for l in labs if "LH_CX_" in l], start=1)]))
+            with open(save_path[1], "w") as f:
+                f.write("\n".join([f"{i}_{l}" for i, l in enumerate([l for l in labs if "RH_CX_" in l], start=schaefer // 2 + 1)]))
+
+        # write info and labels, we have the same labels (obviously) for both resolutions
         parc_info[name, space] = {
             "n_parcels": len(labs), 
             "resolution": "1mm", 
