@@ -8,14 +8,14 @@ from neuromaps import images
 
 wd = Path.cwd().parent
 print(f"Working dir: {wd}")
-sys.path.append(wd.as_posix())
+sys.path.append(str(Path.home() / "projects" / "nispace"))
 
 # import NiSpace functions
 from nispace.utils.utils import relabel_nifti_parc
 from nispace.utils.utils_datasets import download, download_file
 
 # nispace data path 
-nispace_source_data_path = wd / "datasets" / "nispace-data_source"
+nispace_source_data_path = wd
 
 
 # %% Get parcellations

@@ -7,14 +7,14 @@ import pandas as pd
 
 wd = Path.cwd().parent
 print(f"Working dir: {wd}")
-sys.path.append(wd.as_posix())
+sys.path.append(str(Path.home() / "projects" / "nispace"))
 
 # import NiSpace functions
 from nispace.datasets import fetch_parcellation, parcellation_lib
 from nispace.nulls import get_distance_matrix
 
 # nispace data path 
-nispace_source_data_path = wd / "datasets" / "nispace-data_source"
+nispace_source_data_path = wd
 
 
 # %% Generate distance matrices

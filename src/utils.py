@@ -5,8 +5,11 @@ import numpy as np
 import pandas as pd
 
 import sys
+
+# add nispace to path
 wd = Path.cwd().parent
-sys.path.append(str(wd))
+print(f"Working dir: {wd}")
+sys.path.append(str(Path.home() / "projects" / "nispace"))
 
 from nispace.modules.constants import _PARCS_NICE
 from nispace.io import parcellate_data
@@ -16,7 +19,9 @@ from nispace.utils.utils import _rm_ext
     
 
 def parcellate_reference_dataset(reference_name, reference_files, reference_path=None,
-                                 data_labels=None,
+                                 data_labels=None, 
+                                 data_space="MNI152NLin2009cAsym", 
+                                 parc_space="MNI152NLin2009cAsym",
                                  parcs=_PARCS_NICE, nulls=False,
                                  **kwargs):
     
@@ -24,40 +29,16 @@ def parcellate_reference_dataset(reference_name, reference_files, reference_path
 
     for parc in parcs:
         print(parc)
-        
-        # space
-        if parc in ["DesikanKilliany", "Destrieux"]:
-            parc_space = "fsaverage"
-        else:
-            parc_space = "mni152"
-        
-        # cortex only
-        if reference_name in ["rsn"]:
-            cortex_only = True
-        else:
-            cortex_only = False
-        
+
         # get parcellation
-        if nulls:
-            parc_loaded, parc_labels, parc_space, parc_distmat = \
-                fetch_parcellation(
-                    parc, 
-                    space=parc_space, 
-                    cortex_only=cortex_only,
-                    return_dist_mat=True, 
-                    return_space=True, 
-                    return_loaded=True
-                )
-        else:
-            parc_loaded, parc_labels, parc_space = \
-                fetch_parcellation(
-                    parc, 
-                    space=parc_space, 
-                    cortex_only=cortex_only,
-                    return_dist_mat=False, 
-                    return_space=True, 
-                    return_loaded=True
-                )
+        parc_loaded, parc_labels, parc_space, parc_distmat = \
+            fetch_parcellation(
+                parc, 
+                space=parc_space, 
+                return_dist_mat=True, 
+                return_space=True, 
+                return_loaded=True
+            )
 
         # parcellate  
         tab = parcellate_data(

@@ -1,25 +1,31 @@
 # %% imports ---------------------------------------------------------------------------------------
 
-import pathlib
+from pathlib import Path
+import sys
 import zipfile
 import numpy as np
 import pandas as pd
-import requests
-import io
+
+# Nispace
+wd = Path.cwd().parent
+print(f"Working dir: {wd}")
+sys.path.append(str(Path.home() / "projects" / "nispace"))
+
+# import NiSpace functions
 from nispace.datasets import fetch_reference
 from nispace.io import write_json
 from nispace.utils.utils import _rm_ext
 from nispace.utils.utils_datasets import download
 
-# nispace data path
-nispace_source_data_path = pathlib.Path.cwd() / "nispace-data"
+# nispace data path 
+nispace_source_data_path = wd
 
 
 # %% PET collections -------------------------------------------------------------------------------
 # --------------------------------------------------------------------------------------------------
 
 pet_files = fetch_reference("pet")
-pet_files = [_rm_ext(f.name) for f in pet_files]
+pet_files = [f.name.split("_space")[0] for f in pet_files]
 
 # All
 pd.Series(pet_files, name="map") \
@@ -36,50 +42,51 @@ pd.DataFrame({
 # UniqueTracers
 collection = {
     "General": [
-        "target-CMRglu_tracer-fdg_n-20_dx-hc_pub-castrillon2023_space-mni152",
+        "target-CMRglu_tracer-fdg_n-20_dx-hc_pub-castrillon2023",
         # "CBF"
-        "target-SV2A_tracer-ucbj_n-10_dx-hc_pub-finnema2016_space-mni152",
-        "target-HDAC_tracer-martinostat_n-8_dx-hc_pub-wey2016_space-mni152"
+        "target-SV2A_tracer-ucbj_n-10_dx-hc_pub-finnema2016",
+        "target-HDAC_tracer-martinostat_n-8_dx-hc_pub-wey2016",
+        "target-VMAT2_tracer-dtbz_n-76_dx-hc_pub-larsen2020"
     ],
     "Immunity": [
-        'target-TSPO_tracer-pbr28_n-6_dx-hc_pub-lois2018_space-mni152', 
-        'target-COX1_tracer-ps13_n-11_dx-hc_pub-kim2020_space-mni152'
+        'target-TSPO_tracer-pbr28_n-6_dx-hc_pub-lois2018', 
+        'target-COX1_tracer-ps13_n-11_dx-hc_pub-kim2020'
     ],
     "Glutamate": [
-        "target-mGluR5_tracer-abp688_n-73_dx-hc_pub-smart2019_space-mni152",
-        "target-NMDA_tracer-ge179_n-29_dx-hc_pub-galovic2021_space-mni152"
+        "target-mGluR5_tracer-abp688_n-73_dx-hc_pub-smart2019",
+        "target-NMDA_tracer-ge179_n-29_dx-hc_pub-galovic2021"
     ],
     "GABA": [
-        "target-GABAa5_tracer-ro154513_n-10_dx-hc_pub-lukow2022_space-mni152",
-        "target-GABAa_tracer-flumazenil_n-6_dx-hc_pub-dukart2018_space-mni152",
+        "target-GABAa5_tracer-ro154513_n-10_dx-hc_pub-lukow2022",
+        "target-GABAa_tracer-flumazenil_n-6_dx-hc_pub-dukart2018"
     ],
     "Dopamine": [
         "target-FDOPA_tracer-fluorodopa_n-12_dx-hc_pub-garciagomez2018_space-mni152",
-        "target-D1_tracer-sch23390_n-13_dx-hc_pub-kaller2017_space-mni152",
-        "target-D2_tracer-flb457_n-55_dx-hc_pub-sandiego2015_space-mni152",
-        "target-DAT_tracer-fpcit_n-174_dx-hc_pub-dukart2018_space-mni152",
+        "target-D1_tracer-sch23390_n-13_dx-hc_pub-kaller2017",
+        "target-D23_tracer-flb457_n-55_dx-hc_pub-sandiego2015",
+        "target-DAT_tracer-fpcit_n-174_dx-hc_pub-dukart2018",
     ],
     "Serotonin": [
-        "target-5HT1a_tracer-way100635_n-35_dx-hc_pub-savli2012_space-mni152",
-        "target-5HT1b_tracer-p943_n-23_dx-hc_pub-savli2012_space-mni152",
-        "target-5HT2a_tracer-altanserin_n-19_dx-hc_pub-savli2012_space-mni152",
-        "target-5HT4_tracer-sb207145_n-59_dx-hc_pub-beliveau2017_space-mni152",
-        "target-5HT6_tracer-gsk215083_n-30_dx-hc_pub-radhakrishnan2018_space-mni152",
-        "target-5HTT_tracer-dasb_n-18_dx-hc_pub-savli2012_space-mni152",
+        "target-5HT1a_tracer-way100635_n-35_dx-hc_pub-savli2012",
+        "target-5HT1b_tracer-p943_n-23_dx-hc_pub-savli2012",
+        "target-5HT2a_tracer-altanserin_n-19_dx-hc_pub-savli2012",
+        "target-5HT4_tracer-sb207145_n-59_dx-hc_pub-beliveau2017",
+        "target-5HT6_tracer-gsk215083_n-30_dx-hc_pub-radhakrishnan2018",
+        "target-5HTT_tracer-dasb_n-18_dx-hc_pub-savli2012",
     ],
     "Noradrenaline/Acetylcholine": [
-        "target-NET_tracer-mrb_n-77_dx-hc_pub-ding2010_space-mni152",
-        "target-A4B2_tracer-flubatine_n-30_dx-hc_pub-hillmer2016_space-mni152",
-        "target-M1_tracer-lsn3172176_n-24_dx-hc_pub-naganawa2020_space-mni152",
-        "target-VAChT_tracer-feobv_n-18_dx-hc_pub-aghourian2017_space-mni152",
+        "target-NET_tracer-mrb_n-10_dx-hc_pub-hesse2017",
+        "target-A4B2_tracer-flubatine_n-30_dx-hc_pub-hillmer2016",
+        "target-M1_tracer-lsn3172176_n-24_dx-hc_pub-naganawa2020",
+        "target-VAChT_tracer-feobv_n-18_dx-hc_pub-aghourian2017",
     ],
     "Opiods/Endocannabinoids": [
-        "target-MOR_tracer-carfentanil_n-204_dx-hc_pub-kantonen2020_space-mni152",
-        "target-KOR_tracer-ly2795050_n-28_dx-hc_pub-vijay2018_space-mni152",
-        "target-CB1_tracer-omar_n-77_dx-hc_pub-normandin2015_space-mni152",
+        "target-MOR_tracer-carfentanil_n-204_dx-hc_pub-kantonen2020",
+        "target-KOR_tracer-ly2795050_n-28_dx-hc_pub-vijay2018",
+        "target-CB1_tracer-omar_n-77_dx-hc_pub-normandin2015",
     ],
     "Histamine": [
-        "target-H3_tracer-gsk189254_n-8_dx-hc_pub-gallezot2017_space-mni152",
+        "target-H3_tracer-gsk189254_n-8_dx-hc_pub-gallezot2017",
     ]
 }
 write_json(
@@ -89,43 +96,44 @@ write_json(
 
 # UniqueTracerSets
 collection = [
-    'target-5HT1a_tracer-way100635_n-35_dx-hc_pub-savli2012_space-mni152',
-    'target-5HT1b_tracer-p943_n-23_dx-hc_pub-savli2012_space-mni152',
-    'target-5HT1b_tracer-p943_n-65_dx-hc_pub-gallezot2010_space-mni152',
-    'target-5HT2a_tracer-altanserin_n-19_dx-hc_pub-savli2012_space-mni152',
-    'target-5HT4_tracer-sb207145_n-59_dx-hc_pub-beliveau2017_space-mni152',
-    'target-5HT6_tracer-gsk215083_n-30_dx-hc_pub-radhakrishnan2018_space-mni152',
-    'target-5HTT_tracer-dasb_n-100_dx-hc_pub-beliveau2017_space-mni152',
-    'target-5HTT_tracer-dasb_n-18_dx-hc_pub-savli2012_space-mni152',
-    'target-A4B2_tracer-flubatine_n-30_dx-hc_pub-hillmer2016_space-mni152',
-    'target-CB1_tracer-omar_n-77_dx-hc_pub-normandin2015_space-mni152',
-    'target-CMRglu_tracer-fdg_n-20_dx-hc_pub-castrillon2023_space-mni152',
-    'target-COX1_tracer-ps13_n-11_dx-hc_pub-kim2020_space-mni152',
-    'target-D1_tracer-sch23390_n-13_dx-hc_pub-kaller2017_space-mni152',
-    'target-D2_tracer-flb457_n-37_dx-hc_pub-smith2017_space-mni152',
-    'target-D2_tracer-flb457_n-55_dx-hc_pub-sandiego2015_space-mni152',
-    'target-DAT_tracer-fpcit_n-174_dx-hc_pub-dukart2018_space-mni152',
-    'target-DAT_tracer-fpcit_n-30_dx-hc_pub-garciagomez2013_space-mni152',
-    'target-FDOPA_tracer-fluorodopa_n-12_dx-hc_pub-garciagomez2018_space-mni152',
-    'target-GABAa_tracer-flumazenil_n-16_dx-hc_pub-norgaard2021_space-mni152',
-    'target-GABAa_tracer-flumazenil_n-6_dx-hc_pub-dukart2018_space-mni152',
-    'target-GABAa5_tracer-ro154513_n-10_dx-hc_pub-lukow2022_space-mni152',
-    'target-H3_tracer-gsk189254_n-8_dx-hc_pub-gallezot2017_space-mni152',
-    'target-HDAC_tracer-martinostat_n-8_dx-hc_pub-wey2016_space-mni152',
-    'target-KOR_tracer-ly2795050_n-28_dx-hc_pub-vijay2018_space-mni152',
-    'target-M1_tracer-lsn3172176_n-24_dx-hc_pub-naganawa2020_space-mni152',
-    'target-mGluR5_tracer-abp688_n-22_dx-hc_pub-rosaneto_space-mni152',
-    'target-mGluR5_tracer-abp688_n-28_dx-hc_pub-dubois2015_space-mni152',
-    'target-mGluR5_tracer-abp688_n-73_dx-hc_pub-smart2019_space-mni152',
-    'target-MOR_tracer-carfentanil_n-204_dx-hc_pub-kantonen2020_space-mni152',
-    'target-MOR_tracer-carfentanil_n-39_dx-hc_pub-turtonen2021_space-mni152',
-    'target-NET_tracer-mrb_n-10_dx-hc_pub-hesse2017_space-mni152',
-    'target-NET_tracer-mrb_n-77_dx-hc_pub-ding2010_space-mni152',
-    'target-SV2A_tracer-ucbj_n-10_dx-hc_pub-finnema2016_space-mni152',
-    'target-TSPO_tracer-pbr28_n-6_dx-hc_pub-lois2018_space-mni152',
-    'target-VAChT_tracer-feobv_n-18_dx-hc_pub-aghourian2017_space-mni152',
-    'target-VAChT_tracer-feobv_n-4_dx-hc_pub-tuominen_space-mni152',
-    'target-VAChT_tracer-feobv_n-5_dx-hc_pub-bedard2019_space-mni152',
+    'target-5HT1a_tracer-way100635_n-35_dx-hc_pub-savli2012',
+    'target-5HT1b_tracer-p943_n-23_dx-hc_pub-savli2012',
+    'target-5HT1b_tracer-p943_n-65_dx-hc_pub-gallezot2010',
+    'target-5HT2a_tracer-altanserin_n-19_dx-hc_pub-savli2012',
+    # 'target-5HT4_tracer-sb207145_n-59_dx-hc_pub-beliveau2017',
+    'target-5HT6_tracer-gsk215083_n-30_dx-hc_pub-radhakrishnan2018',
+    'target-5HTT_tracer-dasb_n-100_dx-hc_pub-beliveau2017',
+    'target-5HTT_tracer-dasb_n-18_dx-hc_pub-savli2012',
+    'target-A4B2_tracer-flubatine_n-30_dx-hc_pub-hillmer2016',
+    'target-CB1_tracer-omar_n-77_dx-hc_pub-normandin2015',
+    'target-CMRglu_tracer-fdg_n-20_dx-hc_pub-castrillon2023',
+    'target-COX1_tracer-ps13_n-11_dx-hc_pub-kim2020',
+    'target-D1_tracer-sch23390_n-13_dx-hc_pub-kaller2017',
+    'target-D23_tracer-flb457_n-37_dx-hc_pub-smith2017',
+    'target-D23_tracer-flb457_n-55_dx-hc_pub-sandiego2015',
+    'target-DAT_tracer-fpcit_n-174_dx-hc_pub-dukart2018',
+    'target-DAT_tracer-fpcit_n-30_dx-hc_pub-garciagomez2013',
+    'target-FDOPA_tracer-fluorodopa_n-12_dx-hc_pub-garciagomez2018',
+    'target-GABAa_tracer-flumazenil_n-16_dx-hc_pub-norgaard2021',
+    'target-GABAa_tracer-flumazenil_n-6_dx-hc_pub-dukart2018',
+    'target-GABAa5_tracer-ro154513_n-10_dx-hc_pub-lukow2022',
+    'target-H3_tracer-gsk189254_n-8_dx-hc_pub-gallezot2017',
+    'target-HDAC_tracer-martinostat_n-8_dx-hc_pub-wey2016',
+    'target-KOR_tracer-ly2795050_n-28_dx-hc_pub-vijay2018',
+    'target-M1_tracer-lsn3172176_n-24_dx-hc_pub-naganawa2020',
+    'target-mGluR5_tracer-abp688_n-22_dx-hc_pub-rosaneto',
+    'target-mGluR5_tracer-abp688_n-28_dx-hc_pub-dubois2015',
+    'target-mGluR5_tracer-abp688_n-73_dx-hc_pub-smart2019',
+    'target-MOR_tracer-carfentanil_n-204_dx-hc_pub-kantonen2020',
+    'target-MOR_tracer-carfentanil_n-39_dx-hc_pub-turtonen2021',
+    'target-NET_tracer-mrb_n-10_dx-hc_pub-hesse2017',
+    'target-NET_tracer-mrb_n-77_dx-hc_pub-ding2010',
+    'target-SV2A_tracer-ucbj_n-10_dx-hc_pub-finnema2016',
+    'target-TSPO_tracer-pbr28_n-6_dx-hc_pub-lois2018',
+    'target-VAChT_tracer-feobv_n-18_dx-hc_pub-aghourian2017',
+    'target-VAChT_tracer-feobv_n-4_dx-hc_pub-tuominen',
+    'target-VAChT_tracer-feobv_n-5_dx-hc_pub-bedard2019',
+    "target-VMAT2_tracer-dtbz_n-76_dx-hc_pub-larsen2020"
 ]
 pd.DataFrame({
     "set": [f.split("_")[0].split("-")[1] for f in collection],
@@ -254,8 +262,8 @@ write_json(collection, nispace_source_data_path / "reference" / "mrna" / f"colle
 # %% RSN collections -------------------------------------------------------------------------------
 # --------------------------------------------------------------------------------------------------
 
-rsn_files = fetch_reference("rsn")
-rsn_files = [_rm_ext(f.name) for f in rsn_files]
+rsn_files = fetch_reference("rsn", space="MNI152")
+rsn_files = [f.name.split("_space")[0] for f in rsn_files]
 
 # All
 pd.Series(rsn_files, name="map") \

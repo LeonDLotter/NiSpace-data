@@ -6,38 +6,56 @@ import pandas as pd
 from pathlib import Path
 import sys
 
-# add nispace to path
-wd = Path.cwd().parent
-sys.path.append(str(wd))
-
 from utils import parcellate_reference_dataset 
 
-# imports
-from nispace.datasets import fetch_reference
-from nispace.modules.constants import _PARCS_NICE, _DSETS, _DSETS_TAB_ONLY
+# add nispace to path
+wd = Path.cwd().parent
+print(f"Working dir: {wd}")
+sys.path.append(str(Path.home() / "projects" / "nispace"))
 
-# nispace data path
-nispace_source_data_path = pathlib.Path.cwd() / "nispace-data"
+# import NiSpace functions
+from nispace.datasets import fetch_reference, reference_lib, parcellation_lib
+
+# nispace data path 
+nispace_source_data_path = wd
 
 # datasets with maps
-_DSETS_MAP = [ds for ds in _DSETS if ds not in _DSETS_TAB_ONLY]
+DSETS_WITH_MAPS = [k for k, v in reference_lib.items() if "map" in v]
+print("DSETS_WITH_MAPS: ", DSETS_WITH_MAPS)
+
+# parcellations: MNI152NLin
+PARCS_MNI152NLin2009cAsym = [k for k, v in parcellation_lib.items() if "MNI152NLin2009cAsym" in v]
+print("PARCS_MNI152NLin2009cAsym: ", PARCS_MNI152NLin2009cAsym)
+
+# parcelations: fsaverage only
+PARCS_FSA = [k for k, v in parcellation_lib.items() if "fsaverage" in v]
+print("PARCS_FSA: ", PARCS_FSA)
+
+# %%
 
 # %% Parcellate map-based image data ---------------------------------------------------------------
 
 # iterate datasets
-for dataset in _DSETS_MAP:
+for dataset in DSETS_WITH_MAPS:
     print("-------- " + dataset.upper() + " --------")
     
-    # get files
-    files = fetch_reference(dataset)
+    for parcs, parc_space, ref_space in [
+        (PARCS_MNI152NLin2009cAsym, "MNI152NLin2009cAsym", "MNI152NLin2009cAsym"), 
+        (PARCS_FSA, "fsaverage", "MNI152NLin2009cAsym")
+    ]:
+        
+        # get files
+        files = fetch_reference(dataset, space=ref_space if dataset != "rsn" else "MNI152")
     
-    # parcellate
-    parcellate_reference_dataset(
-        reference_name=dataset,
-        reference_files=files,
-        reference_path=nispace_source_data_path / "reference" / dataset,
-        parcs=_PARCS_NICE,
-    )
+        # parcellate
+        parcellate_reference_dataset(
+            reference_name=dataset,
+            reference_files=files,
+            reference_path=nispace_source_data_path / "reference" / dataset,
+            data_space=ref_space,
+            parc_space=parc_space,
+            parcs=parcs,
+        )
 
 
 # %%
