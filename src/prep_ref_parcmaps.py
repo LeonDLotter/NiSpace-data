@@ -31,7 +31,6 @@ print("PARCS_MNI152NLin2009cAsym: ", PARCS_MNI152NLin2009cAsym)
 PARCS_FSA = [k for k, v in parcellation_lib.items() if "fsaverage" in v]
 print("PARCS_FSA: ", PARCS_FSA)
 
-# %%
 
 # %% Parcellate map-based image data ---------------------------------------------------------------
 
@@ -53,6 +52,7 @@ for dataset in DSETS_WITH_MAPS:
             reference_files=files,
             reference_path=nispace_source_data_path / "reference" / dataset,
             data_space=ref_space,
+            data_labels=[f.name.split("_space")[0] for f in files] if dataset != "rsn" else None,
             parc_space=parc_space,
             parcs=parcs,
         )
