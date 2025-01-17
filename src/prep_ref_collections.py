@@ -61,7 +61,7 @@ collection = {
         "target-GABAa_tracer-flumazenil_n-6_dx-hc_pub-dukart2018"
     ],
     "Dopamine": [
-        "target-FDOPA_tracer-fluorodopa_n-12_dx-hc_pub-garciagomez2018_space-mni152",
+        "target-FDOPA_tracer-fluorodopa_n-12_dx-hc_pub-garciagomez2018",
         "target-D1_tracer-sch23390_n-13_dx-hc_pub-kaller2017",
         "target-D23_tracer-flb457_n-55_dx-hc_pub-sandiego2015",
         "target-DAT_tracer-fpcit_n-174_dx-hc_pub-dukart2018",
