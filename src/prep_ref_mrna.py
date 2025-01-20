@@ -1,36 +1,52 @@
 # %% Init
 
 import sys
-import pathlib
+from pathlib import Path
 import numpy as np
 import pandas as pd
 import zipfile
-from abagen import get_expression_data
-from tqdm.auto import tqdm
 from itertools import combinations
 from joblib import Parallel, delayed
+from tqdm.auto import tqdm
 
-from nispace.utils.utils_datasets import download
+# wd
+wd = Path.cwd().parent
+print(f"Working dir: {wd}")
 
-from nispace.modules.constants import _PARCS_NICE
-from nispace.datasets import fetch_parcellation
+# Abagen (cloned github version)
+sys.path.append(str(Path.home() / "projects" / "abagen"))
+from abagen import get_expression_data
+
+# Nispace
+sys.path.append(str(Path.home() / "projects" / "nispace"))
+from nispace.datasets import fetch_parcellation, parcellation_lib
 from nispace.stats.coloc import corr
 from nispace.io import load_labels
 
-# nispace data path
-nispace_source_data_path = pathlib.Path.cwd() / "nispace-data"
+# nispace data path 
+nispace_source_data_path = wd
 
 
 # %% mRNA tabulated data ---------------------------------------------------------------------------
 corr_threshold = 0.2
 
 def par_fun(parc):
-        
+    
+    # Monkey patch pandas append for abagen compatibility
+    import pandas._libs.lib as lib
+    if not hasattr(pd.DataFrame, 'append'):
+        def _append(self, other, axis=0, **kwargs):
+            return pd.concat([self, other], axis=axis, **kwargs)
+        pd.DataFrame.append = _append
+        # Also patch the C-extension module
+        if hasattr(lib, 'DataFrame'):
+            lib.DataFrame.append = _append
+
     # space
     if parc in ["Destrieux", "DesikanKilliany"]:
         space = "fsaverage"
     else:
-        space = "mni152"
+        space = "MNI152NLin2009cAsym"
 
     # load parc
     parc_path, labels_path = fetch_parcellation(parc, space=space, return_loaded=False)
@@ -98,15 +114,23 @@ def par_fun(parc):
             f"After correlation threshold of >= {corr_threshold}, {mRNA_tab.shape[0]} genes remain.")
 
     # save
-    mRNA_tab.to_csv(nispace_source_data_path / "reference" / "mrna" / "tab" / 
-                    f"mrna_{parc}.csv.gz")
-    gene_crosscorr.to_csv(nispace_source_data_path / "reference" / "mrna" / "tab" / 
-                            f"mrna_crosscorr_{parc}.csv.gz")
+    mRNA_tab.to_csv(
+        nispace_source_data_path / "reference" / "mrna" / "tab" / f"dset-mrna_parc-{parc}.csv.gz"
+    )
+    gene_crosscorr.to_csv(
+        nispace_source_data_path / "reference" / "mrna" / "tab" /  f"dset-mrna_parc-{parc}_crosscorr.csv.gz"
+    )
+
+#%% Run
+
+# parcellations
+PARCS = [k for k in parcellation_lib.keys() if "alias" not in parcellation_lib[k]]
+print(f"{len(PARCS)} parcellations: {PARCS}")
 
 # Run in parallel
-Parallel(n_jobs=-1)(
+Parallel(n_jobs=1)(
     delayed(par_fun)(parc) 
-    for parc in tqdm(_PARCS_NICE)
+    for parc in tqdm(PARCS)
 )
 
     

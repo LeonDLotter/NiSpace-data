@@ -40,7 +40,7 @@ for dataset in DSETS_WITH_MAPS:
     
     for parcs, parc_space, ref_space in [
         (PARCS_MNI152NLin2009cAsym, "MNI152NLin2009cAsym", "MNI152NLin2009cAsym"), 
-        (PARCS_FSA, "fsaverage", "MNI152NLin2009cAsym")
+        (PARCS_FSA, "fsaverage", "MNI152NLin6Asym")
     ]:
         
         # get files
