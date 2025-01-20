@@ -1,19 +1,24 @@
 # %% Init
 
 import sys
-import pathlib
 import numpy as np
 import pandas as pd
 from tqdm.auto import tqdm
+from pathlib import Path
 
 from nilearn.datasets import fetch_abide_pcp
 
 # add nispace to path
+wd = Path.cwd().parent
+print(f"Working dir: {wd}")
+sys.path.append(str(Path.home() / "projects" / "nispace"))
+
+# import NiSpace functions
 from nispace.datasets import fetch_parcellation, fetch_reference
 from nispace.io import parcellate_data
 
-# nispace data path in home dir
-nispace_data_path = pathlib.Path.cwd() / "nispace-data"
+# nispace data path 
+nispace_source_data_path = wd
 
 
 # %% EXAMPLE: ABIDE --------------------------------------------------------------------------------
@@ -92,9 +97,9 @@ abide_tab = parcellate_data(
 )
 
 # save parcellated data
-abide_tab.to_csv(nispace_data_path / "example" / f"example-abide_parc-{parc_name}.csv.gz")
+abide_tab.to_csv(nispace_source_data_path / "example" / f"example-abide_parc-{parc_name}.csv.gz")
 # save phenotypic data
-data_pheno.to_csv(nispace_data_path / "example" / "example-abide_info.csv", index=False)
+data_pheno.to_csv(nispace_source_data_path / "example" / "example-abide_info.csv", index=False)
     
  
 # %% EXAMPLE: ENIGMA -------------------------------------------------------------------------------
@@ -125,19 +130,19 @@ for disorder, file in disorders.items():
     
 # Add PTSD data from https://doi.org/10.21203/rs.3.rs-2085479/v1
 print("PTSD")
-enigma_tab["PTSD"] = pd.read_csv("_archive/enigma_ptsd_case-controls_CortThick.csv")\
+enigma_tab["PTSD"] = pd.read_csv(wd / "_archive" / "enigma_ptsd_case-controls_CortThick.csv")\
     .set_index("Structure")["d"]
 
 # Add Parkinson data from https://doi.org/10.1002/mds.28706
 print("PD")
-tab = pd.read_csv("_archive/enigma_pd_case-controls_CortThick.csv")
+tab = pd.read_csv(wd / "_archive" / "enigma_pd_case-controls_CortThick.csv")
 tab.Structure = [r.split(" ")[0] + "_" + "".join(r.split(" ")[1:]).lower()
                  for r in tab.Structure]
 enigma_tab["PD"] = tab.set_index("Structure")["d"]
 
 # Add Anorexia data from 
 print("AN")
-tab = pd.read_csv("_archive/enigma_an_case-controls_CortThick.csv")
+tab = pd.read_csv(wd / "_archive" / "enigma_an_case-controls_CortThick.csv")
 tab.Structure = [r.replace("_thickavg","") for r in tab.Structure]
 enigma_tab["AN"] = tab.set_index("Structure")["d"]
 
@@ -150,13 +155,13 @@ if enigma_tab.isna().sum().sum() > 0:
 enigma_tab = enigma_tab.round(3).astype(np.float32)
 
 # save parcellated data
-enigma_tab.T.to_csv(nispace_data_path / "example" / "example-enigma_parc-DesikanKilliany.csv.gz")    
+enigma_tab.T.to_csv(nispace_source_data_path / "example" / "example-enigma_parc-DesikanKilliany.csv.gz")    
 
 
 # %% EXAMPLE: HAPPY --------------------------------------------------------------------------------
 
 # parcellation we will use
-parc = "Schaefer200"
+parc = "Schaefer200MelbourneS2"
 
 # number of subjects for each group (happy vs normal)
 n_subs = 50
@@ -166,14 +171,14 @@ tab_happy = fetch_reference(
     "pet",
     maps=["MOR", "KOR", "CB1"],
     parcellation=parc,
-    nispace_data_dir=nispace_data_path
+    nispace_data_dir=nispace_source_data_path
 )
 
 # get all data
 tab_all = fetch_reference(
     "pet",
     parcellation=parc,
-    nispace_data_dir=nispace_data_path
+    nispace_data_dir=nispace_source_data_path
 )
 
 # generate our 100 subjects
@@ -198,33 +203,33 @@ for i in range(n_subs):
     data_happy.iloc[i + n_subs, :] = data
 
 # save
-data_happy.to_csv(nispace_data_path / "example" / f"example-happy_parc-{parc}.csv.gz")
+data_happy.to_csv(nispace_source_data_path / "example" / f"example-happy_parc-{parc}.csv.gz")
 
 
-# Test Happy Data
+# %% Test Happy Data
 
-# from nispace import NiSpace
+from nispace import NiSpace
 
-# coloc = "spearman"
-# stat = "rho"
-# group_comparison = "zscore(a,b)" 
+coloc = "spearman"
+stat = "rho"
+group_comparison = "zscore(a,b)" 
 
-# nsp = NiSpace(
-#     x=fetch_reference("pet", collection="UniqueTracer", parcellation=parc, nispace_data_dir=nispace_data_path),
-#     y=data_happy,
-#     parcellation=parc,
-#     n_proc=8,
-# ).fit()
+nsp = NiSpace(
+    x=fetch_reference("pet", collection="UniqueTracer", parcellation=parc, nispace_data_dir=nispace_source_data_path),
+    y=data_happy,
+    parcellation=parc,
+    n_proc=8,
+).fit()
 
-# nsp.transform_y(group_comparison, groups=[0]*n_subs + [1]*n_subs)
-# nsp.colocalize(coloc, Y_transform=group_comparison)
-# nsp.permute("groups", coloc, Y_transform=group_comparison, n_perm=1000)
-# nsp.plot(
-#     method=coloc, 
-#     Y_transform=group_comparison,
-#     plot_kwargs={"sort_categories": False},
-#     permute_what="groups"
-# )
+nsp.transform_y(group_comparison, groups=[0]*n_subs + [1]*n_subs)
+nsp.colocalize(coloc, Y_transform=group_comparison)
+nsp.permute("groups", coloc, Y_transform=group_comparison, n_perm=1000)
+nsp.plot(
+    method=coloc, 
+    Y_transform=group_comparison,
+    plot_kwargs={"sort_categories": False},
+    permute_what="groups"
+)
 
 
 # %%
