@@ -52,7 +52,7 @@ for dataset in DSETS_WITH_MAPS:
             reference_files=files,
             reference_path=nispace_source_data_path / "reference" / dataset,
             data_space=ref_space,
-            data_labels=[f.name.split("_space")[0] for f in files] if dataset != "rsn" else None,
+            data_labels=[f.name.split("_space")[0] for f in files],
             parc_space=parc_space,
             parcs=parcs,
         )
