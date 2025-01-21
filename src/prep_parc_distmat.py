@@ -23,6 +23,8 @@ for parc in parcellation_lib:
     if "alias" in parcellation_lib[parc]:
         continue
     for space in parcellation_lib[parc]:
+        if space == "fsLR":
+            continue
         print(parc, space)
         
         # load

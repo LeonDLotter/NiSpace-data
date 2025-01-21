@@ -252,7 +252,7 @@ parc = images.relabel_gifti(
 parc = transforms.fsaverage_to_fsaverage(
     data=parc,
     target_density="10k",
-    method="linear"
+    method="nearest"
 )
 
 # save
