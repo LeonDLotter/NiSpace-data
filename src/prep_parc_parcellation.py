@@ -116,7 +116,7 @@ for schaefer, tian in [(100, "S1"), (200, "S2"), (400, "S3")]:
             print(f"Loading parcellation {name}, {space}...")
             
             # load via netneurotools, convert to gifti and relabel
-            parc = fetch_schaefer2018("fsaverage5")[f"{200}Parcels7Networks"]
+            parc = fetch_schaefer2018("fsaverage5")[f"{schaefer}Parcels7Networks"]
             parc = images.relabel_gifti(
                 images.annot_to_gifti(
                     (parc.lh, parc.rh)
@@ -251,7 +251,7 @@ parc = images.relabel_gifti(
 )
 parc = transforms.fsaverage_to_fsaverage(
     data=parc,
-    target_density="10k",
+    target_density="41k",
     method="nearest"
 )
 
