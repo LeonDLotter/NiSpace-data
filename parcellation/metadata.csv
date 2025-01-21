@@ -1,13 +1,18 @@
 parcellation,space,n_parcels,resolution,publication,license
 Schaefer100MelbourneS1,MNI152NLin2009cAsym,116,1mm,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
 Schaefer100MelbourneS1,MNI152NLin6Asym,116,1mm,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
-Schaefer100MelbourneS1,fsLR,116,1mm,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
+Schaefer100MelbourneS1,fsaverage,116,10k,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
+Schaefer100MelbourneS1,fsLR,116,32k,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
 Schaefer200MelbourneS2,MNI152NLin2009cAsym,232,1mm,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
 Schaefer200MelbourneS2,MNI152NLin6Asym,232,1mm,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
-Schaefer200MelbourneS2,fsLR,232,1mm,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
+Schaefer200MelbourneS2,fsaverage,232,10k,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
+Schaefer200MelbourneS2,fsLR,232,32k,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
 Schaefer400MelbourneS3,MNI152NLin2009cAsym,450,1mm,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
 Schaefer400MelbourneS3,MNI152NLin6Asym,450,1mm,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
-Schaefer400MelbourneS3,fsLR,450,1mm,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
+Schaefer400MelbourneS3,fsaverage,450,10k,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
+Schaefer400MelbourneS3,fsLR,450,32k,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
+HCPex,fsLR,180,32k,10.1038/nature18933,https://www.humanconnectome.org/study/hcp-young-adult/document/wu-minn-hcp-consortium-open-access-data-use-terms
+HCPex,fsaverage,180,10k,10.1038/nature18933; https://figshare.com/articles/dataset/HCP-MMP1_0_projected_on_fsaverage/3498446/2,CC-BY-4.0
 HCPex,MNI152NLin2009cAsym,426,1mm,10.1038/nature18933; 10.1007/s00429-021-02421-6,GPL-3.0
-DesikanKilliany,fsaverage,70,41k,https://doi.org/10.1016/j.neuroimage.2006.01.021,free
-Destrieux,fsaverage,152,41k,10.1016/j.neuroimage.2010.06.010,free
+DesikanKilliany,fsaverage,70,10k,https://doi.org/10.1016/j.neuroimage.2006.01.021,free
+Destrieux,fsaverage,152,10k,10.1016/j.neuroimage.2010.06.010,free

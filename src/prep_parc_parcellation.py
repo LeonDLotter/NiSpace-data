@@ -4,7 +4,9 @@ import sys
 from pathlib import Path
 import numpy as np
 import pandas as pd
-from neuromaps import images
+import shutil
+from neuromaps import images, transforms
+from netneurotools.datasets import fetch_schaefer2018, fetch_mmpall
 
 wd = Path.cwd().parent
 print(f"Working dir: {wd}")
@@ -69,7 +71,7 @@ for schaefer, tian in [(100, "S1"), (200, "S2"), (400, "S3")]:
     print("new labels: ", labs[:5], "...")
     
     # Load parcellation and reorder labels and save all data
-    for space in ["MNI152NLin2009cAsym", "MNI152NLin6Asym", "fsLR"]:
+    for space in ["MNI152NLin2009cAsym", "MNI152NLin6Asym", "fsaverage", "fsLR", ]:
         save_dir = nispace_source_data_path / "parcellation" / name / space
         if not save_dir.exists():
             save_dir.mkdir(parents=True, exist_ok=True)
@@ -101,13 +103,46 @@ for schaefer, tian in [(100, "S1"), (200, "S2"), (400, "S3")]:
             # add index to labels and save
             with open(save_path, "w") as f:
                 f.write("\n".join([f"{i}_{l}" for i, l in enumerate(labs, start=1)]))
-            
-        # fslr space
-        if space == "fsLR":
+                
+            # Resolution
+            res = "1mm"
+                
+        # fsaverage space
+        elif space == "fsaverage":
             
             # PARCELLATION
-            save_path = (save_dir / f"parc-{name}_space-{space}_hemi-L.label.gii.gz",
-                         save_dir / f"parc-{name}_space-{space}_hemi-R.label.gii.gz")
+            save_path = (save_dir / f"parc-{name}_space-fsaverage_hemi-L.label.gii.gz",
+                         save_dir / f"parc-{name}_space-fsaverage_hemi-R.label.gii.gz")
+            print(f"Loading parcellation {name}, {space}...")
+            
+            # load via netneurotools, convert to gifti and relabel
+            parc = fetch_schaefer2018("fsaverage5")[f"{200}Parcels7Networks"]
+            parc = images.relabel_gifti(
+                images.annot_to_gifti(
+                    (parc.lh, parc.rh)
+                )
+            )
+            # save
+            parc[0].to_filename(save_path[0])
+            parc[1].to_filename(save_path[1])
+            
+            # LABELS
+            save_path = (save_dir / f"parc-{name}_space-fsaverage_hemi-L.label.txt",
+                         save_dir / f"parc-{name}_space-fsaverage_hemi-R.label.txt")
+            with open(save_path[0], "w") as f:
+                f.write("\n".join([f"{i}_{l}" for i, l in enumerate([l for l in labs if "LH_CX_" in l], start=1)]))
+            with open(save_path[1], "w") as f:
+                f.write("\n".join([f"{i}_{l}" for i, l in enumerate([l for l in labs if "RH_CX_" in l], start=schaefer // 2 + 1)]))
+            
+            # Resolution
+            res = "10k"
+            
+        # fslr space
+        elif space == "fsLR":
+            
+            # PARCELLATION
+            save_path = (save_dir / f"parc-{name}_space-fsLR_hemi-L.label.gii.gz",
+                         save_dir / f"parc-{name}_space-fsLR_hemi-R.label.gii.gz")
             print(f"Loading parcellation {name}, {space}...")
             # download, convert to gifti and relabel
             parc = images.relabel_gifti(
@@ -125,18 +160,22 @@ for schaefer, tian in [(100, "S1"), (200, "S2"), (400, "S3")]:
             parc[0].to_filename(save_path[0])
             parc[1].to_filename(save_path[1])
             
-            # LABELS
-            save_path = (save_dir / f"parc-{name}_space-{space}_hemi-L.label.txt",
-                         save_dir / f"parc-{name}_space-{space}_hemi-R.label.txt")
-            with open(save_path[0], "w") as f:
-                f.write("\n".join([f"{i}_{l}" for i, l in enumerate([l for l in labs if "LH_CX_" in l], start=1)]))
-            with open(save_path[1], "w") as f:
-                f.write("\n".join([f"{i}_{l}" for i, l in enumerate([l for l in labs if "RH_CX_" in l], start=schaefer // 2 + 1)]))
+            # LABELS: same as fsaverage
+            shutil.copy(
+                nispace_source_data_path / "parcellation" / name / "fsaverage" / f"parc-{name}_space-fsaverage_hemi-L.label.txt", 
+                save_dir / f"parc-{name}_space-fsLR_hemi-L.label.txt"
+            )
+            shutil.copy(
+                nispace_source_data_path / "parcellation" / name / "fsaverage" / f"parc-{name}_space-fsaverage_hemi-R.label.txt", 
+                save_dir / f"parc-{name}_space-fsLR_hemi-R.label.txt"
+            )
+            # Resolution
+            res = "32k"
 
         # write info and labels, we have the same labels (obviously) for both resolutions
         parc_info[name, space] = {
             "n_parcels": len(labs), 
-            "resolution": "1mm", 
+            "resolution": res, 
             "publication": "10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6",
             "license": "MIT"
         }
@@ -145,35 +184,192 @@ for schaefer, tian in [(100, "S1"), (200, "S2"), (400, "S3")]:
 
 
 # ==================================================================================================
-# HCP
+#   HCP
 
 print("HCPex")
-
 # name
 name = "HCPex"
-space = "MNI152NLin2009cAsym"
 
-# labels
-labs = np.loadtxt(
+## SPACE: fsLR (original) ------------------------------------------------------------
+space = "fsLR"
+save_dir = nispace_source_data_path / "parcellation" / name / space
+if not save_dir.exists():
+    save_dir.mkdir(parents=True, exist_ok=True)
+    
+# PARCELLATION
+save_path = (save_dir / f"parc-HCPex_space-fsLR_hemi-L.label.gii.gz",
+             save_dir / f"parc-HCPex_space-fsLR_hemi-R.label.gii.gz")
+
+# load and relabel
+parc = fetch_mmpall()
+parc = images.relabel_gifti((parc.lh, parc.rh))
+
+# save
+parc[0].to_filename(save_path[0])
+parc[1].to_filename(save_path[1])
+
+# LABELS
+# save path
+save_path = (save_dir / f"parc-HCPex_space-fsLR_hemi-L.label.txt",
+             save_dir / f"parc-HCPex_space-fsLR_hemi-R.label.txt")
+# one hemisphere, but symmetric
+labs = [l[1].replace("_ROI","").replace("L_","").replace("R_","") 
+        for l in parc[0].labeltable.get_labels_as_dict().items() 
+        if l[0] != 0]
+# save
+with open(save_path[0], "w") as f:
+    f.write("\n".join([f"{i}_LH_CX_{l}" for i, l in enumerate(labs, start=1)]))
+with open(save_path[1], "w") as f:
+    f.write("\n".join([f"{i}_RH_CX_{l}" for i, l in enumerate(labs, start=len(labs) + 1)]))
+
+# info
+parc_info[name, space] = {
+    "n_parcels": len(labs), 
+    "resolution": "32k", 
+    "publication": "10.1038/nature18933",
+    "license": "https://www.humanconnectome.org/study/hcp-young-adult/document/wu-minn-hcp-consortium-open-access-data-use-terms"
+}
+
+
+## SPACE: fsaverage ----------------------------------------------------------------
+
+space = "fsaverage"
+save_dir = nispace_source_data_path / "parcellation" / name / space
+if not save_dir.exists():
+    save_dir.mkdir(parents=True, exist_ok=True)
+    
+# PARCELLATION
+save_path = (save_dir / f"parc-HCPex_space-fsaverage_hemi-L.label.gii.gz",
+             save_dir / f"parc-HCPex_space-fsaverage_hemi-R.label.gii.gz")
+
+# load and relabel
+parc = images.relabel_gifti(
+    images.annot_to_gifti(
+        (download_file(remote="https://figshare.com/ndownloader/files/5528816"),
+         download_file(remote="https://figshare.com/ndownloader/files/5528819"))
+    )
+)
+parc = transforms.fsaverage_to_fsaverage(
+    data=parc,
+    target_density="10k",
+    method="linear"
+)
+
+# save
+parc[0].to_filename(save_path[0])
+parc[1].to_filename(save_path[1])
+
+# LABELS (copy from fslr)
+shutil.copy(
+    nispace_source_data_path / "parcellation" / name / "fsLR" / "parc-HCPex_space-fsLR_hemi-L.label.txt", 
+    save_dir / f"parc-{name}_space-fsaverage_hemi-L.label.txt"
+)
+shutil.copy(
+    nispace_source_data_path / "parcellation" / name / "fsLR" / "parc-HCPex_space-fsLR_hemi-R.label.txt", 
+    save_dir / f"parc-{name}_space-fsaverage_hemi-R.label.txt"
+)
+
+# info
+parc_info[name, space] = {
+    "n_parcels": len(labs), 
+    "resolution": "10k", 
+    "publication": "10.1038/nature18933; https://figshare.com/articles/dataset/HCP-MMP1_0_projected_on_fsaverage/3498446/2",
+    "license": "CC-BY-4.0"
+}
+
+
+## SPACE: MNI152NLin2009cAsym  ------------------------------------------------------------
+space = "MNI152NLin2009cAsym"
+save_dir = nispace_source_data_path / "parcellation" / name / space
+if not save_dir.exists():
+    save_dir.mkdir(parents=True, exist_ok=True)
+
+# source PARCELLATION and LABELS
+
+# load 
+parc_mni = images.load_nifti(
+    download_file(
+        host="github",
+        remote=("wayalan/HCPex", "main", "HCPex_v1.1/HCPex.nii.gz"),
+    )
+)
+labs_mni = np.loadtxt(
     download("https://github.com/wayalan/HCPex/raw/main/HCPex_v1.1/HCPex.nii.txt"), 
     str
 ).tolist()
-labs = [f"{l[0]}_{l[1]}H_{'CX' if int(l[0]) < 361 else 'SC'}_{l[2]}" for l in labs]
+
+# new PARCELLATION and LABELS
+
+# reload fslr labels
+labs_fslr = np.concatenate([
+    np.loadtxt(
+        nispace_source_data_path / "parcellation" / name / "fsLR" / "parc-HCPex_space-fsLR_hemi-L.label.txt", 
+        str
+    ),
+    np.loadtxt(
+        nispace_source_data_path / "parcellation" / name / "fsLR" / "parc-HCPex_space-fsLR_hemi-R.label.txt", 
+        str
+    )
+])
+
+# we make a dataframe with the labels for mni and fslr
+labs_matching = pd.DataFrame({
+    "mni_idx": [int(l[0]) for l in labs_mni],
+    "mni_label": [f"{l[1]}H_{'CX' if int(l[0]) <= 360 else 'SC'}_{l[2]}" for l in labs_mni],
+    "fslr_idx": [int(l.split("_")[0]) for l in labs_fslr] + [""] * 66,
+    "fslr_label": ["_".join(l.split("_")[1:]) for l in labs_fslr] + [""] * 66,
+})
+# One single label is different: H in fsLR is Hipp in mni
+labs_matching.replace({"LH_CX_Hipp": "LH_CX_H", "RH_CX_Hipp": "RH_CX_H"}, inplace=True)
+print(labs_matching)
+
+# check if all fslr (original) labels in mni
+print("fsLR (original) labels that are not in mni:")
+print([l for l in labs_matching["fslr_label"] if l not in labs_matching["mni_label"].to_list() and l != ""])
+print("mni labels that are not in fsLR (original):")
+print([l for l in labs_matching["mni_label"] if l not in labs_matching["fslr_label"].to_list() and "_SC_" not in l])
+
+# new label_order in MNI
+labs_matching["mni_idx_new"] = \
+    [
+        labs_matching.loc[labs_matching["mni_label"] == l_fslr]["mni_idx"].values[0] 
+        for l_fslr in labs_matching["fslr_label"] 
+        if l_fslr != ""
+    ] + \
+    labs_matching["mni_idx"].iloc[360:].to_list()
+labs_matching["mni_label_new"] = \
+    [
+        labs_matching.loc[labs_matching["mni_idx"] == i]["mni_label"].values[0] 
+        for i in labs_matching["mni_idx_new"] 
+    ]
+print(labs_matching)
+
+# PARCELLATION
+save_path = save_dir / f"parc-{name}_space-{space}.label.nii.gz"
+
+# Well, that was a mess. now make the new volume
+parc = relabel_nifti_parc(
+    parc_mni, 
+    new_order=labs_matching["mni_idx_new"], 
+    new_labels=np.arange(1, len(labs_matching["mni_idx_new"]) + 1)
+)
+
+# save
+parc.to_filename(save_path)
+
+# LABELS
+save_path = save_dir / f"parc-{name}_space-{space}.label.txt"
+with open(save_path, "w") as f:
+    f.write("\n".join([f"{i}_{l}" for i, l in enumerate(labs_matching["mni_label_new"], start=1)]))
 
 # info
-# space: "MNI152NLin2009cAsym"
 parc_info[name, space] = {
-    "n_parcels": len(labs), 
+    "n_parcels": len(labs_matching["mni_label_new"]), 
     "resolution": "1mm", 
     "publication": "10.1038/nature18933; 10.1007/s00429-021-02421-6",
     "license": "GPL-3.0"
 }
-# save labels
-path = nispace_source_data_path / "parcellation" / name / space / f"parc-{name}_space-{space}.label.txt"
-if not path.exists():
-    path.parent.mkdir(parents=True, exist_ok=True)
-with open(path, "w") as f:
-    f.write("\n".join(labs))
+
 
 # ==================================================================================================
 
@@ -207,7 +403,7 @@ parc = images.relabel_gifti(
 # info
 parc_info[name, space] = {
     "n_parcels": len([l for l in labs if l != "unknown"]) * 2, 
-    "resolution": "41k", 
+    "resolution": "10k", 
     "publication": "https://doi.org/10.1016/j.neuroimage.2006.01.021",
     "license": "free"
 }
@@ -256,7 +452,7 @@ parc = images.relabel_gifti(
 # info
 parc_info[name, space] = {
     "n_parcels": len([l for l in labs if l != "unknown"]) * 2, 
-    "resolution": "41k", 
+    "resolution": "10k", 
     "publication": "10.1016/j.neuroimage.2010.06.010",
     "license": "free"
 }
