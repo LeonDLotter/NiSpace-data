@@ -8,9 +8,8 @@ import sys
 import tempfile
 import nibabel as nib
 from neuromaps import images
+from neuromaps.resampling import resample_images
 from sklearn.preprocessing import minmax_scale
-
-from utils import parcellate_reference_dataset 
 
 # add nispace to path
 wd = Path.cwd().parent
@@ -28,14 +27,6 @@ nispace_source_data_path = wd
 DSETS_WITH_MAPS = [k for k, v in reference_lib.items() if "map" in v]
 print("DSETS_WITH_MAPS: ", DSETS_WITH_MAPS)
 
-# parcellations: MNI152NLin
-PARCS_MNI152NLin2009cAsym = [k for k, v in parcellation_lib.items() if "MNI152NLin2009cAsym" in v]
-print("PARCS_MNI152NLin2009cAsym: ", PARCS_MNI152NLin2009cAsym)
-
-# parcelations: fsaverage only
-PARCS_FSA = [k for k, v in parcellation_lib.items() if "fsaverage" in v]
-print("PARCS_FSA:", PARCS_FSA)
-
 # all parcellations (original, not aliases)
 PARCS = [k for k in parcellation_lib.keys() if "alias" not in parcellation_lib[k]]
 print("PARCS:", PARCS)
@@ -44,7 +35,7 @@ print("PARCS:", PARCS)
 # %% Parcellate map-based image data ---------------------------------------------------------------
 
 # iterate datasets
-for dataset in [DSETS_WITH_MAPS[0]]:
+for dataset in DSETS_WITH_MAPS:
     print("-------- " + dataset.upper() + " --------")
     
     # get files: 
@@ -88,23 +79,30 @@ for dataset in [DSETS_WITH_MAPS[0]]:
         print("Pre-parcellation dataframe shape: ", ref_maps_df.shape)
         
         # iterate spaces: 
+        # TODO: THIS IS A MESS: NOT NECESSARY WHEN WE PROVIDE ALL SPACES FOR ALL REFS/PARCS
+        # Desikan and Destrieux parcellations only available in fsaverage, transform function expects MNI152NLin6Asym
+        if dataset == "pet" and parc_name in ["DesikanKilliany", "Destrieux"]:
+            ref_spaces_to_iterate = ["MNI152NLin6Asym", "fsaverage"]
+            parc_spaces_to_iterate = ["fsaverage", "fsaverage"]
+        # RSN dataset has only MNI152 space for now
+        # TODO: REGISTER RSN DATASET (OR WAIT 'TILL AVAILABLE VIA MIDB )
+        elif dataset == "rsn" and parc_name in ["DesikanKilliany", "Destrieux"]:
+            ref_spaces_to_iterate = ["MNI152"]
+            parc_spaces_to_iterate = ["fsaverage"]
+        # RSN dataset fits better to MNI152NLin2009cAsym 
+        elif dataset == "rsn" and parc_name not in ["DesikanKilliany", "Destrieux"]:
+            ref_spaces_to_iterate = ["MNI152"]
+            parc_spaces_to_iterate = ["MNI152NLin2009cAsym"]
         # for PET data and Schaefer parcellations: fsaverage > MNI152NLin6Asym
-        if dataset == "pet" and parc_name in ["Schaefer100MelbourneS1", "Schaefer200MelbourneS2", "Schaefer400MelbourneS3"]:
+        elif dataset == "pet" and parc_name in ["Schaefer100MelbourneS1", "Schaefer200MelbourneS2", "Schaefer400MelbourneS3"]:
             ref_spaces_to_iterate = ["MNI152NLin6Asym", "fsaverage"]
             parc_spaces_to_iterate = ["MNI152NLin6Asym", "fsaverage"]
         # HCPex parcellation exists only in MNI152NLin2009cAsym
         elif dataset == "pet" and parc_name == "HCPex":
             ref_spaces_to_iterate = ["MNI152NLin2009cAsym", "fsaverage"]
             parc_spaces_to_iterate = ["MNI152NLin2009cAsym", "fsaverage"]
-        # RSN dataset fits better to MNI152NLin2009cAsym but is not yet registered, so use original MNI152 space
-        # TODO: REGISTER RSN DATASET (OR WAIT 'TILL AVAILABLE VIA MIDB )
-        elif dataset == "rsn":
-            ref_spaces_to_iterate = ["MNI152"]
-            parc_spaces_to_iterate = ["MNI152NLin2009cAsym"]
-        # Desikan and Destrieux parcellations only available in fsaverage, transform function expects MNI152NLin6Asym
-        elif parc_name in ["DesikanKilliany", "Destrieux"]:
-            ref_spaces_to_iterate = ["MNI152NLin6Asym", "fsaverage"]
-            parc_spaces_to_iterate = ["fsaverage", "fsaverage"]
+        else:
+            raise ValueError(f"We missed a case: Dataset: {dataset}; parcellation: {parc_name}")
             
         # run parcellation
         for ref_space, parc_space in zip(ref_spaces_to_iterate, parc_spaces_to_iterate):
@@ -133,17 +131,32 @@ for dataset in [DSETS_WITH_MAPS[0]]:
                 print("Scaling fsaverage data... CHANGE THIS")
                 tmp_dir = Path(tempfile.mkdtemp())
                 for i, (lh, rh) in enumerate(ref_paths):
-                    lh = images.load_gifti(lh)
-                    rh = images.load_gifti(rh)
-                    lh_dat = lh.agg_data()
-                    rh_dat = rh.agg_data()
-                    lh_dat = minmax_scale(lh_dat, feature_range=(1e-6, 1))
-                    rh_dat = minmax_scale(rh_dat, feature_range=(1e-6, 1))
-                    lh = nib.GiftiImage(darrays=[nib.gifti.GiftiDataArray(lh_dat)])
-                    rh = nib.GiftiImage(darrays=[nib.gifti.GiftiDataArray(rh_dat)])
-                    lh.to_filename(tmp_dir / f"lh_{i}.gii")
-                    rh.to_filename(tmp_dir / f"rh_{i}.gii")
-                    ref_paths[i] = (tmp_dir / f"lh_{i}.gii", tmp_dir / f"rh_{i}.gii")
+                    # load img
+                    lh, rh = images.load_gifti(lh), images.load_gifti(rh)
+                    # resample parc to img
+                    (parc_lh, parc_rh), _ = resample_images(
+                        src=parc,
+                        trg=(lh, rh),
+                        src_space="fsaverage",
+                        trg_space="fsaverage",
+                        method="nearest",
+                        resampling="transform_to_trg"
+                    )
+                    # get data
+                    lh_dat, rh_dat = lh.agg_data(), rh.agg_data()
+                    parc_lh_dat, parc_rh_dat = parc_lh.agg_data(), parc_rh.agg_data()
+                    # rescale
+                    lh_dat_rescaled, rh_dat_rescaled = np.zeros_like(lh_dat), np.zeros_like(rh_dat)
+                    lh_dat_rescaled[parc_lh_dat > 0] = minmax_scale(lh_dat[parc_lh_dat > 0], feature_range=(1e-6, 1))
+                    rh_dat_rescaled[parc_rh_dat > 0] = minmax_scale(rh_dat[parc_rh_dat > 0], feature_range=(1e-6, 1))
+                    # to nifti
+                    lh_rescaled = nib.GiftiImage(darrays=[nib.gifti.GiftiDataArray(lh_dat_rescaled)])
+                    rh_rescaled = nib.GiftiImage(darrays=[nib.gifti.GiftiDataArray(rh_dat_rescaled)])
+                    lh_rescaled.to_filename(tmp_dir / f"lh_{i}.gii")
+                    rh_rescaled.to_filename(tmp_dir / f"rh_{i}.gii")
+                    ref_paths[i] = (tmp_dir / f"lh_{i}.gii", 
+                                    tmp_dir / f"rh_{i}.gii")
+            # that was terrible, but it works for now
 
             # parcellate
             tab = parcellate_data(
