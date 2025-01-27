@@ -272,7 +272,7 @@ shutil.copy(
 # info
 parc_info[name, space] = {
     "n_parcels": len(labs), 
-    "resolution": "10k", 
+    "resolution": "41k", 
     "publication": "10.1038/nature18933; https://figshare.com/articles/dataset/HCP-MMP1_0_projected_on_fsaverage/3498446/2",
     "license": "CC-BY-4.0"
 }
@@ -386,8 +386,8 @@ space = "fsaverage"
 
 # load parcellation from templateflow
 parc = (
-    images.load_gifti(download("https://templateflow.s3.amazonaws.com/tpl-fsaverage/tpl-fsaverage_hemi-L_den-10k_atlas-Desikan2006_seg-aparc_dseg.label.gii")),
-    images.load_gifti(download("https://templateflow.s3.amazonaws.com/tpl-fsaverage/tpl-fsaverage_hemi-R_den-10k_atlas-Desikan2006_seg-aparc_dseg.label.gii"))
+    images.load_gifti(download("https://templateflow.s3.amazonaws.com/tpl-fsaverage/tpl-fsaverage_hemi-L_den-41k_atlas-Desikan2006_seg-aparc_dseg.label.gii")),
+    images.load_gifti(download("https://templateflow.s3.amazonaws.com/tpl-fsaverage/tpl-fsaverage_hemi-R_den-41k_atlas-Desikan2006_seg-aparc_dseg.label.gii"))
 )
 
 # get labels
@@ -404,7 +404,7 @@ parc = images.relabel_gifti(
 # info
 parc_info[name, space] = {
     "n_parcels": len([l for l in labs if l != "unknown"]) * 2, 
-    "resolution": "10k", 
+    "resolution": "41k", 
     "publication": "https://doi.org/10.1016/j.neuroimage.2006.01.021",
     "license": "free"
 }
@@ -435,8 +435,8 @@ space = "fsaverage"
 
 # load parcellation from templateflow
 parc = (
-    images.load_gifti(download("https://templateflow.s3.amazonaws.com/tpl-fsaverage/tpl-fsaverage_hemi-L_den-10k_atlas-Destrieux2009_dseg.label.gii")),
-    images.load_gifti(download("https://templateflow.s3.amazonaws.com/tpl-fsaverage/tpl-fsaverage_hemi-R_den-10k_atlas-Destrieux2009_dseg.label.gii"))
+    images.load_gifti(download("https://templateflow.s3.amazonaws.com/tpl-fsaverage/tpl-fsaverage_hemi-L_den-41k_atlas-Destrieux2009_dseg.label.gii")),
+    images.load_gifti(download("https://templateflow.s3.amazonaws.com/tpl-fsaverage/tpl-fsaverage_hemi-R_den-41k_atlas-Destrieux2009_dseg.label.gii"))
 )
 
 # get labels
@@ -453,7 +453,7 @@ parc = images.relabel_gifti(
 # info
 parc_info[name, space] = {
     "n_parcels": len([l for l in labs if l != "unknown"]) * 2, 
-    "resolution": "10k", 
+    "resolution": "41k", 
     "publication": "10.1016/j.neuroimage.2010.06.010",
     "license": "free"
 }
