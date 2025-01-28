@@ -5,7 +5,7 @@ import sys
 import zipfile
 import numpy as np
 import pandas as pd
-
+import shutil
 # Nispace
 wd = Path.cwd().parent
 print(f"Working dir: {wd}")
@@ -257,6 +257,21 @@ collection = {k: sorted(df.query("chrom==@k").gene.unique()) for k in sets}
 all_genes = sum([collection[k] for k in collection], [])
 print(len(collection), "sets,", len(all_genes), "genes,", len(set(all_genes)), "unique.")
 write_json(collection, nispace_source_data_path / "reference" / "mrna" / f"collection-Chromosome.collect")
+
+
+# %% magicc collections ----------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------------
+
+# Copy from mRNA
+for fp_src in (nispace_source_data_path / "reference" / "mrna").glob("*.c*"):
+    fp_dst = nispace_source_data_path / "reference" / "magicc" / fp_src.name
+    shutil.copy(fp_src, fp_dst)
+
+# Replace collection-All.collect
+fp = sorted((nispace_source_data_path / "reference" / "magicc" / "tab").glob("dset-magicc_parc-*.csv.gz"))[0]
+all_genes = pd.read_csv(fp, index_col=0).index.unique()
+all_genes = pd.Series(sorted(all_genes), name="map")
+all_genes.to_csv(nispace_source_data_path / "reference" / "magicc" / "collection-All.collect", index=False)
 
 
 # %% RSN collections -------------------------------------------------------------------------------
