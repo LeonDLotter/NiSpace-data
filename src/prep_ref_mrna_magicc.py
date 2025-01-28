@@ -49,7 +49,7 @@ expression_fslr = np.load(magicc_data_path / "ahba_vertex.npy")
 print(expression_fslr.shape)
 
 # filter by reproducibility
-repr_threshold = 0.2
+repr_threshold = 0.5
 expression_fslr = expression_fslr[df_reproducibility.reproducibility >= repr_threshold]
 df_tableS2 = df_tableS2[df_tableS2["Estimated reproducibility"] >= repr_threshold]
 print(df_tableS2.shape)
