@@ -232,7 +232,6 @@ parc_info[name, space] = {
 
 
 ## SPACE: fsaverage ----------------------------------------------------------------
-
 space = "fsaverage"
 save_dir = nispace_source_data_path / "parcellation" / name / space
 if not save_dir.exists():
@@ -382,7 +381,14 @@ print("DesikanKilliany")
 
 # name
 name = "DesikanKilliany"
+
+
+# SPACE: fsaverage ---------------------------------------------------------------------------------
 space = "fsaverage"
+print(space)
+save_dir = nispace_source_data_path / "parcellation" / name / space
+if not save_dir.exists():
+    save_dir.mkdir(parents=True, exist_ok=True)
 
 # load parcellation from templateflow
 parc = (
@@ -401,18 +407,11 @@ parc = images.relabel_gifti(
      background=labs_bg
 )
 
-# info
-parc_info[name, space] = {
-    "n_parcels": len([l for l in labs if l != "unknown"]) * 2, 
-    "resolution": "41k", 
-    "publication": "https://doi.org/10.1016/j.neuroimage.2006.01.021",
-    "license": "free"
-}
+# check
+print("LH: ", np.unique(parc[0].agg_data()))
+print("RH: ", np.unique(parc[1].agg_data()))
 
 # save maps and labels
-save_dir = nispace_source_data_path / "parcellation" / name / space
-if not save_dir.exists():
-    save_dir.mkdir(parents=True, exist_ok=True)
 # left
 parc[0].to_filename(save_dir / f"parc-{name}_space-{space}_hemi-L.label.gii.gz")
 with open(save_dir / f"parc-{name}_space-{space}_hemi-L.label.txt", "w") as f:
@@ -421,6 +420,66 @@ with open(save_dir / f"parc-{name}_space-{space}_hemi-L.label.txt", "w") as f:
 parc[1].to_filename(save_dir / f"parc-{name}_space-{space}_hemi-R.label.gii.gz")
 with open(save_dir / f"parc-{name}_space-{space}_hemi-R.label.txt", "w") as f:
     f.write("\n".join([f"{i}_RH_CX_{l}" for i, l in enumerate([l for l in labs if l not in labs_bg], start=35)]))
+    
+# info
+parc_info[name, space] = {
+    "n_parcels": len([l for l in labs if l != "unknown"]) * 2, 
+    "resolution": "41k", 
+    "publication": "https://doi.org/10.1016/j.neuroimage.2006.01.021",
+    "license": "free"
+}
+    
+    
+# SPACE: fslr ---------------------------------------------------------------------------------------------
+space = "fsLR"
+print(space)
+save_dir = nispace_source_data_path / "parcellation" / name / space
+if not save_dir.exists():
+    save_dir.mkdir(parents=True, exist_ok=True)
+
+# load original fsaverage parcellation from templateflow
+parc_fsaverage = (
+    images.load_gifti(download("https://templateflow.s3.amazonaws.com/tpl-fsaverage/tpl-fsaverage_hemi-L_den-41k_atlas-Desikan2006_seg-aparc_dseg.label.gii")),
+    images.load_gifti(download("https://templateflow.s3.amazonaws.com/tpl-fsaverage/tpl-fsaverage_hemi-R_den-41k_atlas-Desikan2006_seg-aparc_dseg.label.gii"))
+)
+
+# convert to fslr
+parc = transforms.fsaverage_to_fslr(
+    data=parc_fsaverage,
+    target_density="32k",
+    method="nearest"
+)
+
+# sort out labels
+parc = images.relabel_gifti(
+    (images.construct_shape_gii(images.load_data(parc[0]), labels=labs, intent='NIFTI_INTENT_LABEL'), 
+     images.construct_shape_gii(images.load_data(parc[1]), labels=labs, intent='NIFTI_INTENT_LABEL')), 
+    background=labs_bg
+)
+
+# check
+print("LH: ", np.unique(parc[0].agg_data()))
+print("RH: ", np.unique(parc[1].agg_data()))
+
+# save maps and copy labels from fsaverage
+parc[0].to_filename(save_dir / f"parc-{name}_space-{space}_hemi-L.label.gii.gz")
+shutil.copy(
+    nispace_source_data_path / "parcellation" / name / "fsaverage" / f"parc-{name}_space-fsaverage_hemi-L.label.txt", 
+    save_dir / f"parc-{name}_space-{space}_hemi-L.label.txt"
+)
+parc[1].to_filename(save_dir / f"parc-{name}_space-{space}_hemi-R.label.gii.gz")
+shutil.copy(
+    nispace_source_data_path / "parcellation" / name / "fsaverage" / f"parc-{name}_space-fsaverage_hemi-R.label.txt", 
+    save_dir / f"parc-{name}_space-{space}_hemi-R.label.txt"
+)
+
+# info
+parc_info[name, space] = {
+    "n_parcels": len([l for l in labs if l != "unknown"]) * 2, 
+    "resolution": "32k", 
+    "publication": "https://doi.org/10.1016/j.neuroimage.2006.01.021",
+    "license": "free"
+}
 
 # ==================================================================================================
 
@@ -431,7 +490,14 @@ with open(save_dir / f"parc-{name}_space-{space}_hemi-R.label.txt", "w") as f:
 print("Destrieux")
 # name
 name = "Destrieux"
+
+
+# SPACE: fsaverage ---------------------------------------------------------------------------------
 space = "fsaverage"
+print(space)
+save_dir = nispace_source_data_path / "parcellation" / name / space
+if not save_dir.exists():
+    save_dir.mkdir(parents=True, exist_ok=True)
 
 # load parcellation from templateflow
 parc = (
@@ -450,18 +516,11 @@ parc = images.relabel_gifti(
      background=labs_bg
 )
 
-# info
-parc_info[name, space] = {
-    "n_parcels": len([l for l in labs if l != "unknown"]) * 2, 
-    "resolution": "41k", 
-    "publication": "10.1016/j.neuroimage.2010.06.010",
-    "license": "free"
-}
+# check
+print("LH: ", np.unique(parc[0].agg_data()))
+print("RH: ", np.unique(parc[1].agg_data()))
 
 # save maps and labels
-save_dir = nispace_source_data_path / "parcellation" / name / space
-if not save_dir.exists():
-    save_dir.mkdir(parents=True, exist_ok=True)
 # left
 parc[0].to_filename(save_dir / f"parc-{name}_space-{space}_hemi-L.label.gii.gz")
 with open(save_dir / f"parc-{name}_space-{space}_hemi-L.label.txt", "w") as f:
@@ -470,6 +529,67 @@ with open(save_dir / f"parc-{name}_space-{space}_hemi-L.label.txt", "w") as f:
 parc[1].to_filename(save_dir / f"parc-{name}_space-{space}_hemi-R.label.gii.gz")
 with open(save_dir / f"parc-{name}_space-{space}_hemi-R.label.txt", "w") as f:
     f.write("\n".join([f"{i}_RH_CX_{l}" for i, l in enumerate([l for l in labs if l not in labs_bg], start=75)]))
+
+# info
+parc_info[name, space] = {
+    "n_parcels": len([l for l in labs if l != "unknown"]) * 2, 
+    "resolution": "41k", 
+    "publication": "10.1016/j.neuroimage.2010.06.010",
+    "license": "free"
+}
+
+
+# SPACE: fslr ---------------------------------------------------------------------------------------------
+space = "fsLR"
+print(space)
+save_dir = nispace_source_data_path / "parcellation" / name / space
+if not save_dir.exists():
+    save_dir.mkdir(parents=True, exist_ok=True)
+
+# load original fsaverage parcellation from templateflow
+parc_fsaverage = (
+    images.load_gifti(download("https://templateflow.s3.amazonaws.com/tpl-fsaverage/tpl-fsaverage_hemi-L_den-41k_atlas-Destrieux2009_dseg.label.gii")),
+    images.load_gifti(download("https://templateflow.s3.amazonaws.com/tpl-fsaverage/tpl-fsaverage_hemi-R_den-41k_atlas-Destrieux2009_dseg.label.gii"))
+)
+
+# convert to fslr
+parc = transforms.fsaverage_to_fslr(
+    data=parc_fsaverage,
+    target_density="32k",
+    method="nearest"
+)
+
+# sort out labels
+parc = images.relabel_gifti(
+    (images.construct_shape_gii(images.load_data(parc[0]), labels=labs, intent='NIFTI_INTENT_LABEL'), 
+     images.construct_shape_gii(images.load_data(parc[1]), labels=labs, intent='NIFTI_INTENT_LABEL')), 
+    background=labs_bg
+)
+
+# check
+print("LH: ", np.unique(parc[0].agg_data()))
+print("RH: ", np.unique(parc[1].agg_data()))
+
+# save maps and copy labels from fsaverage
+parc[0].to_filename(save_dir / f"parc-{name}_space-{space}_hemi-L.label.gii.gz")
+shutil.copy(
+    nispace_source_data_path / "parcellation" / name / "fsaverage" / f"parc-{name}_space-fsaverage_hemi-L.label.txt", 
+    save_dir / f"parc-{name}_space-{space}_hemi-L.label.txt"
+)
+parc[1].to_filename(save_dir / f"parc-{name}_space-{space}_hemi-R.label.gii.gz")
+shutil.copy(
+    nispace_source_data_path / "parcellation" / name / "fsaverage" / f"parc-{name}_space-fsaverage_hemi-R.label.txt", 
+    save_dir / f"parc-{name}_space-{space}_hemi-R.label.txt"
+)
+
+# info
+parc_info[name, space] = {
+    "n_parcels": len([l for l in labs if l != "unknown"]) * 2, 
+    "resolution": "32k", 
+    "publication": "10.1016/j.neuroimage.2010.06.010",
+    "license": "free"
+}
+
 
 # ==================================================================================================
 

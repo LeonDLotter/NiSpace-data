@@ -15,4 +15,6 @@ HCPex,fsLR,180,32k,10.1038/nature18933,https://www.humanconnectome.org/study/hcp
 HCPex,fsaverage,180,41k,10.1038/nature18933; https://figshare.com/articles/dataset/HCP-MMP1_0_projected_on_fsaverage/3498446/2,CC-BY-4.0
 HCPex,MNI152NLin2009cAsym,426,1mm,10.1038/nature18933; 10.1007/s00429-021-02421-6,GPL-3.0
 DesikanKilliany,fsaverage,70,41k,https://doi.org/10.1016/j.neuroimage.2006.01.021,free
+DesikanKilliany,fsLR,70,32k,https://doi.org/10.1016/j.neuroimage.2006.01.021,free
 Destrieux,fsaverage,152,41k,10.1016/j.neuroimage.2010.06.010,free
+Destrieux,fsLR,152,32k,10.1016/j.neuroimage.2010.06.010,free
