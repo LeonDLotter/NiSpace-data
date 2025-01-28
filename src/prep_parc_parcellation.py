@@ -116,7 +116,7 @@ for schaefer, tian in [(100, "S1"), (200, "S2"), (400, "S3")]:
             print(f"Loading parcellation {name}, {space}...")
             
             # load via netneurotools, convert to gifti and relabel
-            parc = fetch_schaefer2018("fsaverage5")[f"{schaefer}Parcels7Networks"]
+            parc = fetch_schaefer2018("fsaverage6")[f"{schaefer}Parcels7Networks"]
             parc = images.relabel_gifti(
                 images.annot_to_gifti(
                     (parc.lh, parc.rh)
@@ -135,7 +135,7 @@ for schaefer, tian in [(100, "S1"), (200, "S2"), (400, "S3")]:
                 f.write("\n".join([f"{i}_{l}" for i, l in enumerate([l for l in labs if "RH_CX_" in l], start=schaefer // 2 + 1)]))
             
             # Resolution
-            res = "10k"
+            res = "41k"
             
         # fslr space
         elif space == "fsLR":
