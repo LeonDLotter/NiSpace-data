@@ -283,6 +283,24 @@ rsn_files = [f.name.split("_space")[0] for f in rsn_files]
 # All
 pd.Series(rsn_files, name="map") \
     .to_csv(nispace_source_data_path / "reference" / "rsn" / "collection-All.collect", index=None)
-    
+
+
+# %% GRF collections -------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------------
+
+# all grf maps
+grf_tab_files = sorted( (nispace_source_data_path / "reference" / "grf" / "tab").glob("*.csv.gz") )
+all_grf = pd.Series(pd.read_csv(grf_tab_files[0], index_col=0).index, name="map")
+all_grf.to_csv(nispace_source_data_path / "reference" / "grf" / "collection-All.collect", index=False)
+
+# only no autocorrelation
+all_grf.loc[all_grf.str.contains("alpha-0.0")] \
+    .to_csv(nispace_source_data_path / "reference" / "grf" / "collection-Alpha0.collect", index=False)
+
+# collection split by alpha
+collection = {}
+for alpha in {float(idx.split("alpha-")[1].split("_")[0]) for idx in all_grf}:
+    collection[f"alpha-{alpha}"] = [idx for idx in all_grf if idx.startswith(f"alpha-{alpha:.01f}")]
+write_json(collection, nispace_source_data_path / "reference" / "grf" / "collection-ByAlpha.collect")
 
 # %%
