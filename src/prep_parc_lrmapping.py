@@ -22,7 +22,7 @@ nispace_source_data_path = wd
 # %% Generate distance matrices
 
 # fit models
-for parc in ["Schaefer200MelbourneS2"]: #parcellation_lib:
+for parc in parcellation_lib:
     if "alias" in parcellation_lib[parc]:
         continue
     for space in parcellation_lib[parc]:
@@ -96,7 +96,7 @@ for parc in ["Schaefer200MelbourneS2"]: #parcellation_lib:
         print(betas_df.head())
         
         # save
-        betas_df.to_csv(nispace_source_data_path / "parcellation" / parc / space / f"parc-{parc}_space-{space}_l2rmap.csv.gz")
+        betas_df.to_csv(nispace_source_data_path / "parcellation" / parc / space / f"parc-{parc}_space-{space}.l2rmap.csv.gz")
         
             
             
