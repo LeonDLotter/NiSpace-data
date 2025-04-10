@@ -70,9 +70,6 @@ for parc_name in parcellation_lib:
     parc_dat_rh = parc[1].agg_data()
     idc_rh = np.trim_zeros(np.unique(parc_dat_rh))
     
-    # empty dataframe
-    
-    
     # extract expression data
     def par_fun(expr_vector):
         expr_lh = vol_to_vect_arr(expr_vector.astype(np.float32), parc_dat_lh, idc_lh)

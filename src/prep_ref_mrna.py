@@ -14,7 +14,7 @@ wd = Path.cwd().parent
 print(f"Working dir: {wd}")
 
 # Abagen (cloned github version)
-sys.path.append(str(Path.home() / "projects" / "abagen"))
+#sys.path.append(str(Path.home() / "projects" / "abagen"))
 from abagen import get_expression_data
 
 # Nispace
@@ -43,10 +43,10 @@ def par_fun(parc):
             lib.DataFrame.append = _append
 
     # space
-    if parc in ["Destrieux", "DesikanKilliany"]:
-        space = "fsaverage"
-    else:
+    if parc == "HCPex":
         space = "MNI152NLin2009cAsym"
+    else:
+        space = "MNI152NLin6Asym"
 
     # load parc
     parc_path, labels_path = fetch_parcellation(parc, space=space, return_loaded=False)
