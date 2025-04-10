@@ -34,7 +34,7 @@ for parc in parcellation_lib:
         dist_mat = get_distance_matrix(
             parc_loaded, 
             parc_space=space,
-            downsample_vol=2,
+            parc_resample=2,
             centroids=False,
             surf_euclidean=False,
             n_proc=-1,
