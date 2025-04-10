@@ -64,7 +64,7 @@ for dataset in DSETS_WITH_MAPS:
     
     # iterate parcellations:
     print("Parcellating...")
-    for parc_name in PARCS:
+    for parc_name in PARCS: 
         print(parc_name)
         
         # Initiate dataframe
@@ -72,7 +72,7 @@ for dataset in DSETS_WITH_MAPS:
             index=pd.Index(list(ref_maps_avail_all), name="map"),
             columns=fetch_parcellation(
                 parc_name, 
-                space="MNI152NLin2009cAsym" if parc_name not in ["DesikanKilliany", "Destrieux"] else "fsaverage", 
+                space="MNI152NLin6Asym" if parc_name != "HCPex" else "MNI152NLin2009cAsym", 
                 return_loaded=True
             )[1],
         )
@@ -80,27 +80,19 @@ for dataset in DSETS_WITH_MAPS:
         
         # iterate spaces: 
         # TODO: THIS IS A MESS: NOT NECESSARY WHEN WE PROVIDE ALL SPACES FOR ALL REFS/PARCS
-        # Desikan and Destrieux parcellations only available in fsaverage, transform function expects MNI152NLin6Asym
-        if dataset == "pet" and parc_name in ["DesikanKilliany", "Destrieux"]:
-            ref_spaces_to_iterate = ["MNI152NLin6Asym", "fsaverage"]
-            parc_spaces_to_iterate = ["fsaverage", "fsaverage"]
-        # RSN dataset has only MNI152 space for now
-        # TODO: REGISTER RSN DATASET (OR WAIT 'TILL AVAILABLE VIA MIDB )
-        elif dataset == "rsn" and parc_name in ["DesikanKilliany", "Destrieux"]:
-            ref_spaces_to_iterate = ["MNI152"]
-            parc_spaces_to_iterate = ["fsaverage"]
-        # RSN dataset fits better to MNI152NLin2009cAsym 
-        elif dataset == "rsn" and parc_name not in ["DesikanKilliany", "Destrieux"]:
-            ref_spaces_to_iterate = ["MNI152"]
-            parc_spaces_to_iterate = ["MNI152NLin2009cAsym"]
         # for PET data and Schaefer parcellations: fsaverage > MNI152NLin6Asym
-        elif dataset == "pet" and parc_name in ["Schaefer100MelbourneS1", "Schaefer200MelbourneS2", "Schaefer400MelbourneS3"]:
+        if dataset == "pet" and parc_name in ["Schaefer100MelbourneS1", "Schaefer200MelbourneS2", "Schaefer400MelbourneS3", 
+                                              "DesikanKillianyAseg", "DestrieuxAseg"]:
             ref_spaces_to_iterate = ["MNI152NLin6Asym", "fsaverage"]
             parc_spaces_to_iterate = ["MNI152NLin6Asym", "fsaverage"]
         # HCPex parcellation exists only in MNI152NLin2009cAsym
         elif dataset == "pet" and parc_name == "HCPex":
             ref_spaces_to_iterate = ["MNI152NLin2009cAsym", "fsaverage"]
             parc_spaces_to_iterate = ["MNI152NLin2009cAsym", "fsaverage"]
+        # RSN dataset has only MNI152 space for now and fits better to MNI152NLin2009cAsym 
+        elif dataset == "rsn":
+            ref_spaces_to_iterate = ["MNI152"]
+            parc_spaces_to_iterate = ["MNI152NLin2009cAsym"]
         else:
             raise ValueError(f"We missed a case: Dataset: {dataset}; parcellation: {parc_name}")
             
