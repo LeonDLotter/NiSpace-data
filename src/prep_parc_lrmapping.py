@@ -13,7 +13,6 @@ sys.path.append(str(Path.home() / "projects" / "nispace"))
 
 # import NiSpace functions
 from nispace.datasets import fetch_parcellation, parcellation_lib
-from nispace.nulls import get_distance_matrix
 
 # nispace data path 
 nispace_source_data_path = wd

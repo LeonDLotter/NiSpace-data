@@ -320,8 +320,10 @@ parc_mni = images.load_nifti(
     )
 )
 labs_mni = np.loadtxt(
-    download("https://github.com/wayalan/HCPex/raw/main/HCPex_v1.1/HCPex.nii.txt"), 
-    str
+    download_file(
+        host="github",
+        remote=("wayalan/HCPex", "main", "HCPex_v1.1/HCPex.nii.txt"),
+    )
 ).tolist()
 
 # new PARCELLATION and LABELS
