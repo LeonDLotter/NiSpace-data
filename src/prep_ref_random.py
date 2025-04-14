@@ -198,12 +198,8 @@ for alpha in alphas:
             print(parc)
             
             # fetch parcellation
-            if "MNI152NLin2009cAsym" in parcellation_lib[parc]:
-                parc_space = "MNI152NLin2009cAsym"
-                resampling_target = "data"
-            else:
-                parc_space = "fsaverage"
-                resampling_target = "parcellation"
+            parc_space = "MNI152NLin2009cAsym"
+            resampling_target = "data"
             parc_img, parc_labels = fetch_parcellation(parc, space=parc_space, return_loaded=True)
             
             # parcellate
