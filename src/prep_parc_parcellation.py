@@ -5,20 +5,33 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 import shutil
+from nilearn import plotting, image
 from neuromaps import images, transforms
-from netneurotools.datasets import fetch_schaefer2018, fetch_mmpall
+from netneurotools.datasets import fetch_mmpall
+import templateflow.api as tflow
 
-wd = Path.cwd()
+import matplotlib.pyplot as plt
+wd = Path.cwd().parent
 print(f"Working dir: {wd}")
 sys.path.append(str(Path.home() / "projects" / "nispace"))
 
 # import NiSpace functions
-from nispace.utils.utils import relabel_nifti_parc
+from nispace.utils.utils import relabel_nifti_parc, merge_parcellations
 from nispace.utils.utils_datasets import download, download_file
 
 # nispace data path 
 nispace_source_data_path = wd
 print(f"NiSpace source data path: {nispace_source_data_path}")
+
+# plot for mni
+def plot_mni(parc, name, space):
+    plotting.plot_stat_map(
+        parc, 
+        bg_img=download(f"https://templateflow.s3.amazonaws.com/tpl-{space}/tpl-{space}_res-01_T1w.nii.gz"),
+        title=f"{name} | {space}", 
+        cut_coords=(0, 0, 0)
+    )
+    plt.show()
 
 
 # %% Get parcellations
@@ -45,11 +58,9 @@ for schaefer, tian in [(100, "S1"), (200, "S2"), (400, "S3")]:
     )[0].to_list()
     
     # labels Schaefer
-    labs_schaefer = pd.read_csv(
-        f"https://github.com/ThomasYeoLab/CBIG/raw/master/stable_projects/brain_parcellation/"
-        f"Schaefer2018_LocalGlobal/Parcellations/MNI/Centroid_coordinates/"
-        f"Schaefer2018_{schaefer}Parcels_7Networks_order_FSLMNI152_1mm.Centroid_RAS.csv"
-    )["ROI Name"].to_list()
+    labs_schaefer = pd.read_table(
+        tflow.get("MNI152NLin6Asym", atlas="Schaefer2018", desc=f"{schaefer}Parcels7Networks", suffix="dseg")[0]
+    ).name.to_list()
     
     # combine and rename
     labs_old = []
@@ -60,7 +71,6 @@ for schaefer, tian in [(100, "S1"), (200, "S2"), (400, "S3")]:
         l = l.split("_")
         labs_old.append(l[1] + "_CX_" + "_".join(l[2:]))
     print("old labels: ", labs_old[:5], "...")
-    #labs_old = [f"{i}_{l}" for i, l in enumerate(labs_old, start=1)]
     
     # REORDER LABELS: LH CX -> LH SC -> RH CX -> RH SC
     labs = \
@@ -72,32 +82,42 @@ for schaefer, tian in [(100, "S1"), (200, "S2"), (400, "S3")]:
     print("new labels: ", labs[:5], "...")
     
     # Load parcellation and reorder labels and save all data
-    for space in ["MNI152NLin2009cAsym", "MNI152NLin6Asym", "fsaverage", "fsLR", ]:
+    for space in ["MNI152NLin6Asym", "MNI152NLin2009cAsym", "fsaverage", "fsLR", ]:
+        print(space)
         save_dir = nispace_source_data_path / "parcellation" / name / space
         if not save_dir.exists():
             save_dir.mkdir(parents=True, exist_ok=True)
                 
         # MNI spaces
         if "MNI152" in space:
-            
-            # PARCELLATION
             save_path = save_dir / f"parc-{name}_space-{space}.label.nii.gz"
             print(f"Loading parcellation {name}, {space}...")
-            # download image
-            parc = images.load_nifti(
+            
+            # download cortical
+            parc_cx = images.load_nifti(
+                download(
+                    "https://templateflow.s3.amazonaws.com/"
+                    f"tpl-{space}/tpl-{space}_res-01_atlas-Schaefer2018_desc-{schaefer}Parcels7Networks_dseg.nii.gz")
+            )
+            
+            # download subcortical
+            fn = f"Tian_Subcortex_{tian}_3T{'_2009cAsym.nii.gz' if space == 'MNI152NLin2009cAsym' else '.nii'}"
+            parc_sc = images.load_nifti(
                 download_file(
                     host="github",
-                    remote=("yetianmed/subcortex", 
-                            "master", 
-                            f"Group-Parcellation/3T/Cortex-Subcortex/MNIvolumetric/"
-                            f"Schaefer2018_{schaefer}Parcels_7Networks_order_Tian_Subcortex_{tian}_{'3T_' if space == 'MNI152NLin2009cAsym' else ''}{space}_1mm.nii.gz"),
+                    remote=("yetianmed/subcortex", "master", 
+                            f"Group-Parcellation/3T/Subcortex-Only/{fn}"),
                 )
             )
-            # reorder labels
-            parc = relabel_nifti_parc(parc, new_order=[labs_old.index(l_new) + 1 for l_new in labs])
+            parc_sc = image.resample_to_img(parc_sc, parc_cx, interpolation="nearest")
+            
+            # combine
+            parc, labs = merge_parcellations([parc_cx, parc_sc], [labs_schaefer, labs_tian])
             # save
             print(f"Saving relabeled parcellation {name}, {space}...")
             parc.to_filename(save_path)
+            # plot
+            plot_mni(parc, name, space)
         
             # LABELS
             save_path = save_dir / f"parc-{name}_space-{space}.label.txt"
@@ -107,6 +127,7 @@ for schaefer, tian in [(100, "S1"), (200, "S2"), (400, "S3")]:
                 
             # Resolution
             res = "1mm"
+   
                 
         # fsaverage space
         elif space == "fsaverage":
@@ -116,12 +137,18 @@ for schaefer, tian in [(100, "S1"), (200, "S2"), (400, "S3")]:
                          save_dir / f"parc-{name}_space-fsaverage_hemi-R.label.gii.gz")
             print(f"Loading parcellation {name}, {space}...")
             
-            # load via netneurotools, convert to gifti and relabel
-            parc = fetch_schaefer2018("fsaverage6")[f"{schaefer}Parcels7Networks"]
+            # load 
             parc = images.relabel_gifti(
-                images.annot_to_gifti(
-                    (parc.lh, parc.rh)
-                )
+                (download("https://templateflow.s3.amazonaws.com/tpl-fsaverage/"
+                          f"tpl-fsaverage_hemi-L_den-164k_atlas-Schaefer2018_seg-7n_scale-{schaefer}_dseg.label.gii"),
+                 download("https://templateflow.s3.amazonaws.com/tpl-fsaverage/"
+                          f"tpl-fsaverage_hemi-R_den-164k_atlas-Schaefer2018_seg-7n_scale-{schaefer}_dseg.label.gii"))
+            )
+            # resample
+            parc = transforms.fsaverage_to_fsaverage(
+                data=parc,
+                target_density="41k",
+                method="nearest"
             )
             # save
             parc[0].to_filename(save_path[0])
@@ -150,10 +177,10 @@ for schaefer, tian in [(100, "S1"), (200, "S2"), (400, "S3")]:
                 images.dlabel_to_gifti(
                     download_file(
                     host="github",
-                    remote=("yetianmed/subcortex", 
+                    remote=("ThomasYeoLab/CBIG", 
                             "master", 
-                            f"Group-Parcellation/3T/Cortex-Subcortex/"
-                            f"Schaefer2018_{schaefer}Parcels_7Networks_order_Tian_Subcortex_{tian}.dlabel.nii"),
+                            f"stable_projects/brain_parcellation/Schaefer2018_LocalGlobal/Parcellations/HCP/fslr32k/cifti/"
+                            f"Schaefer2018_{schaefer}Parcels_7Networks_order.dlabel.nii"),
                     )
                 )                
             )
@@ -357,6 +384,8 @@ parc = relabel_nifti_parc(
 
 # save
 parc.to_filename(save_path)
+# plot
+plot_mni(parc, name, space)
 
 # LABELS
 save_path = save_dir / f"parc-{name}_space-{space}.label.txt"
@@ -387,16 +416,18 @@ for name in ["DesikanKillianyAseg", "DestrieuxAseg"]:
         save_dir = nispace_source_data_path / "parcellation" / name / space
         if not save_dir.exists():
             save_dir.mkdir(parents=True, exist_ok=True)
-            
-        # CHANGE TO OSF
-        # load parcellation from osf
+        
+        seg = "aparc.aseg" if "Desikan" in name else "aparc.a2009s.aseg"
+        # load parcellation from G-Node
         parc = images.load_gifti(
-            f"/Users/llotter/data/parcellations/freesurfer_mni/parcellations/{space}/"
-            f"seg-{'aparc' if 'Desikan' in name else 'aparc.a2009s'}.aseg_space-{space}_desc-smoothed.nii.gz"
+            download(
+                "https://gin.g-node.org/llotter/mni_freesurfer/raw/c406d4f41aca04f6497649a85bfcfc4de93ab7a2/"
+                f"parcellations/{space}/seg-{seg}_space-{space}_desc-smoothed.nii.gz"
+            )
         )
         labs_tmp = pd.read_table(
-            f"/Users/llotter/data/parcellations/freesurfer_mni/parcellations/{space}/"
-            f"seg-{'aparc' if 'Desikan' in name else 'aparc.a2009s'}.aseg_space-{space}.tsv",
+            "https://gin.g-node.org/llotter/mni_freesurfer/raw/c406d4f41aca04f6497649a85bfcfc4de93ab7a2/"
+            f"parcellations/{space}/seg-{seg}_space-{space}.tsv",
             index_col=0,
             header=None
         )
