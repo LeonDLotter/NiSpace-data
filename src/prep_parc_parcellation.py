@@ -38,8 +38,6 @@ def plot_mni(parc, name, space):
 
 # parcellation info
 parc_info = {}
-#pd.DataFrame(columns=["parcellation", "n_parcels", "space", "resolution", "publication"])
-
 
 # ==================================================================================================
 # Schaefer + Melbourne
@@ -80,7 +78,7 @@ for schaefer, tian in [(100, "S1"), (200, "S2"), (400, "S3")]:
         [l for l in labs_old if "RH_SC_" in l]
     #labs = [f"{i}_{l}" for i, l in enumerate(labs, start=1)]
     print("new labels: ", labs[:5], "...")
-    
+
     # Load parcellation and reorder labels and save all data
     for space in ["MNI152NLin6Asym", "MNI152NLin2009cAsym", "fsaverage", "fsLR", ]:
         print(space)
@@ -112,7 +110,7 @@ for schaefer, tian in [(100, "S1"), (200, "S2"), (400, "S3")]:
             parc_sc = image.resample_to_img(parc_sc, parc_cx, interpolation="nearest")
             
             # combine
-            parc, labs = merge_parcellations([parc_cx, parc_sc], [labs_schaefer, labs_tian])
+            parc, _ = merge_parcellations([parc_cx, parc_sc])
             # save
             print(f"Saving relabeled parcellation {name}, {space}...")
             parc.to_filename(save_path)
