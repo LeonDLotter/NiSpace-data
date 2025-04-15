@@ -40,16 +40,26 @@ for dataset in DSETS_WITH_MAPS:
     
     # get files: 
     ref_maps = {}
-    for space in ["MNI152", "MNI152NLin6Asym", "MNI152NLin2009cAsym", "fsaverage", "fsLR"]:
+    for space in ["MNI152", "MNI152NLin6Asym", "MNI152NLin2009cAsym", "fsaverage", "fsLR", "fsaverage_original"]:
         ref_maps[space] = {}
         
         print("Checking space:", space)
-        ref_maps[space] = [
-            m for m in reference_lib[dataset]["map"].keys()
-            if space in reference_lib[dataset]["map"][m]
-            and "private" not in (reference_lib[dataset]["map"][m][space]["host"] if "mni" in space.lower() 
-                                  else reference_lib[dataset]["map"][m][space]["L"]["host"])
-        ]
+        if "original" not in space:
+            ref_maps[space] = [
+                m for m in reference_lib[dataset]["map"].keys()
+                if space in reference_lib[dataset]["map"][m]
+                and "private" not in (reference_lib[dataset]["map"][m][space]["host"] if "mni" in space.lower() 
+                                    else reference_lib[dataset]["map"][m][space]["L"]["host"])
+            ]
+        else:
+            space_original = space.replace("_original", "")
+            ref_maps[space] = [
+                m for m in reference_lib[dataset]["map"].keys()
+                if space_original in reference_lib[dataset]["map"][m]
+                and "desc-proc" not in reference_lib[dataset]["map"][m][space_original]["L"]["remote"]
+                and "private" not in (reference_lib[dataset]["map"][m][space_original]["host"] if "mni" in space_original.lower() 
+                                    else reference_lib[dataset]["map"][m][space_original]["L"]["host"])
+            ]
         if len(ref_maps[space]) == 0:
             ref_maps.pop(space)
             print("No maps found for space:", space)
@@ -61,7 +71,7 @@ for dataset in DSETS_WITH_MAPS:
     for space in ref_maps.keys():
         ref_maps_avail_all.update(ref_maps[space])
     print(f"-> {len(ref_maps_avail_all)} unique maps")
-    
+
     # iterate parcellations:
     print("Parcellating...")
     for parc_name in PARCS: 
@@ -72,7 +82,7 @@ for dataset in DSETS_WITH_MAPS:
             index=pd.Index(list(ref_maps_avail_all), name="map"),
             columns=fetch_parcellation(
                 parc_name, 
-                space="MNI152NLin6Asym" if parc_name != "HCPex" else "MNI152NLin2009cAsym", 
+                space="MNI152NLin6Asym" if parc_name != "Glasser" else "fsLR", 
                 return_loaded=True
             )[1],
         )
@@ -83,16 +93,18 @@ for dataset in DSETS_WITH_MAPS:
         # for PET data and Schaefer parcellations: fsaverage > MNI152NLin6Asym
         if dataset == "pet" and parc_name in ["Schaefer100MelbourneS1", "Schaefer200MelbourneS2", "Schaefer400MelbourneS3", 
                                               "DesikanKillianyAseg", "DestrieuxAseg"]:
-            ref_spaces_to_iterate = ["MNI152NLin6Asym", "fsaverage"]
-            parc_spaces_to_iterate = ["MNI152NLin6Asym", "fsaverage"]
-        # HCPex parcellation exists only in MNI152NLin2009cAsym
-        elif dataset == "pet" and parc_name == "HCPex":
-            ref_spaces_to_iterate = ["MNI152NLin2009cAsym", "fsaverage"]
-            parc_spaces_to_iterate = ["MNI152NLin2009cAsym", "fsaverage"]
+            ref_spaces_to_iterate = ["MNI152NLin6Asym", "fsaverage_original"]
+            parc_spaces_to_iterate = ["MNI152NLin6Asym", "fsaverage_original"]
+        # Glasser parcellation exists only in fslr
+        elif dataset == "pet" and parc_name == "Glasser":
+            ref_spaces_to_iterate = ["fsLR", "fsaverage_original"]
+            parc_spaces_to_iterate = ["fsLR", "fsaverage_original"]
         # RSN dataset has only MNI152 space for now and fits better to MNI152NLin2009cAsym 
-        elif dataset == "rsn":
+        elif dataset == "rsn" and parc_name != "Glasser":
             ref_spaces_to_iterate = ["MNI152"]
             parc_spaces_to_iterate = ["MNI152NLin2009cAsym"]
+        elif dataset == "rsn" and parc_name == "Glasser":
+            continue
         else:
             raise ValueError(f"We missed a case: Dataset: {dataset}; parcellation: {parc_name}")
             
@@ -100,12 +112,12 @@ for dataset in DSETS_WITH_MAPS:
         for ref_space, parc_space in zip(ref_spaces_to_iterate, parc_spaces_to_iterate):
             
             # Load the parcellation
-            parc, labels = fetch_parcellation(parc_name, space=parc_space, return_loaded=True)
+            parc, labels = fetch_parcellation(parc_name, space=parc_space.replace("_original", ""), return_loaded=True)
             print(f"Parcellation loaded for space {parc_space}")
             
             # Load the reference maps
             ref_maps_avail = ref_maps[ref_space]
-            ref_paths = fetch_reference(dataset, maps=ref_maps_avail, space=ref_space, print_references=False)
+            ref_paths = fetch_reference(dataset, maps=ref_maps_avail, space=ref_space.replace("_original", ""), print_references=False)
             print(f"-> {len(ref_paths)} maps available for space {ref_space}")
             
             # TODO: fix this: we will now delete all potential subcortical data for the fsaverage maps
@@ -114,7 +126,7 @@ for dataset in DSETS_WITH_MAPS:
             # but this is not working yet as we have scaled the MNI data from 0-1 but we did not
             # scale the fsaverage data. This is not straightforward as we need to scale fsaverage data
             # to the range of the MNI data in cortical regions only.
-            if ref_space == "fsaverage":
+            if ref_space == "fsaverage_original":
                 labels_cx = ref_maps_df.columns[ref_maps_df.columns.str.contains("_SC_")]
                 print(f"Dropping {len(labels_cx)} subcortical parcels")
                 ref_maps_df.loc[ref_maps_avail, labels_cx] = np.nan
@@ -154,10 +166,10 @@ for dataset in DSETS_WITH_MAPS:
             tab = parcellate_data(
                 parcellation=parc,
                 parc_labels=labels,
-                parc_space=parc_space,
+                parc_space=parc_space.replace("_original", ""),
                 data=ref_paths,
                 data_labels=ref_maps_avail,
-                data_space=ref_space,
+                data_space=ref_space.replace("_original", ""),
                 n_proc=-1,
                 dtype=np.float32,
                 drop_background_parcels=True,
