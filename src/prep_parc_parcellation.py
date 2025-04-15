@@ -210,11 +210,11 @@ for schaefer, tian in [(100, "S1"), (200, "S2"), (400, "S3")]:
 
 
 # ==================================================================================================
-#   HCP
+#   Glasser
 
-print("HCPex")
+print("Glasser")
 # name
-name = "HCPex"
+name = "Glasser"
 
 ## SPACE: fsLR (original) ------------------------------------------------------------
 space = "fsLR"
@@ -223,8 +223,8 @@ if not save_dir.exists():
     save_dir.mkdir(parents=True, exist_ok=True)
     
 # PARCELLATION
-save_path = (save_dir / f"parc-HCPex_space-fsLR_hemi-L.label.gii.gz",
-             save_dir / f"parc-HCPex_space-fsLR_hemi-R.label.gii.gz")
+save_path = (save_dir / f"parc-Glasser_space-fsLR_hemi-L.label.gii.gz",
+             save_dir / f"parc-Glasser_space-fsLR_hemi-R.label.gii.gz")
 
 # load and relabel
 parc = fetch_mmpall()
@@ -236,8 +236,8 @@ parc[1].to_filename(save_path[1])
 
 # LABELS
 # save path
-save_path = (save_dir / f"parc-HCPex_space-fsLR_hemi-L.label.txt",
-             save_dir / f"parc-HCPex_space-fsLR_hemi-R.label.txt")
+save_path = (save_dir / f"parc-Glasser_space-fsLR_hemi-L.label.txt",
+             save_dir / f"parc-Glasser_space-fsLR_hemi-R.label.txt")
 # one hemisphere, but symmetric
 labs = [l[1].replace("_ROI","").replace("L_","").replace("R_","") 
         for l in parc[0].labeltable.get_labels_as_dict().items() 
@@ -264,8 +264,8 @@ if not save_dir.exists():
     save_dir.mkdir(parents=True, exist_ok=True)
     
 # PARCELLATION
-save_path = (save_dir / f"parc-HCPex_space-fsaverage_hemi-L.label.gii.gz",
-             save_dir / f"parc-HCPex_space-fsaverage_hemi-R.label.gii.gz")
+save_path = (save_dir / f"parc-Glasser_space-fsaverage_hemi-L.label.gii.gz",
+             save_dir / f"parc-Glasser_space-fsaverage_hemi-R.label.gii.gz")
 
 # load and relabel
 parc = images.relabel_gifti(
@@ -286,11 +286,11 @@ parc[1].to_filename(save_path[1])
 
 # LABELS (copy from fslr)
 shutil.copy(
-    nispace_source_data_path / "parcellation" / name / "fsLR" / "parc-HCPex_space-fsLR_hemi-L.label.txt", 
+    nispace_source_data_path / "parcellation" / name / "fsLR" / "parc-Glasser_space-fsLR_hemi-L.label.txt", 
     save_dir / f"parc-{name}_space-fsaverage_hemi-L.label.txt"
 )
 shutil.copy(
-    nispace_source_data_path / "parcellation" / name / "fsLR" / "parc-HCPex_space-fsLR_hemi-R.label.txt", 
+    nispace_source_data_path / "parcellation" / name / "fsLR" / "parc-Glasser_space-fsLR_hemi-R.label.txt", 
     save_dir / f"parc-{name}_space-fsaverage_hemi-R.label.txt"
 )
 
@@ -301,105 +301,6 @@ parc_info[name, space] = {
     "publication": "10.1038/nature18933; https://figshare.com/articles/dataset/HCP-MMP1_0_projected_on_fsaverage/3498446/2",
     "license": "CC-BY-4.0"
 }
-
-
-## SPACE: MNI152NLin2009cAsym  ------------------------------------------------------------
-
-space = "MNI152NLin2009cAsym"
-save_dir = nispace_source_data_path / "parcellation" / name / space
-if not save_dir.exists():
-    save_dir.mkdir(parents=True, exist_ok=True)
-
-# source PARCELLATION and LABELS
-
-# load 
-parc_mni = images.load_nifti(
-    download_file(
-        host="github",
-        remote=("wayalan/HCPex", "main", "HCPex_v1.1/HCPex.nii.gz"),
-    )
-)
-labs_mni = np.loadtxt(
-    download_file(
-        host="github",
-        remote=("wayalan/HCPex", "main", "HCPex_v1.1/HCPex.nii.txt"),
-    )
-).tolist()
-
-# new PARCELLATION and LABELS
-
-# reload fslr labels
-labs_fslr = np.concatenate([
-    np.loadtxt(
-        nispace_source_data_path / "parcellation" / name / "fsLR" / "parc-HCPex_space-fsLR_hemi-L.label.txt", 
-        str
-    ),
-    np.loadtxt(
-        nispace_source_data_path / "parcellation" / name / "fsLR" / "parc-HCPex_space-fsLR_hemi-R.label.txt", 
-        str
-    )
-])
-
-# we make a dataframe with the labels for mni and fslr
-labs_matching = pd.DataFrame({
-    "mni_idx": [int(l[0]) for l in labs_mni],
-    "mni_label": [f"{l[1]}H_{'CX' if int(l[0]) <= 360 else 'SC'}_{l[2]}" for l in labs_mni],
-    "fslr_idx": [int(l.split("_")[0]) for l in labs_fslr] + [""] * 66,
-    "fslr_label": ["_".join(l.split("_")[1:]) for l in labs_fslr] + [""] * 66,
-})
-# One single label is different: H in fsLR is Hipp in mni
-labs_matching.replace({"LH_CX_Hipp": "LH_CX_H", "RH_CX_Hipp": "RH_CX_H"}, inplace=True)
-print(labs_matching)
-
-# check if all fslr (original) labels in mni
-print("fsLR (original) labels that are not in mni:")
-print([l for l in labs_matching["fslr_label"] if l not in labs_matching["mni_label"].to_list() and l != ""])
-print("mni labels that are not in fsLR (original):")
-print([l for l in labs_matching["mni_label"] if l not in labs_matching["fslr_label"].to_list() and "_SC_" not in l])
-
-# new label_order in MNI
-labs_matching["mni_idx_new"] = \
-    [
-        labs_matching.loc[labs_matching["mni_label"] == l_fslr]["mni_idx"].values[0] 
-        for l_fslr in labs_matching["fslr_label"] 
-        if l_fslr != ""
-    ] + \
-    labs_matching["mni_idx"].iloc[360:].to_list()
-labs_matching["mni_label_new"] = \
-    [
-        labs_matching.loc[labs_matching["mni_idx"] == i]["mni_label"].values[0] 
-        for i in labs_matching["mni_idx_new"] 
-    ]
-print(labs_matching)
-
-# PARCELLATION
-save_path = save_dir / f"parc-{name}_space-{space}.label.nii.gz"
-
-# Well, that was a mess. now make the new volume
-parc = relabel_nifti_parc(
-    parc_mni, 
-    new_order=labs_matching["mni_idx_new"], 
-    new_labels=np.arange(1, len(labs_matching["mni_idx_new"]) + 1)
-)
-
-# save
-parc.to_filename(save_path)
-# plot
-plot_mni(parc, name, space)
-
-# LABELS
-save_path = save_dir / f"parc-{name}_space-{space}.label.txt"
-with open(save_path, "w") as f:
-    f.write("\n".join([f"{i}_{l}" for i, l in enumerate(labs_matching["mni_label_new"], start=1)]))
-
-# info
-parc_info[name, space] = {
-    "n_parcels": len(labs_matching["mni_label_new"]), 
-    "resolution": "1mm", 
-    "publication": "10.1038/nature18933; 10.1007/s00429-021-02421-6",
-    "license": "GPL-3.0"
-}
-
 
 # ==================================================================================================
 
