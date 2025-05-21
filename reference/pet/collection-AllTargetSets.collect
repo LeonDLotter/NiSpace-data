@@ -41,7 +41,7 @@ MOR,target-MOR_tracer-carfentanil_n-39_dx-hc_pub-turtonen2021,39
 NET,target-NET_tracer-mrb_n-10_dx-hc_pub-hesse2017,10
 NET,target-NET_tracer-mrb_n-77_dx-hc_pub-ding2010,77
 NMDA,target-NMDA_tracer-ge179_n-29_dx-hc_pub-galovic2021,29
-SV2A,target-SV2A_tracer-ucbj_n-10_dx-hc_pub-finnema2016,10
+SV2A,target-SV2A_tracer-ucbj_n-76_dx-hc_pub-finnema2016,76
 TSPO,target-TSPO_tracer-pbr28_n-6_dx-hc_pub-lois2018,6
 VAChT,target-VAChT_tracer-feobv_n-18_dx-hc_pub-aghourian2017,18
 VAChT,target-VAChT_tracer-feobv_n-4_dx-hc_pub-tuominen,4

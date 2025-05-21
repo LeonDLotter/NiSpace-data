@@ -44,7 +44,7 @@ collection = {
     "General": [
         "target-CMRglu_tracer-fdg_n-20_dx-hc_pub-castrillon2023",
         # "CBF"
-        "target-SV2A_tracer-ucbj_n-10_dx-hc_pub-finnema2016",
+        "target-SV2A_tracer-ucbj_n-76_dx-hc_pub-finnema2016",
         "target-HDAC_tracer-martinostat_n-8_dx-hc_pub-wey2016",
         "target-VMAT2_tracer-dtbz_n-76_dx-hc_pub-larsen2020"
     ],
@@ -128,7 +128,7 @@ collection = [
     'target-MOR_tracer-carfentanil_n-39_dx-hc_pub-turtonen2021',
     'target-NET_tracer-mrb_n-10_dx-hc_pub-hesse2017',
     'target-NET_tracer-mrb_n-77_dx-hc_pub-ding2010',
-    'target-SV2A_tracer-ucbj_n-10_dx-hc_pub-finnema2016',
+    'target-SV2A_tracer-ucbj_n-76_dx-hc_pub-finnema2016',
     'target-TSPO_tracer-pbr28_n-6_dx-hc_pub-lois2018',
     'target-VAChT_tracer-feobv_n-18_dx-hc_pub-aghourian2017',
     'target-VAChT_tracer-feobv_n-4_dx-hc_pub-tuominen',
@@ -302,5 +302,160 @@ collection = {}
 for alpha in {float(idx.split("alpha-")[1].split("_")[0]) for idx in all_grf}:
     collection[f"alpha-{alpha}"] = [idx for idx in all_grf if idx.startswith(f"alpha-{alpha:.01f}")]
 write_json(collection, nispace_source_data_path / "reference" / "grf" / "collection-ByAlpha.collect")
+
+
+
+# %% Neurosynth collections ------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------------
+
+# All
+(
+    pd.read_csv(
+        list((nispace_source_data_path / "reference" / "neurosynth" / "tab").glob("*.csv.gz"))[0], 
+        index_col=0 
+    )
+    .index.to_series()
+    .to_csv(nispace_source_data_path / "reference" / "neurosynth" / "collection-All.collect", index=False)
+)
+
+# Manually defined collection
+
+cognitive_functions = {
+    "Perception": [
+        "auditory",
+        "multisensory",
+        "olfactory",
+        "pain",
+        "perception",
+        "sensory",
+        "somatosensory",
+        "tactile",
+        "visual",
+        "visuospatial"
+    ],
+    "Attention": [
+        "attention",
+        "attentional control",
+        "distraction",
+        "fixation",
+        "salience",
+        "selective attention",
+        "shifting",
+        "spatial attention",
+        "sustained attention",
+        "visual attention"
+    ],
+    "Memory": [
+        "autobiographical memory",
+        "episodic memory",
+        "long term",
+        "memory encoding",
+        "memory retrieval",
+        "recall",
+        "repetition",
+        "semantic memory",
+        "short term",
+        "working memory"
+    ],
+    "Language": [
+        "articulation",
+        "comprehension",
+        "language",
+        "listening",
+        "phonological",
+        "production",
+        "reading",
+        "semantic",
+        "speech",
+        "speech perception",
+        "speech production",
+        "syntactic"
+    ],
+    "Executive Control": [
+        "arithmetic",
+        "cognitive control",
+        "cognitive flexibility",
+        "decision making",
+        "executive control",
+        "executive function",
+        "flexibility",
+        "inhibition",
+        "monitoring",
+        "planning",
+        "problem solving",
+        "reasoning",
+        "response inhibition",
+        "response selection",
+        "set shifting",
+        "task switching",
+        "updating"
+    ],
+    "Reward and Learning": [
+        "adaptation",
+        "conflict",
+        "delay",
+        "effort",
+        "feedback",
+        "goal directed",
+        "learning",
+        "motivation",
+        "prediction",
+        "prediction error",
+        "punishment",
+        "reinforcement learning",
+        "reward",
+        "reward anticipation",
+        "risk"
+    ],
+    "Emotion & Affect": [
+        "affect",
+        "anxiety",
+        "emotion regulation",
+        "empathy",
+        "fear",
+        "happy",
+        "joy",
+        "loss",
+        "love",
+        "mood",
+        "positive affect",
+        "satisfaction",
+        "threat",
+        "valence"
+    ],
+    "Social Cognition": [
+        "face recognition",
+        "imitation",
+        "mentalizing",
+        "perspective taking",
+        "self referential",
+        "social cognition",
+        "social interaction",
+        "theory mind"
+    ],
+    "Motor Function": [
+        "action observation",
+        "coordination",
+        "eye movements",
+        "gaze",
+        "grasping",
+        "hand movements",
+        "imagery",
+        "motor",
+        "motor control",
+        "movement",
+        "sensorimotor",
+        "skill"
+    ],
+    "Arousal & State": [
+        "arousal",
+        "autonomic",
+        "eating",
+        "interoceptive",
+        "sleep",
+        "stress"
+    ]
+}
+write_json(cognitive_functions, nispace_source_data_path / "reference" / "neurosynth" / "collection-CognitiveFunctions.collect")
 
 # %%
