@@ -1,23 +1,33 @@
-parcellation,space,n_parcels,resolution,publication,license
-Schaefer100MelbourneS1,MNI152NLin6Asym,116,1mm,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
-Schaefer100MelbourneS1,MNI152NLin2009cAsym,116,1mm,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
-Schaefer100MelbourneS1,fsaverage,116,41k,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
-Schaefer100MelbourneS1,fsLR,116,32k,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
-Schaefer200MelbourneS2,MNI152NLin6Asym,232,1mm,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
-Schaefer200MelbourneS2,MNI152NLin2009cAsym,232,1mm,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
-Schaefer200MelbourneS2,fsaverage,232,41k,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
-Schaefer200MelbourneS2,fsLR,232,32k,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
-Schaefer400MelbourneS3,MNI152NLin6Asym,450,1mm,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
-Schaefer400MelbourneS3,MNI152NLin2009cAsym,450,1mm,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
-Schaefer400MelbourneS3,fsaverage,450,41k,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
-Schaefer400MelbourneS3,fsLR,450,32k,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
-Glasser,fsLR,180,32k,10.1038/nature18933,https://www.humanconnectome.org/study/hcp-young-adult/document/wu-minn-hcp-consortium-open-access-data-use-terms
-Glasser,fsaverage,180,41k,10.1038/nature18933; https://figshare.com/articles/dataset/HCP-MMP1_0_projected_on_fsaverage/3498446/2,CC-BY-4.0
-DesikanKillianyAseg,MNI152NLin6Asym,84,1mm,10.1016/j.neuroimage.2006.01.021,free
-DesikanKillianyAseg,MNI152NLin2009cAsym,84,1mm,10.1016/j.neuroimage.2006.01.021,free
-DesikanKillianyAseg,fsaverage,68,41k,10.1016/j.neuroimage.2006.01.021,free
-DesikanKillianyAseg,fsLR,68,32k,10.1016/j.neuroimage.2006.01.021,free
-DestrieuxAseg,MNI152NLin6Asym,164,1mm,10.1016/j.neuroimage.2010.06.010,free
-DestrieuxAseg,MNI152NLin2009cAsym,164,1mm,10.1016/j.neuroimage.2010.06.010,free
-DestrieuxAseg,fsaverage,148,41k,10.1016/j.neuroimage.2010.06.010,free
-DestrieuxAseg,fsLR,148,32k,10.1016/j.neuroimage.2010.06.010,free
+parcellation,space,level,n_parcels,resolution,publication,license
+Schaefer100,MNI152NLin6Asym,cortex,100,1mm,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
+Schaefer100,MNI152NLin2009cAsym,cortex,100,1mm,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
+Schaefer100,fsaverage,cortex,100,41k,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
+Schaefer100,fsLR,cortex,100,32k,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
+Schaefer200,MNI152NLin6Asym,cortex,200,1mm,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
+Schaefer200,MNI152NLin2009cAsym,cortex,200,1mm,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
+Schaefer200,fsaverage,cortex,200,41k,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
+Schaefer200,fsLR,cortex,200,32k,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
+Schaefer400,MNI152NLin6Asym,cortex,400,1mm,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
+Schaefer400,MNI152NLin2009cAsym,cortex,400,1mm,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
+Schaefer400,fsaverage,cortex,400,41k,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
+Schaefer400,fsLR,cortex,400,32k,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
+TianS1,MNI152NLin6Asym,subcortex,16,1mm,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
+TianS1,MNI152NLin2009cAsym,subcortex,16,1mm,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
+TianS2,MNI152NLin6Asym,subcortex,32,1mm,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
+TianS2,MNI152NLin2009cAsym,subcortex,32,1mm,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
+TianS3,MNI152NLin6Asym,subcortex,50,1mm,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
+TianS3,MNI152NLin2009cAsym,subcortex,50,1mm,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
+Glasser,fsLR,cortex,360,32k,10.1038/nature18933,https://www.humanconnectome.org/study/hcp-young-adult/document/wu-minn-hcp-consortium-open-access-data-use-terms
+Glasser,fsaverage,cortex,360,41k,10.1038/nature18933; https://figshare.com/articles/dataset/HCP-MMP1_0_projected_on_fsaverage/3498446/2,CC-BY-4.0
+DesikanKilliany,MNI152NLin6Asym,cortex,68,1mm,10.1016/j.neuroimage.2006.01.021,free
+DesikanKilliany,MNI152NLin2009cAsym,cortex,68,1mm,10.1016/j.neuroimage.2006.01.021,free
+DesikanKilliany,fsaverage,cortex,68,41k,10.1016/j.neuroimage.2006.01.021,free
+DesikanKilliany,fsLR,cortex,68,32k,10.1016/j.neuroimage.2006.01.021,free
+DesikanKillianyTourville,MNI152NLin6Asym,cortex,62,1mm,10.3389/fnins.2012.00171,free
+DesikanKillianyTourville,MNI152NLin2009cAsym,cortex,62,1mm,10.3389/fnins.2012.00171,free
+Destrieux,MNI152NLin6Asym,cortex,148,1mm,10.1016/j.neuroimage.2010.06.010,free
+Destrieux,MNI152NLin2009cAsym,cortex,148,1mm,10.1016/j.neuroimage.2010.06.010,free
+Destrieux,fsaverage,cortex,148,41k,10.1016/j.neuroimage.2010.06.010,free
+Destrieux,fsLR,cortex,148,32k,10.1016/j.neuroimage.2010.06.010,free
+Aseg,MNI152NLin6Asym,subcortex,16,1mm,10.1016/s0896-6273(02)00569-x,free
+Aseg,MNI152NLin2009cAsym,subcortex,16,1mm,10.1016/s0896-6273(02)00569-x,free

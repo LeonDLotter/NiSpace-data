@@ -32,13 +32,18 @@ email = "l.lotter@fz-juelich.de"
 sys.path.append(str(Path.home() / "projects" / "nispace"))
 
 # import NiSpace functions
-from nispace.datasets import parcellation_lib, fetch_parcellation
+from nispace.io import load_labels, load_img
 from nispace.parcellate import Parcellater
-from nispace.io import write_json
 from nispace.utils.utils_datasets import download
 
 # nispace data path 
 nispace_source_data_path = wd
+
+# All parcellations
+PARCS = sorted(
+    [p.name for p in (nispace_source_data_path / "parcellation").glob("*") if p.is_dir()]
+)
+print("PARCS:", PARCS)
 
 # %% Download neurosynth data and convert to nimare dataset
 
@@ -87,13 +92,6 @@ if not fp.exists():
 terms_to_keep = pd.read_csv(fp, sep="\t")
 terms_to_keep = terms_to_keep[terms_to_keep["keep"] == 1]["term"].to_list()
 print(f"Number of terms in keep list: {len(terms_to_keep)}")
-
-# %% Download cognitive atlas
-
-# cogatlas = download_cognitive_atlas(
-#     data_dir=neurosynth_data_path,
-#     overwrite=False,
-# )
 
     
 # %% Run meta-analysis on term maps that are in any LDA dataset
@@ -181,21 +179,27 @@ if not all([fp.exists() for fp in map_paths]):
     raise FileNotFoundError(f"Some maps do not exist: {map_paths}")
 
 # iterate nispace parcellations
-for parc in parcellation_lib.keys():
-    if "alias" in parcellation_lib[parc]:
-        continue
+for parc in PARCS:
     print(parc)
-    
-    # space
-    parc_space = "MNI152NLin6Asym" if "MNI152NLin6Asym" in parcellation_lib[parc] else "fsLR"
     
     # fetch parcellation
     # the template from nimare ("mni152_2mm") corresponds to the MNI152NLin6Asym template in NiSpace
-    parc_img, parc_labels = fetch_parcellation(
-        parc,
-        space=parc_space,
-        return_loaded=True,
-    )
+    if (nispace_source_data_path / "parcellation" / parc / "MNI152NLin6Asym").exists():
+        parc_space = "MNI152NLin6Asym"
+        parc_img = load_img(nispace_source_data_path / "parcellation" / parc / "MNI152NLin6Asym" / 
+                            f"parc-{parc}_space-MNI152NLin6Asym.label.nii.gz")
+        parc_labels = load_labels(nispace_source_data_path / "parcellation" / parc / "MNI152NLin6Asym" / 
+                                  f"parc-{parc}_space-MNI152NLin6Asym.label.txt")
+    else:
+        parc_space = "fsLR"
+        parc_img = load_img((nispace_source_data_path / "parcellation" / parc / "fsLR" / 
+                             f"parc-{parc}_space-fsLR_hemi-L.label.gii.gz",
+                             nispace_source_data_path / "parcellation" / parc / "fsLR" / 
+                             f"parc-{parc}_space-fsLR_hemi-R.label.gii.gz"))
+        parc_labels = load_labels((nispace_source_data_path / "parcellation" / parc / "fsLR" / 
+                                  f"parc-{parc}_space-fsLR_hemi-L.label.txt",
+                                  nispace_source_data_path / "parcellation" / parc / "fsLR" / 
+                                  f"parc-{parc}_space-fsLR_hemi-R.label.txt"))
     
     # prep parcellator
     parcellater = Parcellater(
@@ -228,3 +232,4 @@ for parc in parcellation_lib.keys():
     
     # save
     data.to_csv(nispace_source_data_path / "reference" / "neurosynth" / "tab" / f"dset-neurosynth_parc-{parc}.csv.gz")
+# %%

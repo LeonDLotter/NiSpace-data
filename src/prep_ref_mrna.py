@@ -15,20 +15,26 @@ print(f"Working dir: {wd}")
 
 # Abagen (cloned github version)
 #sys.path.append(str(Path.home() / "projects" / "abagen"))
-from abagen import get_expression_data, images
+from abagen import get_expression_data, images, keep_stable_genes
 
 # Nispace
 sys.path.append(str(Path.home() / "projects" / "nispace"))
-from nispace.datasets import fetch_parcellation, parcellation_lib, fetch_template
-from nispace.stats.coloc import corr
+from nispace.datasets import fetch_template
 from nispace.io import load_labels
 
 # nispace data path 
 nispace_source_data_path = wd
 
+# All parcellations
+PARCS = sorted(
+    [p.name for p in (nispace_source_data_path / "parcellation").glob("*") if p.is_dir()]
+)
+print("PARCS:", PARCS)
+
+PARCS_SC = ["TianS1", "TianS2", "TianS3", "Aseg"]
 
 # %% mRNA tabulated data ---------------------------------------------------------------------------
-corr_threshold = 0.2
+corr_threshold = 0.1
 
 def par_fun(parc):
     
@@ -49,7 +55,19 @@ def par_fun(parc):
         space = "MNI152NLin6Asym"
 
     # load parc
-    parc_path, labels_path = fetch_parcellation(parc, space=space, return_loaded=False)
+    if "mni" in space.lower():
+        parc_path = nispace_source_data_path / "parcellation" / parc / space / f"parc-{parc}_space-{space}.label.nii.gz"
+        labels_path = parc_path.parent / f"parc-{parc}_space-{space}.label.txt"
+    else:
+        parc_path = (
+            nispace_source_data_path / "parcellation" / parc / space / f"parc-{parc}_space-{space}_hemi-L.label.gii.gz",
+            nispace_source_data_path / "parcellation" / parc / space / f"parc-{parc}_space-{space}_hemi-R.label.gii.gz"
+        )
+        labels_path = (
+            parc_path[0].parent / f"parc-{parc}_space-{space}_hemi-L.label.txt",
+            parc_path[1].parent / f"parc-{parc}_space-{space}_hemi-R.label.txt"
+        )
+    
     if isinstance(parc_path, tuple):
         tpl_path = fetch_template("fsaverage", desc="pial")
         parc_path = images.check_atlas(
@@ -63,10 +81,10 @@ def par_fun(parc):
 
     # parc info
     parc_info = pd.DataFrame({
-        "id": [int(l.split("_")[0]) for l in parc_labels],
+        "id": np.arange(1, len(parc_labels) + 1),
         "label": parc_labels,
-        "hemisphere": [l.split("_")[1][0] for l in parc_labels],
-        "structure": ["cortex" if "_CX_" in l else "subcortex/brainstem" for l in parc_labels]
+        "hemisphere": [l.split("hemi-")[1].split("_")[0] for l in parc_labels],
+        "structure": ["cortex" if parc not in PARCS_SC else "subcortex/brainstem"] * len(parc_labels)
     })
         
     # get data for each donor
@@ -78,29 +96,30 @@ def par_fun(parc):
         verbose=False, # 1
         return_donors=True 
     )
-
-    # get donor combinations
-    donor_combinations = list(combinations(mRNA_dict.keys(), 2))
-
-    # get crosscorr matrix
-    gene_crosscorr = pd.DataFrame(
-        columns=pd.MultiIndex.from_tuples(donor_combinations, names=["donor1", "donor2"]), 
-        index=pd.Index(mRNA_dict["9861"].columns, name="map"),
-        dtype=np.float16
+    
+    # keep stable genes
+    mRNA_list_stable, stability = keep_stable_genes(
+        expression=list(mRNA_dict.values()),
+        threshold=0.1,
+        percentile=False,
+        rank=True,
+        return_stability=True
     )
-    for gene in gene_crosscorr.index:
-        for comb in donor_combinations:
-            df = pd.concat([mRNA_dict[comb[0]][gene], mRNA_dict[comb[1]][gene]], axis=1).dropna()
-            if len(df) > 1:
-                gene_crosscorr.loc[gene, comb] = corr(df.values[:,0], df.values[:,1], rank=True) 
-            else:
-                gene_crosscorr.loc[gene, comb] = np.nan
+    stability = pd.Series(stability, index=mRNA_dict[list(mRNA_dict.keys())[0]].columns, dtype=np.float32)
+    stability.name = "reproducibility"
+    stability.index.name = "map"
+    print(stability.head())
+    
+    # get genes to extract
+    genes_to_extract = mRNA_list_stable[0].columns.to_list()
+    print(f"Retaining {len(genes_to_extract)} genes for {parc}")
 
     # get combined data for all donors        
     mRNA_tab = get_expression_data(
         atlas=parc_path,
         atlas_info=parc_info,
         lr_mirror="bidirectional",
+        norm_matched=False, # required to ensure that cortex and subcortex data can be combined post-hoc
         n_proc=1,
         verbose=False, #0
     )
@@ -113,8 +132,7 @@ def par_fun(parc):
 
     # subset dataset
     n_genes_prior = mRNA_tab.shape[0]
-    genes_overthresh = gene_crosscorr.loc[gene_crosscorr.mean(axis=1) > corr_threshold].index
-    mRNA_tab = mRNA_tab.loc[genes_overthresh]
+    mRNA_tab = mRNA_tab.loc[genes_to_extract]
     print(f"Parcellation: {parc}. Originally {n_genes_prior} genes.\n"
           f"After correlation threshold of >= {corr_threshold}, {mRNA_tab.shape[0]} genes remain.")
 
@@ -122,14 +140,13 @@ def par_fun(parc):
     mRNA_tab.to_csv(
         nispace_source_data_path / "reference" / "mrna" / "tab" / f"dset-mrna_parc-{parc}.csv.gz"
     )
-    gene_crosscorr.to_csv(
-        nispace_source_data_path / "reference" / "mrna" / "tab" /  f"dset-mrna_parc-{parc}_crosscorr.csv.gz"
+    stability.to_csv(
+        nispace_source_data_path / "reference" / "mrna" / "tab" /  f"dset-mrna_parc-{parc}_reproducibility.csv.gz"
     )
 
 #%% Run
 
 # parcellations
-PARCS = [k for k in parcellation_lib.keys() if "alias" not in parcellation_lib[k]]
 print(f"{len(PARCS)} parcellations: {PARCS}")
 
 # Run in parallel
@@ -137,7 +154,5 @@ Parallel(n_jobs=1)(
     delayed(par_fun)(parc) 
     for parc in tqdm(PARCS)
 )
-
-    
 
 # %%

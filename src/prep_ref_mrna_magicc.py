@@ -8,7 +8,7 @@ import zipfile
 from itertools import combinations
 from joblib import Parallel, delayed
 from tqdm.auto import tqdm
-from neuromaps import transforms
+from neuromaps import transforms, images
 import nibabel as nib
 
 # wd
@@ -17,8 +17,6 @@ print(f"Working dir: {wd}")
 
 # Nispace
 sys.path.append(str(Path.home() / "projects" / "nispace"))
-from nispace.datasets import fetch_parcellation, parcellation_lib
-from nispace.stats.coloc import corr
 from nispace.io import load_labels
 from nispace.utils.utils import vol_to_vect_arr
 
@@ -26,8 +24,13 @@ from nispace.utils.utils import vol_to_vect_arr
 nispace_source_data_path = wd
 
 # DIRECTORY TO MAGICC DATA
-magicc_data_path = Path("/Volumes/work_storage/data/magicc_expression_data")
+magicc_data_path = Path("/Volumes/data_m2_2tb/data/magicc_expression_data")
 
+# All parcellations
+PARCS = sorted(
+    [p.name for p in (nispace_source_data_path / "parcellation").glob("*") if p.is_dir()]
+)
+print("PARCS:", PARCS)
 
 # %% mRNA tabulated data ---------------------------------------------------------------------------
 
@@ -42,7 +45,8 @@ df_reproducibility = (
     .rename(columns={"gene.symbol": "map", "Estimated reproducibility": "reproducibility"})
     .set_index("map")
 )
-df_reproducibility.to_csv(nispace_source_data_path / "reference" / "magicc" / "tab" / "dset-magicc_reproducibility.csv.gz")
+df_reproducibility.to_csv(nispace_source_data_path / "reference" / "magicc" / "tab" / 
+                          "dset-magicc_reproducibility.csv.gz")
 
 # load expression data in fslr space
 expression_fslr = np.load(magicc_data_path / "ahba_vertex.npy")
@@ -56,13 +60,35 @@ print(df_tableS2.shape)
 print(expression_fslr.shape)
 
 # extract data
-for parc_name in parcellation_lib:
+for parc_name in PARCS:
     print(parc_name)
     
-    if "alias" in parcellation_lib[parc_name]:
+    # skip if no fsLR space available
+    if not (nispace_source_data_path / "parcellation" / parc_name / "fsLR").exists():
+        print(f"Parcellation {parc_name} not found in fsLR space")
         continue
     
-    parc, labels = fetch_parcellation(parc_name, space="fsLR", return_loaded=True)
+    # load parc
+    parc = (
+        images.load_gifti(
+            nispace_source_data_path / "parcellation" / parc_name / "fsLR" / 
+            f"parc-{parc_name}_space-fsLR_hemi-L.label.gii.gz"
+        ),
+        images.load_gifti(
+            nispace_source_data_path / "parcellation" / parc_name / "fsLR" / 
+            f"parc-{parc_name}_space-fsLR_hemi-R.label.gii.gz"
+        )
+    )
+    labels = np.concatenate([
+        np.loadtxt(
+            nispace_source_data_path / "parcellation" / parc_name / "fsLR" / 
+            f"parc-{parc_name}_space-fsLR_hemi-L.label.txt", dtype=str
+        ),
+        np.loadtxt(
+            nispace_source_data_path / "parcellation" / parc_name / "fsLR" / 
+            f"parc-{parc_name}_space-fsLR_hemi-R.label.txt", dtype=str
+        )
+    ]).tolist()
   
     # get parcellation data
     parc_dat_lh = parc[0].agg_data()
@@ -89,7 +115,8 @@ for parc_name in parcellation_lib:
     )
         
     # save
-    df_parc_expr.to_csv(nispace_source_data_path / "reference" / "magicc" / "tab" / f"dset-magicc_parc-{parc_name}.csv.gz")
+    df_parc_expr.to_csv(nispace_source_data_path / "reference" / "magicc" / "tab" / 
+                        f"dset-magicc_parc-{parc_name}.csv.gz")
 
 
 # %%

@@ -1,0 +1,16 @@
+hemi-L_lab-Thalamus
+hemi-L_lab-Caudate
+hemi-L_lab-Putamen
+hemi-L_lab-Pallidum
+hemi-L_lab-Hippocampus
+hemi-L_lab-Amygdala
+hemi-L_lab-Accumbens+area
+hemi-L_lab-VentralDC
+hemi-R_lab-Thalamus
+hemi-R_lab-Caudate
+hemi-R_lab-Putamen
+hemi-R_lab-Pallidum
+hemi-R_lab-Hippocampus
+hemi-R_lab-Amygdala
+hemi-R_lab-Accumbens+area
+hemi-R_lab-VentralDC

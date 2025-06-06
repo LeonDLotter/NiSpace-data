@@ -17,7 +17,7 @@ print(f"Working dir: {wd}")
 sys.path.append(str(Path.home() / "projects" / "nispace"))
 
 # import NiSpace functions
-from nispace.datasets import fetch_reference, fetch_parcellation, reference_lib, parcellation_lib
+from nispace.datasets import fetch_reference, fetch_parcellation, reference_lib
 from nispace.io import parcellate_data
 
 # nispace data path 
@@ -27,10 +27,11 @@ nispace_source_data_path = wd
 DSETS_WITH_MAPS = [k for k, v in reference_lib.items() if "map" in v]
 print("DSETS_WITH_MAPS: ", DSETS_WITH_MAPS)
 
-# all parcellations (original, not aliases)
-PARCS = [k for k in parcellation_lib.keys() if "alias" not in parcellation_lib[k]]
+# all parcellations 
+PARCS = sorted(
+    [p.name for p in (nispace_source_data_path / "parcellation").glob("*") if p.is_dir()]
+)
 print("PARCS:", PARCS)
-
 
 # %% Parcellate map-based image data ---------------------------------------------------------------
 
@@ -49,7 +50,7 @@ for dataset in DSETS_WITH_MAPS:
                 m for m in reference_lib[dataset]["map"].keys()
                 if space in reference_lib[dataset]["map"][m]
                 and "private" not in (reference_lib[dataset]["map"][m][space]["host"] if "mni" in space.lower() 
-                                    else reference_lib[dataset]["map"][m][space]["L"]["host"])
+                                      else reference_lib[dataset]["map"][m][space]["L"]["host"])
             ]
         else:
             space_original = space.replace("_original", "")
@@ -77,24 +78,38 @@ for dataset in DSETS_WITH_MAPS:
     for parc_name in PARCS: 
         print(parc_name)
         
+        # parcel labels
+        try:
+            labels = np.loadtxt(nispace_source_data_path / "parcellation" / parc_name / "MNI152NLin6Asym" / 
+                                f"parc-{parc_name}_space-MNI152NLin6Asym.label.txt", dtype=str)
+        except:
+            labels = np.concatenate([
+                np.loadtxt(nispace_source_data_path / "parcellation" / parc_name / "fsLR" / 
+                           f"parc-{parc_name}_space-fsLR_hemi-L.label.txt", dtype=str),
+                np.loadtxt(nispace_source_data_path / "parcellation" / parc_name / "fsLR" / 
+                           f"parc-{parc_name}_space-fsLR_hemi-R.label.txt", dtype=str)
+            ])
+        
         # Initiate dataframe
         ref_maps_df = pd.DataFrame(
             index=pd.Index(list(ref_maps_avail_all), name="map"),
-            columns=fetch_parcellation(
-                parc_name, 
-                space="MNI152NLin6Asym" if parc_name != "Glasser" else "fsLR", 
-                return_loaded=True
-            )[1],
+            columns=labels,
         )
         print("Pre-parcellation dataframe shape: ", ref_maps_df.shape)
         
         # iterate spaces: 
         # TODO: THIS IS A MESS: NOT NECESSARY WHEN WE PROVIDE ALL SPACES FOR ALL REFS/PARCS
         # for PET data and Schaefer parcellations: fsaverage > MNI152NLin6Asym
-        if dataset == "pet" and parc_name in ["Schaefer100MelbourneS1", "Schaefer200MelbourneS2", "Schaefer400MelbourneS3", 
-                                              "DesikanKillianyAseg", "DestrieuxAseg"]:
+        if dataset == "pet" and parc_name in ["Schaefer100", "Schaefer200", "Schaefer400", 
+                                              "DesikanKilliany", "Destrieux"]:
             ref_spaces_to_iterate = ["MNI152NLin6Asym", "fsaverage_original"]
             parc_spaces_to_iterate = ["MNI152NLin6Asym", "fsaverage_original"]
+        elif dataset == "pet" and parc_name == "DesikanKillianyTourville":
+            ref_spaces_to_iterate = ["MNI152NLin6Asym"]
+            parc_spaces_to_iterate = ["MNI152NLin6Asym"]
+        elif dataset == "pet" and parc_name in ["TianS1", "TianS2", "TianS3", "Aseg"]:
+            ref_spaces_to_iterate = ["MNI152NLin6Asym"]
+            parc_spaces_to_iterate = ["MNI152NLin6Asym"]
         # Glasser parcellation exists only in fslr
         elif dataset == "pet" and parc_name == "Glasser":
             ref_spaces_to_iterate = ["fsLR", "fsaverage_original"]
@@ -112,7 +127,19 @@ for dataset in DSETS_WITH_MAPS:
         for ref_space, parc_space in zip(ref_spaces_to_iterate, parc_spaces_to_iterate):
             
             # Load the parcellation
-            parc, labels = fetch_parcellation(parc_name, space=parc_space.replace("_original", ""), return_loaded=True)
+            if "mni" in parc_space.lower():
+                parc = images.load_nifti(
+                    nispace_source_data_path / "parcellation" / parc_name / parc_space / 
+                    f"parc-{parc_name}_space-{parc_space}.label.nii.gz"
+                )
+            else:
+                parc_space_to_load = parc_space.replace("_original", "")
+                parc = (
+                    images.load_gifti(nispace_source_data_path / "parcellation" / parc_name / parc_space_to_load / 
+                                      f"parc-{parc_name}_space-{parc_space_to_load}_hemi-L.label.gii.gz"),
+                    images.load_gifti(nispace_source_data_path / "parcellation" / parc_name / parc_space_to_load / 
+                                      f"parc-{parc_name}_space-{parc_space_to_load}_hemi-R.label.gii.gz")
+                )
             print(f"Parcellation loaded for space {parc_space}")
             
             # Load the reference maps

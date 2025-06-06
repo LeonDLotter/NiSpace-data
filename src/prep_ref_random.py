@@ -15,15 +15,18 @@ print(f"Working dir: {wd}")
 sys.path.append(str(Path.home() / "projects" / "nispace"))
 
 # import NiSpace functions
-from nispace.datasets import fetch_parcellation, fetch_template, parcellation_lib
-from nispace.io import parcellate_data
+from nispace.datasets import fetch_template
+from nispace.io import parcellate_data, load_labels, load_img
 
 # nispace data path 
 nispace_source_data_path = wd
 
 # all parcellations (original, not aliases)
-PARCS = [k for k in parcellation_lib.keys() if "alias" not in parcellation_lib[k]]
+PARCS = sorted(
+    [p.name for p in (nispace_source_data_path / "parcellation").glob("*") if p.is_dir()]
+)
 print("PARCS:", PARCS)
+
 # %% Functions to generate random voxel-wise maps
 # Copied from: https://github.com/netneurolab/markello_spatialnulls/blob/master/parspin/parspin/spatial.py
 # Cite: https://doi.org/10.1016/j.neuroimage.2021.118052
@@ -200,7 +203,15 @@ for alpha in alphas:
             # fetch parcellation
             parc_space = "MNI152NLin2009cAsym"
             resampling_target = "data"
-            parc_img, parc_labels = fetch_parcellation(parc, space=parc_space, return_loaded=True)
+            
+            if not (nispace_source_data_path / "parcellation" / parc / parc_space).exists():
+                print(f"Parcellation {parc} not found in {parc_space} space")
+                continue
+            
+            parc_img = load_img(nispace_source_data_path / "parcellation" / parc / parc_space / 
+                                f"parc-{parc}_space-{parc_space}.label.nii.gz")
+            parc_labels = load_labels(nispace_source_data_path / "parcellation" / parc / parc_space / 
+                                      f"parc-{parc}_space-{parc_space}.label.txt")
             
             # parcellate
             grf_parc = parcellate_data(
@@ -225,7 +236,7 @@ for alpha in alphas:
             
             
 # to final dfs
-for parc in PARCS:
+for parc in data_grf:
     df = pd.concat(
         [
             pd.concat(data_grf[parc][alpha])

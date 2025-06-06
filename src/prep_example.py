@@ -161,7 +161,7 @@ enigma_tab.T.to_csv(nispace_source_data_path / "example" / "example-enigma_parc-
 # %% EXAMPLE: HAPPY --------------------------------------------------------------------------------
 
 # parcellation we will use
-parc = "Schaefer200MelbourneS2"
+parc = "Schaefer200"
 
 # number of subjects for each group (happy vs normal)
 n_subs = 50

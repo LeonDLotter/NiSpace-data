@@ -1,0 +1,16 @@
+hemi-L_lab-HIP
+hemi-L_lab-AMY
+hemi-L_lab-pTHA
+hemi-L_lab-aTHA
+hemi-L_lab-NAc
+hemi-L_lab-GP
+hemi-L_lab-PUT
+hemi-L_lab-CAU
+hemi-R_lab-HIP
+hemi-R_lab-AMY
+hemi-R_lab-pTHA
+hemi-R_lab-aTHA
+hemi-R_lab-NAc
+hemi-R_lab-GP
+hemi-R_lab-PUT
+hemi-R_lab-CAU
