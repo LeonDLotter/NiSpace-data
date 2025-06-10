@@ -234,17 +234,24 @@ for alpha in alphas:
             # save
             data_grf[parc][alpha].append(grf_parc)
             
-            
+#%%
+           
 # to final dfs
 for parc in data_grf:
-    df = pd.concat(
-        [
-            pd.concat(data_grf[parc][alpha])
-            for alpha in alphas
-        ]
-    )
-    df = df.astype(np.float16)
-    df.index.name = "map"
-    df.to_csv(nispace_source_data_path / "reference" / "grf" / "tab" / f"dset-grf_parc-{parc}.csv.gz")
+    print(parc)
+    
+    try:
+        df = pd.concat(
+            [
+                pd.concat(data_grf[parc][alpha])
+                for alpha in alphas
+            ]
+        )
+        df = df.astype(np.float16)
+        df.index.name = "map"
+        df.to_csv(nispace_source_data_path / "reference" / "grf" / "tab" / f"dset-grf_parc-{parc}.csv.gz")
+    except Exception as e:
+        print(f"Error for {parc}: {e}")
+        continue
 
 # %%

@@ -21,61 +21,7 @@ nispace_source_data_path = wd
 # ONLY NON-SYMMETRIC PARCELLATIONS FOR THIS
 PARCS = ["Schaefer100", "Schaefer200", "Schaefer400"]
 
-#%% TEMP to get l2rmap for Schaefer parcellations
-
-# for parc, parc_old in [("Schaefer100", "Schaefer100MelbourneS1"), 
-#                        ("Schaefer200", "Schaefer200MelbourneS2"), 
-#                        ("Schaefer400", "Schaefer400MelbourneS3")]:
-#     print(parc, parc_old)
-    
-#     for space in ["MNI152NLin6Asym", "MNI152NLin2009cAsym", "fsLR", "fsaverage"]:
-        
-#         # load old l2rmap
-#         l2rmap_old = pd.read_csv(nispace_source_data_path / "parcellation" / parc_old / space / f"parc-{parc_old}_space-{space}.l2rmap.csv.gz", index_col=0)
-#         print("old l2rmap:", l2rmap_old.shape)
-#         display(l2rmap_old.head())
-#         assert np.allclose(l2rmap_old.sum(), 1.0)
-        
-#         # number of parcels on one hemisphere
-#         schaefer_n = int(parc[-3:]) // 2
-#         print(schaefer_n)
-        
-#         # get l2rmap for cortex only
-#         l2rmap = l2rmap_old.iloc[:schaefer_n, :schaefer_n]
-        
-#         # new labels
-#         if "mni" in space.lower():
-#             labels = np.loadtxt(
-#                 nispace_source_data_path / "parcellation" / parc / space / f"parc-{parc}_space-{space}.label.txt", dtype=str
-#             )
-#             labels_lh = [l for l in labels if "hemi-L_" in l]
-#             labels_rh = [l for l in labels if "hemi-R_" in l]
-#         else:
-#             labels_lh = np.loadtxt(
-#                 nispace_source_data_path / "parcellation" / parc / space / f"parc-{parc}_space-{space}_hemi-L.label.txt", dtype=str
-#             ).tolist()
-#             labels_rh = np.loadtxt(
-#                 nispace_source_data_path / "parcellation" / parc / space / f"parc-{parc}_space-{space}_hemi-R.label.txt", dtype=str
-#             ).tolist()
-        
-#         # check
-#         assert len(labels_lh) == len(labels_rh) == schaefer_n
-        
-#         # assign new labels
-#         l2rmap.index = labels_lh
-#         l2rmap.columns = labels_rh
-        
-#         # checks
-#         display(l2rmap.head())
-#         print("new l2rmap:", l2rmap.shape)
-#         assert np.allclose(l2rmap.sum(), 1.0)
-        
-#         # save
-#         l2rmap.to_csv(nispace_source_data_path / "parcellation" / parc / space / f"parc-{parc}_space-{space}.l2rmap.csv.gz")
-
-
-
-# %% Generate distance matrices
+# %% Generate LR mapping
 
 # fit models
 for parc in PARCS:
