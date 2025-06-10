@@ -150,7 +150,7 @@ def par_fun(parc):
 print(f"{len(PARCS)} parcellations: {PARCS}")
 
 # Run in parallel
-Parallel(n_jobs=1)(
+Parallel(n_jobs=-1)(
     delayed(par_fun)(parc) 
     for parc in tqdm(PARCS)
 )
