@@ -392,9 +392,9 @@ parc_info[name, "fsaverage"] = {
 # DesikanKilliany & Destrieux
 
 for name, fs_name, doi in [
-    ("DesikanKilliany", "aparc", "10.1016/j.neuroimage.2006.01.021"), 
-    ("DesikanKillianyTourville", "aparc.DKTatlas", "10.3389/fnins.2012.00171"), 
-    ("Destrieux", "aparc.a2009s", "10.1016/j.neuroimage.2010.06.010")
+    ("DesikanKilliany", "aparc", "10.1016/j.neuroimage.2006.01.021; doi.org/10.12751/g-node.2mnxpm"), 
+    ("DesikanKillianyTourville", "aparc.DKTatlas", "10.3389/fnins.2012.00171; doi.org/10.12751/g-node.2mnxpm"), 
+    ("Destrieux", "aparc.a2009s", "10.1016/j.neuroimage.2010.06.010; doi.org/10.12751/g-node.2mnxpm")
 ]:
     print(name)
 
