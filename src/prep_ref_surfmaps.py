@@ -19,7 +19,7 @@ sys.path.append(str(Path.home() / "projects" / "nispace"))
 
 # import NiSpace functions
 from nispace.datasets import fetch_reference, fetch_parcellation, reference_lib, parcellation_lib
-from nispace.io import parcellate_data
+from nispace.io import parcellate_data, load_img
 from nispace.utils.utils_datasets import get_file
 
 # nispace data path 
@@ -74,7 +74,7 @@ for dataset in DSETS_WITH_MAPS:
             fp = fp[0]
             fn_save = fp[0].name.split("_space-")[0] + "_space-fsLR_desc-proc_hemi-%s.surf.gii.gz"
             surf = transforms.fsaverage_to_fslr(
-                data=fp,
+                data=load_img(fp),
                 target_density="32k",
                 method="linear"
             )
@@ -90,7 +90,7 @@ for dataset in DSETS_WITH_MAPS:
             fp = fp[0]
             fn_save = fp[0].name.split("_space-")[0] + "_space-fsaverage_desc-proc_hemi-%s.surf.gii.gz"
             surf = transforms.fslr_to_fsaverage(
-                data=fp,
+                data=load_img(fp),
                 target_density="41k",
                 method="linear"
             )
@@ -108,7 +108,7 @@ for dataset in DSETS_WITH_MAPS:
                 print("Converting from MNI152NLin6Asym to fsaverage")
                 fn_save = fp.name.split("_space-")[0] + "_space-fsaverage_desc-proc_hemi-%s.surf.gii.gz"
                 surf = transforms.mni152_to_fsaverage(
-                    img=fp,
+                    img=load_img(fp),
                     fsavg_density="41k",
                     method="linear"
                 )
@@ -119,7 +119,7 @@ for dataset in DSETS_WITH_MAPS:
                 print("Converting from MNI152NLin6Asym to fsLR")
                 fn_save = fp.name.split("_space-")[0] + "_space-fsLR_desc-proc_hemi-%s.surf.gii.gz"
                 surf = transforms.mni152_to_fslr(
-                    img=fp,
+                    img=load_img(fp),
                     fslr_density="32k",
                     method="linear"
                 )
