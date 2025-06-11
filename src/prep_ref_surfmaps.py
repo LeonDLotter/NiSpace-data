@@ -49,17 +49,11 @@ for dataset in DSETS_WITH_MAPS:
         
         # Cases:
         # original fsaverage exists
-        if "fsaverage" in reference_lib[dataset]["map"][m]:
-            if not "desc-proc" in reference_lib[dataset]["map"][m]["fsaverage"]["L"]:
-                from_fsa_to_fslr = True
-            else:
-                from_fsa_to_fslr = False
+        if "fsa" in reference_lib[dataset]["map"][m]:
+            from_fsa_to_fslr = True
         # original fsLR exists
-        elif "fsLR" in reference_lib[dataset]["map"][m]:
-            if not "desc-proc" in reference_lib[dataset]["map"][m]["fsLR"]["L"]:
-                from_fslr_to_fsa = True
-            else:
-                from_fslr_to_fsa = False
+        elif "hcp" in reference_lib[dataset]["map"][m]:
+            from_fslr_to_fsa = True
         # only MNI152NLin6Asym exists
         elif "MNI152NLin6Asym" in reference_lib[dataset]["map"][m]:
             from_mni_to_fsa = True
@@ -78,7 +72,7 @@ for dataset in DSETS_WITH_MAPS:
             if len(fp) == 0 or len(fp) > 1:
                 raise ValueError(f"No or multiple files found for {m} in fsaverage")
             fp = fp[0]
-            fn_save = fp[0].name.split("_space-")[0] + "_space-fsLR_desc-proc_hemi-%s.surf.gii"
+            fn_save = fp[0].name.split("_space-")[0] + "_space-fsLR_desc-proc_hemi-%s.surf.gii.gz"
             surf = transforms.fsaverage_to_fslr(
                 data=fp,
                 target_density="32k",
@@ -94,7 +88,7 @@ for dataset in DSETS_WITH_MAPS:
             if len(fp) == 0 or len(fp) > 1:
                 raise ValueError(f"No or multiple files found for {m} in fsLR")
             fp = fp[0]
-            fn_save = fp[0].name.split("_space-")[0] + "_space-fsaverage_desc-proc_hemi-%s.surf.gii"
+            fn_save = fp[0].name.split("_space-")[0] + "_space-fsaverage_desc-proc_hemi-%s.surf.gii.gz"
             surf = transforms.fslr_to_fsaverage(
                 data=fp,
                 target_density="41k",
@@ -112,7 +106,7 @@ for dataset in DSETS_WITH_MAPS:
             
             if from_mni_to_fsa:
                 print("Converting from MNI152NLin6Asym to fsaverage")
-                fn_save = fp.name.split("_space-")[0] + "_space-fsaverage_desc-proc_hemi-%s.surf.gii"
+                fn_save = fp.name.split("_space-")[0] + "_space-fsaverage_desc-proc_hemi-%s.surf.gii.gz"
                 surf = transforms.mni152_to_fsaverage(
                     img=fp,
                     fsavg_density="41k",
@@ -123,7 +117,7 @@ for dataset in DSETS_WITH_MAPS:
 
             if from_mni_to_fslr:
                 print("Converting from MNI152NLin6Asym to fsLR")
-                fn_save = fp.name.split("_space-")[0] + "_space-fsLR_desc-proc_hemi-%s.surf.gii"
+                fn_save = fp.name.split("_space-")[0] + "_space-fsLR_desc-proc_hemi-%s.surf.gii.gz"
                 surf = transforms.mni152_to_fslr(
                     img=fp,
                     fslr_density="32k",
