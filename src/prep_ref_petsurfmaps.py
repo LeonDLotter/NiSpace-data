@@ -31,7 +31,7 @@ dataset = "pet"
 
 # iterate maps
 for m in reference_lib[dataset]["map"]:
-    from_mni_to_fsa, from_mni_to_fslr, from_fsa_to_fslr, from_fslr_to_fsa = False, False, False, False
+    transform_to_fsaverage, transform_to_fslr = None, None
     if "private" in reference_lib[dataset]["map"][m]["MNI152"]["host"]:
         print(f"Skipping private map: {m}")
         continue
@@ -41,81 +41,64 @@ for m in reference_lib[dataset]["map"]:
     # Cases:
     # original fsaverage exists
     if "fsaverageOriginal" in reference_lib[dataset]["map"][m]:
-        from_fsa_to_fslr = True
+        # TODO: intuitively, source_space should be fsaverageOriginal, but it is NOT because we processed
+        # the data in another script. So, source_space will be "fsaverage" and no fsaverage_to_fsaverage 
+        # transform will be applied. CHANGE THIS BY IMPLEMENTING ALL PROCESSING IN ONE SCRIPT
+        source_space = "fsaverage"
+        transform_to_fsaverage = None
+        transform_to_fslr = transforms.fsaverage_to_fslr
     # original fsLR exists
     elif "fsLROriginal" in reference_lib[dataset]["map"][m]:
-        from_fslr_to_fsa = True
+        # TODO: See above, replace fsaverageOriginal with fsLROriginal
+        source_space = "fsLR"
+        transform_to_fsaverage = transforms.fslr_to_fsaverage
+        transform_to_fslr = None
     # only MNI152NLin6Asym exists
     elif "MNI152NLin6Asym" in reference_lib[dataset]["map"][m]:
-        from_mni_to_fsa = True
-        from_mni_to_fslr = True
+        source_space = "MNI152NLin6Asym"
+        transform_to_fsaverage = transforms.mni152_to_fsaverage
+        transform_to_fslr = transforms.mni152_to_fslr
     else:
         raise ValueError(f"Something is wrong with the map: {m}")
     
-    # check
-    if not any([from_mni_to_fsa, from_mni_to_fslr, from_fsa_to_fslr, from_fslr_to_fsa]):
-        raise ValueError(f"All conversions are False for {m}")
-    
-    # fsaverage to fsLR
-    if from_fsa_to_fslr:
-        print("Converting from fsaverage to fsLR")
-        fp = fetch_reference(dataset, m, space="fsaverage", verbose=False)
-        if len(fp) == 0 or len(fp) > 1:
-            raise ValueError(f"No or multiple files found for {m} in fsaverage")
-        fp = fp[0]
-        fn_save = fp[0].name.split("_space-")[0] + "_space-fsLR_desc-proc_hemi-%s.surf.gii.gz"
-        surf = transforms.fsaverage_to_fslr(
-            data=load_img(fp),
-            target_density="32k",
-            method="linear"
-        )
-        surf[0].to_filename(nispace_source_data_path / "reference" / dataset / "map" / m / (fn_save % "L"))
-        surf[1].to_filename(nispace_source_data_path / "reference" / dataset / "map" / m / (fn_save % "R"))
-    
-    # fsLR to fsaverage
-    if from_fslr_to_fsa:
-        print("Converting from fsLR to fsaverage")
-        fp = fetch_reference(dataset, m, space="fsLR", verbose=False)
-        if len(fp) == 0 or len(fp) > 1:
-            raise ValueError(f"No or multiple files found for {m} in fsLR")
-        fp = fp[0]
-        fn_save = fp[0].name.split("_space-")[0] + "_space-fsaverage_desc-proc_hemi-%s.surf.gii.gz"
-        surf = transforms.fslr_to_fsaverage(
-            data=load_img(fp),
-            target_density="41k",
-            method="linear"
-        )
-        surf[0].to_filename(nispace_source_data_path / "reference" / dataset / "map" / m / (fn_save % "L"))
-        surf[1].to_filename(nispace_source_data_path / "reference" / dataset / "map" / m / (fn_save % "R"))
+    # apply transform
+    for target_space, transform_to_target, target_density in [
+        ("fsLR", transform_to_fslr, "32k"), 
+        ("fsaverage", transform_to_fsaverage, "41k")
+    ]:
+        print(f"Transforming {m} from {source_space} to {target_space}...")
         
-    # MNI152NLin6Asym to fsaverage
-    if from_mni_to_fsa or from_mni_to_fslr:
-        fp = fetch_reference(dataset, m, space="MNI152NLin6Asym", verbose=False)
+        # get original map and check
+        fp = fetch_reference(dataset, m, space=source_space, verbose=False)
         if len(fp) == 0 or len(fp) > 1:
-            raise ValueError(f"No or multiple files found for {m} in MNI152NLin6Asym")
+            raise ValueError(f"No or multiple files found for {m} in {source_space}")
         fp = fp[0]
+        if source_space == "MNI152NLin6Asym" and isinstance(fp, Path):
+            pass
+        elif len(fp) == 2:
+            hemi = ["L", "R"]
+        elif len(fp) == 1:
+            raise ValueError(f"Only one hemisphere found for {m}: {fp}")
+            #hemi = [fp[0].name.split("hemi-")[1].split(".")[0]]
+        else:
+            raise ValueError(f"Something is wrong with the map: {m}")
         
-        if from_mni_to_fsa:
-            print("Converting from MNI152NLin6Asym to fsaverage")
-            fn_save = fp.name.split("_space-")[0] + "_space-fsaverage_desc-proc_hemi-%s.surf.gii.gz"
-            surf = transforms.mni152_to_fsaverage(
-                img=load_img(fp),
-                fsavg_density="41k",
-                method="linear"
+        # transform
+        if transform_to_target is not None:
+            map_target = transform_to_target(
+                load_img(fp),
+                target_density,
+                method="linear",
+                #**{"hemi": hemi} if source_space != "MNI152NLin6Asym" else {}
             )
-            surf[0].to_filename(nispace_source_data_path / "reference" / dataset / "map" / m / (fn_save % "L"))
-            surf[1].to_filename(nispace_source_data_path / "reference" / dataset / "map" / m / (fn_save % "R"))
-
-        if from_mni_to_fslr:
-            print("Converting from MNI152NLin6Asym to fsLR")
-            fn_save = fp.name.split("_space-")[0] + "_space-fsLR_desc-proc_hemi-%s.surf.gii.gz"
-            surf = transforms.mni152_to_fslr(
-                img=load_img(fp),
-                fslr_density="32k",
-                method="linear"
-            )
-            surf[0].to_filename(nispace_source_data_path / "reference" / dataset / "map" / m / (fn_save % "L"))
-            surf[1].to_filename(nispace_source_data_path / "reference" / dataset / "map" / m / (fn_save % "R"))
             
-            
+            # save
+            save_dir = nispace_source_data_path / "reference" / dataset / "map" / m
+            save_dir.mkdir(parents=True, exist_ok=True)
+            for i_h, h in enumerate(hemi):
+                map_target[i_h].to_filename(save_dir / f"{m}_space-{target_space}_desc-proc_hemi-{h}.surf.gii.gz")
+                print(f"Saved {m} to {target_space} {h}...")
+        else:
+            print(f"No transform to {target_space} for {m}")
+                
 # %%
