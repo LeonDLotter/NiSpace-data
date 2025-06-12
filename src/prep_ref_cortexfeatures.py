@@ -91,6 +91,33 @@ for m in reference_lib["cortexfeatures"]["map"]:
         print(f"Only one hemisphere found for {m}: {fp}")
     if len(fp) > 2:
         raise ValueError(f"More than two files found for {m} in fsLR: {fp}")
+    
+    # transform to fsLR and fsaverage
+    for target_space, transform_to_target, target_density in [
+        ("fsLR", transform_to_fslr, "32k"), 
+        ("fsaverage", transform_to_fsaverage, "41k")
+    ]:
+        print(f"Transforming {m} to {target_space}...")
+        
+        # hemispheres
+        hemi = ["L", "R"] if len(fp) == 2 else [fp[0].name.split("hemi-")[1].split(".")[0]]
+        
+        # transform
+        map_target = transform_to_target(
+            data=load_img(fp),
+            target_density=target_density,
+            method="linear",
+            hemi=hemi
+        )
+        
+        # save
+        save_dir = nispace_source_data_path / "reference" / "cortexfeatures"/ "map" / m
+        save_dir.mkdir(parents=True, exist_ok=True)
+        for i_h, h in enumerate(hemi):
+            map_target[i_h].to_filename(save_dir / f"{m}_space-{target_space}_desc-proc_hemi-{h}.surf.gii.gz")
+            print(f"Saved {m} to {target_space} {h}...")
+        
+
 
     
     
