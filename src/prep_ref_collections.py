@@ -458,4 +458,55 @@ cognitive_functions = {
 }
 write_json(cognitive_functions, nispace_source_data_path / "reference" / "neurosynth" / "collection-CognitiveFunctions.collect")
 
+
+# %% cortexfeatures collections --------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------------
+
+# All
+(
+    pd.read_csv(
+        list((nispace_source_data_path / "reference" / "cortexfeatures" / "tab").glob("*.csv.gz"))[0], 
+        index_col=0 
+    )
+    .index.to_series()
+    .to_csv(nispace_source_data_path / "reference" / "cortexfeatures" / "collection-All.collect", index=False)
+)
+
+# MEG
+collection = [
+    "feature-megpoweralpha_pub-shafiei2022",
+    "feature-megpowerbeta_pub-shafiei2022",
+    "feature-megpowerdelta_pub-shafiei2022",
+    "feature-megpowergamma1_pub-shafiei2022",
+    "feature-megpowergamma2_pub-shafiei2022",
+    "feature-megpowertheta_pub-shafiei2022",
+    "feature-megtimescale_pub-shafiei2022",
+]
+pd.Series(collection, name="map") \
+    .to_csv(nispace_source_data_path / "reference" / "cortexfeatures" / "collection-MEG.collect", index=False)
+
+# Metabolism
+collection = [
+    "feature-cbf_pub-vaishnavi2010",
+    "feature-cbv_pub-vaishnavi2010",
+    "feature-cmro2_pub-vaishnavi2010",
+    "feature-cmrglc_pub-vaishnavi2010",
+    "feature-glycindex_pub-vaishnavi2010",
+]
+pd.Series(collection, name="map") \
+    .to_csv(nispace_source_data_path / "reference" / "cortexfeatures" / "collection-Metabolism.collect", index=False)
+
+# CortexTopology
+collection = [
+    "feature-thickness_pub-hcps1200",
+    "feature-t1t2_pub-hcps1200",
+    "feature-saaxis_pub-sydnor2021",
+    "feature-geneexpr-abagen",
+    "feature-develexpansion_pub-hill2010",
+    "feature-evolexpansion_pub-hill2010",
+    "feature-evolexpansion_pub-xu2020",
+    "feature-specieshomology_pub-xu2020",
+]
+pd.Series(collection, name="map") \
+    .to_csv(nispace_source_data_path / "reference" / "cortexfeatures" / "collection-CortexOrganisation.collect", index=False)
 # %%
