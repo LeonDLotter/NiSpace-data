@@ -38,5 +38,4 @@ def generate_hashes():
         json.dump(file_hashes, json_file, indent=4)
 
 if __name__ == "__main__":
-    commit_hash = sys.argv[1] if len(sys.argv) > 1 else None
-    generate_hashes(commit_hash) 
+    generate_hashes() 
