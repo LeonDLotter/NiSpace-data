@@ -61,8 +61,8 @@ gi_agg_R_img = nib.GiftiImage(darrays=[nib.gifti.GiftiDataArray(data=gi_agg_R)])
 # save giftis
 save_dir = nispace_source_data_path / "reference" / "cortexfeatures"/ "map" / "feature-glycindex_pub-vaishnavi2010" 
 save_dir.mkdir(parents=True, exist_ok=True)
-gi_agg_L_img.to_filename(save_dir / "feature-glycindex_pub-vaishnavi2010_space-fsaverage_desc-proc_hemi-L.surf.gii.gz")
-gi_agg_R_img.to_filename(save_dir / "feature-glycindex_pub-vaishnavi2010_space-fsaverage_desc-proc_hemi-R.surf.gii.gz")
+gi_agg_L_img.to_filename(save_dir / "feature-glycindex_pub-vaishnavi2010_space-fsLROriginal_hemi-L.surf.gii.gz")
+gi_agg_R_img.to_filename(save_dir / "feature-glycindex_pub-vaishnavi2010_space-fsLROriginal_hemi-R.surf.gii.gz")
 
 
 # %% Convert to NiSpace-format surface maps
