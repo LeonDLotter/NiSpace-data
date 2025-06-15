@@ -3,12 +3,7 @@
 import sys
 from pathlib import Path
 import numpy as np
-import pandas as pd
-import zipfile
-from itertools import combinations
-from joblib import Parallel, delayed
-from tqdm.auto import tqdm
-from neuromaps import transforms, images
+from neuromaps import transforms
 import nibabel as nib
 
 # add nispace to path
@@ -17,9 +12,8 @@ print(f"Working dir: {wd}")
 sys.path.append(str(Path.home() / "projects" / "nispace"))
 
 # import NiSpace functions
-from nispace.datasets import fetch_reference, fetch_parcellation, reference_lib, parcellation_lib
-from nispace.io import parcellate_data, load_img
-from nispace.utils.utils_datasets import get_file
+from nispace.datasets import fetch_reference, reference_lib
+from nispace.io import load_img
 from nispace.stats.misc import residuals 
 
 # nispace data path 
