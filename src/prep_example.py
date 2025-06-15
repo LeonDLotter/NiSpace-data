@@ -14,7 +14,7 @@ print(f"Working dir: {wd}")
 sys.path.append(str(Path.home() / "projects" / "nispace"))
 
 # import NiSpace functions
-from nispace.datasets import fetch_parcellation, fetch_reference
+from nispace.datasets import fetch_parcellation, fetch_reference, parcellation_lib
 from nispace.io import parcellate_data
 
 # nispace data path 
@@ -23,14 +23,14 @@ nispace_source_data_path = wd
 
 # %% EXAMPLE: ABIDE --------------------------------------------------------------------------------
 
-deriv = "falff"
+deriv = "degree_weighted"
 
 data = fetch_abide_pcp(
     data_dir=None, 
     n_subjects=None, 
-    pipeline="ccs", 
+    pipeline="cpac", 
     band_pass_filtering=True, 
-    global_signal_regression=False, 
+    global_signal_regression=True, 
     derivatives=[deriv], 
     quality_checked=True, 
     verbose=1, 
@@ -74,33 +74,35 @@ data_pheno = data_pheno[["subject", "site", "site_num", "dx", "dx_num", "dsm_iv_
 data_pheno = data_pheno.replace(-9999, np.nan)
 print(data_pheno.head(5))
 
-# parcellation to use
-parc_name = "Schaefer200"
-
-# get parcellation
-parc, parc_labels = fetch_parcellation(parc_name, return_loaded=True)
-
- # parcellate  
-abide_tab = parcellate_data(
-    data=data_rsfmri,
-    data_labels=data_pheno["subject"],
-    data_space="MNI152",
-    parcellation=parc,
-    parc_labels=parc_labels,
-    parc_space="MNI152",
-    resampling_target="data",
-    drop_background_parcels=True,
-    min_num_valid_datapoints=5,
-    min_fraction_valid_datapoints=0.1,
-    n_proc=-1,
-    dtype=np.float32,
-)
-
-# save parcellated data
-abide_tab.to_csv(nispace_source_data_path / "example" / f"example-abide_parc-{parc_name}.csv.gz")
-# save phenotypic data
-data_pheno.to_csv(nispace_source_data_path / "example" / "example-abide_info.csv", index=False)
+for parc_name in ["Schaefer200", "TianS1"]:
     
+    # parcellation to use
+    print(parc_name)
+
+    # get parcellation
+    parc, parc_labels = fetch_parcellation(parc_name)
+
+    # parcellate  
+    abide_tab = parcellate_data(
+        data=data_rsfmri,
+        data_labels=data_pheno["subject"],
+        data_space="MNI152",
+        parcellation=parc,
+        parc_labels=parc_labels,
+        parc_space="MNI152",
+        resampling_target="data",
+        drop_background_parcels=True,
+        min_num_valid_datapoints=5,
+        min_fraction_valid_datapoints=0.1,
+        n_proc=-1,
+        dtype=np.float32,
+    )
+
+    # save parcellated data
+    abide_tab.to_csv(nispace_source_data_path / "example" / f"example-abide_parc-{parc_name}.csv.gz")
+    # save phenotypic data
+    data_pheno.to_csv(nispace_source_data_path / "example" / "example-abide_info.csv", index=False)
+        
  
 # %% EXAMPLE: ENIGMA -------------------------------------------------------------------------------
 
@@ -161,62 +163,64 @@ enigma_tab.T.to_csv(nispace_source_data_path / "example" / "example-enigma_parc-
 # %% EXAMPLE: HAPPY --------------------------------------------------------------------------------
 
 # parcellation we will use
-parc = "Schaefer200"
+for parc_name in [p for p in parcellation_lib if "alias" not in parcellation_lib[p]]:
 
-# number of subjects for each group (happy vs normal)
-n_subs = 50
+    # number of subjects for each group (happy vs normal)
+    n_subs = 50
 
-# get happy source data
-tab_happy = fetch_reference(
-    "pet",
-    maps=["MOR", "KOR", "CB1"],
-    parcellation=parc,
-    nispace_data_dir=nispace_source_data_path
-)
+    # get happy source data
+    tab_happy = fetch_reference(
+        "pet",
+        maps=["MOR", "KOR", "CB1"],
+        parcellation=parc_name,
+        nispace_data_dir=nispace_source_data_path
+    )
 
-# get all data
-tab_all = fetch_reference(
-    "pet",
-    parcellation=parc,
-    nispace_data_dir=nispace_source_data_path
-)
+    # get all data
+    tab_all = fetch_reference(
+        "pet",
+        parcellation=parc_name,
+        nispace_data_dir=nispace_source_data_path
+    )
 
-# generate our 100 subjects
-# dataframe: first 50 are happy, second 50 are random
-data_happy = pd.DataFrame(
-    columns=tab_happy.columns, 
-    index=[f"sub-{i:03d}H" for i in range(1, n_subs+1)] + [f"sub-{i:03d}C" for i in range(n_subs+1, n_subs*2+1)]
-)
+    # generate our 100 subjects
+    # dataframe: first 50 are happy, second 50 are random
+    data_happy = pd.DataFrame(
+        columns=tab_happy.columns, 
+        index=[f"sub-{i:03d}H" for i in range(1, n_subs+1)] + [f"sub-{i:03d}C" for i in range(n_subs+1, n_subs*2+1)]
+    )
 
-rng = np.random.default_rng(42)  
-for i in range(n_subs):  
-    
-    # get a randomly weighted combination of our happy maps
-    weights = rng.random(tab_happy.shape[0]) + 0.5
-    data = ( tab_happy.T * weights ).mean(axis=1)
-    data_happy.iloc[i, :] = data
+    rng = np.random.default_rng(42)  
+    for i in range(n_subs):  
+        
+        # get a randomly weighted combination of our happy maps
+        weights = rng.random(tab_happy.shape[0]) + 0.5
+        data = ( tab_happy.T * weights ).mean(axis=1)
+        data_happy.iloc[i, :] = data
 
-    # get the mean of random subsets of the whole dataset -> "realistic noise"
-    
-    subset = rng.choice(tab_all.index, 30)
-    data = ( tab_all.loc[subset, :].T ).mean(axis=1) + rng.random(tab_all.shape[1])
-    data_happy.iloc[i + n_subs, :] = data
+        # get the mean of random subsets of the whole dataset -> "realistic noise"
+        
+        subset = rng.choice(tab_all.index, 30)
+        data = ( tab_all.loc[subset, :].T ).mean(axis=1) + rng.random(tab_all.shape[1])
+        data_happy.iloc[i + n_subs, :] = data
 
-# save
-data_happy.to_csv(nispace_source_data_path / "example" / f"example-happy_parc-{parc}.csv.gz")
+    # save
+    data_happy.to_csv(nispace_source_data_path / "example" / f"example-happy_parc-{parc_name}.csv.gz")
 
 
 # %% Test Happy Data
 
 from nispace import NiSpace
+import os
+os.environ["NISPACE_DATA_DIR"] = str(nispace_source_data_path)
 
 coloc = "spearman"
 stat = "rho"
 group_comparison = "zscore(a,b)" 
-
+parc_name = "Schaefer200"
 nsp = NiSpace(
-    x=fetch_reference("pet", collection="UniqueTracer", parcellation=parc, nispace_data_dir=nispace_source_data_path),
-    y=data_happy,
+    x=fetch_reference("pet", collection="UniqueTracer", parcellation=parc_name),
+    y=pd.read_csv(nispace_source_data_path / "example" / f"example-happy_parc-{parc_name}.csv.gz", index_col=0),
     parcellation=parc,
     n_proc=8,
 ).fit()
