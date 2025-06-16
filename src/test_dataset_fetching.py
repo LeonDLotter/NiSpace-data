@@ -21,7 +21,7 @@ for parc_name in datasets.parcellation_lib:
             continue
         print(space)
         
-        datasets.fetch_parcellation(parc_name, space, return_dist_mat=False)
+        datasets.fetch_parcellation(parc_name, space, return_dist_mat=False, return_loaded=False)
 
 # %% Templates
 

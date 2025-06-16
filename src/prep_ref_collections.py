@@ -509,4 +509,44 @@ collection = [
 ]
 pd.Series(collection, name="map") \
     .to_csv(nispace_source_data_path / "reference" / "cortexfeatures" / "collection-CortexOrganisation.collect", index=False)
+
+
+# %% bigbrain collections --------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------------
+
+# All
+(
+    pd.read_csv(
+        list((nispace_source_data_path / "reference" / "bigbrain" / "tab").glob("*.csv.gz"))[0], 
+        index_col=0 
+    )
+    .index.to_series()
+    .to_csv(nispace_source_data_path / "reference" / "bigbrain" / "collection-All.collect", index=False)
+)
+
+# Cortical layers
+collection = [
+    "feature-layer1_pub-wagstyl2020",
+    "feature-layer2_pub-wagstyl2020",
+    "feature-layer3_pub-wagstyl2020",
+    "feature-layer4_pub-wagstyl2020",
+    "feature-layer5_pub-wagstyl2020",
+    "feature-layer6_pub-wagstyl2020",
+]
+pd.Series(collection, name="map") \
+    .to_csv(nispace_source_data_path / "reference" / "bigbrain" / "collection-CorticalLayers.collect", index=False)
+
+# DifferentiationGradients
+collection = [
+    "feature-histogradient1_pub-paquola2021",
+    "feature-histogradient2_pub-paquola2021",
+    "feature-microgradient1_pub-paquola2021",
+    "feature-microgradient2_pub-paquola2021",
+    "feature-funcgradient1_pub-paquola2021",
+    "feature-funcgradient2_pub-paquola2021",
+    "feature-funcgradient3_pub-paquola2021",
+]
+pd.Series(collection, name="map") \
+    .to_csv(nispace_source_data_path / "reference" / "bigbrain" / "collection-DifferentiationGradients.collect", index=False)
+
 # %%

@@ -1,12 +1,9 @@
 # %% Init
 
-import pathlib
 import numpy as np
 import pandas as pd
 from pathlib import Path
 import sys
-import tempfile
-import nibabel as nib
 from neuromaps import images
 from neuromaps.resampling import resample_images
 from sklearn.preprocessing import minmax_scale
@@ -17,7 +14,7 @@ print(f"Working dir: {wd}")
 sys.path.append(str(Path.home() / "projects" / "nispace"))
 
 # import NiSpace functions
-from nispace.datasets import fetch_reference, fetch_parcellation, reference_lib
+from nispace.datasets import reference_lib
 from nispace.io import parcellate_data
 
 # nispace data path 
@@ -33,6 +30,24 @@ PARCS = sorted(
 )
 print("PARCS:", PARCS)
 
+# function to fetch reference maps
+def fetch_reference(dataset, maps, space):
+    
+    map_paths = []
+    map_dir = nispace_source_data_path / "reference" / dataset / "map"
+    for m in maps:
+        fp = sorted((map_dir / m).glob(f"{m}_space-{space}*"))
+        if len(fp) == 0:
+            raise ValueError(f"No map found for {m} in {space}")
+        elif len(fp) == 1:
+            fp = fp[0]
+        elif len(fp) == 2:
+            fp = tuple(fp)
+        elif len(fp) > 2:
+            raise ValueError(f"Over two maps found for {m} in {space}: {fp}")
+        map_paths.append(fp)
+    return map_paths
+        
 
 # %% Parcellate map-based image data ---------------------------------------------------------------
 
@@ -84,25 +99,6 @@ for dataset in DSETS_WITH_MAPS:
     print("Parcellating...")
     for parc_name in PARCS: 
         print(parc_name)
-        
-        # parcel labels
-        try:
-            labels = np.loadtxt(nispace_source_data_path / "parcellation" / parc_name / "MNI152NLin6Asym" / 
-                                f"parc-{parc_name}_space-MNI152NLin6Asym.label.txt", dtype=str)
-        except:
-            labels = np.concatenate([
-                np.loadtxt(nispace_source_data_path / "parcellation" / parc_name / "fsLR" / 
-                           f"parc-{parc_name}_space-fsLR_hemi-L.label.txt", dtype=str),
-                np.loadtxt(nispace_source_data_path / "parcellation" / parc_name / "fsLR" / 
-                           f"parc-{parc_name}_space-fsLR_hemi-R.label.txt", dtype=str)
-            ])
-        
-        # Initiate dataframe
-        ref_maps_df = pd.DataFrame(
-            index=pd.Index(list(ref_maps_avail_all), name="map"),
-            columns=labels,
-        )
-        print("Pre-parcellation dataframe shape: ", ref_maps_df.shape)
         
         # iterate spaces: 
         # TODO: THIS IS A MESS: NOT NECESSARY WHEN WE PROVIDE ALL SPACES FOR ALL REFS/PARCS
@@ -163,6 +159,42 @@ for dataset in DSETS_WITH_MAPS:
             else:
                 raise ValueError(f"We missed a case: Dataset: {dataset}; parcellation: {parc_name}")
             
+        # dataset: bigbrain
+        elif dataset == "bigbrain":
+            # cortical parcellations available in surface spaces:
+            if parc_name in ["Schaefer100", "Schaefer200", "Schaefer400", "DesikanKilliany", "Destrieux", "Glasser"]:
+                ref_spaces_to_iterate = ["fsaverage"]
+                parc_spaces_to_iterate = ["fsaverage"]
+                ref_maps_to_iterate = [ref_maps["fsaverageOriginal"]]
+            # subcortical parcellations
+            elif parc_name in ["TianS1", "TianS2", "TianS3", "Aseg"]:
+                continue
+            # cortical parcellations but not available in fsaverage
+            elif parc_name in ["DesikanKillianyTourville"]:
+                continue
+            # the rest
+            else:
+                raise ValueError(f"We missed a case: Dataset: {dataset}; parcellation: {parc_name}")
+            
+        # parcel labels
+        try:
+            labels = np.loadtxt(nispace_source_data_path / "parcellation" / parc_name / "MNI152NLin6Asym" / 
+                                f"parc-{parc_name}_space-MNI152NLin6Asym.label.txt", dtype=str)
+        except:
+            labels = np.concatenate([
+                np.loadtxt(nispace_source_data_path / "parcellation" / parc_name / "fsLR" / 
+                           f"parc-{parc_name}_space-fsLR_hemi-L.label.txt", dtype=str),
+                np.loadtxt(nispace_source_data_path / "parcellation" / parc_name / "fsLR" / 
+                           f"parc-{parc_name}_space-fsLR_hemi-R.label.txt", dtype=str)
+            ])
+        
+        # Initiate dataframe
+        ref_maps_df = pd.DataFrame(
+            index=pd.Index(list(ref_maps_avail_all), name="map"),
+            columns=labels,
+        )
+        print("Pre-parcellation dataframe shape: ", ref_maps_df.shape)
+            
         # run parcellation
         for ref_space, parc_space, ref_maps_avail in zip(ref_spaces_to_iterate, parc_spaces_to_iterate, ref_maps_to_iterate):
                      
@@ -182,7 +214,8 @@ for dataset in DSETS_WITH_MAPS:
             print(f"Parcellation loaded for space {parc_space}")
             
             # Load the reference maps
-            ref_paths = fetch_reference(dataset, maps=ref_maps_avail, space=ref_space, print_references=False)
+            # local fetch_reference function; works only if all maps are available in the source_data folder
+            ref_paths = fetch_reference(dataset, maps=ref_maps_avail, space=ref_space)
             print(f"-> {len(ref_paths)} maps available for space {ref_space}")
             
             # parcellate
