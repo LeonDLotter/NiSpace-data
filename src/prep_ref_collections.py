@@ -295,11 +295,7 @@ write_json(collection, nispace_source_data_path / "reference" / "mrna" / f"colle
 
 # Cortical layers
 # https://elifesciences.org/reviewed-preprints/86933v2
-# data: https://rdr.ucl.ac.uk/articles/dataset/MAGICC_vertex-level_gene_expression_data/22183891/1?file=39446125
-# download from the link above and set path to to "SuppTable2.csv"
-wagstyl2024_tableS2 = pd.read_csv(
-    wd / "_archive" / "magicc_expression_data" / "SuppTable2.csv"
-)
+wagstyl2024_tableS2 = pd.read_excel("https://cdn.elifesciences.org/articles/86933/elife-86933-supp2-v1.xlsx")
 sets = ["Layer 1", "Layer 2", "Layer 3", "Layer 4", "Layer 5", "Layer 6"]
 collection = {
     s.lower().replace(" ",""): wagstyl2024_tableS2[wagstyl2024_tableS2[s]==True]["gene.symbol"].unique().tolist()
