@@ -6,6 +6,12 @@ import zipfile
 import numpy as np
 import pandas as pd
 import shutil
+import tarfile
+import pyreadr
+from scipy import stats
+from statsmodels.stats.multitest import multipletests
+from tqdm.auto import tqdm
+
 # Nispace
 wd = Path.cwd().parent
 print(f"Working dir: {wd}")
@@ -13,7 +19,7 @@ sys.path.append(str(Path.home() / "projects" / "nispace"))
 
 # import NiSpace functions
 from nispace.datasets import fetch_reference
-from nispace.io import write_json
+from nispace.io import write_json, read_msigdb_json, read_json
 from nispace.utils.utils import _rm_ext
 from nispace.utils.utils_datasets import download
 
@@ -248,15 +254,243 @@ all_genes = sum([collection[k] for k in collection], [])
 print(len(collection), "sets,", len(all_genes), "genes,", len(set(all_genes)), "unique.")
 write_json(collection, nispace_source_data_path / "reference" / "mrna" / f"collection-SynGO.collect")
 
-# Chromosome location
-# for now, get from ABAnnotate (original source: DAVID)
-df = pd.read_csv("/Users/llotter/projects/ABAnnotate/raw_datasets/DAVID/OFFICIAL_GENE_SYMBOL2CHROMOSOME.txt", sep="\t", header=None)
-df.columns = ["gene", "chrom"]
-sets = [str(i) for i in np.arange(1,23,1)] + ["X","Y"]
-collection = {k: sorted(df.query("chrom==@k").gene.unique()) for k in sets}
+# GO
+for name, short_name in [
+    ("GOBiologicalProcess", "bp"),
+    ("GOCellularComponent", "cc"),
+    ("GOMolecularFunction", "mf"),
+]:
+    collection = {}
+    for k, v in read_msigdb_json(download(
+        f"https://data.broadinstitute.org/gsea-msigdb/msigdb/release/2025.1.Hs/c5.go.{short_name}.v2025.1.Hs.json"
+    )).items():
+        collection[k.replace(f"GO{short_name.upper()}_", "")] = v
+    all_genes = sum([collection[k] for k in collection], [])
+    print(len(collection), "sets,", len(all_genes), "genes,", len(set(all_genes)), "unique.")
+    write_json(collection, nispace_source_data_path / "reference" / "mrna" / f"collection-{name}.collect")
+
+# Chromosome locations
+collection = {}
+for k, v in read_msigdb_json(download(
+    "https://data.broadinstitute.org/gsea-msigdb/msigdb/release/2025.1.Hs/c1.all.v2025.1.Hs.json"
+)).items():
+    
+    # replace keys directly
+    if "chr" not in k:
+        k = k
+    else:
+        chr = k.replace("chr","").split("p")[0].split("q")[0]
+        if chr not in ["X", "Y"]:
+            chr = chr.zfill(2)
+        pq = ('p' if 'p' in k else 'q') + k.split("p")[-1].split("q")[-1].zfill(2)
+        k = f"chr{chr}{pq}"
+    # save
+    collection[k] = v
+# sort by keys
+collection = {k: collection[k] for k in sorted(collection.keys())}
+# save
 all_genes = sum([collection[k] for k in collection], [])
 print(len(collection), "sets,", len(all_genes), "genes,", len(set(all_genes)), "unique.")
 write_json(collection, nispace_source_data_path / "reference" / "mrna" / f"collection-Chromosome.collect")
+
+# Cortical layers
+# https://elifesciences.org/reviewed-preprints/86933v2
+wagstyl2024_tableS2 = pd.read_excel(
+    "https://s3.us-east-1.amazonaws.com/prod-elife-epp-data/automation/86933/v2/content/supplements/495984_file05.xlsx?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=ASIAXOXT77XQAL2QZ4DM%2F20250620%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20250620T141316Z&X-Amz-Expires=3600&X-Amz-Security-Token=IQoJb3JpZ2luX2VjENf%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLWVhc3QtMSJGMEQCIBEuMkmQmPrz%2BT1eLNW8I1wJ5mgCOYQG1dXiaOJ07tfgAiBNWtkT8vYXsolBBvjTsCM5Neho29G8jyB7E81lruom4yqMBQi%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F8BEAAaDDUxMjY4NjU1NDU5MiIMxOOR%2BSPpVrOjWm80KuAEGlYJc66gZepp9UrDpdKm3r%2B3S8N2UA%2FGVjfLKHSsUB%2B9zlaBT3nFSsNzcypM%2B%2F9HwGG3a1jHiS36pcdAJG3288qHeOfGKcu%2BvpXCAHC%2Bxb48kf5WHoKKNAEte3kj%2BVaESWVuDs3CbABzAuqi6fftFLJ0bxNP%2FtR2L3I3VDusumB%2BS6Z1n9lVxOSIv2S2cNPNPhwgQEmd7noRvb0zVSK8PN2L6F0vscoSny3NBS84VNYpPqHU%2BVwp2vNa6EfCVKjJH3bs3p03QFovyb1VAaon%2FhdlptVzT%2BvKRn4f9USXRNykCjFp5T6Jz2hl%2B0gSKKRhLU9EjucgPhZNAEKHIawbz9Il8JkXr1itOc%2FgNBxLJUabD5EuS1OEfP8sblEUNmQrSXDSNmZgCLwidk6QA72qDzj%2B%2FdipQW9jCm7Et4RCfEmL4o7eu6veEieEDbMDRTJwKgELSvWiVhN%2FinKU0rTP1NII5Vft9Gw3Ot3nnueg732HGQ2YNAWqOLJx08%2Fo%2BPY1j4JoTLpI3zwTwEGMP8frCS5D31Vl0pskHuC1RESsGKNm%2BjalAr2kiD2V4ZmfDqx6sJBr0Urbg2cRtrAtScjsIbyYlv%2Bmt4TGk0F7BHATCAkRBuKsr5sP%2BciwJF%2BhOuTKXGdUE1oNevnZw8APu5wMfLaUhZKqVqkIIU3FmWMYSecBndAOI9TvN9NgkGpJpv9VtCUaS2d9LwpSv1HmnR%2FTAhveziiYcL4zA8FxkxH71chd9Pj0ucWJmkip8cc%2BRRBWxbFSWkZ4Z9FFmgVTOkl%2FUhdwFp93cT0yLXVSAEM8wfAw%2FNjVwgY6mwGkWLUVIiCpsncJR0iUF7Mam2Z%2BODgVfUE2B2jsJTha3xAKVX0k7XxFnQftOSxnmppv4vyJhUtnQVXOfCVQ%2BlkdsQ%2Fv9O8CLro%2FbPA45UR3c362h1cscJyAMwzjLQiVKtONZeslgFTgc6ZgLf8q6abpDbEQZq3xHsgp5pfJuPTae3LTsAuTPsgUk1vxsQ9XAiLBs1o7KBKcRc%2FoPw%3D%3D&X-Amz-Signature=ba8c0ee18af7196c4d0049b0d339efc89f8c08c3e09bb056155222b89e993b40&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject"
+)
+sets = ["Layer 1", "Layer 2", "Layer 3", "Layer 4", "Layer 5", "Layer 6"]
+collection = {
+    s.lower().replace(" ",""): wagstyl2024_tableS2[wagstyl2024_tableS2[s]==True]["gene.symbol"].unique().tolist()
+    for s in sets
+}    
+all_genes = sum([collection[k] for k in collection], [])
+print(len(collection), "sets,", len(all_genes), "genes,", len(set(all_genes)), "unique.")
+write_json(collection, nispace_source_data_path / "reference" / "mrna" / f"collection-CorticalLayers.collect")
+
+# Tissue-specific gene expression
+collection = {}
+for s, url in [
+    ("ExpressedElevated", "https://www.proteinatlas.org/search/tissue_category_rna%3Abrain%3BTissue+enriched%2CGroup+enriched%2CTissue+enhanced+AND+sort_by%3Atissue+specific+score?format=tsv&download=yes"),
+    ("ExpressedNotElevated", "https://www.proteinatlas.org/search/tissue_category_rna%3AAny%3BTissue+enriched%2CGroup+enriched%2CTissue+enhanced+NOT+tissue_category_rna%3Abrain%3BTissue+enriched%2CGroup+enriched%2CTissue+enhanced+NOT+tissue_category_rna%3Abrain%3BNot+detected+AND+sort_by%3Atissue+specific+score?format=tsv&download=yes"),
+    ("ExpressedLowSpecificity", "https://www.proteinatlas.org/search/tissue_category_rna%3AAny%3BLow+tissue+specificity+AND+NOT+tissue_category_rna%3Abrain%3BNot+detected?format=tsv&download=yes"),
+    ("NotInBrain", "https://www.proteinatlas.org/search/tissue_category_rna%3Abrain%3BNot+detected+AND+NOT+tissue_category_rna%3AAny%3BNot+detected?format=tsv&download=yes"),
+    ("NotInTissue", "https://www.proteinatlas.org/search/tissue_category_rna%3AAny%3BNot+detected?format=tsv&download=yes")
+]:
+    df = pd.read_table(url)
+    print(s, len(df["Gene"].unique()))
+    collection[s] = sorted(df["Gene"].unique().tolist())
+write_json(collection, nispace_source_data_path / "reference" / "mrna" / f"collection-ProteinAtlas.collect")
+
+#%%
+# load data from R ABAEnrichment package hosted at:
+# https://bioconductor.org/packages/ABAData/
+
+# get dev effect and expression data
+url = "https://mghp.osn.xsede.org/bir190004-bucket01/archive.bioconductor.org/packages/3.2/data/experiment/src/contrib/ABAData_1.0.0.tar.gz"
+fp = wd / "_archive" / "ABAData_1.0.0.tar.gz"
+if not fp.exists():
+    download(url, fp)
+with tarfile.open(fp, "r:gz") as tar:
+    for member in tar.getmembers():
+        if member.name.endswith("dataset_dev_effect.rda") or member.name.endswith("dataset_5_stages.rda"):
+            tar.extract(member, path=wd / "_archive")
+            
+# read rdata files
+expression = pyreadr.read_r(wd / "_archive" / "ABAData" / "data" / "dataset_5_stages.rda")
+expression = list(expression.values())[0]
+
+# mappings for developmental stages
+stages = {
+    1: "prenatal", 
+    2: "infant", 
+    3: "child", 
+    4: "adolescent", 
+    5: "adult"
+}
+
+# mappings for regions
+regions = {
+    10194: "OFC", #'OFC_orbital frontal cortex',
+    10173: "dlPFC", #'DFC_dorsolateral prefrontal cortex',
+    10185: "vlPFC", #'VFC_ventrolateral prefrontal cortex',
+    10278: 'ACC', #'MFC_anterior (rostral) cingulate (medial prefrontal) cortex',
+    10163: "M1C", #'M1C_primary motor cortex (area M1, area 4)',
+    10209: "S1C", #'S1C_primary somatosensory cortex (area S1, areas 3,1,2)',
+    10225: "IPC", #'IPC_posteroventral (inferior) parietal cortex',
+    10236: "A1C", #'A1C_primary auditory cortex (core)',
+    10243: 'STC', #'STC_posterior (caudal) superior temporal cortex (area 22c)',
+    10252: 'ITC', #'ITC_inferolateral temporal cortex (area TEv, area 20)',
+    10269: 'V1C', #'V1C_primary visual cortex (striate cortex, area V1/17)',
+    10294: 'HIP', #'HIP_hippocampus (hippocampal formation)',
+    10361: "AMY", #'AMY_amygdaloid complex',
+    10333: 'STR', #'STR_striatum',
+    10398: "mdTHA", #'MD_mediodorsal nucleus of thalamus',
+    10657: "CBC", #'CBC_cerebellar cortex'
+ }
+
+# sort into final matrix form
+expression = expression.rename(columns={"hgnc_symbol": "gene_symbol", "structure": "region", "signal": "expression", "age_category": "stage"})
+expression = expression[["gene_symbol", "region", "stage", "expression"]]
+expression["stage"] = expression["stage"].replace(stages)
+expression["region"] = expression["region"].replace(regions)
+expression["region_stage"] = [f"{s1}-{s2}" for s1, s2 in zip(expression.stage, expression.region)]
+expression_matrix = expression[["gene_symbol", "region_stage", "expression"]] \
+    .pivot_table(columns="region_stage", index="gene_symbol").droplevel(0, axis=1)
+    
+# genes in brain according to protein atlas
+genes_in_brain = read_json(wd / "reference" / "mrna" / "collection-ProteinAtlas.collect")
+genes_in_brain = genes_in_brain["ExpressedElevated"] + genes_in_brain["ExpressedNotElevated"] + genes_in_brain["ExpressedLowSpecificity"]
+genes_in_brain = sorted(list(set(genes_in_brain)))
+expression_matrix = expression_matrix.loc[expression_matrix.index.isin(genes_in_brain)]
+print(expression_matrix.shape)
+
+# identify marker genes
+def identify_marker_genes(expression_matrix, 
+                          p_correction="fdr_bh",
+                          min_expression=0.1):
+    """
+    Identify marker genes for each region-stage combination
+    
+    Parameters:
+    -----------
+    expression_matrix : pd.DataFrame
+        Genes (rows) x Region-Stage combinations (columns)
+    region_stage_labels : list
+        Labels for each column
+    p_threshold : float
+        Significance threshold after correction
+    fc_threshold : float
+        Minimum log2 fold change
+    min_expression : float
+        Minimum expression threshold necessary to keep a gene in the analysis.
+        Calculated for the mean expression of each gene across all region-stage combinations.
+    
+    Returns:
+    --------
+    dict : Marker genes for each combination
+    """
+    print(f"Expression matrix shape before removing genes with no expression: {expression_matrix.shape}")
+    expression_matrix = expression_matrix[np.not_equal(expression_matrix.sum(axis=1), 0)]
+    print(f"Expression matrix shape after removing genes with no expression: {expression_matrix.shape}")
+    
+    # convert expression matrix to pseudocounts and log2 transform, then save as array
+    expression_matrix = np.log2(expression_matrix + 1)
+    
+    # apply min_expression threshold
+    if min_expression is not None:
+        print(f"Expression matrix shape before min_expression threshold: {expression_matrix.shape}")
+        expression_matrix_mean = expression_matrix.mean(axis=1)
+        expression_matrix = expression_matrix[expression_matrix_mean > expression_matrix_mean.quantile(min_expression)]
+        print(f"Expression matrix shape after min_expression threshold: {expression_matrix.shape}")
+        
+    # to array
+    expression_matrix_array = expression_matrix.values
+    
+    # initialize matrices
+    p_matrix = np.full_like(expression_matrix, np.nan)
+    fc_matrix = np.full_like(expression_matrix, np.nan)
+    pc_matrix = np.full_like(expression_matrix, np.nan)
+    n_genes = expression_matrix.shape[0]
+    n_conditions = expression_matrix.shape[1]
+    
+    # iterate columns = conditions
+    for i_condition in tqdm(range(n_conditions), desc="Conditions"):
+        
+        # Data for target condition
+        target_expr = expression_matrix_array[:, i_condition]
+        
+        # Data for other conditions
+        other_expr = expression_matrix_array[:, np.arange(n_conditions) != i_condition]
+        
+        # Iterate genes
+        for i_gene in range(n_genes):
+            target_val = target_expr[i_gene]
+            other_vals = other_expr[i_gene, :]
+            
+            # t-test
+            t_stat, p_val = stats.ttest_1samp(other_vals, target_val, alternative="less")
+            
+            # save p value and fold change
+            p_matrix[i_gene, i_condition] = p_val
+            with np.errstate(divide='ignore'):
+                fc = np.log2(target_val / other_vals.mean())
+                if np.isinf(fc):
+                    fc = 0.0
+                fc_matrix[i_gene, i_condition] = fc
+                
+        # multiple testing
+        pc_matrix[:, i_condition] = multipletests(p_matrix[:, i_condition], method=p_correction)[1]
+            
+    # to dfs
+    p_matrix = pd.DataFrame(p_matrix, index=expression_matrix.index, columns=expression_matrix.columns)
+    fc_matrix = pd.DataFrame(fc_matrix, index=expression_matrix.index, columns=expression_matrix.columns)
+    pc_matrix = pd.DataFrame(pc_matrix, index=expression_matrix.index, columns=expression_matrix.columns)
+    return fc_matrix, p_matrix, pc_matrix
+
+# get markers
+fc_matrix, p_matrix, pc_matrix = identify_marker_genes(expression_matrix, min_expression=None)
+pbonf_matrix = p_matrix * p_matrix.shape[0] * p_matrix.shape[1]
+
+# set order
+sets = [f"{s}-{r}" for s in stages.values() for r in regions.values()]
+
+# collection with only bonferroni significant genes and fold change > 1
+print("Only Bonferroni significant genes")
+collection = {
+    k: p_matrix[k][(pbonf_matrix[k] < 0.05) & (fc_matrix[k] > 1)].index.tolist()
+    for k in sets
+}
+print(f"{len(collection)} sets, between {min(len(v) for v in collection.values())} and {max(len(v) for v in collection.values())} genes.")
+write_json(collection, nispace_source_data_path / "reference" / "mrna" / f"collection-BrainSpan.collect")
+
+# collection with all genes that show positive fold change and fold values
+print("All genes and fold values")
+df = {
+    k: fc_matrix[k][fc_matrix[k] > 0].to_frame(name="weight")
+    for k in sets
+}
+df = pd.concat(df, axis=0, names=["set", "map"]).astype(np.float16)
+df.to_csv(nispace_source_data_path / "reference" / "mrna" / f"collection-BrainSpanWeights.collect", index=True)
 
 
 # %% magicc collections ----------------------------------------------------------------------------
