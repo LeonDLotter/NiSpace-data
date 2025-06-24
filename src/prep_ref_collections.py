@@ -295,8 +295,10 @@ write_json(collection, nispace_source_data_path / "reference" / "mrna" / f"colle
 
 # Cortical layers
 # https://elifesciences.org/reviewed-preprints/86933v2
-wagstyl2024_tableS2 = pd.read_excel(
-    "https://s3.us-east-1.amazonaws.com/prod-elife-epp-data/automation/86933/v2/content/supplements/495984_file05.xlsx?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=ASIAXOXT77XQAL2QZ4DM%2F20250620%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20250620T141316Z&X-Amz-Expires=3600&X-Amz-Security-Token=IQoJb3JpZ2luX2VjENf%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLWVhc3QtMSJGMEQCIBEuMkmQmPrz%2BT1eLNW8I1wJ5mgCOYQG1dXiaOJ07tfgAiBNWtkT8vYXsolBBvjTsCM5Neho29G8jyB7E81lruom4yqMBQi%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F8BEAAaDDUxMjY4NjU1NDU5MiIMxOOR%2BSPpVrOjWm80KuAEGlYJc66gZepp9UrDpdKm3r%2B3S8N2UA%2FGVjfLKHSsUB%2B9zlaBT3nFSsNzcypM%2B%2F9HwGG3a1jHiS36pcdAJG3288qHeOfGKcu%2BvpXCAHC%2Bxb48kf5WHoKKNAEte3kj%2BVaESWVuDs3CbABzAuqi6fftFLJ0bxNP%2FtR2L3I3VDusumB%2BS6Z1n9lVxOSIv2S2cNPNPhwgQEmd7noRvb0zVSK8PN2L6F0vscoSny3NBS84VNYpPqHU%2BVwp2vNa6EfCVKjJH3bs3p03QFovyb1VAaon%2FhdlptVzT%2BvKRn4f9USXRNykCjFp5T6Jz2hl%2B0gSKKRhLU9EjucgPhZNAEKHIawbz9Il8JkXr1itOc%2FgNBxLJUabD5EuS1OEfP8sblEUNmQrSXDSNmZgCLwidk6QA72qDzj%2B%2FdipQW9jCm7Et4RCfEmL4o7eu6veEieEDbMDRTJwKgELSvWiVhN%2FinKU0rTP1NII5Vft9Gw3Ot3nnueg732HGQ2YNAWqOLJx08%2Fo%2BPY1j4JoTLpI3zwTwEGMP8frCS5D31Vl0pskHuC1RESsGKNm%2BjalAr2kiD2V4ZmfDqx6sJBr0Urbg2cRtrAtScjsIbyYlv%2Bmt4TGk0F7BHATCAkRBuKsr5sP%2BciwJF%2BhOuTKXGdUE1oNevnZw8APu5wMfLaUhZKqVqkIIU3FmWMYSecBndAOI9TvN9NgkGpJpv9VtCUaS2d9LwpSv1HmnR%2FTAhveziiYcL4zA8FxkxH71chd9Pj0ucWJmkip8cc%2BRRBWxbFSWkZ4Z9FFmgVTOkl%2FUhdwFp93cT0yLXVSAEM8wfAw%2FNjVwgY6mwGkWLUVIiCpsncJR0iUF7Mam2Z%2BODgVfUE2B2jsJTha3xAKVX0k7XxFnQftOSxnmppv4vyJhUtnQVXOfCVQ%2BlkdsQ%2Fv9O8CLro%2FbPA45UR3c362h1cscJyAMwzjLQiVKtONZeslgFTgc6ZgLf8q6abpDbEQZq3xHsgp5pfJuPTae3LTsAuTPsgUk1vxsQ9XAiLBs1o7KBKcRc%2FoPw%3D%3D&X-Amz-Signature=ba8c0ee18af7196c4d0049b0d339efc89f8c08c3e09bb056155222b89e993b40&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject"
+# data: https://rdr.ucl.ac.uk/articles/dataset/MAGICC_vertex-level_gene_expression_data/22183891/1?file=39446125
+# download from the link above and set path to to "SuppTable2.csv"
+wagstyl2024_tableS2 = pd.read_csv(
+    wd / "_archive" / "magicc_expression_data" / "SuppTable2.csv"
 )
 sets = ["Layer 1", "Layer 2", "Layer 3", "Layer 4", "Layer 5", "Layer 6"]
 collection = {
