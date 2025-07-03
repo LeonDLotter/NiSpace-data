@@ -52,7 +52,7 @@ def fetch_reference(dataset, maps, space):
 # %% Parcellate map-based image data ---------------------------------------------------------------
 
 # iterate datasets
-for dataset in DSETS_WITH_MAPS:
+for dataset in ["tpm"]:# DSETS_WITH_MAPS:
     print("-------- " + dataset.upper() + " --------")
     
     # get files: 
@@ -176,6 +176,23 @@ for dataset in DSETS_WITH_MAPS:
             else:
                 raise ValueError(f"We missed a case: Dataset: {dataset}; parcellation: {parc_name}")
             
+        # dataset: tpm
+        elif dataset == "tpm":
+            # parcellations available in MNI152NLin6Asym
+            if parc_name in ["Schaefer100", "Schaefer200", "Schaefer400", "DesikanKilliany", "Destrieux",
+                             "DesikanKillianyTourville", "TianS1", "TianS2", "TianS3", "Aseg"]:
+                ref_spaces_to_iterate = ["MNI152NLin6Asym"]
+                parc_spaces_to_iterate = ["MNI152NLin6Asym"]
+                ref_maps_to_iterate = [ref_maps["MNI152NLin6Asym"]]
+            # parcellations only available in fsLR
+            elif parc_name in ["Glasser"]:
+                ref_spaces_to_iterate = ["fsLR"]
+                parc_spaces_to_iterate = ["fsLR"]
+                ref_maps_to_iterate = [ref_maps["fsLR"]]
+            # the rest
+            else:
+                raise ValueError(f"We missed a case: Dataset: {dataset}; parcellation: {parc_name}")
+        
         # parcel labels
         try:
             labels = np.loadtxt(nispace_source_data_path / "parcellation" / parc_name / "MNI152NLin6Asym" / 

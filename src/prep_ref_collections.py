@@ -781,4 +781,13 @@ collection = [
 pd.Series(collection, name="map") \
     .to_csv(nispace_source_data_path / "reference" / "bigbrain" / "collection-DifferentiationGradients.collect", index=False)
 
+# %% tpm collections -------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------------
+
+# All
+with open(nispace_source_data_path / "reference" / "tpm" / "collection-All.collect", "w") as f:
+    for fp in sorted((wd / "reference" / "tpm" / "map").glob("*")):
+        if fp.is_dir():
+            f.write(f"{fp.name}\n")
+
 # %%
