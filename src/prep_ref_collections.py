@@ -151,7 +151,6 @@ pd.DataFrame({
 
 # %% mRNA collections -------------------------------------------------------------------------------
 # --------------------------------------------------------------------------------------------------
-# TODO: brainspan, add weighted cell types
 # TODO: add GWAS from PGC after mapping to genes ("35 kb upstream and 10 kb downstream")
 
 # All genes
@@ -238,6 +237,35 @@ for collection, save_name in zip(
 ):
     collection = collection.astype(str)
     collection = {k: sorted(collection.query("set==@k").gene.unique()) for k in collection.set.unique()}
+    # for the TPM sets, we have nice names
+    if "TPM" in save_name:
+        sets = {
+            'Adult-Ex1': "Ex1 CortProject (L2/3)", # Cortical projection neuron; L2/3
+            'Adult-Ex2': "Ex2 Granule (L3/4)", # Granule neuron; L3/4
+            'Adult-Ex3': "Ex3 Granule (L4)", # Granule neuron; L4
+            'Adult-Ex4': "Ex4 SubcortProject (L4)", # Subcortical projection neuron; L4
+            'Adult-Ex5': "Ex5 SubcortProject (L4-6)", # Subcortical projection neuron; L4-6
+            'Adult-Ex6': "Ex6 SubcortProject (L5-6)", # Subcortical projection neuron; L5-6
+            'Adult-Ex7': "Ex7 Corticothalamic", # Corticothalamic projection neuron
+            'Adult-Ex8': "Ex8 Corticothalamic (L6)", # Corticothalamic projection neuron; L6
+            'Adult-In1': "In1 VIP+RELN+NDNF+ (L1/2)", # VIP+, RELN+, NDNF+; L1/2
+            'Adult-In2': "In2 VIP+RELN-NDNF- (L6)", # VIP+, RELN-, NDNF-; L6
+            'Adult-In3': "In3 VIP+RELN+NDNF- (L6)", # VIP+, RELN+, NDNF-; L6
+            'Adult-In4': "In4 VIP-RELN+NDNF+ (L1-3)", # VIP-, RELN+, NDNF+; L1-3
+            'Adult-In5': "In5 CCK+NOS1+CALB2+ (L2/3)", # CCK+, NOS1+, CALB2+; L2/3
+            'Adult-In6': "In6 PVALB+CRHBP+ (L4/5)", # PVALB+, CRHBP; L4/5
+            'Adult-In7': "In7 SST+CALB1+NPY+ (L5/6)", # SST+, CALB1+, NPY+; L5/6
+            'Adult-In8': "In8 SST+NOS1+ (L6)", # SST+, NOS1+; L6
+            'Adult-OtherNeuron': 'Other Neurons',
+            'Dev-quiescent': 'Developing-quiescent',
+            'Dev-replicating': 'Developing-replicating',
+            'Adult-Astro': "Astrocyte", # Astrocytes
+            'Adult-Endo': "Endothelial", # Endothelial cells
+            'Adult-Micro': "Microglia", # Microglia
+            'Adult-OPC': "OPC", # Oligodendrocyte progenitor cells
+            'Adult-Oligo': "Oligodendrocyte" # Oligodendrocytes
+        }
+        collection = {sets[k]: collection[k] for k in collection}
     all_genes = sum([collection[k] for k in collection], [])
     print(len(collection), "sets,", len(all_genes), "genes,", len(set(all_genes)), "unique.")
     write_json(collection, nispace_source_data_path / "reference" / "mrna" / f"collection-{save_name}.collect")
