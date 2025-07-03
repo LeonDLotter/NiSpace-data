@@ -1,5 +1,5 @@
 {
-    "Adult-Ex1": [
+    "Ex1 CortProject (L2/3)": [
         "CAMK2A",
         "CCDC88C",
         "CDH9",
@@ -19,7 +19,7 @@
         "PDGFD",
         "SERPINE2"
     ],
-    "Adult-Ex2": [
+    "Ex2 Granule (L3/4)": [
         "ADCY8",
         "BEND4",
         "CLMN",
@@ -32,7 +32,7 @@
         "SYT10",
         "TRHDE"
     ],
-    "Adult-Ex3": [
+    "Ex3 Granule (L4)": [
         "CHN1",
         "HR",
         "HTR2A",
@@ -43,7 +43,7 @@
         "VAV3",
         "VIPR2"
     ],
-    "Adult-Ex4": [
+    "Ex4 SubcortProject (L4)": [
         "ANO3",
         "ANXA1",
         "COL6A1",
@@ -62,7 +62,7 @@
         "TNNT2",
         "TSHZ2"
     ],
-    "Adult-Ex5": [
+    "Ex5 SubcortProject (L4-6)": [
         "ABCC9",
         "ACOT11",
         "ADTRP",
@@ -79,7 +79,7 @@
         "SV2B",
         "TLL1"
     ],
-    "Adult-Ex6": [
+    "Ex6 SubcortProject (L5-6)": [
         "ABO",
         "ADAMTSL1",
         "ANKRD18A",
@@ -119,7 +119,7 @@
         "ZFHX3",
         "ZNF385D"
     ],
-    "Adult-Ex7": [
+    "Ex7 Corticothalamic": [
         "CHST8",
         "COBL",
         "DPYD",
@@ -127,7 +127,7 @@
         "PRRX1",
         "SNTG2"
     ],
-    "Adult-Ex8": [
+    "Ex8 Corticothalamic (L6)": [
         "ADRA2A",
         "ANKRD13A",
         "ATP10A",
@@ -194,11 +194,11 @@
         "TRPM4",
         "ZNF804B"
     ],
-    "Adult-In1": [
+    "In1 VIP+RELN+NDNF+ (L1/2)": [
         "CNR1",
         "SDK2"
     ],
-    "Adult-In2": [
+    "In2 VIP+RELN-NDNF- (L6)": [
         "CCDC141",
         "COL21A1",
         "GABRA1",
@@ -207,7 +207,7 @@
         "PPP1R1C",
         "SLC7A11"
     ],
-    "Adult-In3": [
+    "In3 VIP+RELN+NDNF- (L6)": [
         "AHRR",
         "CALN1",
         "CIT",
@@ -229,7 +229,7 @@
         "TGFB2",
         "TMEM130"
     ],
-    "Adult-In4": [
+    "In4 VIP-RELN+NDNF+ (L1-3)": [
         "ADAMTS2",
         "DAAM2",
         "EGFR",
@@ -242,7 +242,7 @@
         "SV2C",
         "TRPC3"
     ],
-    "Adult-In5": [
+    "In5 CCK+NOS1+CALB2+ (L2/3)": [
         "FCRL4",
         "FREM2",
         "GAL3ST1",
@@ -255,7 +255,7 @@
         "TOX",
         "TXK"
     ],
-    "Adult-In6": [
+    "In6 PVALB+CRHBP+ (L4/5)": [
         "C4BPA",
         "LRRC38",
         "NXPH1",
@@ -263,7 +263,7 @@
         "RPH3AL",
         "ZNF703"
     ],
-    "Adult-In7": [
+    "In7 SST+CALB1+NPY+ (L5/6)": [
         "AOX1",
         "CKMT1B",
         "COL24A1",
@@ -278,13 +278,13 @@
         "STK32B",
         "VWDE"
     ],
-    "Adult-In8": [
+    "In8 SST+NOS1+ (L6)": [
         "CTTNBP2",
         "NMU",
         "TMCO4",
         "TNR"
     ],
-    "Adult-Astro": [
+    "Astrocyte": [
         "ABCC9",
         "ABO",
         "ACSBG1",
@@ -326,7 +326,7 @@
         "TTTY15",
         "USP9Y"
     ],
-    "Adult-Endo": [
+    "Endothelial": [
         "ABCA8",
         "ADAMTS4",
         "ANKRD13A",
@@ -411,7 +411,7 @@
         "ZFHX3",
         "ZNF703"
     ],
-    "Dev-quiescent": [
+    "Developing-quiescent": [
         "BCL11A",
         "DCX",
         "DPYSL3",
@@ -430,7 +430,7 @@
         "SYT6",
         "TUBA1A"
     ],
-    "Dev-replicating": [
+    "Developing-replicating": [
         "AURKB",
         "BIRC5",
         "BRIP1",
@@ -472,7 +472,7 @@
         "UBE2C",
         "ZNF268"
     ],
-    "Adult-Micro": [
+    "Microglia": [
         "A2M",
         "ALOX5AP",
         "BCL2A1",
@@ -499,7 +499,7 @@
         "ST8SIA4",
         "TREM1"
     ],
-    "Adult-OtherNeuron": [
+    "Other Neurons": [
         "ADCY8",
         "CALB2",
         "CCK",
@@ -547,7 +547,7 @@
         "VSNL1",
         "WNT16"
     ],
-    "Adult-OPC": [
+    "OPC": [
         "A2M",
         "AGPAT9",
         "ALOX5AP",
@@ -602,7 +602,7 @@
         "TREM1",
         "XYLT1"
     ],
-    "Adult-Oligo": [
+    "Oligodendrocyte": [
         "ABCA8",
         "ADAMTS4",
         "B3GNT7",
