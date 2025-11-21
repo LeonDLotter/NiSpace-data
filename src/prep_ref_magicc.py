@@ -5,6 +5,8 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 from neuromaps import images
+from joblib import Parallel, delayed
+from tqdm.auto import tqdm
 
 # wd
 wd = Path.cwd().parent
@@ -12,7 +14,6 @@ print(f"Working dir: {wd}")
 
 # Nispace
 sys.path.append(str(Path.home() / "projects" / "nispace"))
-from nispace.io import load_labels
 from nispace.utils.utils import vol_to_vect_arr
 
 # nispace data path 

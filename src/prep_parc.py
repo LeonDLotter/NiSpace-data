@@ -2,9 +2,10 @@
 
 import sys
 from pathlib import Path
+from arrow import get
 import numpy as np
 import pandas as pd
-from nilearn import plotting, image
+from nilearn import plotting, image, datasets
 from neuromaps import images, transforms
 from netneurotools.datasets import fetch_mmpall
 import templateflow.api as tflow
@@ -562,11 +563,138 @@ for space in mni_spaces:
         "license": "free"
     }
     
+# %% ===============================================================================================
+# Harvard-Oxford Cortical
+for name, tf_name, nl_name, level, doi in [
+    ("HarvardOxfordCortical", "HOCPAL", "cortl", "cortex", "doi.org/10.1016/j.schres.2005.11.020; doi.org/10.1016/j.neuroimage.2006.01.021"), 
+    ("HarvardOxfordSubcortical", "HOSPA", "sub", "subcortex", "doi.org/10.1176/appi.ajp.162.7.1256; doi.org/10.1016/j.biopsych.2006.06.027"), 
+]:
+    print(name)
+
+
+    # MNI ------------------------------------------------------------------------------------------
+    for space in mni_spaces:
+        print(space)
+        
+        # download parcellation
+        parc = images.load_nifti(
+            download(
+                f"https://templateflow.s3.amazonaws.com/tpl-{space}/tpl-{space}_res-01_atlas-{tf_name}_desc-th25_dseg.nii.gz"
+            )
+        )
+        
+        # get labels from nilearn (templateflow does not provide them)
+        labels = datasets.fetch_atlas_harvard_oxford(f"{nl_name}-prob-1mm")["labels"]
+        label_idc = [
+            i for i, l in enumerate(labels) # we start from 0 because the background==0 label is included!
+            if l not in ["Background", 
+                         "Left Cerebral White Matter", "Right Cerebral White Matter",
+                         "Left Cerebral Cortex", "Right Cerebral Cortex",
+                         "Left Lateral Ventricle", "Right Lateral Ventricle",
+                         "Brain-Stem"]
+        ]
+        label_idc_lh = [i for i in label_idc if "Left " in labels[i]]
+        print("LH indices:", label_idc_lh)
+        label_idc_rh = [i for i in label_idc if "Right " in labels[i]]
+        print("RH indices:", label_idc_rh)
+        assert 0 not in label_idc_lh and 0 not in label_idc_rh, "Background label should not be included"
+        labels = [
+            f"hemi-{labels[i][0]}_lab-" + \
+                labels[i].split(" (")[0].replace("Left ", "").replace("Right ", "").replace(",", "").replace("'","").replace(" " , "+") 
+            for i in label_idc_lh + label_idc_rh
+        ]
+        print(labels)
+        
+        # keep the right parcel indices and relabel consecutively
+        parc = relabel_nifti_parc(parc, new_order=label_idc_lh + label_idc_rh)
+        
+        # resample
+        parc = resample_to_template(parc, space)
+        
+        # save and plot
+        save_parc(
+            parc=parc, 
+            name=name, 
+            space=space, 
+            labels=labels, 
+            plot=True
+        )
+        
+        # add to parc_info
+        parc_info[name, space] = {
+            "level": level,
+            "n_parcels": len(labels), 
+            "resolution": "1mm", 
+            "publication": doi,
+            "license": "free"
+        }
+        
+        
+    # fsaverage & fsLR -----------------------------------------------------------------------------
+    # will be conferted from MNI152NLin6Asym
+    name = "HarvardOxfordCortical"
+    print(name)
+
+    # load MNI152NLin6Asym parcellation that we prepared above
+    parc = images.load_nifti(
+        get_save_dir(name, "MNI152NLin6Asym") / f"parc-{name}_space-MNI152NLin6Asym.label.nii.gz"
+    )
+    labels = pd.read_csv(
+        get_save_dir(name, "MNI152NLin6Asym") / f"parc-{name}_space-MNI152NLin6Asym.label.txt",
+        header=None
+    )[0].to_list()
+
+    # dict to store surfaces
+    tmp = {"fsaverage": {"L": {}, "R": {}}, "fsLR": {"L": {}, "R": {}}}
+    
+    # iterate hemispheres
+    for hemi in ["L", "R"]:
+        print("transforming hemi:", hemi)
+        
+        # one-hemisphere volume
+        label_idc_hemi = [i for i, l in enumerate(labels, start=1) if f"hemi-{hemi}_" in l]
+        parc_hemi = relabel_nifti_parc(parc, new_order=label_idc_hemi, new_labels=label_idc_hemi)
+        
+        # convert to surface
+        for space, transform_fun, target_density in [
+            ("fsaverage", transforms.mni152_to_fsaverage, "41k"), 
+            ("fsLR", transforms.mni152_to_fslr, "32k")
+        ]:
+            print("transforming space:", space)
+            
+            # transform    
+            parc_surf = transform_fun(parc_hemi, target_density, method="nearest")
+            parc_surf = parc_surf[["L", "R"].index(hemi)] # left/right hemi
+            
+            # save
+            tmp[space][hemi]["surf"] = parc_surf
+            tmp[space][hemi]["labels"] = [l for l in labels if f"hemi-{hemi}_" in l]
+    
+    # save and plot
+    for space in ["fsaverage", "fsLR"]:
+        print("saving space:", space)
+            
+        # save parc
+        save_parc(
+            parc=(tmp[space]["L"]["surf"], tmp[space]["R"]["surf"]), 
+            name=name, 
+            space=space, 
+            labels=(tmp[space]["L"]["labels"], tmp[space]["R"]["labels"]), 
+            plot=True
+        )
+        # save info
+        parc_info[name, space] = {
+            "level": "cortex",
+            "n_parcels": len(labels), 
+            "resolution": "41k" if space == "fsaverage" else "32k",
+            "publication": parc_info[name, "MNI152NLin6Asym"]["publication"],
+            "license": "free"
+        }
+    
 
 # %% ===============================================================================================
 
 # Save info
-
 parc_info = pd.DataFrame.from_dict(parc_info).T
 parc_info.index.names = ["parcellation", "space"]
 parc_info.to_csv(nispace_source_data_path / "parcellation" / "metadata.csv")

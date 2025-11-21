@@ -31,3 +31,9 @@ Destrieux,fsaverage,cortex,148,41k,10.1016/j.neuroimage.2010.06.010,free
 Destrieux,fsLR,cortex,148,32k,10.1016/j.neuroimage.2010.06.010,free
 Aseg,MNI152NLin6Asym,subcortex,16,1mm,10.1016/s0896-6273(02)00569-x,free
 Aseg,MNI152NLin2009cAsym,subcortex,16,1mm,10.1016/s0896-6273(02)00569-x,free
+HarvardOxfordCortical,MNI152NLin6Asym,cortex,96,1mm,doi.org/10.1016/j.schres.2005.11.020; doi.org/10.1016/j.neuroimage.2006.01.021,free
+HarvardOxfordCortical,MNI152NLin2009cAsym,cortex,96,1mm,doi.org/10.1016/j.schres.2005.11.020; doi.org/10.1016/j.neuroimage.2006.01.021,free
+HarvardOxfordCortical,fsaverage,cortex,96,41k,doi.org/10.1016/j.schres.2005.11.020; doi.org/10.1016/j.neuroimage.2006.01.021,free
+HarvardOxfordCortical,fsLR,cortex,96,32k,doi.org/10.1016/j.schres.2005.11.020; doi.org/10.1016/j.neuroimage.2006.01.021,free
+HarvardOxfordSubcortical,MNI152NLin6Asym,subcortex,14,1mm,doi.org/10.1176/appi.ajp.162.7.1256; doi.org/10.1016/j.biopsych.2006.06.027,free
+HarvardOxfordSubcortical,MNI152NLin2009cAsym,subcortex,14,1mm,doi.org/10.1176/appi.ajp.162.7.1256; doi.org/10.1016/j.biopsych.2006.06.027,free

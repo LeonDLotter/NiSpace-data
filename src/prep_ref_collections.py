@@ -537,8 +537,8 @@ all_genes.to_csv(nispace_source_data_path / "reference" / "magicc" / "collection
 # %% RSN collections -------------------------------------------------------------------------------
 # --------------------------------------------------------------------------------------------------
 
-rsn_files = fetch_reference("rsn", space="MNI152")
-rsn_files = [f.name.split("_space")[0] for f in rsn_files]
+rsn_files = sorted( (nispace_source_data_path / "reference" / "rsn" / "map").glob("*") )
+rsn_files = [f.name.split("_space")[0] for f in rsn_files if f.is_dir()]
 
 # All
 pd.Series(rsn_files, name="map") \

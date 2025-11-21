@@ -179,6 +179,7 @@ if not all([fp.exists() for fp in map_paths]):
     raise FileNotFoundError(f"Some maps do not exist: {map_paths}")
 
 # iterate nispace parcellations
+# TODO: simplify after we have every parcellation in every space
 for parc in PARCS:
     print(parc)
     

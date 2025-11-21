@@ -36,7 +36,9 @@ def fetch_reference(dataset, maps, space):
     map_paths = []
     map_dir = nispace_source_data_path / "reference" / dataset / "map"
     for m in maps:
-        fp = sorted((map_dir / m).glob(f"{m}_space-{space}*"))
+        fp = sorted((map_dir / m).glob(f"{m}_space-{space}_*"))
+        if len(fp) == 0:
+            fp = sorted((map_dir / m).glob(f"{m}_space-{space}.*"))
         if len(fp) == 0:
             raise ValueError(f"No map found for {m} in {space}")
         elif len(fp) == 1:
@@ -44,7 +46,7 @@ def fetch_reference(dataset, maps, space):
         elif len(fp) == 2:
             fp = tuple(fp)
         elif len(fp) > 2:
-            raise ValueError(f"Over two maps found for {m} in {space}: {fp}")
+            raise ValueError(f"More than two maps found for {m} in {space}: {fp}")
         map_paths.append(fp)
     return map_paths
         
@@ -52,7 +54,7 @@ def fetch_reference(dataset, maps, space):
 # %% Parcellate map-based image data ---------------------------------------------------------------
 
 # iterate datasets
-for dataset in ["tpm"]:# DSETS_WITH_MAPS:
+for dataset in DSETS_WITH_MAPS:
     print("-------- " + dataset.upper() + " --------")
     
     # get files: 
@@ -106,7 +108,9 @@ for dataset in ["tpm"]:# DSETS_WITH_MAPS:
         # dataset: pet
         if dataset == "pet":
             # parcellations available in all spaces: fsaverage > MNI152NLin6Asym
-            if parc_name in ["Schaefer100", "Schaefer200", "Schaefer400", "DesikanKilliany", "Destrieux"]:
+            if parc_name in ["Schaefer100", "Schaefer200", "Schaefer400", 
+                             "DesikanKilliany", "Destrieux",
+                             "HarvardOxfordCortical"]:
                 ref_spaces_to_iterate = ["MNI152NLin6Asym", "fsaverage"]
                 parc_spaces_to_iterate = ["MNI152NLin6Asym", "fsaverage"]
                 ref_maps_to_iterate = [ref_maps["MNI152NLin6Asym"], ref_maps["fsaverageOriginal"]]
@@ -116,7 +120,10 @@ for dataset in ["tpm"]:# DSETS_WITH_MAPS:
                 parc_spaces_to_iterate = ["fsLR", "fsaverage"]
                 ref_maps_to_iterate = [ref_maps["fsLR"], ref_maps["fsaverageOriginal"]]
             # parcellations only available in MNI spaces
-            elif parc_name in ["DesikanKillianyTourville", "TianS1", "TianS2", "TianS3", "Aseg"]:
+            elif parc_name in ["DesikanKillianyTourville", 
+                               "TianS1", "TianS2", "TianS3", 
+                               "Aseg",
+                               "HarvardOxfordSubcortical"]:
                 ref_spaces_to_iterate = ["MNI152NLin6Asym"]
                 parc_spaces_to_iterate = ["MNI152NLin6Asym"]
                 ref_maps_to_iterate = [ref_maps["MNI152NLin6Asym"]]
@@ -125,18 +132,22 @@ for dataset in ["tpm"]:# DSETS_WITH_MAPS:
                 raise ValueError(f"We missed a case: Dataset: {dataset}; parcellation: {parc_name}")
                 
         # dataset: rsn
-        # RSN dataset has only cortical MNI152 space for now and fits better to MNI152NLin2009cAsym 
+        # RSN dataset is derived from specific MNI152 space and transformed to all other spaces
         elif dataset == "rsn":
-            # parcellations availabe in MNI152NLin2009cAsym
-            if parc_name in ["Schaefer100", "Schaefer200", "Schaefer400", "DesikanKilliany", "Destrieux", "DesikanKillianyTourville"]:
-                ref_spaces_to_iterate = ["MNI152"]
-                parc_spaces_to_iterate = ["MNI152NLin2009cAsym"]
-                ref_maps_to_iterate = [ref_maps["MNI152"]]
-            # subcortical parcellations
-            elif parc_name in ["TianS1", "TianS2", "TianS3", "Aseg"]:
-                continue
-            # cortical parcellations but not available in MNI152NLin2009cAsym
+            # cortical parcellations availabe in MNI152NLin6Asym
+            if parc_name in ["Schaefer100", "Schaefer200", "Schaefer400", 
+                             "DesikanKilliany", "Destrieux", "DesikanKillianyTourville",
+                             "HarvardOxfordCortical"]:
+                ref_spaces_to_iterate = ["MNI152NLin6Asym"]
+                parc_spaces_to_iterate = ["MNI152NLin6Asym"]
+                ref_maps_to_iterate = [ref_maps["MNI152NLin6Asym"]]
+            # cortical parcelation only available in fsLR
             elif parc_name in ["Glasser"]:
+                ref_spaces_to_iterate = ["fsLR"]
+                parc_spaces_to_iterate = ["fsLR"]
+                ref_maps_to_iterate = [ref_maps["fsLR"]]
+            # subcortical parcellations
+            elif parc_name in ["TianS1", "TianS2", "TianS3", "Aseg", "HarvardOxfordSubcortical"]:
                 continue
             # the rest
             else:
@@ -145,12 +156,15 @@ for dataset in ["tpm"]:# DSETS_WITH_MAPS:
         # dataset: cortexfeatures
         elif dataset == "cortexfeatures":
             # cortical parcellations available in surface spaces:
-            if parc_name in ["Schaefer100", "Schaefer200", "Schaefer400", "DesikanKilliany", "Destrieux", "Glasser"]:
+            if parc_name in ["Schaefer100", "Schaefer200", "Schaefer400",
+                             "DesikanKilliany", "Destrieux", 
+                             "Glasser",
+                             "HarvardOxfordCortical"]:
                 ref_spaces_to_iterate = ["fsLR", "fsaverage"]
                 parc_spaces_to_iterate = ["fsLR", "fsaverage"]
                 ref_maps_to_iterate = [ref_maps["fsLROriginal"], ref_maps["fsaverageOriginal"]]
             # subcortical parcellations
-            elif parc_name in ["TianS1", "TianS2", "TianS3", "Aseg"]:
+            elif parc_name in ["TianS1", "TianS2", "TianS3", "Aseg", "HarvardOxfordSubcortical"]:
                 continue
             # cortical parcellations but not available in fsLR
             elif parc_name in ["DesikanKillianyTourville"]:
@@ -162,12 +176,15 @@ for dataset in ["tpm"]:# DSETS_WITH_MAPS:
         # dataset: bigbrain
         elif dataset == "bigbrain":
             # cortical parcellations available in surface spaces:
-            if parc_name in ["Schaefer100", "Schaefer200", "Schaefer400", "DesikanKilliany", "Destrieux", "Glasser"]:
+            if parc_name in ["Schaefer100", "Schaefer200", "Schaefer400", 
+                             "DesikanKilliany", "Destrieux", 
+                             "Glasser",
+                             "HarvardOxfordCortical"]:
                 ref_spaces_to_iterate = ["fsaverage"]
                 parc_spaces_to_iterate = ["fsaverage"]
                 ref_maps_to_iterate = [ref_maps["fsaverageOriginal"]]
             # subcortical parcellations
-            elif parc_name in ["TianS1", "TianS2", "TianS3", "Aseg"]:
+            elif parc_name in ["TianS1", "TianS2", "TianS3", "Aseg", "HarvardOxfordSubcortical"]:
                 continue
             # cortical parcellations but not available in fsaverage
             elif parc_name in ["DesikanKillianyTourville"]:
@@ -179,8 +196,11 @@ for dataset in ["tpm"]:# DSETS_WITH_MAPS:
         # dataset: tpm
         elif dataset == "tpm":
             # parcellations available in MNI152NLin6Asym
-            if parc_name in ["Schaefer100", "Schaefer200", "Schaefer400", "DesikanKilliany", "Destrieux",
-                             "DesikanKillianyTourville", "TianS1", "TianS2", "TianS3", "Aseg"]:
+            if parc_name in ["Schaefer100", "Schaefer200", "Schaefer400", 
+                             "DesikanKilliany", "Destrieux", "DesikanKillianyTourville", 
+                             "TianS1", "TianS2", "TianS3", 
+                             "Aseg",
+                             "HarvardOxfordCortical", "HarvardOxfordSubcortical"]:
                 ref_spaces_to_iterate = ["MNI152NLin6Asym"]
                 parc_spaces_to_iterate = ["MNI152NLin6Asym"]
                 ref_maps_to_iterate = [ref_maps["MNI152NLin6Asym"]]
