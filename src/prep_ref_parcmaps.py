@@ -293,9 +293,9 @@ for dataset in DSETS_WITH_MAPS:
                     data_space=ref_space,
                     n_proc=-1,
                     dtype=np.float32,
-                    drop_background_parcels=True,
-                    min_num_valid_datapoints=5,
-                    min_fraction_valid_datapoints=0.3,
+                    drop_background_parcels=True if dataset!="rsn" else False,
+                    min_num_valid_datapoints=5 if dataset!="rsn" else None,
+                    min_fraction_valid_datapoints=0.3 if dataset!="rsn" else None,
                 )
                 
                 # save into dataframe
