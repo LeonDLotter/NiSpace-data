@@ -13,7 +13,7 @@ from statsmodels.stats.multitest import multipletests
 from tqdm.auto import tqdm
 
 # Nispace
-wd = Path.cwd().parent
+wd = Path(__file__).parent.parent
 print(f"Working dir: {wd}")
 sys.path.append(str(Path.home() / "projects" / "nispace"))
 
@@ -30,7 +30,7 @@ nispace_source_data_path = wd
 # %% PET collections -------------------------------------------------------------------------------
 # --------------------------------------------------------------------------------------------------
 
-pet_files = fetch_reference("pet")
+pet_files = fetch_reference("pet", check_file_hash=False)
 pet_files = [f.name.split("_space")[0] for f in pet_files]
 
 # All
@@ -49,7 +49,7 @@ pd.DataFrame({
 collection = {
     "General": [
         "target-CMRglu_tracer-fdg_n-20_dx-hc_pub-castrillon2023",
-        # "CBF"
+        "target-rCPS_tracer-leucine_n-52_dx-hc_pub-smith2023",
         "target-SV2A_tracer-ucbj_n-76_dx-hc_pub-finnema2016",
         "target-HDAC_tracer-martinostat_n-8_dx-hc_pub-wey2016",
         "target-VMAT2_tracer-dtbz_n-76_dx-hc_pub-larsen2020"
@@ -134,6 +134,7 @@ collection = [
     'target-MOR_tracer-carfentanil_n-39_dx-hc_pub-turtonen2021',
     'target-NET_tracer-mrb_n-10_dx-hc_pub-hesse2017',
     'target-NET_tracer-mrb_n-77_dx-hc_pub-ding2010',
+    'target-rCPS_tracer-leucine_n-52_dx-hc_pub-smith2023',
     'target-SV2A_tracer-ucbj_n-76_dx-hc_pub-finnema2016',
     'target-TSPO_tracer-pbr28_n-6_dx-hc_pub-lois2018',
     'target-VAChT_tracer-feobv_n-18_dx-hc_pub-aghourian2017',
@@ -271,13 +272,15 @@ for collection, save_name in zip(
     write_json(collection, nispace_source_data_path / "reference" / "mrna" / f"collection-{save_name}.collect")
 
 # SynGO
-url = "https://syngoportal.org/data/SynGO_bulk_download_release_20231201.zip"
+url = "https://syngoportal.org/data/syngo1.3_complete_data.zip"
 path = download(url)
 zip_file = zipfile.ZipFile(path)
-with zip_file.open("syngo_ontologies.xlsx") as file:
+with zip_file.open("ontologies.xlsx") as file:
     df = pd.read_excel(file)
-collection = {name: genes.split(", ") 
-              for id, name, genes in zip(df["id"], df["name"], df["hgnc_symbol"])}
+collection = {
+    name: genes.split(", ") 
+    for id, name, genes in zip(df["id"], df["name"], df["hgnc_symbol"])
+}
 all_genes = sum([collection[k] for k in collection], [])
 print(len(collection), "sets,", len(all_genes), "genes,", len(set(all_genes)), "unique.")
 write_json(collection, nispace_source_data_path / "reference" / "mrna" / f"collection-SynGO.collect")

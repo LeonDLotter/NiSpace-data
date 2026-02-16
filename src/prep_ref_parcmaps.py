@@ -9,7 +9,7 @@ from neuromaps.resampling import resample_images
 from sklearn.preprocessing import minmax_scale
 
 # add nispace to path
-wd = Path.cwd().parent
+wd = Path(__file__).parent.parent
 print(f"Working dir: {wd}")
 sys.path.append(str(Path.home() / "projects" / "nispace"))
 

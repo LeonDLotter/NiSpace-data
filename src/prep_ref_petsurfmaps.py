@@ -13,7 +13,7 @@ from neuromaps import transforms
 from sklearn.preprocessing import minmax_scale
 
 # add nispace to path
-wd = Path.cwd().parent
+wd = Path(__file__).parent.parent
 print(f"Working dir: {wd}")
 sys.path.append(str(Path.home() / "projects" / "nispace"))
 
@@ -69,7 +69,7 @@ for m in reference_lib[dataset]["map"]:
         print(f"Transforming {m} from {source_space} to {target_space}...")
         
         # get original map and check
-        fp = fetch_reference(dataset, m, space=source_space, verbose=False)
+        fp = fetch_reference(dataset, m, space=source_space, verbose=False, check_file_hash=True)
         if len(fp) == 0 or len(fp) > 1:
             raise ValueError(f"No or multiple files found for {m} in {source_space}")
         fp = fp[0]

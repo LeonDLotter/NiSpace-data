@@ -1,6 +1,7 @@
 {
     "General": [
         "target-CMRglu_tracer-fdg_n-20_dx-hc_pub-castrillon2023",
+        "target-rCPS_tracer-leucine_n-52_dx-hc_pub-smith2023",
         "target-SV2A_tracer-ucbj_n-76_dx-hc_pub-finnema2016",
         "target-HDAC_tracer-martinostat_n-8_dx-hc_pub-wey2016",
         "target-VMAT2_tracer-dtbz_n-76_dx-hc_pub-larsen2020"
