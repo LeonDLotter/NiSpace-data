@@ -64,14 +64,16 @@ for parc in PARCS:
         isnull = rh_idc_at_loc == 0
         rh_idc_at_loc, rh_counts_at_loc = rh_idc_at_loc[~isnull], rh_counts_at_loc[~isnull]
         
-        # calculate fractions
-        frac = rh_counts_at_loc / rh_counts_at_loc.sum()
+        # store raw counts (column-normalize after loop)
         assert 0 not in rh_idc_at_loc, "0 is in right indices"
-        assert np.isclose(frac.sum(), 1), "Fractions do not sum to 1"
-        
-        # store
-        l2r_map.loc[lh_idx, rh_idc_at_loc] = frac
-    
+        l2r_map.loc[lh_idx, rh_idc_at_loc] = rh_counts_at_loc
+
+    # column-normalize: each RH parcel j = weighted combo of LH parcels summing to 1
+    col_sums = l2r_map.sum(axis=0)
+    assert (col_sums > 0).all(), "Some RH parcels have zero total overlap"
+    l2r_map = l2r_map.div(col_sums, axis=1)
+    assert np.allclose(l2r_map.sum(axis=0), 1), "Column sums do not equal 1"
+
     # assign labels
     l2r_map.index = labels_lh
     l2r_map.columns = labels_rh
