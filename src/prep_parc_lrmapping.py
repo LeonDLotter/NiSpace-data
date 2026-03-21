@@ -104,6 +104,80 @@ for parc in PARCS:
         )
 
 
+#%% DEPRECATED: Generate LR mapping from regression on random maps.
+# Commented out: worked well (interhemi r > 0.8) but asymmetric by construction
+# (OLS predicting RH from LH != OLS predicting LH from RH), which causes bias
+# when used as cross-hemisphere weights in a symmetric W matrix.
+
+for parc in PARCS:
+    print("Parcellation:", parc)
+    spaces = sorted(
+        [s.name for s in (nispace_source_data_path / "parcellation" / parc).glob("*") if s.is_dir()]
+    )
+    print("Available spaces:", spaces)
+
+    for space in spaces:
+        print(parc, space)
+
+        # load labels
+        if "mni" in space.lower():
+            labels = np.loadtxt(
+                nispace_source_data_path / "parcellation" / parc / space /
+                f"parc-{parc}_space-{space}.label.txt", dtype=str
+            )
+            lh_labels = [l for l in labels if "hemi-L_" in l]
+            rh_labels = [l for l in labels if "hemi-R_" in l]
+        else:
+            lh_labels = np.loadtxt(
+                nispace_source_data_path / "parcellation" / parc / space /
+                f"parc-{parc}_space-{space}_hemi-L.label.txt", dtype=str
+            )
+            rh_labels = np.loadtxt(
+                nispace_source_data_path / "parcellation" / parc / space /
+                f"parc-{parc}_space-{space}_hemi-R.label.txt", dtype=str
+            )
+
+        # load random maps
+        grf_data = pd.read_csv(nispace_source_data_path / "reference" / "grf" / "tab" / f"dset-grf_parc-{parc}.csv.gz", index_col=0)
+        grf_data = grf_data.loc[grf_data.index.str.contains("alpha-0.0")]
+        print("Shape of grf_data:", grf_data.shape)
+
+        # df to store betas
+        betas_df = pd.DataFrame(
+            index=pd.Index(lh_labels, name="lh_betas"),
+            columns=pd.Index(rh_labels, name="rh_predicted"),
+            dtype=float
+        )
+
+        # predictors are the LH labels
+        X = grf_data.loc[:, lh_labels]
+
+        # fit model predicting each rh label from lh labels
+        for rh_label in tqdm(rh_labels):
+            y = grf_data.loc[:, rh_label]
+            model = LinearRegression()
+            model.fit(X, y)
+            betas = pd.Series(model.coef_, index=lh_labels)
+            if np.isclose(betas.sum(), 0):
+                raise ValueError(f"Sum of betas after fitting {rh_label} model is 0")
+            betas[betas < 0.1] = 0
+            if np.isclose(betas.sum(), 0):
+                raise ValueError(f"Sum of betas after thresholding {rh_label} model is 0")
+            betas = betas / betas.sum()
+            if not np.isclose(betas.sum(), 1):
+                raise ValueError(f"Sum of betas after adjusting {rh_label} model is not 1")
+            betas_df.loc[lh_labels, rh_label] = betas
+
+        # plot
+        sn.heatmap(betas_df.replace(0, np.nan), cmap="viridis", vmin=0, vmax=1)
+        plt.title(parc)
+        plt.show()
+
+        # save
+        betas_df.to_csv(nispace_source_data_path / "parcellation" / parc / space / f"parc-{parc}_space-{space}.l2rmap.csv.gz")
+
+
+
 # %% DEPRECATED: Generate LR mapping from fsLR vertex overlap.
 # Commented out: produces a diffuse mapping for asymmetric parcellations
 # because non-symmetric parcels don't have clean vertex-to-vertex correspondence.
@@ -159,79 +233,6 @@ for parc in PARCS:
 #     sn.heatmap(l2r_map.replace(0, np.nan), cmap="viridis", vmin=0, vmax=1)
 #     plt.title(parc)
 #     plt.show()
-
-
-# %% DEPRECATED: Generate LR mapping from regression on random maps.
-# Commented out: worked well (interhemi r > 0.8) but asymmetric by construction
-# (OLS predicting RH from LH != OLS predicting LH from RH), which causes bias
-# when used as cross-hemisphere weights in a symmetric W matrix.
-
-# for parc in PARCS:
-#     print("Parcellation:", parc)
-#     spaces = sorted(
-#         [s.name for s in (nispace_source_data_path / "parcellation" / parc).glob("*") if s.is_dir()]
-#     )
-#     print("Available spaces:", spaces)
-#
-#     for space in spaces:
-#         print(parc, space)
-#
-#         # load labels
-#         if "mni" in space.lower():
-#             labels = np.loadtxt(
-#                 nispace_source_data_path / "parcellation" / parc / space /
-#                 f"parc-{parc}_space-{space}.label.txt", dtype=str
-#             )
-#             lh_labels = [l for l in labels if "hemi-L_" in l]
-#             rh_labels = [l for l in labels if "hemi-R_" in l]
-#         else:
-#             lh_labels = np.loadtxt(
-#                 nispace_source_data_path / "parcellation" / parc / space /
-#                 f"parc-{parc}_space-{space}_hemi-L.label.txt", dtype=str
-#             )
-#             rh_labels = np.loadtxt(
-#                 nispace_source_data_path / "parcellation" / parc / space /
-#                 f"parc-{parc}_space-{space}_hemi-R.label.txt", dtype=str
-#             )
-#
-#         # load random maps
-#         grf_data = pd.read_csv(nispace_source_data_path / "reference" / "grf" / "tab" / f"dset-grf_parc-{parc}.csv.gz", index_col=0)
-#         grf_data = grf_data.loc[grf_data.index.str.contains("alpha-0.0")]
-#         print("Shape of grf_data:", grf_data.shape)
-#
-#         # df to store betas
-#         betas_df = pd.DataFrame(
-#             index=pd.Index(lh_labels, name="lh_betas"),
-#             columns=pd.Index(rh_labels, name="rh_predicted"),
-#             dtype=float
-#         )
-#
-#         # predictors are the LH labels
-#         X = grf_data.loc[:, lh_labels]
-#
-#         # fit model predicting each rh label from lh labels
-#         for rh_label in tqdm(rh_labels):
-#             y = grf_data.loc[:, rh_label]
-#             model = LinearRegression()
-#             model.fit(X, y)
-#             betas = pd.Series(model.coef_, index=lh_labels)
-#             if np.isclose(betas.sum(), 0):
-#                 raise ValueError(f"Sum of betas after fitting {rh_label} model is 0")
-#             betas[betas < 0.1] = 0
-#             if np.isclose(betas.sum(), 0):
-#                 raise ValueError(f"Sum of betas after thresholding {rh_label} model is 0")
-#             betas = betas / betas.sum()
-#             if not np.isclose(betas.sum(), 1):
-#                 raise ValueError(f"Sum of betas after adjusting {rh_label} model is not 1")
-#             betas_df.loc[lh_labels, rh_label] = betas
-#
-#         # plot
-#         sn.heatmap(betas_df.replace(0, np.nan), cmap="viridis", vmin=0, vmax=1)
-#         plt.title(parc)
-#         plt.show()
-#
-#         # save
-#         # betas_df.to_csv(nispace_source_data_path / "parcellation" / parc / space / f"parc-{parc}_space-{space}.l2rmap.csv.gz")
 
 
 # %%
