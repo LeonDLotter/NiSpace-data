@@ -84,9 +84,6 @@ for parc in PARCS:
             dtype=float
         )
 
-        # threshold weak correlations
-        C[C < 0.1] = 0
-
         # plot
         sn.heatmap(
             C.replace(0, np.nan),
