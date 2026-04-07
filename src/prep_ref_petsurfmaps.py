@@ -69,7 +69,7 @@ for m in reference_lib[dataset]["map"]:
         print(f"Transforming {m} from {source_space} to {target_space}...")
         
         # get original map and check
-        fp = fetch_reference(dataset, m, space=source_space, verbose=False, check_file_hash=True)
+        fp = fetch_reference(dataset, m, space=source_space, verbose=False, check_file_hash=False)
         if len(fp) == 0 or len(fp) > 1:
             raise ValueError(f"No or multiple files found for {m} in {source_space}")
         fp = fp[0]

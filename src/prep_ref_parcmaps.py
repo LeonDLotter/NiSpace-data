@@ -54,7 +54,7 @@ def fetch_reference(dataset, maps, space):
 # %% Parcellate map-based image data ---------------------------------------------------------------
 
 # iterate datasets
-for dataset in DSETS_WITH_MAPS:
+for dataset in ["pet"]: #DSETS_WITH_MAPS:
     print("-------- " + dataset.upper() + " --------")
     
     # get files: 

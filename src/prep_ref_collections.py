@@ -49,7 +49,7 @@ pd.DataFrame({
 collection = {
     "General": [
         "target-CMRglu_tracer-fdg_n-20_dx-hc_pub-castrillon2023",
-        "target-rCPS_tracer-leucine_n-52_dx-hc_pub-smith2023",
+        "target-rCPS_tracer-leucine_n-42_dx-hc_pub-smith2023",
         "target-SV2A_tracer-ucbj_n-76_dx-hc_pub-finnema2016",
         "target-HDAC_tracer-martinostat_n-8_dx-hc_pub-wey2016",
         "target-VMAT2_tracer-dtbz_n-76_dx-hc_pub-larsen2020"
@@ -134,7 +134,7 @@ collection = [
     'target-MOR_tracer-carfentanil_n-39_dx-hc_pub-turtonen2021',
     'target-NET_tracer-mrb_n-10_dx-hc_pub-hesse2017',
     'target-NET_tracer-mrb_n-77_dx-hc_pub-ding2010',
-    'target-rCPS_tracer-leucine_n-52_dx-hc_pub-smith2023',
+    'target-rCPS_tracer-leucine_n-42_dx-hc_pub-smith2023',
     'target-SV2A_tracer-ucbj_n-76_dx-hc_pub-finnema2016',
     'target-TSPO_tracer-pbr28_n-6_dx-hc_pub-lois2018',
     'target-VAChT_tracer-feobv_n-18_dx-hc_pub-aghourian2017',
