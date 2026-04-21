@@ -26,14 +26,14 @@ print("PARCS:", PARCS)
 
 for parc in PARCS:
     print("Parcellation:", parc)
+    if parc != "Destrieux":
+        continue
     spaces = sorted(
         [s.name for s in (nispace_source_data_path / "parcellation" / parc).glob("*") if s.is_dir()]
     )
     print("Available spaces:", spaces)
     
     for space in spaces:
-        if space == "fsLR":
-            continue
         print(parc, space)
         
         # load
@@ -54,19 +54,24 @@ for parc in PARCS:
         dist_mat = get_distance_matrix(
             parc_loaded, 
             parc_space=space,
-            parc_resample=2,
+            parc_resample={
+                "MNI152NLin2009cAsym": 2, "MNI152NLin6Asym": 2, "fsLR": "32k", "fsaverage": "41k" 
+            }[space],
             centroids=False,
             surf_euclidean=False,
             n_proc=-1,
             dtype=np.float32
         )
         if not isinstance(dist_mat, tuple):
+            assert np.unique(parc_loaded.get_fdata())[1:].shape[0] == dist_mat.shape[0] == dist_mat.shape[1]
             pd.DataFrame(dist_mat).to_csv(
                 nispace_source_data_path / "parcellation" / parc / space / 
                 f"parc-{parc}_space-{space}.dist.csv.gz", 
                 header=None, index=None
             )
         else:
+            assert np.unique(parc_loaded[0].agg_data())[1:].shape[0] == dist_mat[0].shape[0] == dist_mat[0].shape[1]
+            assert np.unique(parc_loaded[1].agg_data())[1:].shape[0] == dist_mat[1].shape[0] == dist_mat[1].shape[1]
             for mat, hemi in zip(dist_mat, ["L", "R"]):
                 pd.DataFrame(mat).to_csv(
                     nispace_source_data_path / "parcellation" / parc / space / 
