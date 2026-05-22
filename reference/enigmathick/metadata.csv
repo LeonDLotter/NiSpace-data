@@ -19,5 +19,5 @@ dx-22q_pub-sun2020,22q11.2DS,,,,,10.1038/s41380-020-0717-9,437.0,330.0,10.1176/a
 dx-an_pub-walton2022,AN,,,684.0,962.0,10.1016/j.biopsych.2022.02.006,685.0,962.0,10.1016/j.biopsych.2022.02.006,anorexia_case-controls_CortThick,anorexia_case-controls_SubVol
 dx-an_subtype-acAN_pub-walton2022,AN,,acAN,224.0,398.0,10.1016/j.biopsych.2022.02.006,224.0,398.0,10.1016/j.biopsych.2022.02.006,anorexia_acAN-controls_CortThick,anorexia_acAN-controls_SubVol
 dx-an_subtype-pwrAN_pub-walton2022,AN,,pwrAN,559.0,559.0,10.1016/j.biopsych.2022.02.006,251.0,558.0,10.1016/j.biopsych.2022.02.006,anorexia_pwrAN-controls_CortThick,anorexia_pwrAN-controls_SubVol
-dx-antisocial_pub-gao2024,AsPD,,,1170.0,1236.0,,1180.0,1249.0,,Antisocial_case-controls_CortThick,Antisocial_case-controls_SubVol
+dx-antisocial_pub-gao2024,AsPD,,,1170.0,1236.0,10.1016/S2215-0366(24)00187-1,1180.0,1249.0,10.1016/S2215-0366(24)00187-1,Antisocial_case-controls_CortThick,Antisocial_case-controls_SubVol
 dx-pd_pub-laansma2021,PD,,,2319.0,1175.0,10.1002/mds.28706,2343.0,1173.0,10.1002/mds.28706,parkinsons_case-controls_CortThick_PDvsCN,parkinsons_case-controls_Subvol_PDvsCN

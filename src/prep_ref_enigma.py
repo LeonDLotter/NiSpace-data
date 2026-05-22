@@ -301,8 +301,8 @@ MAPS = [
         thick_file="Antisocial_case-controls_CortThick",
         surf_file="Antisocial_case-controls_CortSurf",
         subvol_file="Antisocial_case-controls_SubVol",
-        doi_cortical=None,  # Gao et al. 2024, Lancet Psychiatry — DOI TBC
-        doi_subvol=None,
+        doi_cortical="10.1016/S2215-0366(24)00187-1",
+        doi_subvol="10.1016/S2215-0366(24)00187-1",
     ),
     # --- PD ---
     dict(
@@ -347,11 +347,11 @@ print("\nBuilding tables...")
 # enigmathick: all maps with thick_file (22 maps)
 thick_maps = [m for m in MAPS if m["_data"]["thick"] is not None]
 
-# enigmasurf: maps with surf_file only (17 maps; no ASD, no Epilepsy)
+# enigmaarea: maps with surf_file only (17 maps; no ASD, no Epilepsy)
 surf_maps = [m for m in MAPS if m["_data"]["surf"] is not None]
 
 print(f"enigmathick: {len(thick_maps)} maps")
-print(f"enigmasurf:  {len(surf_maps)} maps")
+print(f"enigmaarea:  {len(surf_maps)} maps")
 
 
 def build_tabs(maps, cortical_key):
@@ -385,8 +385,8 @@ surf_dk, surf_aseg = build_tabs(surf_maps, "surf")
 
 print(f"\nenigmathick DK:   {thick_dk.shape}, NaN cols: {thick_dk.isna().all().sum()}")
 print(f"enigmathick Aseg: {thick_aseg.shape}, NaN rows: {thick_aseg.isna().all(axis=1).sum()}")
-print(f"enigmasurf DK:    {surf_dk.shape}, NaN cols: {surf_dk.isna().all().sum()}")
-print(f"enigmasurf Aseg:  {surf_aseg.shape}, NaN rows: {surf_aseg.isna().all(axis=1).sum()}")
+print(f"enigmaarea DK:    {surf_dk.shape}, NaN cols: {surf_dk.isna().all().sum()}")
+print(f"enigmaarea Aseg:  {surf_aseg.shape}, NaN rows: {surf_aseg.isna().all(axis=1).sum()}")
 
 
 # %% Verify pwrAN CortThick anomaly
@@ -436,14 +436,14 @@ thick_all, thick_adult = build_collections(thick_maps)
 surf_all, surf_adult = build_collections(surf_maps)
 
 print(f"\nenigmathick collections: All={len(thick_all)}, Adult={len(thick_adult)}")
-print(f"enigmasurf  collections: All={len(surf_all)}, Adult={len(surf_adult)}")
+print(f"enigmaarea  collections: All={len(surf_all)}, Adult={len(surf_adult)}")
 
 
 # %% Save outputs
 
 for dset, dk_df, aseg_df, meta_df, all_ids, adult_ids in [
     ("enigmathick", thick_dk, thick_aseg, thick_meta, thick_all, thick_adult),
-    ("enigmasurf",  surf_dk,  surf_aseg,  surf_meta,  surf_all,  surf_adult),
+    ("enigmaarea",  surf_dk,  surf_aseg,  surf_meta,  surf_all,  surf_adult),
 ]:
     out_dir = wd / "reference" / dset
     tab_dir = out_dir / "tab"
