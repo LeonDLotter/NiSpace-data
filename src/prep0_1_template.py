@@ -2,21 +2,37 @@
 
 import json
 import shutil
-import urllib.request
 from pathlib import Path
 
 import numpy as np
 import nibabel as nib
 from nilearn import image, datasets
+import templateflow.api as tflow
 
 wd = Path(__file__).parent.parent
 print(f"Working dir: {wd}")
 
 from nispace.utils.utils import apply_transform
+from nispace.utils.utils_datasets import download
 from neuromaps.datasets import fetch_fslr, fetch_fsaverage
 
 nispace_data_path = wd
 nispace_toolbox_path = Path.home() / "projects" / "nispace"
+
+# templateflow wrapper
+def tflow_get(*args, **kwargs):
+    """Wrapper around tflow.get that enforces exactly one result."""
+    result = tflow.get(*args, **kwargs)
+    if result is None:
+        raise FileNotFoundError(f"tflow_get({args}, {kwargs}) returned nothing")
+    if isinstance(result, list):
+        if len(result) != 1:
+            raise ValueError(
+                f"tflow_get({args}, {kwargs}) returned {len(result)} files, expected 1:\n"
+                + "\n".join(f"  {p}" for p in result)
+            )
+        return result[0]
+    return result
 
 # Load canonical geometry reference built by prep0_0_affines.py
 with open(nispace_toolbox_path / "nispace" / "datalib" / "affines.json") as _f:
@@ -25,18 +41,34 @@ with open(nispace_toolbox_path / "nispace" / "datalib" / "affines.json") as _f:
 FSLR_DENSITIES = ["4k", "8k", "32k", "164k"]
 FSAVERAGE_DENSITIES = ["3k", "10k", "41k", "164k"]
 
-# Masks from Yeo et al. 2011 (nicely separated into tight and liberal)
-# These are in MN152NLin6Asym. "thick" equals the Schaefer parcellation masks
-datasets.fetch_atlas_yeo_2011()
-mask_liberal_MNI6 = image.index_img(image.math_img(
+# Liberal gray matter masks sourced from Schaefer parcellation (templateflow)
+mask_liberal_MNI6_1mm = image.math_img(
     "img > 0", 
-    img=datasets.fetch_atlas_yeo_2011(n_networks=7, thickness="thick").maps
-), 0)
-mask_tight_MNI6 = image.index_img(image.math_img(
+    img=tflow_get("MNI152NLin6Asym", atlas="Schaefer2018", desc=f"100Parcels7Networks", resolution="01", suffix="dseg", extension="nii.gz")
+)
+mask_liberal_MNI6_2mm = image.math_img(
     "img > 0", 
-    img=datasets.fetch_atlas_yeo_2011(n_networks=7, thickness="thin").maps
-), 0)
+    img=tflow_get("MNI152NLin6Asym", atlas="Schaefer2018", desc=f"100Parcels7Networks", resolution="02", suffix="dseg", extension="nii.gz")
+)
+mask_liberal_MNI9_1mm = image.math_img(
+    "img > 0", 
+    img=tflow_get("MNI152NLin2009cAsym", atlas="Schaefer2018", desc=f"100Parcels7Networks", resolution="01", suffix="dseg", extension="nii.gz")
+)
+mask_liberal_MNI9_2mm = image.math_img(
+    "img > 0", 
+    img=tflow_get("MNI152NLin2009cAsym", atlas="Schaefer2018", desc=f"100Parcels7Networks", resolution="02", suffix="dseg", extension="nii.gz")
+)
 
+# Conservative gray matter masks sourced from freesurfer segmentation of MNI templates (gin)
+gin_commit = "5839f92fdf207714fae18088da7a114b21a015c8"
+mask_tight_MNI6_1mm = image.math_img(
+    "img > 0", 
+    img=download(f"https://gin.g-node.org/llotter/mni_freesurfer/raw/{gin_commit}/parcellations/MNI152NLin6Asym/seg-aparc_space-MNI152NLin6Asym.nii.gz")
+)
+mask_tight_MNI9_1mm = image.math_img(
+    "img > 0", 
+    img=download(f"https://gin.g-node.org/llotter/mni_freesurfer/raw/{gin_commit}/parcellations/MNI152NLin2009cAsym/seg-aparc_space-MNI152NLin2009cAsym.nii.gz")
+)
 
 # Sources for MNI templates.
 # Values are either a URL string (load/download directly) or a (space, res, desc) tuple
@@ -44,17 +76,17 @@ mask_tight_MNI6 = image.index_img(image.math_img(
 MNI_TEMPLATE_SOURCES = {
     "MNI152NLin6Asym": {
         "1mm": {
-            "T1w":          "https://templateflow.s3.amazonaws.com/tpl-MNI152NLin6Asym/tpl-MNI152NLin6Asym_res-01_T1w.nii.gz",
-            "brain":        "https://templateflow.s3.amazonaws.com/tpl-MNI152NLin6Asym/tpl-MNI152NLin6Asym_res-01_desc-brain_T1w.nii.gz",
-            "mask":         "https://templateflow.s3.amazonaws.com/tpl-MNI152NLin6Asym/tpl-MNI152NLin6Asym_res-01_desc-brain_mask.nii.gz",
-            "mask_gm":      mask_liberal_MNI6,
-            "mask_gm_tight":mask_tight_MNI6,
+            "T1w":          tflow_get("MNI152NLin6Asym", resolution="01", desc=None, suffix="T1w", extension="nii.gz"),
+            "brain":        tflow_get("MNI152NLin6Asym", resolution="01", desc="brain", suffix="T1w", extension="nii.gz"),
+            "mask":         tflow_get("MNI152NLin6Asym", resolution="01", desc="brain", suffix="mask", extension="nii.gz"),
+            "mask_gm":      mask_liberal_MNI6_1mm,
+            "mask_gm_tight":mask_tight_MNI6_1mm,
         },
         "2mm": {
-            "T1w":          "https://templateflow.s3.amazonaws.com/tpl-MNI152NLin6Asym/tpl-MNI152NLin6Asym_res-02_T1w.nii.gz",
-            "brain":        "https://templateflow.s3.amazonaws.com/tpl-MNI152NLin6Asym/tpl-MNI152NLin6Asym_res-02_desc-brain_T1w.nii.gz",
-            "mask":         "https://templateflow.s3.amazonaws.com/tpl-MNI152NLin6Asym/tpl-MNI152NLin6Asym_res-02_desc-brain_mask.nii.gz",
-            "mask_gm":      ("MNI152NLin6Asym", "1mm", "mask_gm"),
+            "T1w":          tflow_get("MNI152NLin6Asym", resolution="02", desc=None, suffix="T1w", extension="nii.gz"),
+            "brain":        tflow_get("MNI152NLin6Asym", resolution="02", desc="brain", suffix="T1w", extension="nii.gz"),
+            "mask":         tflow_get("MNI152NLin6Asym", resolution="02", desc="brain", suffix="mask", extension="nii.gz"),
+            "mask_gm":      mask_liberal_MNI6_2mm,
             "mask_gm_tight":("MNI152NLin6Asym", "1mm", "mask_gm_tight"),
         },
         "3mm": {
@@ -67,17 +99,17 @@ MNI_TEMPLATE_SOURCES = {
     },
     "MNI152NLin2009cAsym": {
         "1mm": {
-            "T1w":          "https://templateflow.s3.amazonaws.com/tpl-MNI152NLin2009cAsym/tpl-MNI152NLin2009cAsym_res-01_T1w.nii.gz",
-            "brain":        "https://templateflow.s3.amazonaws.com/tpl-MNI152NLin2009cAsym/tpl-MNI152NLin2009cAsym_res-01_desc-brain_T1w.nii.gz",
-            "mask":         "https://templateflow.s3.amazonaws.com/tpl-MNI152NLin2009cAsym/tpl-MNI152NLin2009cAsym_res-01_desc-brain_mask.nii.gz",
-            "mask_gm":      ("MNI152NLin6Asym", "1mm", "mask_gm"),
-            "mask_gm_tight":("MNI152NLin6Asym", "1mm", "mask_gm_tight"),
+            "T1w":          tflow_get("MNI152NLin2009cAsym", resolution="01", desc=None, suffix="T1w", extension="nii.gz"),
+            "brain":        tflow_get("MNI152NLin2009cAsym", resolution="01", desc="brain", suffix="T1w", extension="nii.gz"),
+            "mask":         tflow_get("MNI152NLin2009cAsym", resolution="01", desc="brain", suffix="mask", extension="nii.gz"),
+            "mask_gm":      mask_liberal_MNI9_1mm,
+            "mask_gm_tight":mask_tight_MNI9_1mm,
         },
         "2mm": {
-            "T1w":          "https://templateflow.s3.amazonaws.com/tpl-MNI152NLin2009cAsym/tpl-MNI152NLin2009cAsym_res-02_T1w.nii.gz",
-            "brain":        "https://templateflow.s3.amazonaws.com/tpl-MNI152NLin2009cAsym/tpl-MNI152NLin2009cAsym_res-02_desc-brain_T1w.nii.gz",
-            "mask":         "https://templateflow.s3.amazonaws.com/tpl-MNI152NLin2009cAsym/tpl-MNI152NLin2009cAsym_res-02_desc-brain_mask.nii.gz",
-            "mask_gm":      ("MNI152NLin2009cAsym", "1mm", "mask_gm"),
+            "T1w":          tflow_get("MNI152NLin2009cAsym", resolution="02", desc=None, suffix="T1w", extension="nii.gz"),
+            "brain":        tflow_get("MNI152NLin2009cAsym", resolution="02", desc="brain", suffix="T1w", extension="nii.gz"),
+            "mask":         tflow_get("MNI152NLin2009cAsym", resolution="02", desc="brain", suffix="mask", extension="nii.gz"),
+            "mask_gm":      mask_liberal_MNI9_2mm,
             "mask_gm_tight":("MNI152NLin2009cAsym", "1mm", "mask_gm_tight"),
         },
         "3mm": {
@@ -148,10 +180,14 @@ for space, space_data in MNI_TEMPLATE_SOURCES.items():
             dst = dst_path_mni(space, desc, res)
             dst.parent.mkdir(parents=True, exist_ok=True)
 
-            if isinstance(source, (str, nib.spatialimages.SpatialImage)):
-                if isinstance(source, str):
+            if isinstance(source, (str, Path, nib.spatialimages.SpatialImage)):
+                if isinstance(source, Path):
+                    print(f"  Copying {dst.name} ...")
+                    shutil.copy(source, dst)
+                    img = image.load_img(dst)
+                elif isinstance(source, str):
                     print(f"  Downloading {dst.name} ...")
-                    urllib.request.urlretrieve(source, dst)
+                    download(source, dst)
                     img = image.load_img(dst)
                 else:
                     print(f"  Saving {dst.name} ...")
