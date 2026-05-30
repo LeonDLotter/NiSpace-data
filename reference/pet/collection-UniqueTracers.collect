@@ -38,7 +38,7 @@
         "target-M1_tracer-lsn3172176_n-24_dx-hc_pub-naganawa2020",
         "target-VAChT_tracer-feobv_n-18_dx-hc_pub-aghourian2017"
     ],
-    "Opiods/Endocannabinoids": [
+    "Opioids/Endocannabinoids": [
         "target-MOR_tracer-carfentanil_n-204_dx-hc_pub-kantonen2020",
         "target-KOR_tracer-ly2795050_n-28_dx-hc_pub-vijay2018",
         "target-CB1_tracer-omar_n-77_dx-hc_pub-normandin2015"
