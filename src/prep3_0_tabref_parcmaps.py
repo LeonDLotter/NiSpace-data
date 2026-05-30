@@ -23,6 +23,9 @@ nispace_source_data_path = wd
 DSETS_WITH_MAPS = [k for k, v in reference_lib.items() if "map" in v]
 print("DSETS_WITH_MAPS: ", DSETS_WITH_MAPS)
 
+# cortex-only datasets
+DSETS_CORTEX = ["rsn", "rsn17", "cortexfeatures", "bigbrain"]
+
 # parcellations
 PARCS, PARCS_CX, PARCS_SC = load_parc_lists(wd)
 print("PARCS:", PARCS)
@@ -31,6 +34,7 @@ print("PARCS:", PARCS)
 DATASET_SPACE_PAIRS = {
     "pet":            [("MNI152NLin6Asym", "MNI152NLin6Asym"), ("fsaverage", "fsaverageOriginal")],
     "rsn":            [("MNI152NLin6Asym", "MNI152NLin6Asym")],
+    "rsn17":          [("fsLR", "fsLR")],
     "cortexfeatures": [("fsLR", "fsLROriginal"), ("fsaverage", "fsaverageOriginal")],
     "bigbrain":       [("fsaverage", "fsaverageOriginal")],
     "tpm":            [("MNI152NLin6Asym", "MNI152NLin6Asym")],
@@ -62,8 +66,11 @@ for dataset in DSETS_WITH_MAPS:
     print("-------- " + dataset.upper() + " --------")
 
     if dataset not in DATASET_SPACE_PAIRS:
-        print(f"No space pairs defined for dataset: {dataset} — skipping")
-        continue
+        raise ValueError(f"No space pairs defined for dataset: {dataset}")
+    
+    # check if cortex only
+    _is_cortex_only = dataset in DSETS_CORTEX
+    print(f"  Cortex only: {_is_cortex_only}")
 
     # collect available maps per (original) space
     ref_maps = {}
@@ -98,7 +105,7 @@ for dataset in DSETS_WITH_MAPS:
 
     # iterate parcellations
     print("Parcellating...")
-    for parc_name in PARCS:
+    for parc_name in (PARCS_CX if _is_cortex_only else PARCS):
         print(parc_name)
 
         # labels — all parcs have MNI6

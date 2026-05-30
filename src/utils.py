@@ -83,6 +83,7 @@ DATASET_PARCELLATE_KWARGS = {
     "cortexfeatures": dict(ignore_background_data=True,  drop_background_parcels=True,    min_num_valid_datapoints=5,    min_fraction_valid_datapoints=0.3),
     "bigbrain":       dict(ignore_background_data=True,  drop_background_parcels=True,    min_num_valid_datapoints=5,    min_fraction_valid_datapoints=0.3),
     "rsn":            dict(ignore_background_data=False, drop_background_parcels=False,   min_num_valid_datapoints=None, min_fraction_valid_datapoints=None),
+    "rsn17":          dict(ignore_background_data=False, drop_background_parcels=False,   min_num_valid_datapoints=None, min_fraction_valid_datapoints=None),
     "tpm":            dict(ignore_background_data=False, drop_background_parcels=False,   min_num_valid_datapoints=None, min_fraction_valid_datapoints=None),
     "neurosynth":     dict(ignore_background_data=False, background_parcels_to_nan=False, min_num_valid_datapoints=None, min_fraction_valid_datapoints=None),
     "grf":            dict(ignore_background_data=False, background_parcels_to_nan=False, min_num_valid_datapoints=None, min_fraction_valid_datapoints=None),
