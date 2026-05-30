@@ -1,39 +1,93 @@
-parcellation,space,level,n_parcels,resolution,publication,license
-Schaefer100,MNI152NLin6Asym,cortex,100,1mm,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
-Schaefer100,MNI152NLin2009cAsym,cortex,100,1mm,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
-Schaefer100,fsaverage,cortex,100,41k,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
-Schaefer100,fsLR,cortex,100,32k,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
-Schaefer200,MNI152NLin6Asym,cortex,200,1mm,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
-Schaefer200,MNI152NLin2009cAsym,cortex,200,1mm,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
-Schaefer200,fsaverage,cortex,200,41k,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
-Schaefer200,fsLR,cortex,200,32k,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
-Schaefer400,MNI152NLin6Asym,cortex,400,1mm,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
-Schaefer400,MNI152NLin2009cAsym,cortex,400,1mm,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
-Schaefer400,fsaverage,cortex,400,41k,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
-Schaefer400,fsLR,cortex,400,32k,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
-TianS1,MNI152NLin6Asym,subcortex,16,1mm,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
-TianS1,MNI152NLin2009cAsym,subcortex,16,1mm,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
-TianS2,MNI152NLin6Asym,subcortex,32,1mm,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
-TianS2,MNI152NLin2009cAsym,subcortex,32,1mm,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
-TianS3,MNI152NLin6Asym,subcortex,50,1mm,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
-TianS3,MNI152NLin2009cAsym,subcortex,50,1mm,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
-Glasser,fsLR,cortex,360,32k,10.1038/nature18933,https://www.humanconnectome.org/study/hcp-young-adult/document/wu-minn-hcp-consortium-open-access-data-use-terms
-Glasser,fsaverage,cortex,360,41k,10.1038/nature18933; https://figshare.com/articles/dataset/HCP-MMP1_0_projected_on_fsaverage/3498446/2,CC-BY-4.0
-DesikanKilliany,MNI152NLin6Asym,cortex,68,1mm,10.1016/j.neuroimage.2006.01.021; doi.org/10.12751/g-node.2mnxpm,free
-DesikanKilliany,MNI152NLin2009cAsym,cortex,68,1mm,10.1016/j.neuroimage.2006.01.021; doi.org/10.12751/g-node.2mnxpm,free
-DesikanKilliany,fsaverage,cortex,68,41k,10.1016/j.neuroimage.2006.01.021,free
-DesikanKilliany,fsLR,cortex,68,32k,10.1016/j.neuroimage.2006.01.021,free
-DesikanKillianyTourville,MNI152NLin6Asym,cortex,62,1mm,10.3389/fnins.2012.00171; doi.org/10.12751/g-node.2mnxpm,free
-DesikanKillianyTourville,MNI152NLin2009cAsym,cortex,62,1mm,10.3389/fnins.2012.00171; doi.org/10.12751/g-node.2mnxpm,free
-Destrieux,MNI152NLin6Asym,cortex,148,1mm,10.1016/j.neuroimage.2010.06.010; doi.org/10.12751/g-node.2mnxpm,free
-Destrieux,MNI152NLin2009cAsym,cortex,148,1mm,10.1016/j.neuroimage.2010.06.010; doi.org/10.12751/g-node.2mnxpm,free
-Destrieux,fsaverage,cortex,148,41k,10.1016/j.neuroimage.2010.06.010,free
-Destrieux,fsLR,cortex,148,32k,10.1016/j.neuroimage.2010.06.010,free
-Aseg,MNI152NLin6Asym,subcortex,16,1mm,10.1016/s0896-6273(02)00569-x,free
-Aseg,MNI152NLin2009cAsym,subcortex,16,1mm,10.1016/s0896-6273(02)00569-x,free
-HarvardOxfordCortical,MNI152NLin6Asym,cortex,96,1mm,doi.org/10.1016/j.schres.2005.11.020; doi.org/10.1016/j.neuroimage.2006.01.021,free
-HarvardOxfordCortical,MNI152NLin2009cAsym,cortex,96,1mm,doi.org/10.1016/j.schres.2005.11.020; doi.org/10.1016/j.neuroimage.2006.01.021,free
-HarvardOxfordCortical,fsaverage,cortex,96,41k,doi.org/10.1016/j.schres.2005.11.020; doi.org/10.1016/j.neuroimage.2006.01.021,free
-HarvardOxfordCortical,fsLR,cortex,96,32k,doi.org/10.1016/j.schres.2005.11.020; doi.org/10.1016/j.neuroimage.2006.01.021,free
-HarvardOxfordSubcortical,MNI152NLin6Asym,subcortex,14,1mm,doi.org/10.1176/appi.ajp.162.7.1256; doi.org/10.1016/j.biopsych.2006.06.027,free
-HarvardOxfordSubcortical,MNI152NLin2009cAsym,subcortex,14,1mm,doi.org/10.1176/appi.ajp.162.7.1256; doi.org/10.1016/j.biopsych.2006.06.027,free
+parcellation,space,level,n_parcels,symmetric,resolution,publication,license
+Schaefer100Parcels7Networks,MNI152NLin6Asym,cortex,100,False,1mm,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
+Schaefer100Parcels7Networks,MNI152NLin2009cAsym,cortex,100,False,1mm,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
+Schaefer100Parcels7Networks,fsaverage,cortex,100,False,41k,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
+Schaefer100Parcels7Networks,fsLR,cortex,100,False,32k,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
+Schaefer100Parcels17Networks,MNI152NLin6Asym,cortex,100,False,1mm,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
+Schaefer100Parcels17Networks,MNI152NLin2009cAsym,cortex,100,False,1mm,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
+Schaefer100Parcels17Networks,fsaverage,cortex,100,False,41k,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
+Schaefer100Parcels17Networks,fsLR,cortex,100,False,32k,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
+Schaefer200Parcels7Networks,MNI152NLin6Asym,cortex,200,False,1mm,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
+Schaefer200Parcels7Networks,MNI152NLin2009cAsym,cortex,200,False,1mm,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
+Schaefer200Parcels7Networks,fsaverage,cortex,200,False,41k,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
+Schaefer200Parcels7Networks,fsLR,cortex,200,False,32k,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
+Schaefer200Parcels17Networks,MNI152NLin6Asym,cortex,200,False,1mm,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
+Schaefer200Parcels17Networks,MNI152NLin2009cAsym,cortex,200,False,1mm,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
+Schaefer200Parcels17Networks,fsaverage,cortex,200,False,41k,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
+Schaefer200Parcels17Networks,fsLR,cortex,200,False,32k,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
+Schaefer400Parcels7Networks,MNI152NLin6Asym,cortex,400,False,1mm,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
+Schaefer400Parcels7Networks,MNI152NLin2009cAsym,cortex,400,False,1mm,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
+Schaefer400Parcels7Networks,fsaverage,cortex,400,False,41k,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
+Schaefer400Parcels7Networks,fsLR,cortex,400,False,32k,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
+Schaefer400Parcels17Networks,MNI152NLin6Asym,cortex,400,False,1mm,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
+Schaefer400Parcels17Networks,MNI152NLin2009cAsym,cortex,400,False,1mm,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
+Schaefer400Parcels17Networks,fsaverage,cortex,400,False,41k,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
+Schaefer400Parcels17Networks,fsLR,cortex,400,False,32k,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
+Schaefer1000Parcels7Networks,MNI152NLin6Asym,cortex,1000,False,1mm,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
+Schaefer1000Parcels7Networks,MNI152NLin2009cAsym,cortex,1000,False,1mm,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
+Schaefer1000Parcels7Networks,fsaverage,cortex,1000,False,41k,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
+Schaefer1000Parcels7Networks,fsLR,cortex,1000,False,32k,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
+Schaefer1000Parcels17Networks,MNI152NLin6Asym,cortex,1000,False,1mm,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
+Schaefer1000Parcels17Networks,MNI152NLin2009cAsym,cortex,1000,False,1mm,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
+Schaefer1000Parcels17Networks,fsaverage,cortex,1000,False,41k,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
+Schaefer1000Parcels17Networks,fsLR,cortex,1000,False,32k,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
+Yan100,MNI152NLin6Asym,cortex,100,True,1mm,10.1016/j.neuroimage.2023.120010,free
+Yan100,MNI152NLin2009cAsym,cortex,100,True,1mm,10.1016/j.neuroimage.2023.120010,free
+Yan100,fsLR,cortex,100,True,32k,10.1016/j.neuroimage.2023.120010,free
+Yan100,fsaverage,cortex,100,True,41k,10.1016/j.neuroimage.2023.120010,free
+Yan200,MNI152NLin6Asym,cortex,200,True,1mm,10.1016/j.neuroimage.2023.120010,free
+Yan200,MNI152NLin2009cAsym,cortex,200,True,1mm,10.1016/j.neuroimage.2023.120010,free
+Yan200,fsLR,cortex,200,True,32k,10.1016/j.neuroimage.2023.120010,free
+Yan200,fsaverage,cortex,200,True,41k,10.1016/j.neuroimage.2023.120010,free
+Yan400,MNI152NLin6Asym,cortex,400,True,1mm,10.1016/j.neuroimage.2023.120010,free
+Yan400,MNI152NLin2009cAsym,cortex,400,True,1mm,10.1016/j.neuroimage.2023.120010,free
+Yan400,fsLR,cortex,400,True,32k,10.1016/j.neuroimage.2023.120010,free
+Yan400,fsaverage,cortex,400,True,41k,10.1016/j.neuroimage.2023.120010,free
+Yan1000,MNI152NLin6Asym,cortex,1000,True,1mm,10.1016/j.neuroimage.2023.120010,free
+Yan1000,MNI152NLin2009cAsym,cortex,1000,True,1mm,10.1016/j.neuroimage.2023.120010,free
+Yan1000,fsLR,cortex,1000,True,32k,10.1016/j.neuroimage.2023.120010,free
+Yan1000,fsaverage,cortex,1000,True,41k,10.1016/j.neuroimage.2023.120010,free
+TianS1,MNI152NLin6Asym,subcortex,16,True,1mm,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
+TianS1,MNI152NLin2009cAsym,subcortex,16,True,1mm,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
+TianS2,MNI152NLin6Asym,subcortex,32,True,1mm,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
+TianS2,MNI152NLin2009cAsym,subcortex,32,True,1mm,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
+TianS3,MNI152NLin6Asym,subcortex,50,True,1mm,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
+TianS3,MNI152NLin2009cAsym,subcortex,50,True,1mm,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
+TianS4,MNI152NLin6Asym,subcortex,54,True,1mm,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
+TianS4,MNI152NLin2009cAsym,subcortex,54,True,1mm,10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6,MIT
+DesikanKilliany,MNI152NLin6Asym,cortex,68,True,1mm,10.1016/j.neuroimage.2006.01.021; doi.org/10.12751/g-node.2mnxpm,free
+DesikanKilliany,MNI152NLin2009cAsym,cortex,68,True,1mm,10.1016/j.neuroimage.2006.01.021; doi.org/10.12751/g-node.2mnxpm,free
+DesikanKilliany,fsaverage,cortex,68,True,41k,10.1016/j.neuroimage.2006.01.021; doi.org/10.12751/g-node.2mnxpm,free
+DesikanKilliany,fsLR,cortex,68,True,32k,10.1016/j.neuroimage.2006.01.021; doi.org/10.12751/g-node.2mnxpm,free
+DesikanKillianyTourville,MNI152NLin6Asym,cortex,62,True,1mm,10.3389/fnins.2012.00171; doi.org/10.12751/g-node.2mnxpm,free
+DesikanKillianyTourville,MNI152NLin2009cAsym,cortex,62,True,1mm,10.3389/fnins.2012.00171; doi.org/10.12751/g-node.2mnxpm,free
+DesikanKillianyTourville,fsaverage,cortex,62,True,41k,10.3389/fnins.2012.00171; doi.org/10.12751/g-node.2mnxpm,free
+DesikanKillianyTourville,fsLR,cortex,62,True,32k,10.3389/fnins.2012.00171; doi.org/10.12751/g-node.2mnxpm,free
+Destrieux,MNI152NLin6Asym,cortex,148,True,1mm,10.1016/j.neuroimage.2010.06.010; doi.org/10.12751/g-node.2mnxpm,free
+Destrieux,MNI152NLin2009cAsym,cortex,148,True,1mm,10.1016/j.neuroimage.2010.06.010; doi.org/10.12751/g-node.2mnxpm,free
+Destrieux,fsaverage,cortex,148,True,41k,10.1016/j.neuroimage.2010.06.010; doi.org/10.12751/g-node.2mnxpm,free
+Destrieux,fsLR,cortex,148,True,32k,10.1016/j.neuroimage.2010.06.010; doi.org/10.12751/g-node.2mnxpm,free
+Glasser,MNI152NLin6Asym,cortex,360,True,1mm,10.1038/nature18933; https://figshare.com/articles/dataset/HCP-MMP1_0_projected_on_fsaverage/3498446,free
+Glasser,MNI152NLin2009cAsym,cortex,360,True,1mm,10.1038/nature18933; https://figshare.com/articles/dataset/HCP-MMP1_0_projected_on_fsaverage/3498446,free
+Glasser,fsaverage,cortex,360,True,41k,10.1038/nature18933; https://figshare.com/articles/dataset/HCP-MMP1_0_projected_on_fsaverage/3498446,free
+Glasser,fsLR,cortex,360,True,32k,10.1038/nature18933; https://figshare.com/articles/dataset/HCP-MMP1_0_projected_on_fsaverage/3498446,free
+Aseg,MNI152NLin6Asym,subcortex,16,True,1mm,10.1016/s0896-6273(02)00569-x,free
+Aseg,MNI152NLin2009cAsym,subcortex,16,True,1mm,10.1016/s0896-6273(02)00569-x,free
+HarvardOxfordCortical,MNI152NLin6Asym,cortex,96,True,1mm,doi.org/10.1016/j.schres.2005.11.020; doi.org/10.1016/j.neuroimage.2006.01.021,free
+HarvardOxfordCortical,MNI152NLin2009cAsym,cortex,96,True,1mm,doi.org/10.1016/j.schres.2005.11.020; doi.org/10.1016/j.neuroimage.2006.01.021,free
+HarvardOxfordCortical,fsaverage,cortex,96,True,41k,doi.org/10.1016/j.schres.2005.11.020; doi.org/10.1016/j.neuroimage.2006.01.021,free
+HarvardOxfordCortical,fsLR,cortex,96,True,32k,doi.org/10.1016/j.schres.2005.11.020; doi.org/10.1016/j.neuroimage.2006.01.021,free
+HarvardOxfordSubcortical,MNI152NLin6Asym,subcortex,14,True,1mm,doi.org/10.1176/appi.ajp.162.7.1256; doi.org/10.1016/j.biopsych.2006.06.027,free
+HarvardOxfordSubcortical,MNI152NLin2009cAsym,subcortex,14,True,1mm,doi.org/10.1176/appi.ajp.162.7.1256; doi.org/10.1016/j.biopsych.2006.06.027,free
+BrainnetomeCortical,MNI152NLin6Asym,cortex,210,True,1mm,10.1093/cercor/bhw157,"non-commercial, attribution, share alike"
+BrainnetomeSubcortical,MNI152NLin6Asym,subcortex,36,True,1mm,10.1093/cercor/bhw157,"non-commercial, attribution, share alike"
+BrainnetomeCortical,MNI152NLin2009cAsym,cortex,210,True,1mm,10.1093/cercor/bhw157,"non-commercial, attribution, share alike"
+BrainnetomeSubcortical,MNI152NLin2009cAsym,subcortex,36,True,1mm,10.1093/cercor/bhw157,"non-commercial, attribution, share alike"
+BrainnetomeCortical,fsaverage,cortex,210,True,41k,10.1093/cercor/bhw157,"non-commercial, attribution, share alike"
+BrainnetomeCortical,fsLR,cortex,210,True,32k,10.1093/cercor/bhw157,"non-commercial, attribution, share alike"
+AALCortical,MNI152NLin6Asym,cortex,82,True,1mm,10.1016/j.neuroimage.2015.07.075,free
+AALSubcortical,MNI152NLin6Asym,subcortex,12,True,1mm,10.1016/j.neuroimage.2015.07.075,free
+AALCortical,MNI152NLin2009cAsym,cortex,82,True,1mm,10.1016/j.neuroimage.2015.07.075,free
+AALSubcortical,MNI152NLin2009cAsym,subcortex,12,True,1mm,10.1016/j.neuroimage.2015.07.075,free
+AALCortical,fsaverage,cortex,82,True,41k,10.1016/j.neuroimage.2015.07.075,free
+AALCortical,fsLR,cortex,82,True,32k,10.1016/j.neuroimage.2015.07.075,free
