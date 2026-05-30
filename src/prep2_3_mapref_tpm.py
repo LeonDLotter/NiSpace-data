@@ -1,6 +1,5 @@
 # %% Init
 
-import os
 from pathlib import Path
 import pandas as pd
 from neuromaps import transforms
@@ -11,7 +10,7 @@ wd = Path(__file__).parent.parent
 print(f"Working dir: {wd}")
 
 # import NiSpace functions
-from nispace.datasets import fetch_reference, reference_lib, fetch_template
+from nispace.datasets import fetch_reference, reference_lib
 from nispace.io import load_img
 from nispace.utils.utils import apply_transform
 from nispace.utils.utils_datasets import download
@@ -39,15 +38,16 @@ for idx, tissue in [(0, "gm"), (1, "wm"), (2, "csf")]:
     
         
 # %% Load all atlases via reference_lib
-template_MNI152NLin6Asym = fetch_template("MNI152NLin6Asym", desc="mask", res="2mm")
+template_MNI152NLin6Asym = wd / "template" / "MNI152NLin6Asym" / "map" / "mask" / "tpl-MNI152NLin6Asym_desc-mask_res-2mm.nii.gz"
 
 for m in reference_lib["tpm"]["map"]:
     print("Processing map:", m)
 
-    # get original map
+    # get original map — SPM-derived maps exist locally; arteries/veins are fetched from remote
     if any(t in m for t in ["gm", "wm", "csf"]):
-        os.environ["NISPACE_DATA_DIR"] = str(nispace_source_data_path)
-    fp = fetch_reference("tpm", maps=m, space="MNI152", verbose=False, check_file_hash=False)
+        fp = [nispace_source_data_path / "reference" / "tpm" / "map" / m / f"{m}_space-MNI152.nii.gz"]
+    else:
+        fp = fetch_reference("tpm", maps=m, space="MNI152", verbose=False, check_file_hash=False)
     print(fp)
     
     # ----------------------------------------------------------------------------------------------
@@ -101,8 +101,6 @@ for m in reference_lib["tpm"]["map"]:
     map_fsaverage[0].to_filename(fp.parent / f"{m}_space-fsaverage_desc-proc_hemi-L.shape.gii.gz")
     map_fsaverage[1].to_filename(fp.parent / f"{m}_space-fsaverage_desc-proc_hemi-R.shape.gii.gz")
         
-    # reset environment variable
-    os.environ["NISPACE_DATA_DIR"] = str(Path.home() / "nispace-data")
 
 
 # %% Collections

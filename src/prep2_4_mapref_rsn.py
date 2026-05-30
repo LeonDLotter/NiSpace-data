@@ -9,7 +9,6 @@ from neuromaps import transforms
 wd = Path(__file__).parent.parent
 print(f"Working dir: {wd}")
 
-from nispace.datasets import fetch_template
 from nispace.utils.utils import apply_transform
 from nispace.utils.utils_datasets import download
 
@@ -18,7 +17,7 @@ nispace_source_data_path = wd
 
 # %% Download RSN maps from Dworetsky et al. 2021
 # source: https://github.com/GrattonLab/Dworetsky_etal_ConsensusNetworks
-# paper: https://doi.org/10.1016/j.neuroimage.2020.117678
+# paper: https://doi.org/10.1016/j.neuroimage.2021.118164
 
 url = "https://raw.githubusercontent.com/GrattonLab/Dworetsky_etal_ConsensusNetworks/4521ead/Probabilistic_Network_Maps_t88_333.zip"
 archive_dir = nispace_source_data_path / "_archive" / "rsn"
@@ -31,9 +30,9 @@ with zipfile.ZipFile(fp_zip, "r") as z:
 
 # %% Process each network map
 
-template_MNI6 = fetch_template("MNI152NLin6Asym", desc="mask", res="2mm")
-mask_MNI6 = fetch_template("MNI152NLin6Asym", desc="mask_gm", res="2mm")
-mask_MNI9 = fetch_template("MNI152NLin2009cAsym", desc="mask_gm", res="2mm")
+template_MNI6 = wd / "template" / "MNI152NLin6Asym" / "map" / "mask" / "tpl-MNI152NLin6Asym_desc-mask_res-2mm.nii.gz"
+mask_MNI6 = wd / "template" / "MNI152NLin6Asym" / "map" / "mask_gm" / "tpl-MNI152NLin6Asym_desc-mask_gm_res-2mm.nii.gz"
+mask_MNI9 = wd / "template" / "MNI152NLin2009cAsym" / "map" / "mask_gm" / "tpl-MNI152NLin2009cAsym_desc-mask_gm_res-2mm.nii.gz"
 
 for nii_fp in sorted(archive_dir.rglob("*.nii")):
     if nii_fp.name == "711-2B_333.nii":
@@ -61,7 +60,7 @@ for nii_fp in sorted(archive_dir.rglob("*.nii")):
     # space: MNI152NLin2009cAsym
     # transform from MNI6 to MNI2009c, apply mask and scale to [0, 1]
     map_2009c = apply_transform(map_MNI6, mni_from="MNI152NLin6Asym", mni_to="MNI152NLin2009cAsym", order=3)
-    map_2009c = image.math_img("(img * mask / 100).astype(np.float32)", img=map_2009c, mask=mask_MNI9)
+    map_2009c = image.math_img("(img * mask).astype(np.float32)", img=map_2009c, mask=mask_MNI9)
     map_2009c.to_filename(map_dir / f"{map_id}_space-MNI152NLin2009cAsym_desc-proc.nii.gz")
 
     # space: fsLR 32k

@@ -1,6 +1,5 @@
 # %% Init
 
-import os
 import json
 import numpy as np
 import pandas as pd
@@ -8,7 +7,6 @@ from pathlib import Path
 
 wd = Path(__file__).parent.parent
 print(f"Working dir: {wd}")
-os.environ["NISPACE_DATA_DIR"] = str(wd)
 
 ENIGMA_DIR = Path("/Applications/miniforge3/envs/nsp309/lib/python3.9/site-packages"
                   "/enigmatoolbox/datasets/summary_statistics")

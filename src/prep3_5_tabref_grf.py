@@ -14,7 +14,6 @@ wd = Path(__file__).parent.parent
 print(f"Working dir: {wd}")
 
 # import NiSpace functions
-from nispace.datasets import fetch_template
 from nispace.parcellate import Parcellater
 
 # local utils
@@ -82,7 +81,7 @@ def gaussian_random_field(x, y, z, noise=None, alpha=3.0, normalize=True, seed=N
 # %% Setup
 
 # reference space: 2mm MNI152NLin2009cAsym
-mask_img = nib.load(fetch_template("MNI152NLin2009cAsym", res="2mm", desc="mask"))
+mask_img = nib.load(wd / "template" / "MNI152NLin2009cAsym" / "map" / "mask" / "tpl-MNI152NLin2009cAsym_desc-mask_res-2mm.nii.gz")
 
 # generate + mask one GRF and return a float32 NIfTI
 def generate_grf(alpha, seed, mirrored=True):

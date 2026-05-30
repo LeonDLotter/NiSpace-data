@@ -15,7 +15,7 @@ import matplotlib.pyplot as plt
 from nispace.utils.utils import relabel_nifti_parc, apply_transform
 from nispace.utils.utils_datasets import download, download_file
 from utils import tflow_get
-from nispace.datasets import template_lib, fetch_template
+from nispace.datasets import template_lib
 from nispace.plotting import brainplot
 
 wd = Path(__file__).parent.parent
@@ -31,10 +31,10 @@ mni_spaces = ["MNI152NLin6Asym", "MNI152NLin2009cAsym"]
 # templates
 mni_templates = {
     "MNI152NLin6Asym": {
-        "mask": image.load_img(fetch_template("MNI152NLin6Asym", res="1mm", desc="mask")),
+        "mask": image.load_img(wd / "template" / "MNI152NLin6Asym" / "map" / "mask" / "tpl-MNI152NLin6Asym_desc-mask_res-1mm.nii.gz"),
     },
     "MNI152NLin2009cAsym": {
-        "mask": image.load_img(fetch_template("MNI152NLin2009cAsym", res="1mm", desc="mask")),
+        "mask": image.load_img(wd / "template" / "MNI152NLin2009cAsym" / "map" / "mask" / "tpl-MNI152NLin2009cAsym_desc-mask_res-1mm.nii.gz"),
     },
 }
 
