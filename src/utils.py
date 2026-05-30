@@ -4,6 +4,29 @@ import numpy as np
 import pandas as pd
 from pathlib import Path
 from neuromaps import images as neuro_images
+import templateflow.api as tflow
+
+
+def tflow_get(*args, name_filter=None, **kwargs):
+    """Call tflow.get() and enforce exactly one result.
+
+    `name_filter` is an optional substring matched against the filename for
+    entities (e.g. 'seg', 'scale') that pybids does not index as BIDS entities.
+    """
+    result = tflow.get(*args, **kwargs)
+    if result is None:
+        raise FileNotFoundError(f"tflow.get({args}, {kwargs}) returned nothing")
+    if isinstance(result, list):
+        if name_filter:
+            result = [f for f in result if name_filter in f.name]
+        if len(result) != 1:
+            raise ValueError(
+                f"tflow.get({args}, {kwargs}) returned {len(result)} files"
+                + (f" after filtering for '{name_filter}'" if name_filter else "")
+                + ", expected 1:\n" + "\n".join(f"  {p}" for p in result)
+            )
+        return result[0]
+    return result
 
 
 def load_parc_lists(wd):

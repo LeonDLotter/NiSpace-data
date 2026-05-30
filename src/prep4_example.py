@@ -6,7 +6,7 @@ import pandas as pd
 import nibabel as nib
 from pathlib import Path
 
-wd = Path.cwd().parent
+wd = Path(__file__).parent.parent
 print(f"Working dir: {wd}")
 
 nispace_source_data_path = wd

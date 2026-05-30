@@ -1,21 +1,18 @@
 # %% Init
 
-import sys
 from pathlib import Path
 import numpy as np
+import pandas as pd
 from neuromaps import transforms
 import nibabel as nib
 
-# add nispace to path
-wd = Path.cwd().parent
+wd = Path(__file__).parent.parent
 print(f"Working dir: {wd}")
-sys.path.append(str(Path.home() / "projects" / "nispace"))
 
 # import NiSpace functions
-from nispace.datasets import fetch_reference, fetch_parcellation, reference_lib, parcellation_lib
-from nispace.io import parcellate_data, load_img
-from nispace.utils.utils_datasets import get_file
-from nispace.stats.misc import residuals 
+from nispace.datasets import fetch_reference, reference_lib
+from nispace.io import load_img
+from nispace.stats.misc import residuals
 
 # nispace data path 
 nispace_source_data_path = wd
@@ -70,48 +67,43 @@ for m in reference_lib["bigbrain"]["map"]:
             print(f"Saved {m} to {target_space} {h}...")
         
 # %% For checking, plot:
-from nispace.datasets import fetch_template
-from neuromaps.datasets import fetch_fslr
-from nilearn.plotting import plot_surf_stat_map
-import matplotlib.pyplot as plt
+# from nispace.plotting import brainplot
+# import matplotlib.pyplot as plt
 
-fsaverage = fetch_template("fsaverage", res="41k")[0]
-fslr = fetch_fslr("32k")["midthickness"][0]
-
-for m in reference_lib["bigbrain"]["map"]:
-    print("Plotting map:", m)
-    
-    # fslr
-    fig, axes = plt.subplots(1, 2, figsize=(6, 3), subplot_kw={"projection": "3d"})
-    for i, view in enumerate(["lateral", "medial"]):
-        plot_surf_stat_map(
-            fslr,
-            wd / "reference" / "bigbrain" / "map" / m / f"{m}_space-fsLR_desc-proc_hemi-L.surf.gii.gz",
-            title=f"{m}: fsLR",
-            cmap="viridis",
-            view=view,
-            axes=axes[i],
-        )
-    plt.show()
-    
-    # fsaverage
-    fig, axes = plt.subplots(1, 2, figsize=(6, 3), subplot_kw={"projection": "3d"})
-    for i, view in enumerate(["lateral", "medial"]):
-        plot_surf_stat_map(
-            fsaverage,
-            wd / "reference" / "bigbrain" / "map" / m / f"{m}_space-fsaverage_desc-proc_hemi-L.surf.gii.gz",
-            title=f"{m}: fsaverage",
-            cmap="viridis",
-            view=view,
-            axes=axes[i],
-        )
-    plt.show()
-    
-    
-
-    
-    
+# for m in reference_lib["bigbrain"]["map"]:
+#     for space in ["fsLR", "fsaverage"]:
+#         brainplot(
+#             fetch_reference("bigbrain", maps=m, space=space, verbose=False)[0],
+#             space=space,
+#             title=f"{m} | {space}",
+#         )
+#         plt.show()
 
 
+# %% Collections
+
+ref_dir = nispace_source_data_path / "reference" / "bigbrain"
+maps = sorted([d.name for d in (ref_dir / "map").iterdir() if d.is_dir()])
+
+pd.Series(maps, name="map").to_csv(ref_dir / "collection-All.collect", index=False)
+
+pd.Series([
+    "feature-layer1_pub-wagstyl2020",
+    "feature-layer2_pub-wagstyl2020",
+    "feature-layer3_pub-wagstyl2020",
+    "feature-layer4_pub-wagstyl2020",
+    "feature-layer5_pub-wagstyl2020",
+    "feature-layer6_pub-wagstyl2020",
+], name="map").to_csv(ref_dir / "collection-CorticalLayers.collect", index=False)
+
+pd.Series([
+    "feature-histogradient1_pub-paquola2021",
+    "feature-histogradient2_pub-paquola2021",
+    "feature-microgradient1_pub-paquola2021",
+    "feature-microgradient2_pub-paquola2021",
+    "feature-funcgradient1_pub-paquola2021",
+    "feature-funcgradient2_pub-paquola2021",
+    "feature-funcgradient3_pub-paquola2021",
+], name="map").to_csv(ref_dir / "collection-DifferentiationGradients.collect", index=False)
 
 # %%

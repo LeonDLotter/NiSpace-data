@@ -1,15 +1,13 @@
 # %% Init
 
-import sys
 from pathlib import Path
 import numpy as np
 from neuromaps import images
 from neuromaps.datasets import fetch_fsaverage, fetch_fslr
 from neuromaps.nulls.spins import gen_spinsamples, get_parcel_centroids
 
-wd = Path.cwd().parent
+wd = Path(__file__).parent.parent
 print(f"Working dir: {wd}")
-sys.path.append(str(Path.home() / "projects" / "nispace"))
 
 from nispace.nulls import _img_density_for_neuromaps
 

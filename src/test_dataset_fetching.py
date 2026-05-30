@@ -1,12 +1,9 @@
 # %%
-import sys
 import pathlib
 import pandas as pd
 import tempfile
 import os
 
-# add nispace to path
-sys.path.append(str(pathlib.Path.home() / "projects" / "nispace"))
 from nispace import datasets
 
 github_config_file = pathlib.Path.home() / "projects" / "nispace" / ".github.config"

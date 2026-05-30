@@ -1,8 +1,6 @@
 # %% Init
 
 import json
-import tempfile
-import urllib.request
 from pathlib import Path
 
 import numpy as np
@@ -14,6 +12,8 @@ from neuromaps.images import load_gifti
 wd = Path(__file__).parent.parent
 print(f"Working dir: {wd}")
 
+from utils import tflow_get
+
 nispace_toolbox_path = Path.home() / "projects" / "nispace"
 
 FSLR_DENSITIES = ["4k", "8k", "32k", "164k"]
@@ -24,32 +24,28 @@ FSAVERAGE_DENSITIES = ["3k", "10k", "41k", "164k"]
 # To add a new space, add a new key with at minimum a "1mm" entry.
 MNI_SOURCES = {
     "MNI152NLin6Asym": {
-        "1mm": "https://templateflow.s3.amazonaws.com/tpl-MNI152NLin6Asym/tpl-MNI152NLin6Asym_res-01_desc-brain_mask.nii.gz",
-        "2mm": "https://templateflow.s3.amazonaws.com/tpl-MNI152NLin6Asym/tpl-MNI152NLin6Asym_res-02_desc-brain_mask.nii.gz",
+        "1mm": tflow_get("MNI152NLin6Asym", resolution="01", desc="brain", suffix="mask", extension="nii.gz"),
+        "2mm": tflow_get("MNI152NLin6Asym", resolution="02", desc="brain", suffix="mask", extension="nii.gz"),
     },
     "MNI152NLin2009cAsym": {
-        "1mm": "https://templateflow.s3.amazonaws.com/tpl-MNI152NLin2009cAsym/tpl-MNI152NLin2009cAsym_res-01_desc-brain_mask.nii.gz",
-        "2mm": "https://templateflow.s3.amazonaws.com/tpl-MNI152NLin2009cAsym/tpl-MNI152NLin2009cAsym_res-02_desc-brain_mask.nii.gz",
+        "1mm": tflow_get("MNI152NLin2009cAsym", resolution="01", desc="brain", suffix="mask", extension="nii.gz"),
+        "2mm": tflow_get("MNI152NLin2009cAsym", resolution="02", desc="brain", suffix="mask", extension="nii.gz"),
     },
     "MNIColin27": {
-        "1mm": "https://templateflow.s3.amazonaws.com/tpl-MNIColin27/tpl-MNIColin27_desc-brain_mask.nii.gz",
+        "1mm": tflow_get("MNIColin27", desc="brain", suffix="mask", extension="nii.gz"),
     },
     "MNI305": {
-        "1mm": "https://templateflow.s3.amazonaws.com/tpl-MNI305/tpl-MNI305_desc-brain_mask.nii.gz",
+        "1mm": tflow_get("MNI305", desc="brain", suffix="mask", extension="nii.gz"),
     },
 }
 ALL_RESOLUTIONS = ["1mm", "2mm", "3mm", "4mm"]  # always produced for every space
 
 
 def load_source(source):
-    """Load a NIfTI image from a URL string or return a SpatialImage directly."""
+    """Load a NIfTI image from a Path or return a SpatialImage directly."""
     if isinstance(source, nib.spatialimages.SpatialImage):
         return source
-    with tempfile.NamedTemporaryFile(suffix=".nii.gz", delete=False) as f:
-        tmp = Path(f.name)
-    print(f"  Downloading {source.split('/')[-1]} ...")
-    urllib.request.urlretrieve(source, tmp)
-    return nib.load(tmp)
+    return nib.load(source)
 
 
 def geom_entry(img):
@@ -70,8 +66,9 @@ for space, res_sources in MNI_SOURCES.items():
     affines[space] = {}
     loaded = {}  # res -> image
 
-    # Load/download native resolutions
+    # Load native resolutions from tflow cache
     for res, source in res_sources.items():
+        print(f"  Loading {Path(source).name} ...")
         loaded[res] = load_source(source)
 
     # Best native source = smallest mm value (1mm preferred over 2mm etc.)

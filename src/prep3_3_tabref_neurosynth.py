@@ -17,7 +17,7 @@ from nimare.meta.cbma.mkda import MKDAChi2
 # NOTE: biopython is required for downloading abstracts but doesnt have to be imported
 
 # working directory
-wd = Path.cwd().parent
+wd = Path(__file__).parent.parent
 print(f"Working dir: {wd}")
 
 # DIRECTORY IN WHICH NEUROSYNTH DATA WILL BE STORED
@@ -28,21 +28,21 @@ if not neurosynth_data_path.exists():
 # EMAIL FOR DOWNLOADING ABSTRACTS
 email = "l.lotter@fz-juelich.de"
 
-# add nispace to path
-sys.path.append(str(Path.home() / "projects" / "nispace"))
 
 # import NiSpace functions
 from nispace.io import load_labels, load_img
 from nispace.parcellate import Parcellater
 from nispace.utils.utils_datasets import download
 
-# nispace data path 
+# local utils
+sys.path.insert(0, str(Path(__file__).parent))
+from utils import load_parc_lists, load_parc, load_parc_labels, DATASET_PARCELLATE_KWARGS
+
+# nispace data path
 nispace_source_data_path = wd
 
-# All parcellations
-PARCS = sorted(
-    [p.name for p in (nispace_source_data_path / "parcellation").glob("*") if p.is_dir()]
-)
+# parcellations
+PARCS, PARCS_CX, PARCS_SC = load_parc_lists(wd)
 print("PARCS:", PARCS)
 
 # %% Download neurosynth data and convert to nimare dataset
@@ -178,46 +178,27 @@ map_paths = [
 if not all([fp.exists() for fp in map_paths]):
     raise FileNotFoundError(f"Some maps do not exist: {map_paths}")
 
-# iterate nispace parcellations
-# TODO: simplify after we have every parcellation in every space
+# iterate nispace parcellations — all have MNI152NLin6Asym
 for parc in PARCS:
     print(parc)
-    
-    # fetch parcellation
-    # the template from nimare ("mni152_2mm") corresponds to the MNI152NLin6Asym template in NiSpace
-    if (nispace_source_data_path / "parcellation" / parc / "MNI152NLin6Asym").exists():
-        parc_space = "MNI152NLin6Asym"
-        parc_img = load_img(nispace_source_data_path / "parcellation" / parc / "MNI152NLin6Asym" / 
-                            f"parc-{parc}_space-MNI152NLin6Asym.label.nii.gz")
-        parc_labels = load_labels(nispace_source_data_path / "parcellation" / parc / "MNI152NLin6Asym" / 
-                                  f"parc-{parc}_space-MNI152NLin6Asym.label.txt")
-    else:
-        parc_space = "fsLR"
-        parc_img = load_img((nispace_source_data_path / "parcellation" / parc / "fsLR" / 
-                             f"parc-{parc}_space-fsLR_hemi-L.label.gii.gz",
-                             nispace_source_data_path / "parcellation" / parc / "fsLR" / 
-                             f"parc-{parc}_space-fsLR_hemi-R.label.gii.gz"))
-        parc_labels = load_labels((nispace_source_data_path / "parcellation" / parc / "fsLR" / 
-                                  f"parc-{parc}_space-fsLR_hemi-L.label.txt",
-                                  nispace_source_data_path / "parcellation" / parc / "fsLR" / 
-                                  f"parc-{parc}_space-fsLR_hemi-R.label.txt"))
-    
-    # prep parcellator
+
+    parc_space  = "MNI152NLin6Asym"
+    parc_img    = load_parc(wd, parc, parc_space)
+    parc_labels = load_parc_labels(wd, parc, parc_space)
+
+    # prep parcellator (nimare maps are in MNI152NLin6Asym space)
     parcellater = Parcellater(
         parcellation=parc_img,
         space=parc_space,
-        resampling_target="data" if "mni" in parc_space.lower() else "parcellation",
+        resampling_target="data",
     ).fit()
-    
+
     # parcellate function for one map
     def par_fun(map_path):
         data = parcellater.transform(
             data=map_path,
             space="MNI152NLin6Asym",
-            ignore_background_data=True,
-            background_value=0,
-            min_num_valid_datapoints=None,
-            min_fraction_valid_datapoints=None,
+            **DATASET_PARCELLATE_KWARGS["neurosynth"],
         )
         return data.astype(np.float32)
     
@@ -233,4 +214,66 @@ for parc in PARCS:
     
     # save
     data.to_csv(nispace_source_data_path / "reference" / "neurosynth" / "tab" / f"dset-neurosynth_parc-{parc}.csv.gz")
+
+
+# %% Collections
+
+from nispace.io import write_json
+
+ref_dir = nispace_source_data_path / "reference" / "neurosynth"
+
+# All
+pd.Series(terms_to_keep, name="map").to_csv(ref_dir / "collection-All.collect", index=False)
+
+# CognitiveFunctions (manually curated)
+write_json(
+    {
+        "Perception": [
+            "perception", "visual", "visuospatial", "auditory", "olfactory",
+            "tactile", "pain", "sensory", "multisensory",
+        ],
+        "Attention": [
+            "attention", "selective attention", "spatial attention", "sustained attention",
+            "visual attention", "attentional control", "distraction", "fixation", "salience", "shifting",
+        ],
+        "Memory": [
+            "semantic memory", "autobiographical memory", "episodic memory", "working memory",
+            "short term", "long term", "memory encoding", "memory retrieval", "recall", "repetition",
+        ],
+        "Language": [
+            "language", "speech", "speech perception", "speech production", "articulation",
+            "phonological", "listening", "reading", "comprehension", "semantic", "syntactic",
+        ],
+        "Executive Control": [
+            "executive control", "executive function", "cognitive control", "cognitive flexibility",
+            "flexibility", "set shifting", "task switching", "inhibition", "response inhibition",
+            "response selection", "planning", "problem solving", "decision making", "reasoning",
+            "monitoring", "arithmetic",
+        ],
+        "Reward and Learning": [
+            "reward", "learning", "reward anticipation", "adaptation", "delay", "effort",
+            "feedback", "goal directed", "motivation", "prediction", "prediction error",
+            "conflict", "reinforcement learning", "punishment", "risk",
+        ],
+        "Emotion & Affect": [
+            "emotional", "affect", "empathy", "emotion regulation", "valence", "mood",
+            "positive affect", "happy", "joy", "love", "satisfaction",
+            "negative affect", "anxiety", "fear", "loss", "threat",
+        ],
+        "Social Cognition": [
+            "social cognition", "social interaction", "theory mind", "mentalizing",
+            "perspective taking", "face recognition", "imitation", "self referential",
+        ],
+        "Motor Function": [
+            "motor", "motor control", "movement", "sensorimotor", "somatosensory",
+            "action observation", "imagery", "skill", "coordination",
+            "eye movements", "gaze", "grasping", "hand movements",
+        ],
+        "Arousal & State": [
+            "arousal", "autonomic", "eating", "interoceptive", "sleep", "stress",
+        ],
+    },
+    ref_dir / "collection-CognitiveFunctions.collect",
+)
+
 # %%

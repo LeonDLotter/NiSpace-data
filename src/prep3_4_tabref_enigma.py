@@ -6,7 +6,7 @@ import numpy as np
 import pandas as pd
 from pathlib import Path
 
-wd = Path.cwd().parent
+wd = Path(__file__).parent.parent
 print(f"Working dir: {wd}")
 os.environ["NISPACE_DATA_DIR"] = str(wd)
 

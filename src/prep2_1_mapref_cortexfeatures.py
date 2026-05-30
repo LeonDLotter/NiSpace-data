@@ -1,15 +1,13 @@
 # %% Init
 
-import sys
 from pathlib import Path
 import numpy as np
+import pandas as pd
 from neuromaps import transforms
 import nibabel as nib
 
-# add nispace to path
-wd = Path.cwd().parent
+wd = Path(__file__).parent.parent
 print(f"Working dir: {wd}")
-sys.path.append(str(Path.home() / "projects" / "nispace"))
 
 # import NiSpace functions
 from nispace.datasets import fetch_reference, reference_lib
@@ -110,12 +108,42 @@ for m in reference_lib["cortexfeatures"]["map"]:
         for i_h, h in enumerate(hemi):
             map_target[i_h].to_filename(save_dir / f"{m}_space-{target_space}_desc-proc_hemi-{h}.surf.gii.gz")
             print(f"Saved {m} to {target_space} {h}...")
-        
 
 
-    
-    
-    
-    
+# %% Collections
+
+ref_dir = nispace_source_data_path / "reference" / "cortexfeatures"
+maps = sorted([d.name for d in (ref_dir / "map").iterdir() if d.is_dir()])
+
+pd.Series(maps, name="map").to_csv(ref_dir / "collection-All.collect", index=False)
+
+pd.Series([
+    "feature-megpoweralpha_pub-shafiei2022",
+    "feature-megpowerbeta_pub-shafiei2022",
+    "feature-megpowerdelta_pub-shafiei2022",
+    "feature-megpowergamma1_pub-shafiei2022",
+    "feature-megpowergamma2_pub-shafiei2022",
+    "feature-megpowertheta_pub-shafiei2022",
+    "feature-megtimescale_pub-shafiei2022",
+], name="map").to_csv(ref_dir / "collection-MEG.collect", index=False)
+
+pd.Series([
+    "feature-cbf_pub-vaishnavi2010",
+    "feature-cbv_pub-vaishnavi2010",
+    "feature-cmro2_pub-vaishnavi2010",
+    "feature-cmrglc_pub-vaishnavi2010",
+    "feature-glycindex_pub-vaishnavi2010",
+], name="map").to_csv(ref_dir / "collection-Metabolism.collect", index=False)
+
+pd.Series([
+    "feature-thickness_pub-hcps1200",
+    "feature-t1t2_pub-hcps1200",
+    "feature-saaxis_pub-sydnor2021",
+    "feature-geneexpr-abagen",
+    "feature-develexpansion_pub-hill2010",
+    "feature-evolexpansion_pub-hill2010",
+    "feature-evolexpansion_pub-xu2020",
+    "feature-specieshomology_pub-xu2020",
+], name="map").to_csv(ref_dir / "collection-CortexOrganisation.collect", index=False)
 
 # %%

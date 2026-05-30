@@ -15,24 +15,10 @@ print(f"Working dir: {wd}")
 from nispace.utils.utils import apply_transform
 from nispace.utils.utils_datasets import download
 from neuromaps.datasets import fetch_fslr, fetch_fsaverage
+from utils import tflow_get
 
 nispace_data_path = wd
 nispace_toolbox_path = Path.home() / "projects" / "nispace"
-
-# templateflow wrapper
-def tflow_get(*args, **kwargs):
-    """Wrapper around tflow.get that enforces exactly one result."""
-    result = tflow.get(*args, **kwargs)
-    if result is None:
-        raise FileNotFoundError(f"tflow_get({args}, {kwargs}) returned nothing")
-    if isinstance(result, list):
-        if len(result) != 1:
-            raise ValueError(
-                f"tflow_get({args}, {kwargs}) returned {len(result)} files, expected 1:\n"
-                + "\n".join(f"  {p}" for p in result)
-            )
-        return result[0]
-    return result
 
 # Load canonical geometry reference built by prep0_0_affines.py
 with open(nispace_toolbox_path / "nispace" / "datalib" / "affines.json") as _f:

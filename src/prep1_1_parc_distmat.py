@@ -1,14 +1,12 @@
 # %% Init
 
-import sys
 from pathlib import Path
 import numpy as np
 import pandas as pd
 from neuromaps import images
 
-wd = Path.cwd().parent
+wd = Path(__file__).parent.parent
 print(f"Working dir: {wd}")
-sys.path.append(str(Path.home() / "projects" / "nispace"))
 
 # import NiSpace functions
 from nispace.nulls import get_distance_matrix
@@ -26,8 +24,6 @@ print("PARCS:", PARCS)
 
 for parc in PARCS:
     print("Parcellation:", parc)
-    if parc != "Destrieux":
-        continue
     spaces = sorted(
         [s.name for s in (nispace_source_data_path / "parcellation" / parc).glob("*") if s.is_dir()]
     )
@@ -63,15 +59,24 @@ for parc in PARCS:
             dtype=np.float32
         )
         if not isinstance(dist_mat, tuple):
-            assert np.unique(parc_loaded.get_fdata())[1:].shape[0] == dist_mat.shape[0] == dist_mat.shape[1]
+            parc_idc = np.trim_zeros(np.unique(parc_loaded.get_fdata()))
+            if not (parc_idc.shape[0] == dist_mat.shape[0] == dist_mat.shape[1]):
+                raise ValueError("Shape mismatch between parcellation and distance matrix:"
+                                 f"parc_idc.shape={parc_idc.shape}, dist_mat.shape={dist_mat.shape}")
             pd.DataFrame(dist_mat).to_csv(
                 nispace_source_data_path / "parcellation" / parc / space / 
                 f"parc-{parc}_space-{space}.dist.csv.gz", 
                 header=None, index=None
             )
         else:
-            assert np.unique(parc_loaded[0].agg_data())[1:].shape[0] == dist_mat[0].shape[0] == dist_mat[0].shape[1]
-            assert np.unique(parc_loaded[1].agg_data())[1:].shape[0] == dist_mat[1].shape[0] == dist_mat[1].shape[1]
+            parc_idc_lh = np.trim_zeros(np.unique(parc_loaded[0].agg_data()))
+            parc_idc_rh = np.trim_zeros(np.unique(parc_loaded[1].agg_data()))
+            if not (parc_idc_lh.shape[0] == dist_mat[0].shape[0] == dist_mat[0].shape[1]):
+                raise ValueError("Shape mismatch between parcellation and distance matrix:"
+                                 f"parc_idc_lh.shape={parc_idc_lh.shape}, dist_mat[0].shape={dist_mat[0].shape}")
+            if not (parc_idc_rh.shape[0] == dist_mat[1].shape[0] == dist_mat[1].shape[1]):
+                raise ValueError("Shape mismatch between parcellation and distance matrix:"
+                                 f"parc_idc_rh.shape={parc_idc_rh.shape}, dist_mat[1].shape={dist_mat[1].shape}")
             for mat, hemi in zip(dist_mat, ["L", "R"]):
                 pd.DataFrame(mat).to_csv(
                     nispace_source_data_path / "parcellation" / parc / space / 
