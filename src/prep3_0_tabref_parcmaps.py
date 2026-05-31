@@ -14,7 +14,7 @@ from nispace.io import parcellate_data
 
 # local utils
 sys.path.insert(0, str(Path(__file__).parent))
-from utils import load_parc_lists, load_parc, load_parc_labels, DATASET_PARCELLATE_KWARGS
+from utils import load_parc_lists, load_parc, load_parc_labels, DATASET_PARCELLATE_KWARGS, save_csv_gz
 
 # nispace data path
 nispace_source_data_path = wd
@@ -61,6 +61,7 @@ def fetch_reference(dataset, maps, space):
 
 
 # %% Parcellate map-based image data ---------------------------------------------------------------
+
 
 for dataset in DSETS_WITH_MAPS:
     print("-------- " + dataset.upper() + " --------")
@@ -193,7 +194,7 @@ for dataset in DSETS_WITH_MAPS:
         print(ref_maps_df.head())
         save_dir = nispace_source_data_path / "reference" / dataset / "tab"
         save_dir.mkdir(parents=True, exist_ok=True)
-        ref_maps_df.to_csv(save_dir / f"dset-{dataset}_parc-{parc_name}.csv.gz")
+        save_csv_gz(ref_maps_df, save_dir / f"dset-{dataset}_parc-{parc_name}.csv.gz")
         print("-" * 80)
 
 # %%

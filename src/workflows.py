@@ -48,6 +48,7 @@ WORKFLOWS = {
         "prep2_2_mapref_bigbrain.py",
         "prep2_3_mapref_tpm.py",
         "prep2_4_mapref_rsn.py",
+        "prep2_5_mapref_rsn17.py",
         "prep3_0_tabref_parcmaps.py",
         "prep3_1_tabref_mrna.py",
         "prep3_2_tabref_magicc.py",
@@ -81,6 +82,7 @@ WORKFLOWS = {
         "prep2_2_mapref_bigbrain.py",
         "prep2_3_mapref_tpm.py",
         "prep2_4_mapref_rsn.py",
+        "prep2_5_mapref_rsn17.py",
         "prep3_0_tabref_parcmaps.py",
     ],
     "update_parcmaps": [
@@ -107,11 +109,15 @@ WORKFLOWS = {
 _check_coverage()
 
 
-def run_workflow(name: str) -> None:
+def run_workflow(name: str, exclude: list[str] = []) -> None:
     scripts = WORKFLOWS.get(name)
     if scripts is None:
         print(f"Unknown workflow '{name}'. Available: {', '.join(WORKFLOWS)}")
         sys.exit(1)
+
+    scripts = [s for s in scripts if s not in exclude]
+    if exclude:
+        print(f"Excluding: {', '.join(exclude)}\n")
 
     print(f"=== workflow: {name} ({len(scripts)} script(s)) ===\n")
     for i, script in enumerate(scripts, 1):
@@ -127,7 +133,7 @@ def run_workflow(name: str) -> None:
 
 
 if __name__ == "__main__":
-    if len(sys.argv) != 2:
+    if len(sys.argv) < 2:
         print(__doc__)
         sys.exit(1)
-    run_workflow(sys.argv[1])
+    run_workflow(sys.argv[1], exclude=sys.argv[2:])

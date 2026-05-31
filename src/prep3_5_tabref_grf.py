@@ -18,7 +18,7 @@ from nispace.parcellate import Parcellater
 
 # local utils
 sys.path.insert(0, str(Path(__file__).parent))
-from utils import load_parc_lists, load_parc, load_parc_labels, DATASET_PARCELLATE_KWARGS
+from utils import load_parc_lists, load_parc, load_parc_labels, DATASET_PARCELLATE_KWARGS, save_csv_gz
 
 # nispace data path
 nispace_source_data_path = wd
@@ -170,7 +170,7 @@ for parc_name in PARCS:
         columns=labels,
         dtype=np.float16,
     )
-    df.to_csv(out_path)
+    save_csv_gz(df, out_path)
     print(f"  Saved {df.shape} → {out_path.name}")
 
 

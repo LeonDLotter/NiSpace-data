@@ -22,7 +22,7 @@ from nispace.utils.utils_datasets import download
 
 # local utils
 sys.path.insert(0, str(Path(__file__).parent))
-from utils import load_parc_lists
+from utils import load_parc_lists, save_csv_gz
 
 # nispace data path
 nispace_source_data_path = wd
@@ -141,9 +141,7 @@ def par_fun(parc):
           f"After correlation threshold of >= {corr_threshold}, {mRNA_tab.shape[0]} genes remain.")
 
     # save
-    mRNA_tab.to_csv(
-        nispace_source_data_path / "reference" / "mrna" / "tab" / f"dset-mrna_parc-{parc}.csv.gz"
-    )
+    save_csv_gz(mRNA_tab, nispace_source_data_path / "reference" / "mrna" / "tab" / f"dset-mrna_parc-{parc}.csv.gz")
 
 #%% Run stability
 
@@ -180,7 +178,7 @@ if not stab_repro_path.exists() or overwrite:
     )
     stability.name = "reproducibility"
     stability.index.name = "map"
-    stability.to_csv(stab_repro_path)
+    save_csv_gz(stability, stab_repro_path)
 else:
     stability = pd.read_csv(stab_repro_path, index_col=0).squeeze()
 

@@ -1,5 +1,6 @@
 # %% Init
 
+import sys
 import json
 import numpy as np
 import pandas as pd
@@ -7,6 +8,9 @@ from pathlib import Path
 
 wd = Path(__file__).parent.parent
 print(f"Working dir: {wd}")
+
+sys.path.insert(0, str(Path(__file__).parent))
+from utils import save_csv_gz
 
 ENIGMA_DIR = Path("/Applications/miniforge3/envs/nsp309/lib/python3.9/site-packages"
                   "/enigmatoolbox/datasets/summary_statistics")
@@ -450,8 +454,8 @@ for dset, dk_df, aseg_df, meta_df, all_ids, adult_ids in [
     # tabs
     dk_path = tab_dir / f"dset-{dset}_parc-DesikanKilliany.csv.gz"
     aseg_path = tab_dir / f"dset-{dset}_parc-Aseg.csv.gz"
-    dk_df.to_csv(dk_path)
-    aseg_df.to_csv(aseg_path)
+    save_csv_gz(dk_df, dk_path)
+    save_csv_gz(aseg_df, aseg_path)
 
     # metadata
     meta_df.to_csv(out_dir / "metadata.csv")

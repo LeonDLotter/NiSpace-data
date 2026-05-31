@@ -16,7 +16,7 @@ from nispace.utils.utils import vol_to_vect_arr
 
 # local utils
 sys.path.insert(0, str(Path(__file__).parent))
-from utils import load_parc_lists, load_parc, load_parc_labels
+from utils import load_parc_lists, load_parc, load_parc_labels, save_csv_gz
 
 # nispace data path
 nispace_source_data_path = wd
@@ -44,8 +44,8 @@ df_reproducibility = (
     .rename(columns={"gene.symbol": "map", "Estimated reproducibility": "reproducibility"})
     .set_index("map")
 )
-df_reproducibility.to_csv(nispace_source_data_path / "reference" / "magicc" / "tab" / 
-                          "dset-magicc_reproducibility.csv.gz")
+save_csv_gz(df_reproducibility, nispace_source_data_path / "reference" / "magicc" / "tab" /
+            "dset-magicc_reproducibility.csv.gz")
 
 # load expression data in fslr space
 expression_fslr = np.load(magicc_data_path / "ahba_vertex.npy")
@@ -109,7 +109,7 @@ for parc_name in PARCS_CX:
     df_parc_expr = df_parc_expr.astype(np.float16)
         
     # save
-    df_parc_expr.to_csv(out_path)
+    save_csv_gz(df_parc_expr, out_path)
 
 
 # %% Collections

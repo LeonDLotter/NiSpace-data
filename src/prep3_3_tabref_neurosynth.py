@@ -36,7 +36,7 @@ from nispace.utils.utils_datasets import download
 
 # local utils
 sys.path.insert(0, str(Path(__file__).parent))
-from utils import load_parc_lists, load_parc, load_parc_labels, DATASET_PARCELLATE_KWARGS
+from utils import load_parc_lists, load_parc, load_parc_labels, DATASET_PARCELLATE_KWARGS, save_csv_gz
 
 # nispace data path
 nispace_source_data_path = wd
@@ -213,7 +213,7 @@ for parc in PARCS:
     print("Data shape:", data.shape)
     
     # save
-    data.to_csv(nispace_source_data_path / "reference" / "neurosynth" / "tab" / f"dset-neurosynth_parc-{parc}.csv.gz")
+    save_csv_gz(data, nispace_source_data_path / "reference" / "neurosynth" / "tab" / f"dset-neurosynth_parc-{parc}.csv.gz")
 
 
 # %% Collections

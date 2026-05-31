@@ -75,6 +75,11 @@ def load_parc_labels(wd, parc_name, space):
     ])
 
 
+def save_csv_gz(df, path, **kwargs):
+    """Save DataFrame to .csv.gz with a fixed gzip mtime for git-stable output."""
+    df.to_csv(path, compression={"method": "gzip", "mtime": 1}, **kwargs)
+
+
 # Parcellate kwargs per dataset.
 # Used with parcellate_data (prep3_0) or Parcellater.transform (prep3_3, prep3_5).
 # neurosynth and grf use nispace.parcellate.Parcellater, which takes background_parcels_to_nan instead of drop_background_parcels

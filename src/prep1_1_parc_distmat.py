@@ -1,5 +1,6 @@
 # %% Init
 
+import sys
 from pathlib import Path
 import numpy as np
 import pandas as pd
@@ -10,6 +11,10 @@ print(f"Working dir: {wd}")
 
 # import NiSpace functions
 from nispace.nulls import get_distance_matrix
+
+# local utils
+sys.path.insert(0, str(Path(__file__).parent))
+from utils import save_csv_gz
 
 # nispace data path 
 nispace_source_data_path = wd
@@ -63,11 +68,10 @@ for parc in PARCS:
             if not (parc_idc.shape[0] == dist_mat.shape[0] == dist_mat.shape[1]):
                 raise ValueError("Shape mismatch between parcellation and distance matrix:"
                                  f"parc_idc.shape={parc_idc.shape}, dist_mat.shape={dist_mat.shape}")
-            pd.DataFrame(dist_mat).to_csv(
-                nispace_source_data_path / "parcellation" / parc / space / 
-                f"parc-{parc}_space-{space}.dist.csv.gz", 
-                header=None, index=None
-            )
+            save_csv_gz(pd.DataFrame(dist_mat),
+                        nispace_source_data_path / "parcellation" / parc / space /
+                        f"parc-{parc}_space-{space}.dist.csv.gz",
+                        header=None, index=None)
         else:
             parc_idc_lh = np.trim_zeros(np.unique(parc_loaded[0].agg_data()))
             parc_idc_rh = np.trim_zeros(np.unique(parc_loaded[1].agg_data()))
@@ -78,9 +82,8 @@ for parc in PARCS:
                 raise ValueError("Shape mismatch between parcellation and distance matrix:"
                                  f"parc_idc_rh.shape={parc_idc_rh.shape}, dist_mat[1].shape={dist_mat[1].shape}")
             for mat, hemi in zip(dist_mat, ["L", "R"]):
-                pd.DataFrame(mat).to_csv(
-                    nispace_source_data_path / "parcellation" / parc / space / 
-                    f"parc-{parc}_space-{space}_hemi-{hemi}.dist.csv.gz", 
-                    header=None, index=None
-                )
+                save_csv_gz(pd.DataFrame(mat),
+                            nispace_source_data_path / "parcellation" / parc / space /
+                            f"parc-{parc}_space-{space}_hemi-{hemi}.dist.csv.gz",
+                            header=None, index=None)
 # %%

@@ -19,7 +19,7 @@ from nispace.io import parcellate_data
 
 # local utils
 sys.path.insert(0, str(Path(__file__).parent))
-from utils import load_parc_lists, load_parc, load_parc_labels
+from utils import load_parc_lists, load_parc, load_parc_labels, save_csv_gz
 
 # Override AFTER import so local source data is used throughout
 os.environ["NISPACE_DATA_DIR"] = str(nispace_source_data_path)
@@ -120,7 +120,7 @@ for parc_name in PARCS:
             gm_base + rng.standard_normal(len(gm_base)) * noise_scale_hc
         )
 
-    data_an.to_csv(nispace_source_data_path / "example" / f"example-anorexianervosa_parc-{parc_name}.csv.gz")
+    save_csv_gz(data_an, nispace_source_data_path / "example" / f"example-anorexianervosa_parc-{parc_name}.csv.gz")
 
 
 # %% Test Anorexia Nervosa Data
