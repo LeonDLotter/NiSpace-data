@@ -110,7 +110,7 @@ MAPS = [
     # --- MDD ---
     dict(
         map_id="dx-mdd_age-adult_pub-schmaal2017",
-        disorder="MDD", age="adult", subtype=None, adult=True,
+        disorder="MDD", age="adult", subtype=None, main=True,
         thick_file="mddadult_case-controls_CortThick",
         surf_file="mddadult_case-controls_CortSurf",
         subvol_file="mdd_case-controls_SubVol",
@@ -119,7 +119,7 @@ MAPS = [
     ),
     dict(
         map_id="dx-mdd_age-adolescent_pub-schmaal2017",
-        disorder="MDD", age="adolescent", subtype=None, adult=False,
+        disorder="MDD", age="adolescent", subtype=None, main=False,
         thick_file="mddadolescent_case-controls_CortThick",
         surf_file="mddadolescent_case-controls_CortSurf",
         subvol_file=None,
@@ -129,7 +129,7 @@ MAPS = [
     # --- ADHD ---
     dict(
         map_id="dx-adhd_age-allages_pub-hoogman2019",
-        disorder="ADHD", age="allages", subtype=None, adult=False,
+        disorder="ADHD", age="allages", subtype=None, main=True,
         thick_file="adhdallages_case-controls_CortThick",
         surf_file="adhdallages_case-controls_CortSurf",
         subvol_file="adhdallages_case-controls_SubVol",
@@ -138,7 +138,7 @@ MAPS = [
     ),
     dict(
         map_id="dx-adhd_age-adult_pub-hoogman2019",
-        disorder="ADHD", age="adult", subtype=None, adult=True,
+        disorder="ADHD", age="adult", subtype=None, main=False,
         thick_file="adhdadult_case-controls_CortThick",
         surf_file="adhdadult_case-controls_CortSurf",
         subvol_file="adhdadult_case-controls_SubVol",
@@ -147,7 +147,7 @@ MAPS = [
     ),
     dict(
         map_id="dx-adhd_age-adolescent_pub-hoogman2019",
-        disorder="ADHD", age="adolescent", subtype=None, adult=False,
+        disorder="ADHD", age="adolescent", subtype=None, main=False,
         thick_file="adhdadolescent_case-controls_CortThick",
         surf_file="adhdadolescent_case-controls_CortSurf",
         subvol_file="adhdadolescent_case-controls_SubVol",
@@ -156,7 +156,7 @@ MAPS = [
     ),
     dict(
         map_id="dx-adhd_age-pediatric_pub-hoogman2019",
-        disorder="ADHD", age="pediatric", subtype=None, adult=False,
+        disorder="ADHD", age="pediatric", subtype=None, main=False,
         thick_file="adhdpediatric_case-controls_CortThick",
         surf_file="adhdpediatric_case-controls_CortSurf",
         subvol_file="adhdpediatric_case-controls_SubVol",
@@ -166,7 +166,7 @@ MAPS = [
     # --- ASD (CortThick only; no CortSurf in ENIGMA) ---
     dict(
         map_id="dx-asd_pub-vanrooij2018",
-        disorder="ASD", age=None, subtype=None, adult=True,
+        disorder="ASD", age=None, subtype=None, main=True,
         thick_file="asd_mega-analysis_case-controls_CortThick",
         surf_file=None,
         subvol_file="asd_meta-analysis_case-controls_SubVol",
@@ -176,7 +176,7 @@ MAPS = [
     # --- BD ---
     dict(
         map_id="dx-bd_age-adult_pub-hibar2018",
-        disorder="BD", age="adult", subtype=None, adult=True,
+        disorder="BD", age="adult", subtype=None, main=True,
         thick_file="bd_case-controls_CortThick_adult",
         surf_file="bd_case-controls_CortSurf_adult",
         subvol_file="bd_case-controls_SubVol_typeI",
@@ -185,7 +185,7 @@ MAPS = [
     ),
     dict(
         map_id="dx-bd_age-adolescent_pub-hibar2018",
-        disorder="BD", age="adolescent", subtype=None, adult=False,
+        disorder="BD", age="adolescent", subtype=None, main=False,
         thick_file="bd_case-controls_CortThick_adolescent",
         surf_file="bd_case-controls_CortSurf_adolescent",
         subvol_file=None,
@@ -195,7 +195,7 @@ MAPS = [
     # --- SCZ ---
     dict(
         map_id="dx-scz_pub-vanerp2018",
-        disorder="SCZ", age=None, subtype=None, adult=True,
+        disorder="SCZ", age=None, subtype=None, main=True,
         thick_file="scz_case-controls_CortThick",
         surf_file="scz_case-controls_CortSurf",
         subvol_file="scz_case-controls_SubVol",
@@ -205,7 +205,7 @@ MAPS = [
     # --- OCD ---
     dict(
         map_id="dx-ocd_age-adult_pub-boedhoe2018",
-        disorder="OCD", age="adult", subtype=None, adult=True,
+        disorder="OCD", age="adult", subtype=None, main=True,
         thick_file="ocdadults_case-controls_CortThick",
         surf_file="ocdadults_case-controls_CortSurf",
         subvol_file="ocdadult_case-controls_SubVol",
@@ -214,7 +214,7 @@ MAPS = [
     ),
     dict(
         map_id="dx-ocd_age-pediatric_pub-boedhoe2018",
-        disorder="OCD", age="pediatric", subtype=None, adult=False,
+        disorder="OCD", age="pediatric", subtype=None, main=False,
         thick_file="ocdpediatric_case-controls_CortThick",
         surf_file="ocdpediatric_case-controls_CortSurf",
         subvol_file="ocdpediatric_case-controls_SubVol",
@@ -224,7 +224,7 @@ MAPS = [
     # --- Epilepsy (CortThick only; no CortSurf in ENIGMA) ---
     dict(
         map_id="dx-epilepsy_pub-whelan2018",
-        disorder="Epilepsy", age=None, subtype=None, adult=True,
+        disorder="Epilepsy", age=None, subtype=None, main=True,
         thick_file="allepi_case-controls_CortThick",
         surf_file=None,
         subvol_file="allepi_case-controls_SubVol",
@@ -233,7 +233,7 @@ MAPS = [
     ),
     dict(
         map_id="dx-epilepsy_subtype-gge_pub-whelan2018",
-        disorder="Epilepsy", age=None, subtype="gge", adult=True,
+        disorder="Epilepsy", age=None, subtype="gge", main=True,
         thick_file="gge_case-controls_CortThick",
         surf_file=None,
         subvol_file="gge_case-controls_SubVol",
@@ -242,7 +242,7 @@ MAPS = [
     ),
     dict(
         map_id="dx-epilepsy_subtype-ltle_pub-whelan2018",
-        disorder="Epilepsy", age=None, subtype="ltle", adult=True,
+        disorder="Epilepsy", age=None, subtype="ltle", main=True,
         thick_file="tlemtsl_case-controls_CortThick",
         surf_file=None,
         subvol_file="tlemtsl_case-controls_SubVol",
@@ -251,7 +251,7 @@ MAPS = [
     ),
     dict(
         map_id="dx-epilepsy_subtype-rtle_pub-whelan2018",
-        disorder="Epilepsy", age=None, subtype="rtle", adult=True,
+        disorder="Epilepsy", age=None, subtype="rtle", main=True,
         thick_file="tlemtsr_case-controls_CortThick",
         surf_file=None,
         subvol_file="tlemtsr_case-controls_SubVol",
@@ -261,7 +261,7 @@ MAPS = [
     # --- 22q ---
     dict(
         map_id="dx-22q_pub-sun2020",
-        disorder="22q11.2DS", age=None, subtype=None, adult=True,
+        disorder="22q11.2DS", age=None, subtype=None, main=True,
         thick_file="22q_case-controls_CortThick",
         surf_file="22q_case-controls_CortSurf",
         subvol_file="22q_case-controls_SubVol",
@@ -271,7 +271,7 @@ MAPS = [
     # --- AN ---
     dict(
         map_id="dx-an_pub-walton2022",
-        disorder="AN", age=None, subtype=None, adult=True,
+        disorder="AN", age=None, subtype=None, main=True,
         thick_file="anorexia_case-controls_CortThick",
         surf_file="anorexia_case-controls_CortSurf",
         subvol_file="anorexia_case-controls_SubVol",
@@ -280,7 +280,7 @@ MAPS = [
     ),
     dict(
         map_id="dx-an_subtype-acAN_pub-walton2022",
-        disorder="AN", age=None, subtype="acAN", adult=True,
+        disorder="AN", age=None, subtype="acAN", main=True,
         thick_file="anorexia_acAN-controls_CortThick",
         surf_file="anorexia_acAN-controls_CortSurf",
         subvol_file="anorexia_acAN-controls_SubVol",
@@ -289,7 +289,7 @@ MAPS = [
     ),
     dict(
         map_id="dx-an_subtype-pwrAN_pub-walton2022",
-        disorder="AN", age=None, subtype="pwrAN", adult=True,
+        disorder="AN", age=None, subtype="pwrAN", main=True,
         thick_file="anorexia_pwrAN-controls_CortThick",
         surf_file="anorexia_pwrAN-controls_CortSurf",
         subvol_file="anorexia_pwrAN-controls_SubVol",
@@ -299,7 +299,7 @@ MAPS = [
     # --- Antisocial ---
     dict(
         map_id="dx-antisocial_pub-gao2024",
-        disorder="AsPD", age=None, subtype=None, adult=True,
+        disorder="AsPD", age=None, subtype=None, main=True,
         thick_file="Antisocial_case-controls_CortThick",
         surf_file="Antisocial_case-controls_CortSurf",
         subvol_file="Antisocial_case-controls_SubVol",
@@ -309,7 +309,7 @@ MAPS = [
     # --- PD ---
     dict(
         map_id="dx-pd_pub-laansma2021",
-        disorder="PD", age=None, subtype=None, adult=True,
+        disorder="PD", age=None, subtype=None, main=True,
         thick_file="parkinsons_case-controls_CortThick_PDvsCN",
         surf_file="parkinsons_case-controls_CortSurf_PDvsCN",
         subvol_file="parkinsons_case-controls_Subvol_PDvsCN",
@@ -430,22 +430,22 @@ surf_meta = build_metadata(surf_maps, "surf")
 
 def build_collections(maps):
     all_ids = [m["map_id"] for m in maps]
-    adult_ids = [m["map_id"] for m in maps if m["adult"]]
-    return all_ids, adult_ids
+    main_ids = [m["map_id"] for m in maps if m["main"]]
+    return all_ids, main_ids
 
 
-thick_all, thick_adult = build_collections(thick_maps)
-surf_all, surf_adult = build_collections(surf_maps)
+thick_all, thick_main = build_collections(thick_maps)
+surf_all, surf_main = build_collections(surf_maps)
 
-print(f"\nenigmathick collections: All={len(thick_all)}, Adult={len(thick_adult)}")
-print(f"enigmaarea  collections: All={len(surf_all)}, Adult={len(surf_adult)}")
+print(f"\nenigmathick collections: All={len(thick_all)}, Main={len(thick_main)}")
+print(f"enigmaarea  collections: All={len(surf_all)}, Main={len(surf_main)}")
 
 
 # %% Save outputs
 
-for dset, dk_df, aseg_df, meta_df, all_ids, adult_ids in [
-    ("enigmathick", thick_dk, thick_aseg, thick_meta, thick_all, thick_adult),
-    ("enigmaarea",  surf_dk,  surf_aseg,  surf_meta,  surf_all,  surf_adult),
+for dset, dk_df, aseg_df, meta_df, all_ids, main_ids in [
+    ("enigmathick", thick_dk, thick_aseg, thick_meta, thick_all, thick_main),
+    ("enigmaarea",  surf_dk,  surf_aseg,  surf_meta,  surf_all,  surf_main),
 ]:
     out_dir = wd / "reference" / dset
     tab_dir = out_dir / "tab"
@@ -462,12 +462,12 @@ for dset, dk_df, aseg_df, meta_df, all_ids, adult_ids in [
 
     # collections
     pd.DataFrame({"map": all_ids}).to_csv(out_dir / "collection-All.collect", index=False)
-    pd.DataFrame({"map": adult_ids}).to_csv(out_dir / "collection-Adult.collect", index=False)
+    pd.DataFrame({"map": main_ids}).to_csv(out_dir / "collection-Main.collect", index=False)
 
     print(f"\nSaved {dset}:")
     print(f"  {dk_path.name}: {dk_df.shape}")
     print(f"  {aseg_path.name}: {aseg_df.shape}")
     print(f"  collection-All.collect: {len(all_ids)} maps")
-    print(f"  collection-Adult.collect: {len(adult_ids)} maps")
+    print(f"  collection-Main.collect: {len(main_ids)} maps")
 
 print("\nDone.")

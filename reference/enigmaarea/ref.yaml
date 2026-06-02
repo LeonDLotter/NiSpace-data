@@ -5,9 +5,9 @@ description: The NiSpace "ENIGMAarea" dataset is based on ENIGMA (Enhancing Neur
   d effect sizes (d_icv, largely ICV-corrected) for case-vs-control differences in cortical surface area and subcortical volume
   across several neurological and psychiatric disorders. Cortical values are provided in the Desikan parcellation, subcortical
   values in the Aseg parcellation. For some disorders, effect size maps are split by subtype and/or age group. Use collection
-  "Adult" for a reduced collection of only adult data. For each disorder, please cite the appropriate ENIGMA working group
+  "Main" for a reduced collection of the main effect size maps. For each disorder, please cite the appropriate ENIGMA working group
   publication (see map info table).
-default_collection: Adult
+default_collection: Main
 cortex_only: false
 citations:
 - ref: Larivière et al., 2021
@@ -22,8 +22,8 @@ map_info:
 collections:
   All:
     description: All case-control effect size maps across disorders and age groups.
-  Adult:
-    description: Adult-only maps (pediatric and adolescent age groups excluded).
+  Main:
+    description: Main effect size maps.
 tabs:
 - DesikanKilliany
 - Aseg
