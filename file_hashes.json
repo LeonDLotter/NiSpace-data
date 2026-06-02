@@ -27,7 +27,6 @@
     "example/anorexianervosa/example-anorexianervosa_parc-Schaefer200Parcels7Networks.csv.gz": "49df78073810004143c9feed970e96ff825552deac47f2a8bf3a48bee1f5ae01",
     "example/anorexianervosa/example-anorexianervosa_parc-TianS4.csv.gz": "62ab30e62d1c3a518ccc8846b8a2e4dc98d4b74a46b7a4b9c0ce4becad019a2a",
     "example/anorexianervosa/example-anorexianervosa_parc-Aseg.csv.gz": "6d21897e30fc34beb089845439d530e194de970ac2f9d35d80724978b0165540",
-    "parcellation/metadata.csv": "9b6bfc82285f87484f5128d1ec5dbe241edc948f65db7ccb4213c84ae6027bb2",
     "parcellation/Brainnetome/parc.yaml": "877732a42cabcc64c128a245d8cfe0d4838d58d773fdefa7a7d1b59503ff0ce6",
     "parcellation/BrainnetomeCortical/parc.yaml": "054a945c6d79f45996f2f243b6621b8a4fc5dd733ec19487d9bc7013a94d102b",
     "parcellation/BrainnetomeCortical/fsLR/parc-BrainnetomeCortical_space-fsLR_hemi-L.dist.csv.gz": "ff890784e7265a7e08c14e3383cec53e1b81ff278f07fa55a3c683a0ade0c690",

@@ -3,7 +3,6 @@
 import re
 import sys
 import yaml
-from collections import defaultdict
 from pathlib import Path
 import numpy as np
 import pandas as pd
@@ -48,7 +47,32 @@ def get_save_dir(name, space):
     return fp
 
 # function to save parcellation and labels
-def save_parc(parc, name, space, labels, save_dir=None, plot=False):
+def _update_parc_yaml(name, level, symmetric, license, doi):
+    """Write/update parcellation/{name}/parc.yaml with top-level metadata.
+
+    Always sets spaces: auto. Only updates fields that are explicitly provided;
+    never overwrites a pre-existing citation.ref with "".
+    Safe to call multiple times (e.g. once per space) — idempotent for metadata.
+    """
+    parc_dir = nispace_source_data_path / "parcellation" / name
+    parc_dir.mkdir(exist_ok=True)
+    yaml_path = parc_dir / "parc.yaml"
+    cfg = yaml.safe_load(yaml_path.read_text()) if yaml_path.exists() else {"name": name, "label": name}
+    cfg["spaces"] = "auto"
+    if level is not None:
+        cfg["level"] = level
+    if symmetric is not None:
+        cfg["symmetric"] = bool(symmetric)
+    if license is not None:
+        cfg.setdefault("license", str(license))
+    if doi is not None and "citation" not in cfg:
+        cfg["citation"] = {"ref": "", "doi": str(doi).split(";")[0].strip()}
+    yaml_path.write_text(yaml.dump(cfg, default_flow_style=False, sort_keys=False, allow_unicode=True))
+    print(f"  parc.yaml updated: {name}")
+
+
+def save_parc(parc, name, space, labels, save_dir=None, plot=False,
+              level=None, symmetric=None, license=None, doi=None):
     if save_dir is None:
         save_dir = get_save_dir(name, space)
 
@@ -142,6 +166,10 @@ def save_parc(parc, name, space, labels, save_dir=None, plot=False):
             brainplot(data=parc, kind="surface", space=space, title=f"{name} | {space}")
             plt.show()
 
+    # update parc.yaml if metadata was provided
+    if level is not None:
+        _update_parc_yaml(name=name, level=level, symmetric=symmetric, license=license, doi=doi)
+
 
 # resample to template bbox
 def resample_to_template(img, space):
@@ -176,9 +204,6 @@ def _check_parcel_counts(parc, n_expected):
 # division is optional and can be, e.g., a network or a broader anatomical division like a lobe
 # e.g.: "hemi-{L|R|B}_lab-{label+name}"
 # e.g.: "hemi-{L|R|B}_div-{network+name}_lab-{label+name}"
-
-# parcellation info
-parc_info = {}
 
 # %% ===============================================================================================
 # Schaefer
@@ -222,23 +247,11 @@ for schaefer_parcels in [100, 200, 400, 1000]:
             
             # save and plot
             save_parc(
-                parc=parc, 
-                name=name, 
-                space=space, 
-                labels=labels, 
+                parc=parc, name=name, space=space, labels=labels,
+                level="cortex", symmetric=False, license="MIT", doi="10.1093/cercor/bhx179",
             )
-            
-            # add to parc_info
-            parc_info[name, space] = {
-                "level": "cortex",
-                "n_parcels": len(labels), 
-                "symmetric": False,
-                "resolution": "1mm", 
-                "publication": "10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6",
-                "license": "MIT"
-            }
 
-            
+
         # fsaverage ------------------------------------------------------------------------------------
         print("fsaverage")
         
@@ -267,23 +280,12 @@ for schaefer_parcels in [100, 200, 400, 1000]:
         
         # save and plot
         save_parc(
-            parc=parc, 
-            name=name, 
-            space="fsaverage", 
-            labels=([l for l in labels if "hemi-L_" in l], [l for l in labels if "hemi-R_" in l]), 
+            parc=parc, name=name, space="fsaverage",
+            labels=([l for l in labels if "hemi-L_" in l], [l for l in labels if "hemi-R_" in l]),
+            level="cortex", symmetric=False, license="MIT", doi="10.1093/cercor/bhx179",
         )
-        
-        # add to parc_info
-        parc_info[name, "fsaverage"] = {
-            "level": "cortex",
-            "n_parcels": len(labels), 
-            "symmetric": False,
-            "resolution": "41k", 
-            "publication": "10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6",
-            "license": "MIT"
-        }
-        
-        
+
+
         # fsLR -------------------------------------------------------------------------------------
         # we'll convert from the high-resolution fsaverage because the fsLR version on GitHub 
         # misses two labels!
@@ -309,22 +311,11 @@ for schaefer_parcels in [100, 200, 400, 1000]:
         
         # save and plot
         save_parc(
-            parc=parc, 
-            name=name, 
-            space="fsLR", 
-            labels=([l for l in labels if "hemi-L_" in l], [l for l in labels if "hemi-R_" in l]), 
+            parc=parc, name=name, space="fsLR",
+            labels=([l for l in labels if "hemi-L_" in l], [l for l in labels if "hemi-R_" in l]),
+            level="cortex", symmetric=False, license="MIT", doi="10.1093/cercor/bhx179",
         )
-        
-        # add to parc_info
-        parc_info[name, "fsLR"] = {
-            "level": "cortex",
-            "n_parcels": len(labels), 
-            "symmetric": False,
-            "resolution": "32k", 
-            "publication": "10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6",
-            "license": "MIT"
-        }
-        
+
 
 # %% ===============================================================================================
 # Yan2023 (homotopic, Kong17 17 networks)
@@ -374,19 +365,9 @@ for n_parcels in [100, 200, 400, 1000]:
     parc = resample_to_template(parc, space)
 
     save_parc(
-        parc=parc, 
-        name=name, 
-        space=space, 
-        labels=all_labels, 
+        parc=parc, name=name, space=space, labels=all_labels,
+        level="cortex", symmetric=True, license="free", doi=doi_yan,
     )
-    parc_info[name, space] = {
-        "level": "cortex", 
-        "n_parcels": len(all_labels), 
-        "symmetric": True,
-        "resolution": "1mm",
-        "publication": doi_yan, 
-        "license": "free"
-    }
 
     # MNI152NLin2009cAsym --------------------------------------------------------------------------
     space = "MNI152NLin2009cAsym"
@@ -400,19 +381,9 @@ for n_parcels in [100, 200, 400, 1000]:
     )
 
     save_parc(
-        parc=parc, 
-        name=name, 
-        space=space, 
-        labels=all_labels, 
+        parc=parc, name=name, space=space, labels=all_labels,
+        level="cortex", symmetric=True, license="free", doi=doi_yan,
     )
-    parc_info[name, space] = {
-        "level": "cortex", 
-        "n_parcels": len(all_labels), 
-        "symmetric": True,
-        "resolution": "1mm",
-        "publication": doi_yan, 
-        "license": "free"
-    }
 
     # fsLR (native 32k dlabel) ---------------------------------------------------------------------
     space = "fsLR"
@@ -424,19 +395,9 @@ for n_parcels in [100, 200, 400, 1000]:
          images.construct_shape_gii(images.load_data(parc[1]), labels=["unknown"] + labels_rh, intent='NIFTI_INTENT_LABEL'))
     )
     save_parc(
-        parc=parc, 
-        name=name, 
-        space=space, 
-        labels=(labels_lh, labels_rh), 
+        parc=parc, name=name, space=space, labels=(labels_lh, labels_rh),
+        level="cortex", symmetric=True, license="free", doi=doi_yan,
     )
-    parc_info[name, space] = {
-        "level": "cortex", 
-        "n_parcels": len(all_labels), 
-        "symmetric": True,
-        "resolution": "32k",
-        "publication": doi_yan, 
-        "license": "free"
-    }
 
     # fsaverage (annot → 164k → 41k) ---------------------------------------------------------------
     space = "fsaverage"
@@ -454,19 +415,9 @@ for n_parcels in [100, 200, 400, 1000]:
          images.construct_shape_gii(images.load_data(parc[1]), labels=["unknown"] + labels_rh, intent='NIFTI_INTENT_LABEL'))
     )
     save_parc(
-        parc=parc, 
-        name=name,
-        space=space, 
-        labels=(labels_lh, labels_rh), 
+        parc=parc, name=name, space=space, labels=(labels_lh, labels_rh),
+        level="cortex", symmetric=True, license="free", doi=doi_yan,
     )
-    parc_info[name, space] = {
-        "level": "cortex", 
-        "n_parcels": len(all_labels), 
-        "symmetric": True,
-        "resolution": "41k",
-        "publication": doi_yan, 
-        "license": "free"
-    }
 
 
 # %% ===============================================================================================
@@ -513,23 +464,11 @@ for tian in ["S1", "S2", "S3", "S4"]:
         
         # save and plot
         save_parc(
-            parc=parc, 
-            name=name, 
-            space=space, 
-            labels=labels, 
+            parc=parc, name=name, space=space, labels=labels,
+            level="subcortex", symmetric=True, license="MIT", doi="10.1038/s41593-020-00711-6",
         )
-        
-        # add to parc_info
-        parc_info[name, space] = {
-            "level": "subcortex",
-            "n_parcels": len(labels), 
-            "symmetric": True,
-            "resolution": "1mm", 
-            "publication": "10.1093/cercor/bhx179; 0.1038/s41593-020-00711-6",
-            "license": "MIT"
-        }
-        
-        
+
+
 # %% ===============================================================================================
 # FreeSurfer DK, DKT, Destrieux, and Glasser/HCPMMP
 # All loaded from associated FreeSurfer GIN repo: https://gin.g-node.org/llotter/mni_freesurfer
@@ -573,23 +512,11 @@ for name, fs_name, doi in [
         
         # save and plot
         save_parc(
-            parc=parc, 
-            name=name, 
-            space=space, 
-            labels=labels, 
+            parc=parc, name=name, space=space, labels=labels,
+            level="cortex", symmetric=True, license="free", doi=doi,
         )
-        
-        # add to parc_info
-        parc_info[name, space] = {
-            "level": "cortex",
-            "n_parcels": len(labels), 
-            "symmetric": True,
-            "resolution": "1mm", 
-            "publication": doi,
-            "license": "free"
-        }
-        
-        
+
+
     # fsaverage & fsLR -----------------------------------------------------------------------------
     for space, transform_fun, target_density in [
         ("fsaverage", transforms.fsaverage_to_fsaverage, "41k"), 
@@ -657,22 +584,10 @@ for name, fs_name, doi in [
 
         # save and plot
         save_parc(
-            parc=parc, 
-            name=name, 
-            space=space, 
-            labels=(labels_lh, labels_rh), 
+            parc=parc, name=name, space=space, labels=(labels_lh, labels_rh),
+            level="cortex", symmetric=True, license="free", doi=doi,
         )
-        
-        # info
-        parc_info[name, space] = {
-            "level": "cortex",
-            "n_parcels": len(labels_lh) + len(labels_rh), 
-            "symmetric": True,
-            "resolution": target_density, 
-            "publication": doi,
-            "license": "free"
-        }
-        
+
 
 # %% ===============================================================================================
 # Aseg (FreeSurfer subcortical parcellation)
@@ -707,22 +622,10 @@ for space in mni_spaces:
     
     # save and plot
     save_parc(
-        parc=parc, 
-        name=name, 
-        space=space, 
-        labels=labels, 
+        parc=parc, name=name, space=space, labels=labels,
+        level="subcortex", symmetric=True, license="free", doi="10.1016/s0896-6273(02)00569-x",
     )
-    
-    # add to parc_info
-    parc_info[name, space] = {
-        "level": "subcortex",
-        "n_parcels": len(labels), 
-        "symmetric": True,
-        "resolution": "1mm", 
-        "publication": "10.1016/s0896-6273(02)00569-x",
-        "license": "free"
-    }
-    
+
 # %% ===============================================================================================
 # Harvard-Oxford Cortical
 for name, tf_name, nl_name, level, doi in [
@@ -772,23 +675,11 @@ for name, tf_name, nl_name, level, doi in [
         
         # save and plot
         save_parc(
-            parc=parc, 
-            name=name, 
-            space=space, 
-            labels=labels, 
+            parc=parc, name=name, space=space, labels=labels,
+            level=level, symmetric=True, license="free", doi=doi,
         )
-        
-        # add to parc_info
-        parc_info[name, space] = {
-            "level": level,
-            "n_parcels": len(labels), 
-            "symmetric": True,
-            "resolution": "1mm", 
-            "publication": doi,
-            "license": "free"
-        }
-        
-        
+
+
     # fsaverage & fsLR -----------------------------------------------------------------------------
     # will be converted from MNI152NLin6Asym
     name = "HarvardOxfordCortical"
@@ -845,25 +736,14 @@ for name, tf_name, nl_name, level, doi in [
     # save and plot
     for space in ["fsaverage", "fsLR"]:
         print("saving space:", space)
-            
-        # save parc
         save_parc(
-            parc=(tmp[space]["L"]["surf"], tmp[space]["R"]["surf"]), 
-            name=name, 
-            space=space, 
-            labels=(tmp[space]["L"]["labels"], tmp[space]["R"]["labels"]), 
+            parc=(tmp[space]["L"]["surf"], tmp[space]["R"]["surf"]),
+            name=name, space=space,
+            labels=(tmp[space]["L"]["labels"], tmp[space]["R"]["labels"]),
+            level="cortex", symmetric=True, license="free", doi=doi,
         )
-        # save info
-        parc_info[name, space] = {
-            "level": "cortex",
-            "n_parcels": len(labels), 
-            "symmetric": True,
-            "resolution": "41k" if space == "fsaverage" else "32k",
-            "publication": parc_info[name, "MNI152NLin6Asym"]["publication"],
-            "license": "free"
-        }
-    
- 
+
+
 # %% ===============================================================================================
 
 # Brainnetome
@@ -941,22 +821,10 @@ for name, parc, labels, level in [
     
     # save
     save_parc(
-        parc=parc, 
-        name=name, 
-        space=space, 
-        labels=labels, 
+        parc=parc, name=name, space=space, labels=labels,
+        level=level, symmetric=True, license="non-commercial, attribution, share alike", doi=doi,
     )
 
-    # add to parc_info
-    parc_info[name, space] = {
-        "level": level,
-        "n_parcels": len(labels), 
-        "symmetric": True,
-        "resolution": "1mm", 
-        "publication": doi,
-        "license": "non-commercial, attribution, share alike"
-    }
-    
 # MNI152NLin2009cAsym ------------------------------------------------------------------------------
 space = "MNI152NLin2009cAsym"  
 print(space)
@@ -979,21 +847,9 @@ for name, labels, level in [
     
     # save and plot
     save_parc(
-        parc=parc, 
-        name=name, 
-        space=space, 
-        labels=labels, 
+        parc=parc, name=name, space=space, labels=labels,
+        level=level, symmetric=True, license="non-commercial, attribution, share alike", doi=doi,
     )
-
-    # add to parc_info
-    parc_info[name, space] = {
-        "level": level,
-        "n_parcels": len(labels), 
-        "symmetric": True,
-        "resolution": "1mm", 
-        "publication": doi,
-        "license": "non-commercial, attribution, share alike"
-    }
 
 # fsaverage ----------------------------------------------------------------------------------------
 name = "BrainnetomeCortical"
@@ -1033,21 +889,9 @@ print("RH values:", np.unique(parc[1].agg_data()))
 
 # save and plot
 save_parc(
-    parc=parc, 
-    name=name, 
-    space=space, 
-    labels=(labels_lh, labels_rh), 
+    parc=parc, name=name, space=space, labels=(labels_lh, labels_rh),
+    level="cortex", symmetric=True, license="non-commercial, attribution, share alike", doi=doi,
 )
-
-# add to parc_info
-parc_info[name, space] = {
-    "level": "cortex",
-    "n_parcels": len(labels_cx),
-    "symmetric": True,
-    "resolution": "41k", 
-    "publication": doi,
-    "license": "non-commercial, attribution, share alike"
-}
 
 # fsLR ---------------------------------------------------------------------------------------------
 space = "fsLR"
@@ -1087,21 +931,9 @@ print("RH values:", np.unique(parc[1].agg_data()))
 
 # save and plot
 save_parc(
-    parc=parc, 
-    name=name, 
-    space=space, 
-    labels=(labels_lh, labels_rh), 
+    parc=parc, name=name, space=space, labels=(labels_lh, labels_rh),
+    level="cortex", symmetric=True, license="non-commercial, attribution, share alike", doi=doi,
 )
-
-# add to parc_info
-parc_info[name, space] = {
-    "level": "cortex",
-    "n_parcels": len(labels_cx), 
-    "symmetric": True,
-    "resolution": "32k", 
-    "publication": doi,
-    "license": "non-commercial, attribution, share alike"
-}
 
 
 # %% ===============================================================================================
@@ -1159,22 +991,10 @@ for name, parc, labels, level in [
     
     # save
     save_parc(
-        parc=parc, 
-        name=name, 
-        space=space, 
-        labels=labels, 
+        parc=parc, name=name, space=space, labels=labels,
+        level=level, symmetric=True, license="free", doi=doi,
     )
-    
-    # add to parc_info
-    parc_info[name, space] = {
-        "level": level,
-        "n_parcels": len(labels), 
-        "symmetric": True,
-        "resolution": "1mm", 
-        "publication": doi,
-        "license": "free"
-    }
-    
+
 
 # MNI152NLin2009cAsym ------------------------------------------------------------------------------
 space = "MNI152NLin2009cAsym"
@@ -1191,19 +1011,9 @@ for name, labels, level in [
         order=0,
     )
     save_parc(
-        parc=parc, 
-        name=name, 
-        space=space, 
-        labels=labels, 
+        parc=parc, name=name, space=space, labels=labels,
+        level=level, symmetric=True, license="free", doi=doi,
     )
-    parc_info[name, space] = {
-        "level": level, 
-        "n_parcels": len(labels), 
-        "symmetric": True,
-        "resolution": "1mm",
-        "publication": doi, 
-        "license": "free"
-    }
 
 # fsaverage & fsLR (AALCortical only) --------------------------------------------------------------
 name = "AALCortical"
@@ -1249,47 +1059,10 @@ for space in ["fsaverage", "fsLR"]:
     print(f"  saving {space}")
     save_parc(
         parc=(tmp_aal[space]["L"]["surf"], tmp_aal[space]["R"]["surf"]),
-        name=name,
-        space=space,
+        name=name, space=space,
         labels=(tmp_aal[space]["L"]["labels"], tmp_aal[space]["R"]["labels"]),
+        level="cortex", symmetric=True, license="free", doi=doi,
     )
-    parc_info[name, space] = {
-        "level": "cortex",
-        "n_parcels": len(labels_cx),
-        "symmetric": True,
-        "resolution": "41k" if space == "fsaverage" else "32k",
-        "publication": doi,
-        "license": "free"
-    }
-
-
-# %% ===============================================================================================
-
-# Save per-entity parc.yaml + regenerate toolbox JSON via build_datalib.py
-parc_by_name = defaultdict(dict)
-for (parc_name, space), info in parc_info.items():
-    parc_by_name[parc_name][space] = info
-
-for parc_name, spaces_info in parc_by_name.items():
-    parc_dir = nispace_source_data_path / "parcellation" / parc_name
-    parc_dir.mkdir(exist_ok=True)
-    yaml_path = parc_dir / "parc.yaml"
-    cfg = yaml.safe_load(yaml_path.read_text()) if yaml_path.exists() else {
-        "name": parc_name, "label": parc_name, "spaces": {}
-    }
-    if "spaces" not in cfg:
-        cfg["spaces"] = {}
-    first = next(iter(spaces_info.values()))
-    cfg["level"] = first["level"]
-    cfg["symmetric"] = bool(first["symmetric"])
-    cfg.setdefault("license", str(first.get("license", "TODO")))
-    if "publication" in first and "citation" not in cfg:
-        doi = str(first["publication"]).split(";")[0].strip()
-        cfg["citation"] = {"ref": "TODO", "doi": doi}
-    for space, info in spaces_info.items():
-        cfg["spaces"].setdefault(space, {})["resolution"] = str(info["resolution"])
-    yaml_path.write_text(yaml.dump(cfg, default_flow_style=False, sort_keys=False, allow_unicode=True))
-    print(f"  parc.yaml updated: {parc_name}")
 
 # build_datalib.py runs automatically via pre-commit hook on nispace-data commit
 

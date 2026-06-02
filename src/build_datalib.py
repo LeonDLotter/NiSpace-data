@@ -114,9 +114,10 @@ def _resolve_map_space(map_dir: Path, map_name: str, space: str, space_val):
     if is_surface:
         result = {}
         for hemi in ("L", "R"):
+            # Allow any entities between _space-{space} and _hemi-{hemi} (e.g. _desc-proc_)
             candidates = sorted(
-                list(map_dir.glob(f"*_space-{space}_hemi-{hemi}*.gii.gz"))
-                + list(map_dir.glob(f"*_space-{space}_hemi-{hemi}*.gii"))
+                list(map_dir.glob(f"*_space-{space}*_hemi-{hemi}*.gii.gz"))
+                + list(map_dir.glob(f"*_space-{space}*_hemi-{hemi}*.gii"))
             )
             f = _pick_one(candidates, f"{map_name}/{space}/{hemi}")
             if f is None:

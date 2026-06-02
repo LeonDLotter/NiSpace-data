@@ -458,7 +458,7 @@ for dset, dk_df, aseg_df, meta_df, all_ids, adult_ids in [
     save_csv_gz(aseg_df, aseg_path)
 
     # metadata
-    meta_df.to_csv(out_dir / "metadata.csv")
+    meta_df.to_csv(out_dir / "map_info.csv")
 
     # collections
     pd.DataFrame({"map": all_ids}).to_csv(out_dir / "collection-All.collect", index=False)

@@ -14,17 +14,16 @@ from nispace.io import parcellate_data
 
 # local utils
 sys.path.insert(0, str(Path(__file__).parent))
-from utils import load_parc_lists, load_parc, load_parc_labels, DATASET_PARCELLATE_KWARGS, save_csv_gz
+from utils import (load_parc_lists, load_ref_lists, load_parc, load_parc_labels, 
+                   DATASET_PARCELLATE_KWARGS, save_csv_gz)
 
 # nispace data path
 nispace_source_data_path = wd
 
 # datasets with maps
-DSETS_WITH_MAPS = [k for k, v in reference_lib.items() if "map" in v]
-print("DSETS_WITH_MAPS: ", DSETS_WITH_MAPS)
-
-# cortex-only datasets
-DSETS_CORTEX = ["rsn", "rsn17", "cortexfeatures", "bigbrain"]
+REFS, REFS_CX, REFS_MAP, REFS_TAB = load_ref_lists(wd)
+print("REFS with maps:", REFS_MAP)
+print("REFS cortex only:", REFS_CX)
 
 # parcellations
 PARCS, PARCS_CX, PARCS_SC = load_parc_lists(wd)
@@ -63,15 +62,14 @@ def fetch_reference(dataset, maps, space):
 # %% Parcellate map-based image data ---------------------------------------------------------------
 
 
-for dataset in DSETS_WITH_MAPS:
+for dataset in REFS_MAP:
     print("-------- " + dataset.upper() + " --------")
 
     if dataset not in DATASET_SPACE_PAIRS:
         raise ValueError(f"No space pairs defined for dataset: {dataset}")
     
     # check if cortex only
-    _is_cortex_only = dataset in DSETS_CORTEX
-    print(f"  Cortex only: {_is_cortex_only}")
+    print(f"  Cortex only: {dataset in REFS_CX}")
 
     # collect available maps per (original) space
     ref_maps = {}
@@ -106,7 +104,7 @@ for dataset in DSETS_WITH_MAPS:
 
     # iterate parcellations
     print("Parcellating...")
-    for parc_name in (PARCS_CX if _is_cortex_only else PARCS):
+    for parc_name in (PARCS_CX if dataset in REFS_CX else PARCS):
         print(parc_name)
 
         # labels — all parcs have MNI6

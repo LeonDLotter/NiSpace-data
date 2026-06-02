@@ -1,7 +1,7 @@
 """Shared helpers for nispace-data prep scripts."""
 
+import yaml
 import numpy as np
-import pandas as pd
 from pathlib import Path
 from neuromaps import images as neuro_images
 import templateflow.api as tflow
@@ -30,19 +30,57 @@ def tflow_get(*args, name_filter=None, **kwargs):
 
 
 def load_parc_lists(wd):
-    """Return (PARCS, PARCS_CX, PARCS_SC) from disk and metadata.csv.
+    """Return (PARCS, PARCS_CX, PARCS_SC) from per-entity parc.yaml files.
 
-    PARCS   : all parcellation directories, sorted.
-    PARCS_CX: parcellations with level=='cortex' in metadata.csv.
-    PARCS_SC: parcellations with level=='subcortex' in metadata.csv.
+    PARCS   : all real parcellation names (alias entries excluded), sorted.
+    PARCS_CX: parcellations with level=='cortex'.
+    PARCS_SC: parcellations with level=='subcortex'.
     """
     wd = Path(wd)
-    PARCS = sorted([p.name for p in (wd / "parcellation").glob("*") if p.is_dir()])
-    meta = pd.read_csv(wd / "parcellation" / "metadata.csv")
-    parc_level = meta.drop_duplicates("parcellation").set_index("parcellation")["level"]
-    PARCS_CX = sorted([p for p in PARCS if parc_level.get(p) == "cortex"])
-    PARCS_SC = sorted([p for p in PARCS if parc_level.get(p) == "subcortex"])
+    PARCS, PARCS_CX, PARCS_SC = [], [], []
+    for d in sorted((wd / "parcellation").glob("*")):
+        if not d.is_dir():
+            continue
+        yml = d / "parc.yaml"
+        if not yml.exists():
+            continue
+        cfg = yaml.safe_load(yml.read_text())
+        if "alias" in cfg:
+            continue
+        PARCS.append(cfg["name"])
+        if cfg.get("level") == "cortex":
+            PARCS_CX.append(cfg["name"])
+        elif cfg.get("level") == "subcortex":
+            PARCS_SC.append(cfg["name"])
     return PARCS, PARCS_CX, PARCS_SC
+
+
+def load_ref_lists(wd):
+    """Return (REFS, REFS_CX, REFS_MAP, REFS_TAB) from per-entity ref.yaml files.
+
+    REFS    : all reference dataset names, sorted.
+    REFS_CX : datasets with cortex_only: true.
+    REFS_MAP: datasets that have a maps: section (map+tab datasets).
+    REFS_TAB: datasets without maps: (tab-only datasets).
+    """
+    wd = Path(wd)
+    REFS, REFS_CX, REFS_MAP, REFS_TAB = [], [], [], []
+    for d in sorted((wd / "reference").glob("*")):
+        if not d.is_dir():
+            continue
+        yml = d / "ref.yaml"
+        if not yml.exists():
+            continue
+        cfg = yaml.safe_load(yml.read_text())
+        name = cfg["name"]
+        REFS.append(name)
+        if cfg.get("cortex_only", False):
+            REFS_CX.append(name)
+        if "maps" in cfg:
+            REFS_MAP.append(name)
+        else:
+            REFS_TAB.append(name)
+    return REFS, REFS_CX, REFS_MAP, REFS_TAB
 
 
 def load_parc(wd, parc_name, space):
