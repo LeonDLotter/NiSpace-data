@@ -7,6 +7,7 @@ description: The NiSpace "ENIGMAarea" dataset is based on ENIGMA (Enhancing Neur
   values in the Aseg parcellation. For some disorders, effect size maps are split by subtype and/or age group. Use collection
   "Adult" for a reduced collection of only adult data. For each disorder, please cite the appropriate ENIGMA working group
   publication (see map info table).
+default_collection: Adult
 cortex_only: false
 citations:
 - ref: Larivière et al., 2021

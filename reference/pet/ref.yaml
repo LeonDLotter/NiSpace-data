@@ -9,6 +9,7 @@ description: The NiSpace "PET" dataset is based on openly available nuclear imag
   mask generated from the Harvard-Oxford atlas and scaled from 1e-6 to 1. The accompanying metadata table contains detailed
   information about tracers, source samples, original publications and data sources, as well as the publication licenses.
   Every map should be cited when used. The responsibility for this lies with the user!
+default_collection: UniqueTracers
 cortex_only: false
 citations:
 - ref: Markello et al., 2022
@@ -24,8 +25,6 @@ map_info:
   display_columns:
   - target
   - tracer
-  - metric
-  - sample_size
   - license
   note_column: note
 collections:

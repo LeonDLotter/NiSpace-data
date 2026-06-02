@@ -6,6 +6,7 @@ description: The NiSpace "mRNA" dataset is based on Allen Human Brain Atlas (AHB
   lr_mirror="bidirectional", norm_matched=False). Gene stability was assessed using a voxel-level atlas at 8mm isotropic resolution;
   genes were retained if their mean donor-to-donor Spearman rank correlation exceeded 0.2. Please also cite publications associated
   with gene set collections as appropriate.
+default_collection: CellTypesPsychEncodeTPM
 cortex_only: false
 citations:
 - ref: Hawrylycz et al., 2012

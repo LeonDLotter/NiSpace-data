@@ -4,6 +4,7 @@ description: The NiSpace "GRF" dataset consists of many thousands of "Gaussian R
   levels of spatial smoothness. The parameter "alpha" controls the smoothness of the field and therefore the spatial autocorrelation
   of the resulting brain maps. The maps are mirrored across hemispheres exactly at MNI coordinate (0,0,0). There are 1,000
   maps for each alpha level. The code was adopted from Markello et al., 2021 and Burt et al., 2020.
+default_collection: ByAlpha
 cortex_only: false
 citations:
 - ref: Markello et al., 2021

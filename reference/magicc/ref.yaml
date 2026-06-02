@@ -5,6 +5,7 @@ description: The NiSpace "MAGICC" dataset is based on Allen Human Brain Atlas (A
   fsLR space as described in Wagstyl et al., 2024, and parcellated with integrated parcellation. Only genes that showed a
   high reproducibility (>= 0.5, see paper) were retained. Please also cite publications associated with gene set collections
   as appropriate.
+default_collection: CellTypesPsychEncodeTPM
 cortex_only: true
 citations:
 - ref: Hawrylycz et al., 2012
