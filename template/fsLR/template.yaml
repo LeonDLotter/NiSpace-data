@@ -1,0 +1,188 @@
+name: fsLR
+resolutions:
+  4k:
+    midthickness:
+      L:
+        host: github-nispace
+        remote: template/fsLR/map/midthickness/tpl-fsLR_desc-midthickness_res-4k_hemi-L.surf.gii
+      R:
+        host: github-nispace
+        remote: template/fsLR/map/midthickness/tpl-fsLR_desc-midthickness_res-4k_hemi-R.surf.gii
+    inflated:
+      L:
+        host: github-nispace
+        remote: template/fsLR/map/inflated/tpl-fsLR_desc-inflated_res-4k_hemi-L.surf.gii
+      R:
+        host: github-nispace
+        remote: template/fsLR/map/inflated/tpl-fsLR_desc-inflated_res-4k_hemi-R.surf.gii
+    sphere:
+      L:
+        host: github-nispace
+        remote: template/fsLR/map/sphere/tpl-fsLR_desc-sphere_res-4k_hemi-L.surf.gii
+      R:
+        host: github-nispace
+        remote: template/fsLR/map/sphere/tpl-fsLR_desc-sphere_res-4k_hemi-R.surf.gii
+    medial:
+      L:
+        host: github-nispace
+        remote: template/fsLR/map/medial/tpl-fsLR_desc-medial_res-4k_hemi-L.label.gii
+      R:
+        host: github-nispace
+        remote: template/fsLR/map/medial/tpl-fsLR_desc-medial_res-4k_hemi-R.label.gii
+    sulc:
+      L:
+        host: github-nispace
+        remote: template/fsLR/map/sulc/tpl-fsLR_desc-sulc_res-4k_hemi-L.shape.gii
+      R:
+        host: github-nispace
+        remote: template/fsLR/map/sulc/tpl-fsLR_desc-sulc_res-4k_hemi-R.shape.gii
+    vaavg:
+      L:
+        host: github-nispace
+        remote: template/fsLR/map/vaavg/tpl-fsLR_desc-vaavg_res-4k_hemi-L.shape.gii
+      R:
+        host: github-nispace
+        remote: template/fsLR/map/vaavg/tpl-fsLR_desc-vaavg_res-4k_hemi-R.shape.gii
+  8k:
+    midthickness:
+      L:
+        host: github-nispace
+        remote: template/fsLR/map/midthickness/tpl-fsLR_desc-midthickness_res-8k_hemi-L.surf.gii
+      R:
+        host: github-nispace
+        remote: template/fsLR/map/midthickness/tpl-fsLR_desc-midthickness_res-8k_hemi-R.surf.gii
+    inflated:
+      L:
+        host: github-nispace
+        remote: template/fsLR/map/inflated/tpl-fsLR_desc-inflated_res-8k_hemi-L.surf.gii
+      R:
+        host: github-nispace
+        remote: template/fsLR/map/inflated/tpl-fsLR_desc-inflated_res-8k_hemi-R.surf.gii
+    sphere:
+      L:
+        host: github-nispace
+        remote: template/fsLR/map/sphere/tpl-fsLR_desc-sphere_res-8k_hemi-L.surf.gii
+      R:
+        host: github-nispace
+        remote: template/fsLR/map/sphere/tpl-fsLR_desc-sphere_res-8k_hemi-R.surf.gii
+    medial:
+      L:
+        host: github-nispace
+        remote: template/fsLR/map/medial/tpl-fsLR_desc-medial_res-8k_hemi-L.label.gii
+      R:
+        host: github-nispace
+        remote: template/fsLR/map/medial/tpl-fsLR_desc-medial_res-8k_hemi-R.label.gii
+    sulc:
+      L:
+        host: github-nispace
+        remote: template/fsLR/map/sulc/tpl-fsLR_desc-sulc_res-8k_hemi-L.shape.gii
+      R:
+        host: github-nispace
+        remote: template/fsLR/map/sulc/tpl-fsLR_desc-sulc_res-8k_hemi-R.shape.gii
+    vaavg:
+      L:
+        host: github-nispace
+        remote: template/fsLR/map/vaavg/tpl-fsLR_desc-vaavg_res-8k_hemi-L.shape.gii
+      R:
+        host: github-nispace
+        remote: template/fsLR/map/vaavg/tpl-fsLR_desc-vaavg_res-8k_hemi-R.shape.gii
+  32k:
+    midthickness:
+      L:
+        host: github-nispace
+        remote: template/fsLR/map/midthickness/tpl-fsLR_desc-midthickness_res-32k_hemi-L.surf.gii
+      R:
+        host: github-nispace
+        remote: template/fsLR/map/midthickness/tpl-fsLR_desc-midthickness_res-32k_hemi-R.surf.gii
+    inflated:
+      L:
+        host: github-nispace
+        remote: template/fsLR/map/inflated/tpl-fsLR_desc-inflated_res-32k_hemi-L.surf.gii
+      R:
+        host: github-nispace
+        remote: template/fsLR/map/inflated/tpl-fsLR_desc-inflated_res-32k_hemi-R.surf.gii
+    veryinflated:
+      L:
+        host: github-nispace
+        remote: template/fsLR/map/veryinflated/tpl-fsLR_desc-veryinflated_res-32k_hemi-L.surf.gii
+      R:
+        host: github-nispace
+        remote: template/fsLR/map/veryinflated/tpl-fsLR_desc-veryinflated_res-32k_hemi-R.surf.gii
+    sphere:
+      L:
+        host: github-nispace
+        remote: template/fsLR/map/sphere/tpl-fsLR_desc-sphere_res-32k_hemi-L.surf.gii
+      R:
+        host: github-nispace
+        remote: template/fsLR/map/sphere/tpl-fsLR_desc-sphere_res-32k_hemi-R.surf.gii
+    medial:
+      L:
+        host: github-nispace
+        remote: template/fsLR/map/medial/tpl-fsLR_desc-medial_res-32k_hemi-L.label.gii
+      R:
+        host: github-nispace
+        remote: template/fsLR/map/medial/tpl-fsLR_desc-medial_res-32k_hemi-R.label.gii
+    sulc:
+      L:
+        host: github-nispace
+        remote: template/fsLR/map/sulc/tpl-fsLR_desc-sulc_res-32k_hemi-L.shape.gii
+      R:
+        host: github-nispace
+        remote: template/fsLR/map/sulc/tpl-fsLR_desc-sulc_res-32k_hemi-R.shape.gii
+    vaavg:
+      L:
+        host: github-nispace
+        remote: template/fsLR/map/vaavg/tpl-fsLR_desc-vaavg_res-32k_hemi-L.shape.gii
+      R:
+        host: github-nispace
+        remote: template/fsLR/map/vaavg/tpl-fsLR_desc-vaavg_res-32k_hemi-R.shape.gii
+  164k:
+    midthickness:
+      L:
+        host: github-nispace
+        remote: template/fsLR/map/midthickness/tpl-fsLR_desc-midthickness_res-164k_hemi-L.surf.gii
+      R:
+        host: github-nispace
+        remote: template/fsLR/map/midthickness/tpl-fsLR_desc-midthickness_res-164k_hemi-R.surf.gii
+    inflated:
+      L:
+        host: github-nispace
+        remote: template/fsLR/map/inflated/tpl-fsLR_desc-inflated_res-164k_hemi-L.surf.gii
+      R:
+        host: github-nispace
+        remote: template/fsLR/map/inflated/tpl-fsLR_desc-inflated_res-164k_hemi-R.surf.gii
+    veryinflated:
+      L:
+        host: github-nispace
+        remote: template/fsLR/map/veryinflated/tpl-fsLR_desc-veryinflated_res-164k_hemi-L.surf.gii
+      R:
+        host: github-nispace
+        remote: template/fsLR/map/veryinflated/tpl-fsLR_desc-veryinflated_res-164k_hemi-R.surf.gii
+    sphere:
+      L:
+        host: github-nispace
+        remote: template/fsLR/map/sphere/tpl-fsLR_desc-sphere_res-164k_hemi-L.surf.gii
+      R:
+        host: github-nispace
+        remote: template/fsLR/map/sphere/tpl-fsLR_desc-sphere_res-164k_hemi-R.surf.gii
+    medial:
+      L:
+        host: github-nispace
+        remote: template/fsLR/map/medial/tpl-fsLR_desc-medial_res-164k_hemi-L.label.gii
+      R:
+        host: github-nispace
+        remote: template/fsLR/map/medial/tpl-fsLR_desc-medial_res-164k_hemi-R.label.gii
+    sulc:
+      L:
+        host: github-nispace
+        remote: template/fsLR/map/sulc/tpl-fsLR_desc-sulc_res-164k_hemi-L.shape.gii
+      R:
+        host: github-nispace
+        remote: template/fsLR/map/sulc/tpl-fsLR_desc-sulc_res-164k_hemi-R.shape.gii
+    vaavg:
+      L:
+        host: github-nispace
+        remote: template/fsLR/map/vaavg/tpl-fsLR_desc-vaavg_res-164k_hemi-L.shape.gii
+      R:
+        host: github-nispace
+        remote: template/fsLR/map/vaavg/tpl-fsLR_desc-vaavg_res-164k_hemi-R.shape.gii

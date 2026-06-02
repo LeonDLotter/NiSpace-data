@@ -1,0 +1,469 @@
+name: cortexfeatures
+label: CortexFeatures
+description: The NiSpace "CortexFeatures" dataset consists of different features of cortical topology available via neuromaps
+  (https://neuromaps-main.readthedocs.io/). Many of these maps were used in Shafiei et al., 2023. The maps are fetched directly
+  from neuromaps (space="fsLROriginal" or "fsaverageOriginal") or downloaded from the NiSpace-data GitHub repo (space="fsLR"
+  or "fsaverage"; recommended). Please cite the original publication for each map when used.
+cortex_only: true
+citations:
+- ref: Markello et al., 2022
+  doi: 10.1038/s41592-022-01625-w
+- ref: Shafiei et al., 2023
+  doi: 10.1038/s41467-023-41689-6
+map_info:
+  cite_column: doi
+  display_columns:
+  - feature
+  - doi
+  - license
+collections:
+  All:
+    description: All cortical feature maps.
+  MEG:
+    description: MEG power spectra and timescale maps (Shafiei et al., 2022).
+  Metabolism:
+    description: 'Different features of cortical metabolism (Vaishnavi et al., 2010).'
+  CortexOrganisation:
+    description: 'Different features of cortical organisation (various sources).'
+tabs: auto
+maps:
+  feature-thickness_pub-hcps1200:
+    fsaverage: auto
+    fsLR: auto
+    fsLROriginal:
+      L:
+        host: neuromaps
+        remote:
+        - hcps1200
+        - thickness
+        - fsLR
+        - L
+        ext: .surf.gii
+      R:
+        host: neuromaps
+        remote:
+        - hcps1200
+        - thickness
+        - fsLR
+        - R
+        ext: .surf.gii
+  feature-t1t2_pub-hcps1200:
+    fsaverage: auto
+    fsLR: auto
+    fsLROriginal:
+      L:
+        host: neuromaps
+        remote:
+        - hcps1200
+        - myelinmap
+        - fsLR
+        - L
+        ext: .surf.gii
+      R:
+        host: neuromaps
+        remote:
+        - hcps1200
+        - myelinmap
+        - fsLR
+        - R
+        ext: .surf.gii
+  feature-saaxis_pub-sydnor2021:
+    fsaverage: auto
+    fsLR: auto
+    fsLROriginal:
+      L:
+        host: neuromaps
+        remote:
+        - sydnor2021
+        - SAaxis
+        - fsLR
+        - L
+        ext: .surf.gii
+      R:
+        host: neuromaps
+        remote:
+        - sydnor2021
+        - SAaxis
+        - fsLR
+        - R
+        ext: .surf.gii
+  feature-geneexpr-abagen:
+    fsaverage: auto
+    fsLR: auto
+    fsaverageOriginal:
+      L:
+        host: neuromaps
+        remote:
+        - abagen
+        - genepc1
+        - fsaverage
+        - L
+        ext: .surf.gii
+      R:
+        host: neuromaps
+        remote:
+        - abagen
+        - genepc1
+        - fsaverage
+        - R
+        ext: .surf.gii
+  feature-develexpansion_pub-hill2010:
+    fsaverage:
+      R:
+        host: github-nispace
+        remote: reference/cortexfeatures/map/feature-develexpansion_pub-hill2010/feature-develexpansion_pub-hill2010_space-fsaverage_desc-proc_hemi-R.surf.gii.gz
+    fsLR:
+      R:
+        host: github-nispace
+        remote: reference/cortexfeatures/map/feature-develexpansion_pub-hill2010/feature-develexpansion_pub-hill2010_space-fsLR_desc-proc_hemi-R.surf.gii.gz
+    fsLROriginal:
+      R:
+        host: neuromaps
+        remote:
+        - hill2010
+        - devexp
+        - fsLR
+        - R
+        ext: .surf.gii
+  feature-evolexpansion_pub-hill2010:
+    fsaverage:
+      R:
+        host: github-nispace
+        remote: reference/cortexfeatures/map/feature-evolexpansion_pub-hill2010/feature-evolexpansion_pub-hill2010_space-fsaverage_desc-proc_hemi-R.surf.gii.gz
+    fsLR:
+      R:
+        host: github-nispace
+        remote: reference/cortexfeatures/map/feature-evolexpansion_pub-hill2010/feature-evolexpansion_pub-hill2010_space-fsLR_desc-proc_hemi-R.surf.gii.gz
+    fsLROriginal:
+      R:
+        host: neuromaps
+        remote:
+        - hill2010
+        - evoexp
+        - fsLR
+        - R
+        ext: .surf.gii
+  feature-evolexpansion_pub-xu2020:
+    fsaverage: auto
+    fsLR: auto
+    fsLROriginal:
+      L:
+        host: neuromaps
+        remote:
+        - xu2020
+        - evoexp
+        - fsLR
+        - L
+        ext: .surf.gii
+      R:
+        host: neuromaps
+        remote:
+        - xu2020
+        - evoexp
+        - fsLR
+        - R
+        ext: .surf.gii
+  feature-specieshomology_pub-xu2020:
+    fsaverage: auto
+    fsLR: auto
+    fsLROriginal:
+      L:
+        host: neuromaps
+        remote:
+        - xu2020
+        - FChomology
+        - fsLR
+        - L
+        ext: .surf.gii
+      R:
+        host: neuromaps
+        remote:
+        - xu2020
+        - FChomology
+        - fsLR
+        - R
+        ext: .surf.gii
+  feature-fcgradient1_pub-margulies2016:
+    fsaverage: auto
+    fsLR: auto
+    fsLROriginal:
+      L:
+        host: neuromaps
+        remote:
+        - margulies2016
+        - fcgradient01
+        - fsLR
+        - L
+        ext: .surf.gii
+      R:
+        host: neuromaps
+        remote:
+        - margulies2016
+        - fcgradient01
+        - fsLR
+        - R
+        ext: .surf.gii
+  feature-fcgradient2_pub-margulies2016:
+    fsaverage: auto
+    fsLR: auto
+    fsLROriginal:
+      L:
+        host: neuromaps
+        remote:
+        - margulies2016
+        - fcgradient02
+        - fsLR
+        - L
+        ext: .surf.gii
+      R:
+        host: neuromaps
+        remote:
+        - margulies2016
+        - fcgradient02
+        - fsLR
+        - R
+        ext: .surf.gii
+  feature-fcgradient3_pub-margulies2016:
+    fsaverage: auto
+    fsLR: auto
+    fsLROriginal:
+      L:
+        host: neuromaps
+        remote:
+        - margulies2016
+        - fcgradient03
+        - fsLR
+        - L
+        ext: .surf.gii
+      R:
+        host: neuromaps
+        remote:
+        - margulies2016
+        - fcgradient03
+        - fsLR
+        - R
+        ext: .surf.gii
+  feature-cbf_pub-vaishnavi2010:
+    fsaverage: auto
+    fsLR: auto
+    fsLROriginal:
+      L:
+        host: neuromaps
+        remote:
+        - raichle
+        - cbf
+        - fsLR
+        - L
+        ext: .surf.gii
+      R:
+        host: neuromaps
+        remote:
+        - raichle
+        - cbf
+        - fsLR
+        - R
+        ext: .surf.gii
+  feature-cbv_pub-vaishnavi2010:
+    fsaverage: auto
+    fsLR: auto
+    fsLROriginal:
+      L:
+        host: neuromaps
+        remote:
+        - raichle
+        - cbv
+        - fsLR
+        - L
+        ext: .surf.gii
+      R:
+        host: neuromaps
+        remote:
+        - raichle
+        - cbf
+        - fsLR
+        - R
+        ext: .surf.gii
+  feature-cmro2_pub-vaishnavi2010:
+    fsaverage: auto
+    fsLR: auto
+    fsLROriginal:
+      L:
+        host: neuromaps
+        remote:
+        - raichle
+        - cmr02
+        - fsLR
+        - L
+        ext: .surf.gii
+      R:
+        host: neuromaps
+        remote:
+        - raichle
+        - cmr02
+        - fsLR
+        - R
+        ext: .surf.gii
+  feature-cmrglc_pub-vaishnavi2010:
+    fsaverage: auto
+    fsLR: auto
+    fsLROriginal:
+      L:
+        host: neuromaps
+        remote:
+        - raichle
+        - cmrglc
+        - fsLR
+        - L
+        ext: .surf.gii
+      R:
+        host: neuromaps
+        remote:
+        - raichle
+        - cmrglc
+        - fsLR
+        - R
+        ext: .surf.gii
+  feature-glycindex_pub-vaishnavi2010:
+    fsaverage: auto
+    fsLR: auto
+    fsLROriginal: auto
+  feature-megpoweralpha_pub-shafiei2022:
+    fsaverage: auto
+    fsLR: auto
+    fsLROriginal:
+      L:
+        host: neuromaps
+        remote:
+        - hcps1200
+        - megalpha
+        - fsLR
+        - L
+        ext: .surf.gii
+      R:
+        host: neuromaps
+        remote:
+        - hcps1200
+        - megalpha
+        - fsLR
+        - R
+        ext: .surf.gii
+  feature-megpowerbeta_pub-shafiei2022:
+    fsaverage: auto
+    fsLR: auto
+    fsLROriginal:
+      L:
+        host: neuromaps
+        remote:
+        - hcps1200
+        - megbeta
+        - fsLR
+        - L
+        ext: .surf.gii
+      R:
+        host: neuromaps
+        remote:
+        - hcps1200
+        - megbeta
+        - fsLR
+        - R
+        ext: .surf.gii
+  feature-megpowerdelta_pub-shafiei2022:
+    fsaverage: auto
+    fsLR: auto
+    fsLROriginal:
+      L:
+        host: neuromaps
+        remote:
+        - hcps1200
+        - megdelta
+        - fsLR
+        - L
+        ext: .surf.gii
+      R:
+        host: neuromaps
+        remote:
+        - hcps1200
+        - megdelta
+        - fsLR
+        - R
+        ext: .surf.gii
+  feature-megpowergamma1_pub-shafiei2022:
+    fsaverage: auto
+    fsLR: auto
+    fsLROriginal:
+      L:
+        host: neuromaps
+        remote:
+        - hcps1200
+        - meggamma1
+        - fsLR
+        - L
+        ext: .surf.gii
+      R:
+        host: neuromaps
+        remote:
+        - hcps1200
+        - meggamma1
+        - fsLR
+        - R
+        ext: .surf.gii
+  feature-megpowergamma2_pub-shafiei2022:
+    fsaverage: auto
+    fsLR: auto
+    fsLROriginal:
+      L:
+        host: neuromaps
+        remote:
+        - hcps1200
+        - meggamma2
+        - fsLR
+        - L
+        ext: .surf.gii
+      R:
+        host: neuromaps
+        remote:
+        - hcps1200
+        - meggamma2
+        - fsLR
+        - R
+        ext: .surf.gii
+  feature-megpowertheta_pub-shafiei2022:
+    fsaverage: auto
+    fsLR: auto
+    fsLROriginal:
+      L:
+        host: neuromaps
+        remote:
+        - hcps1200
+        - megtheta
+        - fsLR
+        - L
+        ext: .surf.gii
+      R:
+        host: neuromaps
+        remote:
+        - hcps1200
+        - megtheta
+        - fsLR
+        - R
+        ext: .surf.gii
+  feature-megtimescale_pub-shafiei2022:
+    fsaverage: auto
+    fsLR: auto
+    fsLROriginal:
+      L:
+        host: neuromaps
+        remote:
+        - hcps1200
+        - megtimescale
+        - fsLR
+        - L
+        ext: .surf.gii
+      R:
+        host: neuromaps
+        remote:
+        - hcps1200
+        - megtimescale
+        - fsLR
+        - R
+        ext: .surf.gii

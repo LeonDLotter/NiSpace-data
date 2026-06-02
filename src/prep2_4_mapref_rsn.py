@@ -48,7 +48,7 @@ for nii_fp in sorted(archive_dir.rglob("*.nii")):
     img = nib.load(nii_fp)
     if len(img.shape) > 3:
         img = image.index_img(img, 0)
-    nib.save(img, map_dir / f"{map_id}_space-MNI152.nii.gz")
+    nib.save(img, map_dir / f"{map_id}_space-MNIOriginal.nii.gz")
 
     # space: MNI152NLin6Asym — resample to 2mm (maps are already in this space)
     # also apply mask and scale to [0, 1]

@@ -1,0 +1,11 @@
+name: Destrieux
+label: Destrieux (a2009s)
+level: cortex
+symmetric: true
+license: free
+citation:
+  ref: Destrieux et al., 2010, NeuroImage
+  doi: 10.1016/j.neuroimage.2010.06.010
+citation_extra_dois:
+- 10.12751/g-node.2mnxpm
+spaces: auto

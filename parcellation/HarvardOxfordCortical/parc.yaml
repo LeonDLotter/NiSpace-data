@@ -1,0 +1,11 @@
+name: HarvardOxfordCortical
+label: Harvard-Oxford Cortical
+level: cortex
+symmetric: true
+license: free
+citation:
+  ref: Makris et al., 2006, Schizophr Res
+  doi: 10.1016/j.schres.2005.11.020
+citation_extra_dois:
+- 10.1016/j.neuroimage.2006.01.021
+spaces: auto

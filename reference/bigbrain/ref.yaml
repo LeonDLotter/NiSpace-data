@@ -1,0 +1,157 @@
+name: bigbrain
+label: BigBrain
+description: The NiSpace "BigBrain" dataset is adopted from the BigBrainWarp toolbox (https://bigbrainwarp.readthedocs.io)
+  by Paquola et al. The maps are fetched directly from the BigBrainWarp Sciebo folder (space="fsaverageOriginal") or downloaded
+  from the NiSpace-data GitHub repo (space="fsLR" or "fsaverage"; recommended). The data is subject to a CC BY-NC-SA 4.0 license.
+  Please cite the appropriate original publication for each map when used (see map info table).
+cortex_only: true
+citations:
+- ref: Amunts et al., 2013
+  doi: 10.1126/science.1235381
+- ref: Paquola et al., 2021
+  doi: 10.7554/eLife.70119
+map_info:
+  cite_column: doi
+  display_columns:
+  - feature
+  - doi
+  - license
+collections:
+  All:
+    description: All BigBrain histological maps (cortical layers and differentiation gradients).
+  CorticalLayers:
+    description: Cortical layer density maps for layers 1–6 (Wagstyl et al., 2020).
+  DifferentiationGradients:
+    description: Histological, microstructural, and functional cortical differentiation gradients (Paquola et al., 2021).
+tabs: auto
+maps:
+  feature-layer1_pub-wagstyl2020:
+    fsaverage: auto
+    fsLR: auto
+    fsaverageOriginal:
+      L:
+        host: url
+        remote: https://fz-juelich.sciebo.de/public.php/dav/files/HoKucnh8zFpSbKF/spaces/tpl-fsaverage/tpl-fsaverage_hemi-L_den-164k_desc-layer1.shape.gii
+      R:
+        host: url
+        remote: https://fz-juelich.sciebo.de/public.php/dav/files/HoKucnh8zFpSbKF/spaces/tpl-fsaverage/tpl-fsaverage_hemi-R_den-164k_desc-layer1.shape.gii
+  feature-layer2_pub-wagstyl2020:
+    fsaverage: auto
+    fsLR: auto
+    fsaverageOriginal:
+      L:
+        host: url
+        remote: https://fz-juelich.sciebo.de/public.php/dav/files/HoKucnh8zFpSbKF/spaces/tpl-fsaverage/tpl-fsaverage_hemi-L_den-164k_desc-layer2.shape.gii
+      R:
+        host: url
+        remote: https://fz-juelich.sciebo.de/public.php/dav/files/HoKucnh8zFpSbKF/spaces/tpl-fsaverage/tpl-fsaverage_hemi-R_den-164k_desc-layer1.shape.gii
+  feature-layer3_pub-wagstyl2020:
+    fsaverage: auto
+    fsLR: auto
+    fsaverageOriginal:
+      L:
+        host: url
+        remote: https://fz-juelich.sciebo.de/public.php/dav/files/HoKucnh8zFpSbKF/spaces/tpl-fsaverage/tpl-fsaverage_hemi-L_den-164k_desc-layer3.shape.gii
+      R:
+        host: url
+        remote: https://fz-juelich.sciebo.de/public.php/dav/files/HoKucnh8zFpSbKF/spaces/tpl-fsaverage/tpl-fsaverage_hemi-R_den-164k_desc-layer3.shape.gii
+  feature-layer4_pub-wagstyl2020:
+    fsaverage: auto
+    fsLR: auto
+    fsaverageOriginal:
+      L:
+        host: url
+        remote: https://fz-juelich.sciebo.de/public.php/dav/files/HoKucnh8zFpSbKF/spaces/tpl-fsaverage/tpl-fsaverage_hemi-L_den-164k_desc-layer4.shape.gii
+      R:
+        host: url
+        remote: https://fz-juelich.sciebo.de/public.php/dav/files/HoKucnh8zFpSbKF/spaces/tpl-fsaverage/tpl-fsaverage_hemi-R_den-164k_desc-layer4.shape.gii
+  feature-layer5_pub-wagstyl2020:
+    fsaverage: auto
+    fsLR: auto
+    fsaverageOriginal:
+      L:
+        host: url
+        remote: https://fz-juelich.sciebo.de/public.php/dav/files/HoKucnh8zFpSbKF/spaces/tpl-fsaverage/tpl-fsaverage_hemi-L_den-164k_desc-layer5.shape.gii
+      R:
+        host: url
+        remote: https://fz-juelich.sciebo.de/public.php/dav/files/HoKucnh8zFpSbKF/spaces/tpl-fsaverage/tpl-fsaverage_hemi-R_den-164k_desc-layer5.shape.gii
+  feature-layer6_pub-wagstyl2020:
+    fsaverage: auto
+    fsLR: auto
+    fsaverageOriginal:
+      L:
+        host: url
+        remote: https://fz-juelich.sciebo.de/public.php/dav/files/HoKucnh8zFpSbKF/spaces/tpl-fsaverage/tpl-fsaverage_hemi-L_den-164k_desc-layer6.shape.gii
+      R:
+        host: url
+        remote: https://fz-juelich.sciebo.de/public.php/dav/files/HoKucnh8zFpSbKF/spaces/tpl-fsaverage/tpl-fsaverage_hemi-R_den-164k_desc-layer6.shape.gii
+  feature-histogradient1_pub-paquola2021:
+    fsaverage: auto
+    fsLR: auto
+    fsaverageOriginal:
+      L:
+        host: url
+        remote: https://fz-juelich.sciebo.de/public.php/dav/files/HoKucnh8zFpSbKF/spaces/tpl-fsaverage/tpl-fsaverage_hemi-L_den-164k_desc-Hist_G1.shape.gii
+      R:
+        host: url
+        remote: https://fz-juelich.sciebo.de/public.php/dav/files/HoKucnh8zFpSbKF/spaces/tpl-fsaverage/tpl-fsaverage_hemi-R_den-164k_desc-Hist_G1.shape.gii
+  feature-histogradient2_pub-paquola2021:
+    fsaverage: auto
+    fsLR: auto
+    fsaverageOriginal:
+      L:
+        host: url
+        remote: https://fz-juelich.sciebo.de/public.php/dav/files/HoKucnh8zFpSbKF/spaces/tpl-fsaverage/tpl-fsaverage_hemi-L_den-164k_desc-Hist_G2.shape.gii
+      R:
+        host: url
+        remote: https://fz-juelich.sciebo.de/public.php/dav/files/HoKucnh8zFpSbKF/spaces/tpl-fsaverage/tpl-fsaverage_hemi-R_den-164k_desc-Hist_G2.shape.gii
+  feature-microgradient1_pub-paquola2021:
+    fsaverage: auto
+    fsLR: auto
+    fsaverageOriginal:
+      L:
+        host: url
+        remote: https://fz-juelich.sciebo.de/public.php/dav/files/HoKucnh8zFpSbKF/spaces/tpl-fsaverage/tpl-fsaverage_hemi-L_den-164k_desc-Micro_G1.curv
+      R:
+        host: url
+        remote: https://fz-juelich.sciebo.de/public.php/dav/files/HoKucnh8zFpSbKF/spaces/tpl-fsaverage/tpl-fsaverage_hemi-R_den-164k_desc-Micro_G1.curv
+  feature-microgradient2_pub-paquola2021:
+    fsaverage: auto
+    fsLR: auto
+    fsaverageOriginal:
+      L:
+        host: url
+        remote: https://fz-juelich.sciebo.de/public.php/dav/files/HoKucnh8zFpSbKF/spaces/tpl-fsaverage/tpl-fsaverage_hemi-L_den-164k_desc-Micro_G2.curv
+      R:
+        host: url
+        remote: https://fz-juelich.sciebo.de/public.php/dav/files/HoKucnh8zFpSbKF/spaces/tpl-fsaverage/tpl-fsaverage_hemi-R_den-164k_desc-Micro_G2.curv
+  feature-funcgradient1_pub-paquola2021:
+    fsaverage: auto
+    fsLR: auto
+    fsaverageOriginal:
+      L:
+        host: url
+        remote: https://fz-juelich.sciebo.de/public.php/dav/files/HoKucnh8zFpSbKF/spaces/tpl-fsaverage/tpl-fsaverage_hemi-L_den-164k_desc-Func_G1.curv
+      R:
+        host: url
+        remote: https://fz-juelich.sciebo.de/public.php/dav/files/HoKucnh8zFpSbKF/spaces/tpl-fsaverage/tpl-fsaverage_hemi-R_den-164k_desc-Func_G1.curv
+  feature-funcgradient2_pub-paquola2021:
+    fsaverage: auto
+    fsLR: auto
+    fsaverageOriginal:
+      L:
+        host: url
+        remote: https://fz-juelich.sciebo.de/public.php/dav/files/HoKucnh8zFpSbKF/spaces/tpl-fsaverage/tpl-fsaverage_hemi-L_den-164k_desc-Func_G2.curv
+      R:
+        host: url
+        remote: https://fz-juelich.sciebo.de/public.php/dav/files/HoKucnh8zFpSbKF/spaces/tpl-fsaverage/tpl-fsaverage_hemi-R_den-164k_desc-Func_G2.curv
+  feature-funcgradient3_pub-paquola2021:
+    fsaverage: auto
+    fsLR: auto
+    fsaverageOriginal:
+      L:
+        host: url
+        remote: https://fz-juelich.sciebo.de/public.php/dav/files/HoKucnh8zFpSbKF/spaces/tpl-fsaverage/tpl-fsaverage_hemi-L_den-164k_desc-Func_G3.curv
+      R:
+        host: url
+        remote: https://fz-juelich.sciebo.de/public.php/dav/files/HoKucnh8zFpSbKF/spaces/tpl-fsaverage/tpl-fsaverage_hemi-R_den-164k_desc-Func_G3.curv

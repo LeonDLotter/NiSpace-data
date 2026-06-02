@@ -1,0 +1,11 @@
+name: DesikanKillianyTourville
+label: Desikan-Killiany-Tourville (DKT)
+level: cortex
+symmetric: true
+license: free
+citation:
+  ref: Klein & Tourville, 2012, Front Neurosci
+  doi: 10.3389/fnins.2012.00171
+citation_extra_dois:
+- 10.12751/g-node.2mnxpm
+spaces: auto

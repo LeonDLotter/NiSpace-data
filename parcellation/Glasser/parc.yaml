@@ -1,0 +1,11 @@
+name: Glasser
+label: HCP multimodal parcellation (Glasser atlas)
+level: cortex
+symmetric: true
+license: free
+citation:
+  ref: Glasser et al., 2016, Nature
+  doi: 10.1038/nature18933
+citation_extra_dois:
+- figshare.com/articles/dataset/HCP-MMP1_0_projected_on_fsaverage/3498446
+spaces: auto

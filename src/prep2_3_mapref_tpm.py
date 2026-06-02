@@ -32,7 +32,7 @@ tpm_vol = image.load_img(download(url))
 for idx, tissue in [(0, "gm"), (1, "wm"), (2, "csf")]:
     tpm_vol_tissue = image.index_img(tpm_vol, idx)
     fp = (nispace_source_data_path / "reference" / "tpm" / "map" / f"tissue-{tissue}_pub-spm" / 
-            f"tissue-{tissue}_pub-spm_space-MNI152.nii.gz")
+            f"tissue-{tissue}_pub-spm_space-MNIOriginal.nii.gz")
     fp.parent.mkdir(parents=True, exist_ok=True)
     tpm_vol_tissue.to_filename(fp)  
     
@@ -45,9 +45,9 @@ for m in reference_lib["tpm"]["map"]:
 
     # get original map — SPM-derived maps exist locally; arteries/veins are fetched from remote
     if any(t in m for t in ["gm", "wm", "csf"]):
-        fp = [nispace_source_data_path / "reference" / "tpm" / "map" / m / f"{m}_space-MNI152.nii.gz"]
+        fp = [nispace_source_data_path / "reference" / "tpm" / "map" / m / f"{m}_space-MNIOriginal.nii.gz"]
     else:
-        fp = fetch_reference("tpm", maps=m, space="MNI152", verbose=False, check_file_hash=False)
+        fp = fetch_reference("tpm", maps=m, space="MNIOriginal", verbose=False, check_file_hash=False)
     print(fp)
     
     # ----------------------------------------------------------------------------------------------

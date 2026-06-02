@@ -1,0 +1,20 @@
+name: neurosynth
+label: Neurosynth
+description: The NiSpace "Neurosynth" dataset is based on the Neurosynth database (https://neurosynth.org/). The dataset consists
+  of all terms in the Neurosynth database as preselected by the authors. For each term, a "MKDAChi2" meta-analysis map was
+  generated in MNI152NLin6Asym-2mm space using the nimare package. The resulting "z_desc-association" maps were parcellated
+  and are available only as parcellation tables.
+cortex_only: false
+citations:
+- ref: Yarkoni et al., 2011
+  doi: 10.1038/nmeth.1635
+- ref: Salo et al., 2022
+  doi: 10.52294/001c.87681
+- ref: Wager et al., 2007
+  doi: 10.1093/scan/nsm015
+collections:
+  All:
+    description: All curated Neurosynth term-based meta-analytic maps (z-scores, association test).
+  CognitiveFunctions:
+    description: Subset of terms sorted manually into broad cognitive function domains.
+tabs: auto

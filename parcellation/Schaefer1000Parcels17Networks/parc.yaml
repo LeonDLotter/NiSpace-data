@@ -1,0 +1,9 @@
+name: Schaefer1000Parcels17Networks
+label: Schaefer 1000 (17 Yeo networks)
+level: cortex
+symmetric: false
+license: MIT
+citation:
+  ref: Schaefer et al., 2018, Cereb Cortex
+  doi: 10.1093/cercor/bhx179
+spaces: auto

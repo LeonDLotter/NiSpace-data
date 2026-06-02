@@ -1,0 +1,9 @@
+name: AALCortical
+label: AAL2 cortical parcels
+level: cortex
+symmetric: true
+license: free
+citation:
+  ref: Rolls et al., 2015, NeuroImage
+  doi: 10.1016/j.neuroimage.2015.07.075
+spaces: auto

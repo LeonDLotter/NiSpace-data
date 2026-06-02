@@ -1,0 +1,24 @@
+map,feature,doi,license
+feature-thickness_pub-hcps1200,thickness,10.1016/j.neuroimage.2013.05.041,CC BY-NC-SA 4.0
+feature-t1t2_pub-hcps1200,t1t2,10.1016/j.neuroimage.2013.05.041,CC BY-NC-SA 4.0
+feature-saaxis_pub-sydnor2021,saaxis,10.1016/j.neuron.2021.06.016,CC BY-NC-SA 4.0
+feature-geneexpr-abagen,geneexpr,10.7554/eLife.72129,CC BY-NC-SA 4.0
+feature-develexpansion_pub-hill2010,develexpansion,10.1073/pnas.1001229107,CC BY-NC-SA 4.0
+feature-evolexpansion_pub-hill2010,evolexpansion,10.1073/pnas.1001229107,free
+feature-evolexpansion_pub-xu2020,evolexpansion,10.1016/j.neuroimage.2020.117346,free
+feature-specieshomology_pub-xu2020,specieshomology,10.1016/j.neuroimage.2020.117346,free
+feature-fcgradient1_pub-margulies2016,fcgradient1,10.1073/pnas.1608282113,free
+feature-fcgradient2_pub-margulies2016,fcgradient2,10.1073/pnas.1608282113,free
+feature-fcgradient3_pub-margulies2016,fcgradient3,10.1073/pnas.1608282113,free
+feature-cbf_pub-vaishnavi2010,cbf,10.1073/pnas.1010459107,free
+feature-cbv_pub-vaishnavi2010,cbv,10.1073/pnas.1010459107,free
+feature-cmro2_pub-vaishnavi2010,cmro2,10.1073/pnas.1010459107,free
+feature-cmrglc_pub-vaishnavi2010,cmrglc,10.1073/pnas.1010459107,free
+feature-glycindex_pub-vaishnavi2010,glycindex,10.1073/pnas.1010459107,free
+feature-megpoweralpha_pub-shafiei2022,megpoweralpha,10.1371/journal.pbio.3001735,free
+feature-megpowerbeta_pub-shafiei2022,megpowerbeta,10.1371/journal.pbio.3001735,free
+feature-megpowerdelta_pub-shafiei2022,megpowerdelta,10.1371/journal.pbio.3001735,free
+feature-megpowergamma1_pub-shafiei2022,megpowergamma1,10.1371/journal.pbio.3001735,free
+feature-megpowergamma2_pub-shafiei2022,megpowergamma2,10.1371/journal.pbio.3001735,free
+feature-megpowertheta_pub-shafiei2022,megpowertheta,10.1371/journal.pbio.3001735,free
+feature-megtimescale_pub-shafiei2022,megtimescale,10.1371/journal.pbio.3001735,free

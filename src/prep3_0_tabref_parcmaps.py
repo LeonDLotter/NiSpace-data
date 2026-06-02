@@ -75,7 +75,7 @@ for dataset in DSETS_WITH_MAPS:
 
     # collect available maps per (original) space
     ref_maps = {}
-    for space in ["MNI152", "MNI152NLin6Asym", "MNI152NLin2009cAsym",
+    for space in ["MNIOriginal", "MNI152NLin6Asym", "MNI152NLin2009cAsym",
                   "fsaverageOriginal", "fsaverage",
                   "fsLROriginal", "fsLR"]:
         maps_in_space = []

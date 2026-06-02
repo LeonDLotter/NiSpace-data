@@ -1,0 +1,6 @@
+map,tissue,doi,license
+tissue-gm_pub-spm,GM,https://www.fil.ion.ucl.ac.uk/spm/,GNU v2.0
+tissue-wm_pub-spm,WM,https://www.fil.ion.ucl.ac.uk/spm/,GNU v2.0
+tissue-csf_pub-spm,CSF,https://www.fil.ion.ucl.ac.uk/spm/,free
+tissue-arteries_pub-mouches2019,Arteries,10.1038/s41597-019-0034-5,CC0 1.0
+tissue-veins_pub-huck2019,Veins,10.1007/s00429-019-01919-4,CC BY 4.0

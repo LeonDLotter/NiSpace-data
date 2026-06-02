@@ -1,6 +1,7 @@
 # %% Init
 
 import json
+import yaml
 from pathlib import Path
 
 import numpy as np
@@ -111,9 +112,9 @@ for space, fetch_fn, densities in [
         affines[space][density] = {"L": n_L, "R": n_R}
         print(f"  {density}: L={n_L}, R={n_R}")
 
-# %% Write affines.json
+# %% Write affines.yaml
+# build_datalib.py runs automatically via pre-commit hook on nispace-data commit
 
-out = nispace_toolbox_path / "nispace" / "datalib" / "affines.json"
-with open(out, "w") as f:
-    json.dump(affines, f, indent=4)
-print(f"\nWritten → {out}")
+out_yaml = wd / "template" / "affines.yaml"
+out_yaml.write_text(yaml.dump(affines, default_flow_style=False, sort_keys=False, allow_unicode=True))
+print(f"\nWritten → {out_yaml}")

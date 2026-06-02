@@ -51,3 +51,7 @@ Icon
 *.swp
 *.swo
 *~
+
+# local dev config
+config.json
+src/build_config.json

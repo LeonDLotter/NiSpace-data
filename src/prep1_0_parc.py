@@ -2,6 +2,8 @@
 
 import re
 import sys
+import yaml
+from collections import defaultdict
 from pathlib import Path
 import numpy as np
 import pandas as pd
@@ -1263,10 +1265,33 @@ for space in ["fsaverage", "fsLR"]:
 
 # %% ===============================================================================================
 
-# Save info
-parc_info = pd.DataFrame.from_dict(parc_info).T
-parc_info.index.names = ["parcellation", "space"]
-parc_info.to_csv(nispace_source_data_path / "parcellation" / "metadata.csv")
+# Save per-entity parc.yaml + regenerate toolbox JSON via build_datalib.py
+parc_by_name = defaultdict(dict)
+for (parc_name, space), info in parc_info.items():
+    parc_by_name[parc_name][space] = info
+
+for parc_name, spaces_info in parc_by_name.items():
+    parc_dir = nispace_source_data_path / "parcellation" / parc_name
+    parc_dir.mkdir(exist_ok=True)
+    yaml_path = parc_dir / "parc.yaml"
+    cfg = yaml.safe_load(yaml_path.read_text()) if yaml_path.exists() else {
+        "name": parc_name, "label": parc_name, "spaces": {}
+    }
+    if "spaces" not in cfg:
+        cfg["spaces"] = {}
+    first = next(iter(spaces_info.values()))
+    cfg["level"] = first["level"]
+    cfg["symmetric"] = bool(first["symmetric"])
+    cfg.setdefault("license", str(first.get("license", "TODO")))
+    if "publication" in first and "citation" not in cfg:
+        doi = str(first["publication"]).split(";")[0].strip()
+        cfg["citation"] = {"ref": "TODO", "doi": doi}
+    for space, info in spaces_info.items():
+        cfg["spaces"].setdefault(space, {})["resolution"] = str(info["resolution"])
+    yaml_path.write_text(yaml.dump(cfg, default_flow_style=False, sort_keys=False, allow_unicode=True))
+    print(f"  parc.yaml updated: {parc_name}")
+
+# build_datalib.py runs automatically via pre-commit hook on nispace-data commit
 
 # ==================================================================================================
 

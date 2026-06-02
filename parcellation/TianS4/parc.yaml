@@ -1,0 +1,9 @@
+name: TianS4
+label: Melbourne Subcortex S4
+level: subcortex
+symmetric: true
+license: MIT
+citation:
+  ref: Tian et al., 2020, Nat Neurosci
+  doi: 10.1038/s41593-020-00711-6
+spaces: auto

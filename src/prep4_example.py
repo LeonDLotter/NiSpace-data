@@ -71,6 +71,7 @@ an_signal_vol = nib.Nifti1Image(
 # AN cases are based on GM probability + ENIGMA acAN effect (Cohen's d, negative = depletion) + noise.
 # HC controls are GM probability + noise only.
 
+name = "anorexianervosa"
 for parc_name in PARCS:
     print(f"Simulating anorexia nervosa data for parcellation: {parc_name}")
 
@@ -120,7 +121,7 @@ for parc_name in PARCS:
             gm_base + rng.standard_normal(len(gm_base)) * noise_scale_hc
         )
 
-    save_csv_gz(data_an, nispace_source_data_path / "example" / f"example-anorexianervosa_parc-{parc_name}.csv.gz")
+    save_csv_gz(data_an, nispace_source_data_path / "example" / name / f"example-{name}_parc-{parc_name}.csv.gz")
 
 
 # %% Test Anorexia Nervosa Data

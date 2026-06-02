@@ -1,0 +1,56 @@
+name: tpm
+label: TPM
+description: The NiSpace "TPM" dataset is based on openly available tissue probability maps collected from different sources.
+  Many of these maps were used in Bolt et al., 2025. Fetch the original maps by requesting space="MNIOriginal". The processed maps
+  are downloaded from the NiSpace-data GitHub repo; data was downloaded in MNI152NLin6Asym space and transformed to MNI152NLin2009cAsym
+  with a pre-estimated MNI-to-MNI transformation, and to fsLR/fsaverage using neuromaps. Please cite the appropriate original
+  publication for each map when used (see map info table).
+cortex_only: false
+citations:
+- ref: Bolt et al., 2025
+  doi: 10.1038/s41593-025-01945-y
+map_info:
+  cite_column: doi
+  display_columns:
+  - tissue
+  - doi
+  - license
+collections:
+  All:
+    description: Gray matter, white matter, and CSF tissue probability maps (SPM TPM).
+tabs: auto
+maps:
+  tissue-gm_pub-spm:
+    fsaverage: auto
+    fsLR: auto
+    MNIOriginal: auto
+    MNI152NLin6Asym: auto
+    MNI152NLin2009cAsym: auto
+  tissue-wm_pub-spm:
+    fsaverage: auto
+    fsLR: auto
+    MNIOriginal: auto
+    MNI152NLin6Asym: auto
+    MNI152NLin2009cAsym: auto
+  tissue-csf_pub-spm:
+    fsaverage: auto
+    fsLR: auto
+    MNIOriginal: auto
+    MNI152NLin6Asym: auto
+    MNI152NLin2009cAsym: auto
+  tissue-veins_pub-huck2019:
+    fsaverage: auto
+    fsLR: auto
+    MNIOriginal:
+      host: url
+      remote: https://s3-eu-west-1.amazonaws.com/pfigshare-u-files/15347951/VENAT_DensityMap.nii.gz
+    MNI152NLin6Asym: auto
+    MNI152NLin2009cAsym: auto
+  tissue-arteries_pub-mouches2019:
+    fsaverage: auto
+    fsLR: auto
+    MNIOriginal:
+      host: url
+      remote: https://s3-eu-west-1.amazonaws.com/pstorage-npg-968563215/14460467/vesselProbabilities.nii.gz
+    MNI152NLin6Asym: auto
+    MNI152NLin2009cAsym: auto

@@ -28,7 +28,7 @@ dataset = "pet"
 # iterate maps
 for m in reference_lib[dataset]["map"]:
     transform_to_fsaverage, transform_to_fslr = None, None
-    if "private" in reference_lib[dataset]["map"][m]["MNI152"]["host"]:
+    if "private" in reference_lib[dataset]["map"][m]["MNIOriginal"]["host"]:
         print(f"Skipping private map: {m}")
         continue
     
@@ -103,7 +103,7 @@ for m in reference_lib[dataset]["map"]:
 
 ref_dir = nispace_source_data_path / "reference" / "pet"
 maps = [m for m in reference_lib["pet"]["map"]
-        if "private" not in reference_lib["pet"]["map"][m].get("MNI152", {}).get("host", "")]
+        if "private" not in reference_lib["pet"]["map"][m].get("MNIOriginal", {}).get("host", "")]
 
 pd.Series(maps, name="map").to_csv(ref_dir / "collection-All.collect", index=False)
 

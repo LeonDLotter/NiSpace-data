@@ -2,6 +2,7 @@
 
 import json
 import shutil
+import yaml
 from pathlib import Path
 
 import numpy as np
@@ -21,8 +22,8 @@ nispace_data_path = wd
 nispace_toolbox_path = Path.home() / "projects" / "nispace"
 
 # Load canonical geometry reference built by prep0_0_affines.py
-with open(nispace_toolbox_path / "nispace" / "datalib" / "affines.json") as _f:
-    affines_db = json.load(_f)
+with open(nispace_data_path / "template" / "affines.yaml") as _f:
+    affines_db = yaml.safe_load(_f)
 
 FSLR_DENSITIES = ["4k", "8k", "32k", "164k"]
 FSAVERAGE_DENSITIES = ["3k", "10k", "41k", "164k"]
@@ -263,9 +264,12 @@ for density in FSAVERAGE_DENSITIES:
     atlas = fetch_fsaverage(density=density)
     template_json["fsaverage"][density] = copy_and_register("fsaverage", density, atlas)
 
-# %% Write complete template.json to nispace toolbox
+# %% Write template.yaml per space
+# build_datalib.py runs automatically via pre-commit hook on nispace-data commit
 
-out = nispace_toolbox_path / "nispace" / "datalib" / "template.json"
-with open(out, "w") as f:
-    json.dump(template_json, f, indent=4)
-print(f"\nWritten → {out}")
+for space, resolutions in template_json.items():
+    yaml_path = nispace_data_path / "template" / space / "template.yaml"
+    cfg = yaml.safe_load(yaml_path.read_text()) if yaml_path.exists() else {"name": space}
+    cfg["resolutions"] = resolutions
+    yaml_path.write_text(yaml.dump(cfg, default_flow_style=False, sort_keys=False, allow_unicode=True))
+    print(f"Written → {yaml_path}")

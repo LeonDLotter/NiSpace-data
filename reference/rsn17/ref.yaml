@@ -1,0 +1,67 @@
+name: rsn17
+label: RSN17
+description: The NiSpace "RSN17" dataset contains probabilistic resting-state network maps derived from individual-level cortical
+  parcellations of 1029 HCP subjects into 17 functional networks, generated as described in Kong et al., 2021 and made available
+  at https://github.com/ThomasYeoLab/Kong2022_ArealMSHBM. The maps are only available in fsLR and fsaverage spaces. Note that
+  the networks follow the Kong et al. naming convention, which differs from the 17 "Yeo networks". Please cite the original
+  publication when using these maps.
+cortex_only: true
+citations:
+- ref: Kong et al., 2021
+  doi: 10.1093/cercor/bhab101
+collections:
+  All:
+    description: All 17 Kong2022 MSHBM resting-state network maps (Kong et al., 2022).
+tabs: auto
+maps:
+  nw-Auditory_pub-kong2022:
+    fsaverage: auto
+    fsLR: auto
+  nw-ControlA_pub-kong2022:
+    fsaverage: auto
+    fsLR: auto
+  nw-ControlB_pub-kong2022:
+    fsaverage: auto
+    fsLR: auto
+  nw-ControlC_pub-kong2022:
+    fsaverage: auto
+    fsLR: auto
+  nw-DefaultA_pub-kong2022:
+    fsaverage: auto
+    fsLR: auto
+  nw-DefaultB_pub-kong2022:
+    fsaverage: auto
+    fsLR: auto
+  nw-DefaultC_pub-kong2022:
+    fsaverage: auto
+    fsLR: auto
+  nw-DorsAttnA_pub-kong2022:
+    fsaverage: auto
+    fsLR: auto
+  nw-DorsAttnB_pub-kong2022:
+    fsaverage: auto
+    fsLR: auto
+  nw-Language_pub-kong2022:
+    fsaverage: auto
+    fsLR: auto
+  nw-SalVenAttnA_pub-kong2022:
+    fsaverage: auto
+    fsLR: auto
+  nw-SalVenAttnB_pub-kong2022:
+    fsaverage: auto
+    fsLR: auto
+  nw-SomatomotorA_pub-kong2022:
+    fsaverage: auto
+    fsLR: auto
+  nw-SomatomotorB_pub-kong2022:
+    fsaverage: auto
+    fsLR: auto
+  nw-VisualA_pub-kong2022:
+    fsaverage: auto
+    fsLR: auto
+  nw-VisualB_pub-kong2022:
+    fsaverage: auto
+    fsLR: auto
+  nw-VisualC_pub-kong2022:
+    fsaverage: auto
+    fsLR: auto

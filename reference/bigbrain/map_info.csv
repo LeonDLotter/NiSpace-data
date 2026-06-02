@@ -1,0 +1,14 @@
+map,feature,doi,license
+feature-layer1_pub-wagstyl2020,layer1,10.1371/journal.pbio.3000678,CC BY-NC-SA 4.0
+feature-layer2_pub-wagstyl2020,layer2,10.1371/journal.pbio.3000678,CC BY-NC-SA 4.0
+feature-layer3_pub-wagstyl2020,layer3,10.1371/journal.pbio.3000678,CC BY-NC-SA 4.0
+feature-layer4_pub-wagstyl2020,layer4,10.1371/journal.pbio.3000678,CC BY-NC-SA 4.0
+feature-layer5_pub-wagstyl2020,layer5,10.1371/journal.pbio.3000678,CC BY-NC-SA 4.0
+feature-layer6_pub-wagstyl2020,layer6,10.1371/journal.pbio.3000678,CC BY-NC-SA 4.0
+feature-histogradient1_pub-paquola2021,histogradient1,10.7554/eLife.70119,CC BY-NC-SA 4.0
+feature-histogradient2_pub-paquola2021,histogradient2,10.7554/eLife.70119,CC BY-NC-SA 4.0
+feature-microgradient1_pub-paquola2021,microgradient1,10.7554/eLife.70119,CC BY-NC-SA 4.0
+feature-microgradient2_pub-paquola2021,microgradient2,10.7554/eLife.70119,CC BY-NC-SA 4.0
+feature-funcgradient1_pub-paquola2021,funcgradient1,10.7554/eLife.70119,CC BY-NC-SA 4.0
+feature-funcgradient2_pub-paquola2021,funcgradient2,10.7554/eLife.70119,CC BY-NC-SA 4.0
+feature-funcgradient3_pub-paquola2021,funcgradient3,10.7554/eLife.70119,CC BY-NC-SA 4.0

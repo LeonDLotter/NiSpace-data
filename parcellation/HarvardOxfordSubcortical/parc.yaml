@@ -1,0 +1,11 @@
+name: HarvardOxfordSubcortical
+label: Harvard-Oxford Subcortical
+level: subcortex
+symmetric: true
+license: free
+citation:
+  ref: Frazier et al., 2005, Biol Psychiatry
+  doi: 10.1176/appi.ajp.162.7.1256
+citation_extra_dois:
+- 10.1016/j.biopsych.2006.06.027
+spaces: auto
