@@ -114,4 +114,13 @@ pd.Series(maps, name="map").to_csv(ref_dir / "collection-All.collect", index=Fal
 #     fig = brainplot((lh, rh), space=space, title=map_id, surf_mesh="veryinflated")
 #     plt.show()
 
+
+# %% Parcellate ------------------------------------------------------------------------------------
+
+import sys
+sys.path.insert(0, str(Path(__file__).parent))
+from utils import parcellate_mapref
+
+parcellate_mapref(wd, "rsn17", spaces=["fsLR"])
+
 # %%

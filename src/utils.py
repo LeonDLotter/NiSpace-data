@@ -2,6 +2,7 @@
 
 import yaml
 import numpy as np
+import pandas as pd
 from pathlib import Path
 from neuromaps import images as neuro_images
 import templateflow.api as tflow
@@ -116,6 +117,213 @@ def load_parc_labels(wd, parc_name, space):
 def save_csv_gz(df, path, **kwargs):
     """Save DataFrame to .csv.gz with a fixed gzip mtime for git-stable output."""
     df.to_csv(path, compression={"method": "gzip", "mtime": 1}, **kwargs)
+
+
+def parcellate_mapref(wd, dataset, spaces):
+    """Parcellate a map-based reference dataset across all parcellations.
+
+    Args:
+        wd      : repo root (Path)
+        dataset : name matching a reference/<dataset>/ref.yaml (e.g. "pet")
+        spaces  : ordered list of space keys. An "Original"-suffixed key means
+                  "filter maps by this tag but load/parcellate in the base space."
+                  Later entries overwrite earlier ones for maps present in both.
+
+    Saves: reference/<dataset>/tab/dset-<dataset>_parc-<PARC>.csv.gz
+    Raises: ValueError on missing maps, wrong output shape, or all-NaN map rows.
+    """
+    from nispace.datasets import reference_lib
+    from nispace.io import parcellate_data
+
+    wd = Path(wd)
+    _, REFS_CX, _, _ = load_ref_lists(wd)
+    PARCS, PARCS_CX, _ = load_parc_lists(wd)
+    parc_names = PARCS_CX if dataset in REFS_CX else PARCS
+    cx_only = dataset in REFS_CX
+
+    def _fetch_paths(maps, space):
+        map_dir = wd / "reference" / dataset / "map"
+        paths = []
+        for m in maps:
+            fp = sorted((map_dir / m).glob(f"{m}_space-{space}_*"))
+            if not fp:
+                fp = sorted((map_dir / m).glob(f"{m}_space-{space}.*"))
+            if not fp:
+                raise ValueError(f"No map found for {m} in space {space}")
+            elif len(fp) == 1:
+                fp = fp[0]
+            elif len(fp) == 2:
+                fp = tuple(fp)
+            else:
+                raise ValueError(f"More than two maps found for {m} in {space}: {fp}")
+            paths.append(fp)
+        return paths
+
+    # collect available (non-private) maps per filter_space
+    ref_maps = {}
+    for space in spaces:
+        maps_in_space = []
+        for m in reference_lib[dataset]["map"].keys():
+            if space not in reference_lib[dataset]["map"][m]:
+                continue
+            entry = reference_lib[dataset]["map"][m][space]
+            private = False
+            if "host" in entry:
+                private = "private" in entry["host"]
+            elif "L" in entry:
+                private = "private" in entry["L"]["host"]
+            elif "R" in entry:
+                private = "private" in entry["R"]["host"]
+            if not private:
+                maps_in_space.append(m)
+        if maps_in_space:
+            ref_maps[space] = maps_in_space
+
+    # unique maps across all filter_spaces (preserve reference_lib order)
+    ref_maps_avail_all = [
+        m for m in reference_lib[dataset]["map"]
+        if any(m in v for v in ref_maps.values())
+    ]
+    print(f"[{dataset}] cx_only={cx_only} | {len(parc_names)} parcellations")
+    for space, maps in ref_maps.items():
+        print(f"  {space}: {len(maps)} maps")
+    print(f"  → {len(ref_maps_avail_all)} unique maps total")
+    if not ref_maps_avail_all:
+        raise ValueError(
+            f"[{dataset}] No non-private maps found for spaces {spaces}. "
+            "Check ref.yaml and that map files exist."
+        )
+
+    for parc_name in parc_names:
+        labels = load_parc_labels(wd, parc_name, "MNI152NLin6Asym")
+        ref_maps_df = pd.DataFrame(
+            index=pd.Index(list(ref_maps_avail_all), name="map"),
+            columns=labels,
+        )
+
+        passes_run = 0
+        for space in spaces:
+            filter_space = space
+            parc_space = space.replace("Original", "")
+            if filter_space not in ref_maps:
+                print(f"  [{parc_name}] skip {filter_space}: no non-private maps")
+                continue
+            parc_dir = wd / "parcellation" / parc_name / parc_space
+            if not parc_dir.exists():
+                print(f"  [{parc_name}] skip {parc_space}: parcellation dir not found")
+                continue
+            ref_maps_avail = ref_maps[filter_space]
+            passes_run += 1
+
+            parc = load_parc(wd, parc_name, parc_space)
+            ref_paths = _fetch_paths(ref_maps_avail, parc_space)
+
+            # bilateral: MNI space, or all surface maps have two hemispheres
+            if ("MNI152" in parc_space) or (
+                "MNI152" not in parc_space and all(len(fp) == 2 for fp in ref_paths)
+            ):
+                parc_list   = [parc]
+                labels_list = [labels]
+                hemi_list   = [None]
+                paths_list  = [ref_paths]
+                avail_list  = [ref_maps_avail]
+            # mixed: some surface maps are single-hemisphere
+            else:
+                parc_list   = [parc, parc[0], parc[1]]
+                labels_list = [
+                    labels,
+                    [l for l in labels if "hemi-L" in l],
+                    [l for l in labels if "hemi-R" in l],
+                ]
+                hemi_list  = [None, "L", "R"]
+                paths_list = [
+                    [fp for fp in ref_paths if len(fp) == 2],
+                    [fp for fp in ref_paths if len(fp) == 1 and "hemi-L" in fp[0].name],
+                    [fp for fp in ref_paths if len(fp) == 1 and "hemi-R" in fp[0].name],
+                ]
+                avail_list = [
+                    [fp[0].parent.name for fp in paths_list[0]],
+                    [fp[0].parent.name for fp in paths_list[1]],
+                    [fp[0].parent.name for fp in paths_list[2]],
+                ]
+
+            maps_assigned = 0
+            for p, p_l, p_h, r_p, r_m_a in zip(
+                parc_list, labels_list, hemi_list, paths_list, avail_list
+            ):
+                if not r_p:
+                    continue
+                tab = parcellate_data(
+                    parcellation=p,
+                    parc_hemi=p_h,
+                    parc_labels=p_l,
+                    parc_space=parc_space,
+                    data=r_p,
+                    data_labels=r_m_a,
+                    data_space=parc_space,
+                    n_proc=-1,
+                    dtype=np.float32,
+                    **DATASET_PARCELLATE_KWARGS[dataset],
+                )
+                # check parcellate_data did not silently drop maps
+                if len(tab) != len(r_m_a):
+                    raise ValueError(
+                        f"[{dataset}/{parc_name}/{parc_space}"
+                        f"{'/' + p_h if p_h else ''}] "
+                        f"parcellate_data returned {len(tab)} rows, "
+                        f"expected {len(r_m_a)}"
+                    )
+                ref_maps_df.loc[r_m_a, tab.columns] = tab
+                maps_assigned += len(r_m_a)
+
+            print(
+                f"  [{parc_name}] {parc_space} ({filter_space}): "
+                f"{maps_assigned} map(s) assigned"
+            )
+
+        # --- per-parcellation validation ---
+
+        if passes_run == 0:
+            raise ValueError(
+                f"[{dataset}/{parc_name}] No parcellation pass ran. "
+                f"Check that at least one of {spaces} has a matching parcellation dir."
+            )
+
+        if len(ref_maps_df) != len(ref_maps_avail_all):
+            raise ValueError(
+                f"[{dataset}/{parc_name}] row count mismatch: "
+                f"expected {len(ref_maps_avail_all)}, got {len(ref_maps_df)}"
+            )
+
+        # all-NaN rows = map produced no data at all (always an error)
+        nan_rows = ref_maps_df.index[ref_maps_df.isna().all(axis=1)].tolist()
+        if nan_rows:
+            raise ValueError(
+                f"[{dataset}/{parc_name}] {len(nan_rows)} map(s) are entirely NaN "
+                f"(parcellation produced no data): "
+                + ", ".join(nan_rows[:5])
+                + ("..." if len(nan_rows) > 5 else "")
+            )
+
+        # all-NaN columns = parcel has no data for any map (warning only — can be
+        # legitimate for background parcels or cortex parcels in mixed-space datasets)
+        nan_cols = ref_maps_df.columns[ref_maps_df.isna().all(axis=0)].tolist()
+        if nan_cols:
+            print(
+                f"  WARNING [{parc_name}] {len(nan_cols)} parcel(s) all-NaN: "
+                + str(nan_cols[:3])
+                + ("..." if len(nan_cols) > 3 else "")
+            )
+
+        n_filled = int((~ref_maps_df.isna().all(axis=1)).sum())
+        print(
+            f"  [{parc_name}] {n_filled}/{len(ref_maps_avail_all)} maps filled | "
+            f"{len(nan_cols)} all-NaN parcels | shape {ref_maps_df.shape}"
+        )
+
+        save_dir = wd / "reference" / dataset / "tab"
+        save_dir.mkdir(parents=True, exist_ok=True)
+        save_csv_gz(ref_maps_df, save_dir / f"dset-{dataset}_parc-{parc_name}.csv.gz")
 
 
 # Parcellate kwargs per dataset.

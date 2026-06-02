@@ -129,7 +129,7 @@ MAPS = [
     # --- ADHD ---
     dict(
         map_id="dx-adhd_age-allages_pub-hoogman2019",
-        disorder="ADHD", age="allages", subtype=None, adult=True,
+        disorder="ADHD", age="allages", subtype=None, adult=False,
         thick_file="adhdallages_case-controls_CortThick",
         surf_file="adhdallages_case-controls_CortSurf",
         subvol_file="adhdallages_case-controls_SubVol",

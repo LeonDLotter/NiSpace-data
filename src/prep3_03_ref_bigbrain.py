@@ -106,4 +106,13 @@ pd.Series([
     "feature-funcgradient3_pub-paquola2021",
 ], name="map").to_csv(ref_dir / "collection-DifferentiationGradients.collect", index=False)
 
+
+# %% Parcellate ------------------------------------------------------------------------------------
+
+import sys
+sys.path.insert(0, str(Path(__file__).parent))
+from utils import parcellate_mapref
+
+parcellate_mapref(wd, "bigbrain", spaces=["fsaverageOriginal"])
+
 # %%

@@ -1,6 +1,6 @@
-# `NiSpace`: NeuroImaging Spatial Colocalization Environment
+# `NiSpace` – data library
 
-[![Zenodo](https://zenodo.org/badge/811941824.svg)](https://zenodo.org/doi/10.5281/zenodo.12514622)
+[![DOI: 10.5281/zenodo.12514622](https://img.shields.io/badge/DOI-10.5281/zenodo.12514622-1082C3)](https://zenodo.org/doi/10.5281/zenodo.12514622)
 [![CC BY-NC-SA 4.0](https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-lightgrey)](http://creativecommons.org/licenses/by-nc-sa/4.0/)
 
 This is the repository that contains source data for the [`NiSpace`](https://github.com/leondlotter/nispace) toolbox.  
@@ -68,7 +68,7 @@ All three paths check file existence on disk and warn for missing files.
 ```yaml
 maps:
   map_name:
-    MNI152:                  # external host — always explicit
+    MNIOriginal:             # external host — always explicit
       host: neuromaps
       remote: "..."
     MNI152NLin6Asym: auto    # github-nispace file — detected from disk at build time
@@ -76,7 +76,7 @@ maps:
     fsLR: auto
 ```
 
-For `auto` spaces: volumetric → looks for `*_space-{space}[_.].nii.gz` (prefers `_desc-proc_` if multiple matches); surface → looks for `*_space-{space}_hemi-L*.gii.gz` and `hemi-R`. Raises if >1 file matches after disambiguation.
+For `auto` spaces: volumetric → looks for `*_space-{space}[_.].nii.gz` (prefers `_desc-proc_` if multiple matches); surface → looks for `*_space-{space}*_hemi-{L|R}*.gii[.gz]` (any BIDS entities between `_space-` and `_hemi-` are allowed, e.g. `_desc-proc_`). Raises if >1 file matches after disambiguation.
 
 External hosts (`neuromaps`, `url`, `osfprivate`) must always be listed explicitly.
 

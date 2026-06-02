@@ -213,4 +213,16 @@ pd.DataFrame({
     "weight": [m.split("_")[2].split("-")[1] for m in unique_tracer_sets],
 }).to_csv(ref_dir / "collection-UniqueTracerSets.collect", index=False)
 
+
+# %% Parcellate ------------------------------------------------------------------------------------
+
+import sys
+sys.path.insert(0, str(Path(__file__).parent))
+from utils import parcellate_mapref
+
+parcellate_mapref(wd, "pet", spaces=[
+    "MNI152NLin6Asym",    # MNI-native maps
+    "fsaverageOriginal",  # surface-preferred maps overwrite
+])
+
 # %%

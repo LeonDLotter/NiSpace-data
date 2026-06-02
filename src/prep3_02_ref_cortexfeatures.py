@@ -146,4 +146,16 @@ pd.Series([
     "feature-specieshomology_pub-xu2020",
 ], name="map").to_csv(ref_dir / "collection-CortexOrganisation.collect", index=False)
 
+
+# %% Parcellate ------------------------------------------------------------------------------------
+
+import sys
+sys.path.insert(0, str(Path(__file__).parent))
+from utils import parcellate_mapref
+
+parcellate_mapref(wd, "cortexfeatures", spaces=[
+    "fsLROriginal",       # fsLR-native maps
+    "fsaverageOriginal",  # fsaverage-native maps (no overlap → no overwrite)
+])
+
 # %%

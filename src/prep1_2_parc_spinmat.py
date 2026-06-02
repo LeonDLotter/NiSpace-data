@@ -11,6 +11,11 @@ print(f"Working dir: {wd}")
 
 from nispace.nulls import _img_density_for_neuromaps
 
+# local utils
+import sys
+sys.path.insert(0, str(Path(__file__).parent))
+from utils import load_parc_lists
+
 # nispace-data root
 nispace_source_data_path = wd
 
@@ -18,10 +23,8 @@ nispace_source_data_path = wd
 N_PERM = 10000
 SEED = 42
 
-# all parcellations
-PARCS = sorted(
-    [p.name for p in (nispace_source_data_path / "parcellation").glob("*") if p.is_dir()]
-)
+# all parcellations (aliases excluded)
+PARCS, _, _ = load_parc_lists(wd)
 print("PARCS:", PARCS)
 
 

@@ -109,4 +109,13 @@ ref_dir = nispace_source_data_path / "reference" / "tpm"
 maps = sorted([d.name for d in (ref_dir / "map").iterdir() if d.is_dir()])
 pd.Series(maps, name="map").to_csv(ref_dir / "collection-All.collect", index=False)
 
+
+# %% Parcellate ------------------------------------------------------------------------------------
+
+import sys
+sys.path.insert(0, str(Path(__file__).parent))
+from utils import parcellate_mapref
+
+parcellate_mapref(wd, "tpm", spaces=["MNI152NLin6Asym"])
+
 # %%

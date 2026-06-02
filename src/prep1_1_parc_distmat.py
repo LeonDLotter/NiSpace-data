@@ -14,15 +14,13 @@ from nispace.nulls import get_distance_matrix
 
 # local utils
 sys.path.insert(0, str(Path(__file__).parent))
-from utils import save_csv_gz
+from utils import load_parc_lists, save_csv_gz
 
-# nispace data path 
+# nispace data path
 nispace_source_data_path = wd
 
-# all parcellations 
-PARCS = sorted(
-    [p.name for p in (nispace_source_data_path / "parcellation").glob("*") if p.is_dir()]
-)
+# all parcellations (aliases excluded)
+PARCS, _, _ = load_parc_lists(wd)
 print("PARCS:", PARCS)
 
 # %% Generate distance matrices
