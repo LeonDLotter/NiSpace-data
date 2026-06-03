@@ -390,6 +390,11 @@ def build_affines_json() -> dict:
     return yaml.safe_load(yml.read_text()) if yml.exists() else {}
 
 
+def build_transform_json() -> dict:
+    yml = NISPACE_DATA_DIR / "transform" / "transform.yaml"
+    return yaml.safe_load(yml.read_text()) if yml.exists() else {}
+
+
 # ── Main ─────────────────────────────────────────────────────────────────────
 
 if __name__ == "__main__":
@@ -409,6 +414,8 @@ if __name__ == "__main__":
     tpl = build_template_json()
     print("Building affines.json ...")
     aff = build_affines_json()
+    print("Building transform.json ...")
+    xfm = build_transform_json()
 
     outputs = {
         "reference.json":    ref,
@@ -416,6 +423,7 @@ if __name__ == "__main__":
         "example.json":      ex,
         "template.json":     tpl,
         "affines.json":      aff,
+        "transform.json":    xfm,
     }
     for filename, data in outputs.items():
         path = out_dir / filename

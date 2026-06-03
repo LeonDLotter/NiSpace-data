@@ -5,9 +5,10 @@ Usage:
     python src/workflows.py <workflow_name>
 
 Available workflows:
-    all                prep0_0..1 → prep1_0..2 → prep3_01..11 → prep4_example
+    all                prep0_0..2 → prep1_0..2 → prep3_01..11 → prep4_example
     new_parcellation   prep1_0 → prep1_1 → prep1_2 → prep3_01..11 → prep4_example
     new_template       prep0_0 → prep0_1
+    new_transforms     prep0_2
     new_example        prep4_example
     update_all_maprefs prep3_01..06 (re-generate all map files + parcellated tables)
     update_mrna        prep3_07_ref_mrna
@@ -40,6 +41,7 @@ WORKFLOWS = {
     "all": [
         "prep0_0_affines.py",
         "prep0_1_template.py",
+        "prep0_2_transforms.py",
         "prep1_0_parc.py",
         "prep1_1_parc_distmat.py",
         "prep1_2_parc_spinmat.py",
@@ -76,6 +78,9 @@ WORKFLOWS = {
     "new_template": [
         "prep0_0_affines.py",
         "prep0_1_template.py",
+    ],
+    "new_transforms": [
+        "prep0_2_transforms.py",
     ],
     "new_example": [
         "prep4_example.py",

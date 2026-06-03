@@ -61,34 +61,12 @@ mask_tight_MNI9_1mm = image.math_img(
 # Values are either a URL string (load/download directly) or a (space, res, desc) tuple
 # referencing an already-processed entry (resample if same space, apply_transform if different).
 MNI_TEMPLATE_SOURCES = {
-    "MNI152NLin6Asym": {
-        "1mm": {
-            "T1w":          tflow_get("MNI152NLin6Asym", resolution="01", desc=None, suffix="T1w", extension="nii.gz"),
-            "brain":        tflow_get("MNI152NLin6Asym", resolution="01", desc="brain", suffix="T1w", extension="nii.gz"),
-            "mask":         tflow_get("MNI152NLin6Asym", resolution="01", desc="brain", suffix="mask", extension="nii.gz"),
-            "mask_gm":      mask_liberal_MNI6_1mm,
-            "mask_gm_tight":mask_tight_MNI6_1mm,
-        },
-        "2mm": {
-            "T1w":          tflow_get("MNI152NLin6Asym", resolution="02", desc=None, suffix="T1w", extension="nii.gz"),
-            "brain":        tflow_get("MNI152NLin6Asym", resolution="02", desc="brain", suffix="T1w", extension="nii.gz"),
-            "mask":         tflow_get("MNI152NLin6Asym", resolution="02", desc="brain", suffix="mask", extension="nii.gz"),
-            "mask_gm":      mask_liberal_MNI6_2mm,
-            "mask_gm_tight":("MNI152NLin6Asym", "1mm", "mask_gm_tight"),
-        },
-        "3mm": {
-            "T1w":          ("MNI152NLin6Asym", "1mm", "T1w"),
-            "brain":        ("MNI152NLin6Asym", "1mm", "brain"),
-            "mask":         ("MNI152NLin6Asym", "1mm", "mask"),
-            "mask_gm":      ("MNI152NLin6Asym", "1mm", "mask_gm"),
-            "mask_gm_tight":("MNI152NLin6Asym", "1mm", "mask_gm_tight"),
-        },
-    },
     "MNI152NLin2009cAsym": {
         "1mm": {
             "T1w":          tflow_get("MNI152NLin2009cAsym", resolution="01", desc=None, suffix="T1w", extension="nii.gz"),
             "brain":        tflow_get("MNI152NLin2009cAsym", resolution="01", desc="brain", suffix="T1w", extension="nii.gz"),
             "mask":         tflow_get("MNI152NLin2009cAsym", resolution="01", desc="brain", suffix="mask", extension="nii.gz"),
+            "gmprob":       tflow_get("MNI152NLin2009cAsym", resolution="01", label="GM", suffix="probseg", extension="nii.gz"),
             "mask_gm":      mask_liberal_MNI9_1mm,
             "mask_gm_tight":mask_tight_MNI9_1mm,
         },
@@ -96,6 +74,7 @@ MNI_TEMPLATE_SOURCES = {
             "T1w":          tflow_get("MNI152NLin2009cAsym", resolution="02", desc=None, suffix="T1w", extension="nii.gz"),
             "brain":        tflow_get("MNI152NLin2009cAsym", resolution="02", desc="brain", suffix="T1w", extension="nii.gz"),
             "mask":         tflow_get("MNI152NLin2009cAsym", resolution="02", desc="brain", suffix="mask", extension="nii.gz"),
+            "gmprob":       tflow_get("MNI152NLin2009cAsym", resolution="02", label="GM", suffix="probseg", extension="nii.gz"),
             "mask_gm":      mask_liberal_MNI9_2mm,
             "mask_gm_tight":("MNI152NLin2009cAsym", "1mm", "mask_gm_tight"),
         },
@@ -103,8 +82,35 @@ MNI_TEMPLATE_SOURCES = {
             "T1w":          ("MNI152NLin2009cAsym", "1mm", "T1w"),
             "brain":        ("MNI152NLin2009cAsym", "1mm", "brain"),
             "mask":         ("MNI152NLin2009cAsym", "1mm", "mask"),
+            "gmprob":       ("MNI152NLin2009cAsym", "1mm", "gmprob"),
             "mask_gm":      ("MNI152NLin2009cAsym", "1mm", "mask_gm"),
             "mask_gm_tight":("MNI152NLin2009cAsym", "1mm", "mask_gm_tight"),
+        },
+    },
+    "MNI152NLin6Asym": {
+        "1mm": {
+            "T1w":          tflow_get("MNI152NLin6Asym", resolution="01", desc=None, suffix="T1w", extension="nii.gz"),
+            "brain":        tflow_get("MNI152NLin6Asym", resolution="01", desc="brain", suffix="T1w", extension="nii.gz"),
+            "mask":         tflow_get("MNI152NLin6Asym", resolution="01", desc="brain", suffix="mask", extension="nii.gz"),
+            "gmprob":       ("MNI152NLin2009cAsym", "1mm", "gmprob"), # resample from MNI9 since MNI6 doesn't have TPMs in templateflow
+            "mask_gm":      mask_liberal_MNI6_1mm,
+            "mask_gm_tight":mask_tight_MNI6_1mm,
+        },
+        "2mm": {
+            "T1w":          tflow_get("MNI152NLin6Asym", resolution="02", desc=None, suffix="T1w", extension="nii.gz"),
+            "brain":        tflow_get("MNI152NLin6Asym", resolution="02", desc="brain", suffix="T1w", extension="nii.gz"),
+            "mask":         tflow_get("MNI152NLin6Asym", resolution="02", desc="brain", suffix="mask", extension="nii.gz"),
+            "gmprob":       ("MNI152NLin6Asym", "1mm", "gmprob"),
+            "mask_gm":      mask_liberal_MNI6_2mm,
+            "mask_gm_tight":("MNI152NLin6Asym", "1mm", "mask_gm_tight"),
+        },
+        "3mm": {
+            "T1w":          ("MNI152NLin6Asym", "1mm", "T1w"),
+            "brain":        ("MNI152NLin6Asym", "1mm", "brain"),
+            "mask":         ("MNI152NLin6Asym", "1mm", "mask"),
+            "gmprob":       ("MNI152NLin6Asym", "1mm", "gmprob"),
+            "mask_gm":      ("MNI152NLin6Asym", "1mm", "mask_gm"),
+            "mask_gm_tight":("MNI152NLin6Asym", "1mm", "mask_gm_tight"),
         },
     },
 }

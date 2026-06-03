@@ -38,6 +38,17 @@ MNI_SOURCES = {
     "MNI305": {
         "1mm": tflow_get("MNI305", desc="brain", suffix="mask", extension="nii.gz"),
     },
+    "MNI152Lin": {
+        "1mm": tflow_get("MNI152Lin", resolution="01", desc=None, suffix="T1w", extension="nii.gz"),
+        "2mm": tflow_get("MNI152Lin", resolution="02", desc=None, suffix="T1w", extension="nii.gz"),
+    },
+    "MNI152NLin2009cSym": {
+        # templateflow only has res-1 (not res-01) for this space
+        "1mm": tflow_get("MNI152NLin2009cSym", resolution="1", desc=None, suffix="T1w", extension="nii.gz"),
+    },
+    "MNI152NLin6Sym": {
+        "1mm": tflow_get("MNI152NLin6Sym", resolution="01", desc=None, suffix="T1w", extension="nii.gz"),
+    },
 }
 ALL_RESOLUTIONS = ["1mm", "2mm", "3mm", "4mm"]  # always produced for every space
 
