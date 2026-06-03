@@ -148,6 +148,47 @@ Note: `prep0_1_template.py` reads `template/affines.yaml` directly (not the JSON
 
 ---
 
+#### MNI space transforms — `transform/transform.yaml`
+
+Single global file. Written by `prep0_2_transforms.py`. Registers EasyReg deformation fields for 11 bidirectional MNI space pairs.
+
+**File layout:**
+```
+transform/
+  transform.yaml
+  MNI152NLin2009cAsym/
+    from-{flo}_to-MNI152NLin2009cAsym_dir-backward_field.nii.gz
+    from-{flo}_to-MNI152NLin2009cAsym_dir-forward_field.nii.gz
+    ...
+  MNI152NLin6Asym/
+    from-{flo}_to-MNI152NLin6Asym_dir-backward_field.nii.gz
+    ...
+```
+
+Organized by target (hub) space. The `dir-backward` field resamples source → target (primary direction); `dir-forward` is the inverse.
+
+**YAML schema:**
+```yaml
+MNI152NLin2009cAsym:        # target space
+  MNI152NLin6Asym:          # source space
+    backward: {host: github-nispace, remote: "transform/MNI152NLin2009cAsym/from-MNI152NLin6Asym_to-MNI152NLin2009cAsym_dir-backward_field.nii.gz"}
+    forward:  {host: github-nispace, remote: "transform/MNI152NLin2009cAsym/from-MNI152NLin6Asym_to-MNI152NLin2009cAsym_dir-forward_field.nii.gz"}
+  # ... 6 more source spaces
+MNI152NLin6Asym:
+  # ... 4 source spaces
+```
+
+**11 supported pairs** (target ← source):
+
+| Target | Sources |
+|--------|---------|
+| `MNI152NLin2009cAsym` | `MNI152NLin6Asym`, `MNI152Lin`, `MNI305`, `MNIColin27`, `MNI152NLin2009cSym`, `MNI152NLin6Sym` |
+| `MNI152NLin6Asym` | `MNI152Lin`, `MNI305`, `MNIColin27`, `MNI152NLin6Sym`, `MNI152NLin2009cSym` |
+
+Fields are generated on a compute cluster using [EasyReg](https://surfer.nmr.mgh.harvard.edu/fswiki/EasyReg) (FreeSurfer 8.2) with pre-computed [SynthSeg](https://surfer.nmr.mgh.harvard.edu/fswiki/SynthSeg) segmentations and stored in the `llotter/mni_freesurfer` GIN repository.
+
+---
+
 #### Examples — `example/{name}/example.yaml`
 
 One file per example dataset. Data CSVs live alongside the yaml in `example/{name}/`.
@@ -187,6 +228,13 @@ registers them all. An explicit dict is also accepted (legacy).
 1. Run `prep0_0_affines.py` → writes `template/affines.yaml`
 2. Run `prep0_1_template.py` → generates files + writes `template/{space}/template.yaml`
 3. Commit → JSONs updated automatically
+4. Update `DATA_REPO_COMMIT`
+
+#### New or updated MNI space transform fields
+
+1. Update `gin_commit` in `prep0_2_transforms.py` to the relevant `llotter/mni_freesurfer` GIN commit
+2. Run `prep0_2_transforms.py` → downloads fields, writes `transform/transform.yaml`
+3. Commit → `build_datalib.py` compiles `transform.json` automatically
 4. Update `DATA_REPO_COMMIT`
 
 #### New example dataset

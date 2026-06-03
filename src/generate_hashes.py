@@ -4,7 +4,7 @@ import json
 import sys
 
 # Directories to include in hash generation
-DIRECTORIES = ['example', 'parcellation', 'reference', 'template']
+DIRECTORIES = ['example', 'parcellation', 'reference', 'template', 'transform']
 
 # Output file for hashes
 OUTPUT_FILE = 'file_hashes.json'
