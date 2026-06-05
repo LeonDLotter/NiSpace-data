@@ -9,7 +9,7 @@ from neuromaps import transforms
 wd = Path(__file__).parent.parent
 print(f"Working dir: {wd}")
 
-from nispace.utils.utils import apply_transform
+from nispace.transforms import mni_to_mni
 from nispace.utils.utils_datasets import download
 
 nispace_source_data_path = wd
@@ -59,7 +59,7 @@ for nii_fp in sorted(archive_dir.rglob("*.nii")):
 
     # space: MNI152NLin2009cAsym
     # transform from MNI6 to MNI2009c, apply mask and scale to [0, 1]
-    map_2009c = apply_transform(map_MNI6, mni_from="MNI152NLin6Asym", mni_to="MNI152NLin2009cAsym", order=3)
+    map_2009c = mni_to_mni(map_MNI6, mni_from="MNI152NLin6Asym", mni_to="MNI152NLin2009cAsym", order=3)
     map_2009c = image.math_img("(img * mask).astype(np.float32)", img=map_2009c, mask=mask_MNI9)
     map_2009c.to_filename(map_dir / f"{map_id}_space-MNI152NLin2009cAsym_desc-proc.nii.gz")
 

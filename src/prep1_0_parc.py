@@ -12,10 +12,13 @@ from neuromaps import images, transforms
 import templateflow.api as tflow
 import matplotlib.pyplot as plt
 
-# import NiSpace functions
-from nispace.utils.utils import relabel_nifti_parc, apply_transform
-from nispace.utils.utils_datasets import download, download_file
+# local imports
 from utils import tflow_get
+
+# import NiSpace functions
+from nispace.utils.utils import relabel_nifti_parc
+from nispace.utils.utils_datasets import download, download_file
+from nispace.transforms import mni_to_mni
 from nispace.datasets import template_lib
 from nispace.plotting import brainplot
 
@@ -373,7 +376,7 @@ for n_parcels in [100, 200, 400, 1000]:
     space = "MNI152NLin2009cAsym"
     print(space)
 
-    parc = apply_transform(
+    parc = mni_to_mni(
         img=wd / "parcellation" / name / "MNI152NLin6Asym" / f"parc-{name}_space-MNI152NLin6Asym.label.nii.gz",
         mni_from="MNI152NLin6Asym",
         mni_to="MNI152NLin2009cAsym",
@@ -838,7 +841,7 @@ for name, labels, level in [
 ]:
     
     # run transform
-    parc = apply_transform(
+    parc = mni_to_mni(
         img=wd / "parcellation" / name / "MNI152NLin6Asym" / f"parc-{name}_space-MNI152NLin6Asym.label.nii.gz",
         mni_from="MNI152NLin6Asym",
         mni_to="MNI152NLin2009cAsym",
@@ -1004,7 +1007,7 @@ for name, labels, level in [
     ("AALCortical",    labels_cx, "cortex"),
     ("AALSubcortical", labels_sc, "subcortex"),
 ]:
-    parc = apply_transform(
+    parc = mni_to_mni(
         img=wd / "parcellation" / name / "MNI152NLin6Asym" / f"parc-{name}_space-MNI152NLin6Asym.label.nii.gz",
         mni_from="MNI152NLin6Asym",
         mni_to="MNI152NLin2009cAsym",

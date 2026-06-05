@@ -13,7 +13,8 @@ gin_commit = "dead48f557087a694e93b633e863c641c21cbafb"
 
 # All 11 pairs as (ref, flo).
 # ref = target hub space, flo = source space.
-# backward field resamples flo into ref space (primary direction).
+# forward field resamples flo into ref space (pull convention, correct for nitransforms).
+# backward field is a push map (flo grid → ref coords), used by mri_easywarp.
 PAIRS = [
     ("MNI152NLin2009cAsym", "MNI152NLin6Asym"),
     ("MNI152NLin2009cAsym", "MNI152Lin"),
@@ -57,7 +58,7 @@ transform_dir = wd / "transform"
 transform_dir.mkdir(parents=True, exist_ok=True)
 
 # Nested dict: ref (target) → flo (source) → {backward, forward}
-# JSON access pattern: transform_json[mni_to][mni_from]["backward"]
+# JSON access pattern: transform_json[mni_to][mni_from]["forward"]  ← pull resampling
 transform_cfg = {}
 for ref, flo in PAIRS:
     if ref not in transform_cfg:

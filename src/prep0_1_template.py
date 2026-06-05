@@ -13,7 +13,7 @@ import templateflow.api as tflow
 wd = Path(__file__).parent.parent
 print(f"Working dir: {wd}")
 
-from nispace.utils.utils import apply_transform
+from nispace.transforms import mni_to_mni
 from nispace.utils.utils_datasets import download
 from neuromaps.datasets import fetch_fslr, fetch_fsaverage
 from utils import tflow_get
@@ -59,7 +59,7 @@ mask_tight_MNI9_1mm = image.math_img(
 
 # Sources for MNI templates.
 # Values are either a URL string (load/download directly) or a (space, res, desc) tuple
-# referencing an already-processed entry (resample if same space, apply_transform if different).
+# referencing an already-processed entry (resample if same space, transform if different).
 MNI_TEMPLATE_SOURCES = {
     "MNI152NLin2009cAsym": {
         "1mm": {
@@ -222,7 +222,7 @@ for space, space_data in MNI_TEMPLATE_SOURCES.items():
                 else:
                     # Different space — apply MNI-to-MNI transform, then check geometry
                     print(f"  Transforming {src_path.name} ({src_space} -> {space}) ...")
-                    apply_transform(
+                    mni_to_mni(
                         img=src_path,
                         mni_from=src_space,
                         mni_to=space,

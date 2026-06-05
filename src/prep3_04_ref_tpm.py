@@ -12,7 +12,7 @@ print(f"Working dir: {wd}")
 # import NiSpace functions
 from nispace.datasets import fetch_reference, reference_lib
 from nispace.io import load_img
-from nispace.utils.utils import apply_transform
+from nispace.transforms import mni_to_mni
 from nispace.utils.utils_datasets import download
 
 # nispace data path 
@@ -78,7 +78,7 @@ for m in reference_lib["tpm"]["map"]:
     # space: MNI152NLin2009cAsym
     # ----------------------------------------------------------------------------------------------
     print("Attempting MNI152NLin2009cAsym transform...")
-    map_MNI152NLin2009cAsym = apply_transform(
+    map_MNI152NLin2009cAsym = mni_to_mni(
         map_MNI152NLin6Asym, mni_from="MNI152NLin6Asym", mni_to="MNI152NLin2009cAsym", order=3
     )
     map_MNI152NLin2009cAsym.to_filename(fp.parent / fp.name.replace("6Asym", "2009cAsym"))
