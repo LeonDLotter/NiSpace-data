@@ -28,34 +28,71 @@ with open(nispace_data_path / "template" / "affines.yaml") as _f:
 FSLR_DENSITIES = ["4k", "8k", "32k", "164k"]
 FSAVERAGE_DENSITIES = ["3k", "10k", "41k", "164k"]
 
-# Liberal gray matter masks sourced from Schaefer parcellation (templateflow)
-mask_liberal_MNI6_1mm = image.math_img(
+# Liberal cortex gray matter masks sourced from Schaefer parcellation (templateflow)
+mask_liberalcortex_MNI6_1mm = image.math_img(
     "img > 0", 
     img=tflow_get("MNI152NLin6Asym", atlas="Schaefer2018", desc=f"100Parcels7Networks", resolution="01", suffix="dseg", extension="nii.gz")
 )
-mask_liberal_MNI6_2mm = image.math_img(
+mask_liberalcortex_MNI6_2mm = image.math_img(
     "img > 0", 
     img=tflow_get("MNI152NLin6Asym", atlas="Schaefer2018", desc=f"100Parcels7Networks", resolution="02", suffix="dseg", extension="nii.gz")
 )
-mask_liberal_MNI9_1mm = image.math_img(
+mask_liberalcortex_MNI9_1mm = image.math_img(
     "img > 0", 
     img=tflow_get("MNI152NLin2009cAsym", atlas="Schaefer2018", desc=f"100Parcels7Networks", resolution="01", suffix="dseg", extension="nii.gz")
 )
-mask_liberal_MNI9_2mm = image.math_img(
+mask_liberalcortex_MNI9_2mm = image.math_img(
     "img > 0", 
     img=tflow_get("MNI152NLin2009cAsym", atlas="Schaefer2018", desc=f"100Parcels7Networks", resolution="02", suffix="dseg", extension="nii.gz")
 )
 
-# Conservative gray matter masks sourced from freesurfer segmentation of MNI templates (gin)
+# Conservative cortex gray matter masks sourced from freesurfer segmentation of MNI templates (gin)
 gin_commit = "5839f92fdf207714fae18088da7a114b21a015c8"
-mask_tight_MNI6_1mm = image.math_img(
-    "img > 0", 
+mask_tightcortex_MNI6_1mm = image.math_img(
+    "img > 0",
     img=download(f"https://gin.g-node.org/llotter/mni_freesurfer/raw/{gin_commit}/parcellations/MNI152NLin6Asym/seg-aparc_space-MNI152NLin6Asym.nii.gz")
 )
-mask_tight_MNI9_1mm = image.math_img(
-    "img > 0", 
+mask_tightcortex_MNI9_1mm = image.math_img(
+    "img > 0",
     img=download(f"https://gin.g-node.org/llotter/mni_freesurfer/raw/{gin_commit}/parcellations/MNI152NLin2009cAsym/seg-aparc_space-MNI152NLin2009cAsym.nii.gz")
 )
+
+# Subcortex mask from HCP CIFTI grayordinates (natively MNI152NLin6Asym 2mm)
+# Atlas_ROIs.2.nii.gz defines exactly which subcortical voxels are included in fsLR grayordinates
+hcp_commit = "e2d5bbad6d48452deb15c4293556b535c1973a75"
+subcortexmask_MNI6_2mm = image.resample_img(
+    image.math_img(
+        "img > 0",
+        img=download(f"https://github.com/Washington-University/HCPpipelines/raw/{hcp_commit}/global/templates/91282_Greyordinates/Atlas_ROIs.2.nii.gz")
+    ),
+    target_affine=np.array(affines_db["MNI152NLin6Asym"]["2mm"]["affine"]),
+    target_shape=tuple(affines_db["MNI152NLin6Asym"]["2mm"]["shape"]),
+    interpolation="nearest", copy_header=True, force_resample=True,
+)
+subcortexmask_MNI6_1mm = image.resample_img(
+    subcortexmask_MNI6_2mm,
+    target_affine=np.array(affines_db["MNI152NLin6Asym"]["1mm"]["affine"]),
+    target_shape=tuple(affines_db["MNI152NLin6Asym"]["1mm"]["shape"]),
+    interpolation="nearest", copy_header=True, force_resample=True,
+)
+# Cross-space: MNI9 subcortexmask must be pre-computed (MNI9 is processed before MNI6 in the loop)
+subcortexmask_MNI9_2mm = mni_to_mni(
+    subcortexmask_MNI6_2mm, "MNI152NLin6Asym", "MNI152NLin2009cAsym", res="2mm", order=0
+)
+subcortexmask_MNI9_1mm = image.resample_img(
+    subcortexmask_MNI9_2mm,
+    target_affine=np.array(affines_db["MNI152NLin2009cAsym"]["1mm"]["affine"]),
+    target_shape=tuple(affines_db["MNI152NLin2009cAsym"]["1mm"]["shape"]),
+    interpolation="nearest", copy_header=True, force_resample=True,
+)
+
+# Combined GM masks: cortex | subcortex (computed at 1mm and 2mm; 3mm resampled via tuple)
+gmmask_MNI6_1mm      = image.math_img("a | b", a=mask_liberalcortex_MNI6_1mm, b=subcortexmask_MNI6_1mm)
+gmmask_MNI6_2mm      = image.math_img("a | b", a=mask_liberalcortex_MNI6_2mm, b=subcortexmask_MNI6_2mm)
+gmmask_MNI9_1mm      = image.math_img("a | b", a=mask_liberalcortex_MNI9_1mm, b=subcortexmask_MNI9_1mm)
+gmmask_MNI9_2mm      = image.math_img("a | b", a=mask_liberalcortex_MNI9_2mm, b=subcortexmask_MNI9_2mm)
+tightgmmask_MNI6_1mm = image.math_img("a | b", a=mask_tightcortex_MNI6_1mm,   b=subcortexmask_MNI6_1mm)
+tightgmmask_MNI9_1mm = image.math_img("a | b", a=mask_tightcortex_MNI9_1mm,   b=subcortexmask_MNI9_1mm)
 
 # Sources for MNI templates.
 # Values are either a URL string (load/download directly) or a (space, res, desc) tuple
@@ -63,54 +100,72 @@ mask_tight_MNI9_1mm = image.math_img(
 MNI_TEMPLATE_SOURCES = {
     "MNI152NLin2009cAsym": {
         "1mm": {
-            "T1w":          tflow_get("MNI152NLin2009cAsym", resolution="01", desc=None, suffix="T1w", extension="nii.gz"),
-            "brain":        tflow_get("MNI152NLin2009cAsym", resolution="01", desc="brain", suffix="T1w", extension="nii.gz"),
-            "mask":         tflow_get("MNI152NLin2009cAsym", resolution="01", desc="brain", suffix="mask", extension="nii.gz"),
-            "gmprob":       tflow_get("MNI152NLin2009cAsym", resolution="01", label="GM", suffix="probseg", extension="nii.gz"),
-            "mask_gm":      mask_liberal_MNI9_1mm,
-            "mask_gm_tight":mask_tight_MNI9_1mm,
+            "T1w":             tflow_get("MNI152NLin2009cAsym", resolution="01", desc=None, suffix="T1w", extension="nii.gz"),
+            "brain":           tflow_get("MNI152NLin2009cAsym", resolution="01", desc="brain", suffix="T1w", extension="nii.gz"),
+            "gmprob":          tflow_get("MNI152NLin2009cAsym", resolution="01", label="GM", suffix="probseg", extension="nii.gz"),
+            "brainmask":       tflow_get("MNI152NLin2009cAsym", resolution="01", desc="brain", suffix="mask", extension="nii.gz"),
+            "cortexmask":      mask_liberalcortex_MNI9_1mm,
+            "tightcortexmask": mask_tightcortex_MNI9_1mm,
+            "subcortexmask":   subcortexmask_MNI9_1mm,
+            "gmmask":          gmmask_MNI9_1mm,
+            "tightgmmask":     tightgmmask_MNI9_1mm,
         },
         "2mm": {
-            "T1w":          tflow_get("MNI152NLin2009cAsym", resolution="02", desc=None, suffix="T1w", extension="nii.gz"),
-            "brain":        tflow_get("MNI152NLin2009cAsym", resolution="02", desc="brain", suffix="T1w", extension="nii.gz"),
-            "mask":         tflow_get("MNI152NLin2009cAsym", resolution="02", desc="brain", suffix="mask", extension="nii.gz"),
-            "gmprob":       tflow_get("MNI152NLin2009cAsym", resolution="02", label="GM", suffix="probseg", extension="nii.gz"),
-            "mask_gm":      mask_liberal_MNI9_2mm,
-            "mask_gm_tight":("MNI152NLin2009cAsym", "1mm", "mask_gm_tight"),
+            "T1w":             tflow_get("MNI152NLin2009cAsym", resolution="02", desc=None, suffix="T1w", extension="nii.gz"),
+            "brain":           tflow_get("MNI152NLin2009cAsym", resolution="02", desc="brain", suffix="T1w", extension="nii.gz"),
+            "gmprob":          tflow_get("MNI152NLin2009cAsym", resolution="02", label="GM", suffix="probseg", extension="nii.gz"),
+            "brainmask":       tflow_get("MNI152NLin2009cAsym", resolution="02", desc="brain", suffix="mask", extension="nii.gz"),
+            "cortexmask":      mask_liberalcortex_MNI9_2mm,
+            "tightcortexmask": ("MNI152NLin2009cAsym", "1mm", "tightcortexmask"),
+            "subcortexmask":   subcortexmask_MNI9_2mm,
+            "gmmask":          gmmask_MNI9_2mm,
+            "tightgmmask":     ("MNI152NLin2009cAsym", "1mm", "tightgmmask"),
         },
         "3mm": {
-            "T1w":          ("MNI152NLin2009cAsym", "1mm", "T1w"),
-            "brain":        ("MNI152NLin2009cAsym", "1mm", "brain"),
-            "mask":         ("MNI152NLin2009cAsym", "1mm", "mask"),
-            "gmprob":       ("MNI152NLin2009cAsym", "1mm", "gmprob"),
-            "mask_gm":      ("MNI152NLin2009cAsym", "1mm", "mask_gm"),
-            "mask_gm_tight":("MNI152NLin2009cAsym", "1mm", "mask_gm_tight"),
+            "T1w":             ("MNI152NLin2009cAsym", "1mm", "T1w"),
+            "brain":           ("MNI152NLin2009cAsym", "1mm", "brain"),
+            "gmprob":          ("MNI152NLin2009cAsym", "1mm", "gmprob"),
+            "brainmask":       ("MNI152NLin2009cAsym", "1mm", "brainmask"),
+            "cortexmask":      ("MNI152NLin2009cAsym", "1mm", "cortexmask"),
+            "tightcortexmask": ("MNI152NLin2009cAsym", "1mm", "tightcortexmask"),
+            "subcortexmask":   ("MNI152NLin2009cAsym", "1mm", "subcortexmask"),
+            "gmmask":          ("MNI152NLin2009cAsym", "1mm", "gmmask"),
+            "tightgmmask":     ("MNI152NLin2009cAsym", "1mm", "tightgmmask"),
         },
     },
     "MNI152NLin6Asym": {
         "1mm": {
-            "T1w":          tflow_get("MNI152NLin6Asym", resolution="01", desc=None, suffix="T1w", extension="nii.gz"),
-            "brain":        tflow_get("MNI152NLin6Asym", resolution="01", desc="brain", suffix="T1w", extension="nii.gz"),
-            "mask":         tflow_get("MNI152NLin6Asym", resolution="01", desc="brain", suffix="mask", extension="nii.gz"),
-            "gmprob":       ("MNI152NLin2009cAsym", "1mm", "gmprob"), # resample from MNI9 since MNI6 doesn't have TPMs in templateflow
-            "mask_gm":      mask_liberal_MNI6_1mm,
-            "mask_gm_tight":mask_tight_MNI6_1mm,
+            "T1w":             tflow_get("MNI152NLin6Asym", resolution="01", desc=None, suffix="T1w", extension="nii.gz"),
+            "brain":           tflow_get("MNI152NLin6Asym", resolution="01", desc="brain", suffix="T1w", extension="nii.gz"),
+            "gmprob":          ("MNI152NLin2009cAsym", "1mm", "gmprob"),  # MNI6 has no TPMs in templateflow
+            "brainmask":       tflow_get("MNI152NLin6Asym", resolution="01", desc="brain", suffix="mask", extension="nii.gz"),
+            "cortexmask":      mask_liberalcortex_MNI6_1mm,
+            "tightcortexmask": mask_tightcortex_MNI6_1mm,
+            "subcortexmask":   subcortexmask_MNI6_1mm,
+            "gmmask":          gmmask_MNI6_1mm,
+            "tightgmmask":     tightgmmask_MNI6_1mm,
         },
         "2mm": {
-            "T1w":          tflow_get("MNI152NLin6Asym", resolution="02", desc=None, suffix="T1w", extension="nii.gz"),
-            "brain":        tflow_get("MNI152NLin6Asym", resolution="02", desc="brain", suffix="T1w", extension="nii.gz"),
-            "mask":         tflow_get("MNI152NLin6Asym", resolution="02", desc="brain", suffix="mask", extension="nii.gz"),
-            "gmprob":       ("MNI152NLin6Asym", "1mm", "gmprob"),
-            "mask_gm":      mask_liberal_MNI6_2mm,
-            "mask_gm_tight":("MNI152NLin6Asym", "1mm", "mask_gm_tight"),
+            "T1w":             tflow_get("MNI152NLin6Asym", resolution="02", desc=None, suffix="T1w", extension="nii.gz"),
+            "brain":           tflow_get("MNI152NLin6Asym", resolution="02", desc="brain", suffix="T1w", extension="nii.gz"),
+            "gmprob":          ("MNI152NLin6Asym", "1mm", "gmprob"),
+            "brainmask":       tflow_get("MNI152NLin6Asym", resolution="02", desc="brain", suffix="mask", extension="nii.gz"),
+            "cortexmask":      mask_liberalcortex_MNI6_2mm,
+            "tightcortexmask": ("MNI152NLin6Asym", "1mm", "tightcortexmask"),
+            "subcortexmask":   subcortexmask_MNI6_2mm,
+            "gmmask":          gmmask_MNI6_2mm,
+            "tightgmmask":     ("MNI152NLin6Asym", "1mm", "tightgmmask"),
         },
         "3mm": {
-            "T1w":          ("MNI152NLin6Asym", "1mm", "T1w"),
-            "brain":        ("MNI152NLin6Asym", "1mm", "brain"),
-            "mask":         ("MNI152NLin6Asym", "1mm", "mask"),
-            "gmprob":       ("MNI152NLin6Asym", "1mm", "gmprob"),
-            "mask_gm":      ("MNI152NLin6Asym", "1mm", "mask_gm"),
-            "mask_gm_tight":("MNI152NLin6Asym", "1mm", "mask_gm_tight"),
+            "T1w":             ("MNI152NLin6Asym", "1mm", "T1w"),
+            "brain":           ("MNI152NLin6Asym", "1mm", "brain"),
+            "gmprob":          ("MNI152NLin6Asym", "1mm", "gmprob"),
+            "brainmask":       ("MNI152NLin6Asym", "1mm", "brainmask"),
+            "cortexmask":      ("MNI152NLin6Asym", "1mm", "cortexmask"),
+            "tightcortexmask": ("MNI152NLin6Asym", "1mm", "tightcortexmask"),
+            "subcortexmask":   ("MNI152NLin6Asym", "1mm", "subcortexmask"),
+            "gmmask":          ("MNI152NLin6Asym", "1mm", "gmmask"),
+            "tightgmmask":     ("MNI152NLin6Asym", "1mm", "tightgmmask"),
         },
     },
 }

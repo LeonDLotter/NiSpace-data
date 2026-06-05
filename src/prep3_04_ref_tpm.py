@@ -38,7 +38,7 @@ for idx, tissue in [(0, "gm"), (1, "wm"), (2, "csf")]:
     
         
 # %% Load all atlases via reference_lib
-template_MNI152NLin6Asym = wd / "template" / "MNI152NLin6Asym" / "map" / "mask" / "tpl-MNI152NLin6Asym_desc-mask_res-2mm.nii.gz"
+template_MNI152NLin6Asym = wd / "template" / "MNI152NLin6Asym" / "map" / "brainmask" / "tpl-MNI152NLin6Asym_desc-brainmask_res-2mm.nii.gz"
 
 for m in reference_lib["tpm"]["map"]:
     print("Processing map:", m)

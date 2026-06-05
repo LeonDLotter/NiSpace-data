@@ -132,14 +132,28 @@ def parcellate_mapref(wd, dataset, spaces):
     Saves: reference/<dataset>/tab/dset-<dataset>_parc-<PARC>.csv.gz
     Raises: ValueError on missing maps, wrong output shape, or all-NaN map rows.
     """
-    from nispace.datasets import reference_lib
     from nispace.io import parcellate_data
 
     wd = Path(wd)
-    _, REFS_CX, _, _ = load_ref_lists(wd)
+    ref_yaml_path = wd / "reference" / dataset / "ref.yaml"
+    with open(ref_yaml_path) as f:
+        ref_cfg = yaml.safe_load(f)
+    yaml_maps = ref_cfg.get("maps", {})
+    cx_only = ref_cfg.get("cortex_only", False)
+
     PARCS, PARCS_CX, _ = load_parc_lists(wd)
-    parc_names = PARCS_CX if dataset in REFS_CX else PARCS
-    cx_only = dataset in REFS_CX
+    parc_names = PARCS_CX if cx_only else PARCS
+
+    def _is_private(entry):
+        if not isinstance(entry, dict):
+            return False  # "auto"
+        if "host" in entry:
+            return "private" in str(entry["host"])
+        if "L" in entry:
+            return "private" in str(entry["L"].get("host", ""))
+        if "R" in entry:
+            return "private" in str(entry["R"].get("host", ""))
+        return False
 
     def _fetch_paths(maps, space):
         map_dir = wd / "reference" / dataset / "map"
@@ -163,25 +177,17 @@ def parcellate_mapref(wd, dataset, spaces):
     ref_maps = {}
     for space in spaces:
         maps_in_space = []
-        for m in reference_lib[dataset]["map"].keys():
-            if space not in reference_lib[dataset]["map"][m]:
+        for m, m_spaces in yaml_maps.items():
+            if not isinstance(m_spaces, dict) or space not in m_spaces:
                 continue
-            entry = reference_lib[dataset]["map"][m][space]
-            private = False
-            if "host" in entry:
-                private = "private" in entry["host"]
-            elif "L" in entry:
-                private = "private" in entry["L"]["host"]
-            elif "R" in entry:
-                private = "private" in entry["R"]["host"]
-            if not private:
+            if not _is_private(m_spaces[space]):
                 maps_in_space.append(m)
         if maps_in_space:
             ref_maps[space] = maps_in_space
 
-    # unique maps across all filter_spaces (preserve reference_lib order)
+    # unique maps across all filter_spaces (preserve yaml order)
     ref_maps_avail_all = [
-        m for m in reference_lib[dataset]["map"]
+        m for m in yaml_maps
         if any(m in v for v in ref_maps.values())
     ]
     print(f"[{dataset}] cx_only={cx_only} | {len(parc_names)} parcellations")
@@ -336,6 +342,7 @@ DATASET_PARCELLATE_KWARGS = {
     "rsn":            dict(ignore_background_data=False, drop_background_parcels=False,   min_num_valid_datapoints=None, min_fraction_valid_datapoints=None),
     "rsn17":          dict(ignore_background_data=False, drop_background_parcels=False,   min_num_valid_datapoints=None, min_fraction_valid_datapoints=None),
     "tpm":            dict(ignore_background_data=False, drop_background_parcels=False,   min_num_valid_datapoints=None, min_fraction_valid_datapoints=None),
+    "mitobrain":      dict(ignore_background_data=True,  drop_background_parcels=True,    min_num_valid_datapoints=5,    min_fraction_valid_datapoints=0.3),
     "neurosynth":     dict(ignore_background_data=False, background_parcels_to_nan=False, min_num_valid_datapoints=None, min_fraction_valid_datapoints=None),
     "grf":            dict(ignore_background_data=False, background_parcels_to_nan=False, min_num_valid_datapoints=None, min_fraction_valid_datapoints=None),
 }

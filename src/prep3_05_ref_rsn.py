@@ -30,9 +30,8 @@ with zipfile.ZipFile(fp_zip, "r") as z:
 
 # %% Process each network map
 
-template_MNI6 = wd / "template" / "MNI152NLin6Asym" / "map" / "mask" / "tpl-MNI152NLin6Asym_desc-mask_res-2mm.nii.gz"
-mask_MNI6 = wd / "template" / "MNI152NLin6Asym" / "map" / "mask_gm" / "tpl-MNI152NLin6Asym_desc-mask_gm_res-2mm.nii.gz"
-mask_MNI9 = wd / "template" / "MNI152NLin2009cAsym" / "map" / "mask_gm" / "tpl-MNI152NLin2009cAsym_desc-mask_gm_res-2mm.nii.gz"
+mask_MNI6 = wd / "template" / "MNI152NLin6Asym" / "map" / "cortexmask" / "tpl-MNI152NLin6Asym_desc-mask_cortexmask_res-2mm.nii.gz"
+mask_MNI9 = wd / "template" / "MNI152NLin2009cAsym" / "map" / "cortexmask" / "tpl-MNI152NLin2009cAsym_desc-mask_cortexmask_res-2mm.nii.gz"
 
 for nii_fp in sorted(archive_dir.rglob("*.nii")):
     if nii_fp.name == "711-2B_333.nii":
@@ -52,7 +51,7 @@ for nii_fp in sorted(archive_dir.rglob("*.nii")):
 
     # space: MNI152NLin6Asym — resample to 2mm (maps are already in this space)
     # also apply mask and scale to [0, 1]
-    map_MNI6 = image.resample_to_img(img, template_MNI6, interpolation="continuous",
+    map_MNI6 = image.resample_to_img(img, mask_MNI6, interpolation="continuous",
                                      force_resample=True, copy_header=True)
     map_MNI6 = image.math_img("(img * mask / 100).astype(np.float32)", img=map_MNI6, mask=mask_MNI6)
     map_MNI6.to_filename(map_dir / f"{map_id}_space-MNI152NLin6Asym_desc-proc.nii.gz")

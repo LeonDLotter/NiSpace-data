@@ -1,0 +1,7 @@
+map,label,description,doi
+mito-complexi_pub-mosharov2025,CI,Respiratory chain complex I (NADH-ubiquinone oxidoreductase) density,10.1038/s41586-025-08740-6
+mito-complexii_pub-mosharov2025,CII,Respiratory chain complex II (succinate dehydrogenase) density,10.1038/s41586-025-08740-6
+mito-complexiv_pub-mosharov2025,CIV,Respiratory chain complex IV (cytochrome c oxidase) density,10.1038/s41586-025-08740-6
+mito-mitodensity_pub-mosharov2025,MitoD,Mitochondria tissue density,10.1038/s41586-025-08740-6
+mito-tissueresp_pub-mosharov2025,TRC,Tissue respiratory capacity,10.1038/s41586-025-08740-6
+mito-mitoresp_pub-mosharov2025,MRC,Mitochondrial respiratory capacity,10.1038/s41586-025-08740-6

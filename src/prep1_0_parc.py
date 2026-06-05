@@ -35,10 +35,10 @@ mni_spaces = ["MNI152NLin6Asym", "MNI152NLin2009cAsym"]
 # templates
 mni_templates = {
     "MNI152NLin6Asym": {
-        "mask": image.load_img(wd / "template" / "MNI152NLin6Asym" / "map" / "mask" / "tpl-MNI152NLin6Asym_desc-mask_res-1mm.nii.gz"),
+        "mask": image.load_img(wd / "template" / "MNI152NLin6Asym" / "map" / "brainmask" / "tpl-MNI152NLin6Asym_desc-brainmask_res-1mm.nii.gz"),
     },
     "MNI152NLin2009cAsym": {
-        "mask": image.load_img(wd / "template" / "MNI152NLin2009cAsym" / "map" / "mask" / "tpl-MNI152NLin2009cAsym_desc-mask_res-1mm.nii.gz"),
+        "mask": image.load_img(wd / "template" / "MNI152NLin2009cAsym" / "map" / "brainmask" / "tpl-MNI152NLin2009cAsym_desc-brainmask_res-1mm.nii.gz"),
     },
 }
 

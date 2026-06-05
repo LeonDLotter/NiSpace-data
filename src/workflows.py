@@ -5,17 +5,18 @@ Usage:
     python src/workflows.py <workflow_name>
 
 Available workflows:
-    all                prep0_0..2 → prep1_0..2 → prep3_01..11 → prep4_example
-    new_parcellation   prep1_0 → prep1_1 → prep1_2 → prep3_01..11 → prep4_example
+    all                prep0_0..2 → prep1_0..2 → prep3_01..12 → prep4_example
+    new_parcellation   prep1_0 → prep1_1 → prep1_2 → prep3_01..12 → prep4_example
     new_template       prep0_0 → prep0_1
     new_transforms     prep0_2
     new_example        prep4_example
-    update_all_maprefs prep3_01..06 (re-generate all map files + parcellated tables)
+    update_all_maprefs prep3_01..06,12 (re-generate all map files + parcellated tables)
     update_mrna        prep3_07_ref_mrna
     update_magicc      prep3_08_ref_magicc
     update_neurosynth  prep3_09_ref_neurosynth
     update_enigma      prep3_10_ref_enigma
     update_grf         prep3_11_ref_grf
+    update_mitobrain   prep3_12_ref_mitobrain
 """
 
 import subprocess
@@ -56,6 +57,7 @@ WORKFLOWS = {
         "prep3_09_ref_neurosynth.py",
         "prep3_10_ref_enigma.py",
         "prep3_11_ref_grf.py",
+        "prep3_12_ref_mitobrain.py",
         "prep4_example.py",
     ],
     "new_parcellation": [
@@ -73,6 +75,7 @@ WORKFLOWS = {
         "prep3_09_ref_neurosynth.py",
         "prep3_10_ref_enigma.py",
         "prep3_11_ref_grf.py",
+        "prep3_12_ref_mitobrain.py",
         "prep4_example.py",
     ],
     "new_template": [
@@ -92,6 +95,7 @@ WORKFLOWS = {
         "prep3_04_ref_tpm.py",
         "prep3_05_ref_rsn.py",
         "prep3_06_ref_rsn17.py",
+        "prep3_12_ref_mitobrain.py",
     ],
     "update_mrna": [
         "prep3_07_ref_mrna.py",
@@ -107,6 +111,9 @@ WORKFLOWS = {
     ],
     "update_grf": [
         "prep3_11_ref_grf.py",
+    ],
+    "update_mitobrain": [
+        "prep3_12_ref_mitobrain.py",
     ],
 }
 
