@@ -1,10 +1,10 @@
 name: rsn17
 label: RSN17
-description: The NiSpace "RSN17" dataset contains probabilistic resting-state network maps derived from individual-level cortical
-  parcellations of 1029 HCP subjects into 17 functional networks, generated as described in Kong et al., 2021 and made available
-  at https://github.com/ThomasYeoLab/Kong2022_ArealMSHBM. The maps are only available in fsLR and fsaverage spaces. Note that
-  the networks follow the Kong et al. naming convention, which differs from the 17 "Yeo networks". Please cite the original
-  publication when using these maps.
+description: The NiSpace "RSN17" dataset contains resting-state network probability maps describing the 17 "Kong" networks. 
+  The maps were derived from individual-level cortical parcellations of 1029 HCP subjects into 17 functional networks, 
+  generated as described in Kong et al., 2021 and made available at https://github.com/ThomasYeoLab/Kong2022_ArealMSHBM. 
+  The maps are only available in fsLR and fsaverage spaces. Note that the networks follow the Kong et al. naming convention, 
+  which differs from the 17 "Yeo networks". Please cite the original publication when using these maps.
 cortex_only: true
 citations:
 - ref: Kong et al., 2021

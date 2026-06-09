@@ -1,12 +1,11 @@
 name: enigmathick
 label: ENIGMAthick
-description: The NiSpace "ENIGMAthick" dataset is based on ENIGMA (Enhancing NeuroImaging Genetics through Meta-Analysis)
-  working group summary statistics as provided via the ENIGMA Toolbox v2.0.3 (https://github.com/MICA-MNI/ENIGMA). It contains
-  Cohen's d effect sizes (d_icv, largely ICV-corrected) for case-vs-control differences in cortical thickness and subcortical
-  volume across several neurological and psychiatric disorders. Cortical values are provided in the Desikan parcellation,
-  subcortical values in the Aseg parcellation. For some disorders, effect size maps are split by subtype and/or age group.
-  Use collection "Main" for a reduced collection of the main effect size maps. For each disorder, please cite the appropriate ENIGMA
-  working group publication (see map info table).
+description: The NiSpace "ENIGMAthick" dataset is based on ENIGMA analyses of brain structure across several neuro-psychiatric disorders. 
+  The original data is provided via the ENIGMA Toolbox v2.0.3 (https://github.com/MICA-MNI/ENIGMA). It contains Cohen's
+  d effect sizes (d_icv, largely ICV-corrected) for case-vs-control differences in cortical thickness and subcortical volume. 
+  Cortical values are provided in the Desikan parcellation, subcortical values in the Aseg parcellation. For some disorders, 
+  effect size maps are split by subtype and/or age group. Use collection "Main" for a reduced collection of the main effect size maps. 
+  For each disorder, please cite the appropriate ENIGMA working group publication (see map info table).
 default_collection: Main
 cortex_only: false
 citations:

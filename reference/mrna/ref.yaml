@@ -1,11 +1,11 @@
 name: mrna
 label: mRNA
-description: The NiSpace "mRNA" dataset is based on Allen Human Brain Atlas (AHBA) gene expression data published in Hawrylycz
-  et al., 2012. The dataset consists of mRNA expression data from postmortem brain tissue of six donors, mapped onto MNI or
-  fsaverage parcels using the abagen toolbox (Markello et al., 2021). The data was extracted using abagen.get_expression_data(...,
-  lr_mirror="bidirectional", norm_matched=False). Gene stability was assessed using a voxel-level atlas at 8mm isotropic resolution;
-  genes were retained if their mean donor-to-donor Spearman rank correlation exceeded 0.2. Please also cite publications associated
-  with gene set collections as appropriate.
+description: The NiSpace "mRNA" dataset contains whole-brain gene expression maps for > 10,000 genes based on parcel-wise mapping.
+  The dataset consists of Allen Brain Atlas mRNA expression data from postmortem brain tissue of six donors (Hawrylycz et al., 2012), 
+  mapped onto MNI or fsaverage parcels using the abagen toolbox (Markello et al., 2021; abagen.get_expression_data(...,
+  lr_mirror="bidirectional", norm_matched=False)). Gene stability was assessed using a voxel-level atlas at 8mm isotropic resolution;
+  genes were retained if their mean donor-to-donor Spearman rank correlation exceeded 0.2. 
+  Please cite the source publications, as well as publications associated with gene set collections as appropriate.
 default_collection: CellTypesPsychEncodeTPM
 cortex_only: false
 citations:

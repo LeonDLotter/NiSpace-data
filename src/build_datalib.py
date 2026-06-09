@@ -234,7 +234,7 @@ def _resolve_parc_spaces(parc_name: str, parc_dir: Path) -> dict:
                 ("map",     ".label.gii.gz"),
                 ("label",   ".label.txt"),
                 ("distmat", ".dist.csv.gz"),
-                ("spinmat", ".spin.npy"),
+                ("spinmat", ".spin.npz"),
                 ("l2rmap",  ".l2rmap.csv.gz"),
             ]:
                 hemi_entry = {}

@@ -1,8 +1,9 @@
 name: bigbrain
 label: BigBrain
-description: The NiSpace "BigBrain" dataset is adopted from the BigBrainWarp toolbox (https://bigbrainwarp.readthedocs.io)
-  by Paquola et al. The maps are fetched directly from the BigBrainWarp Sciebo folder (space="fsaverageOriginal") or downloaded
-  from the NiSpace-data GitHub repo (space="fsLR" or "fsaverage"; recommended). The data is subject to a CC BY-NC-SA 4.0 license.
+description: The NiSpace "BigBrain" dataset contains histological, microstructural, and functional differentiation maps.
+  The data is adopted from the BigBrainWarp toolbox (https://bigbrainwarp.readthedocs.io) by Paquola et al. The maps are 
+  fetched directly from the BigBrainWarp Sciebo folder (space="fsaverageOriginal") or downloaded from the NiSpace-data GitHub 
+  repo (space="fsLR" or "fsaverage"; recommended). The data is subject to a CC BY-NC-SA 4.0 license.
   Please cite the appropriate original publication for each map when used (see map info table).
 cortex_only: true
 citations:

@@ -1,9 +1,9 @@
 name: cortexfeatures
 label: CortexFeatures
-description: The NiSpace "CortexFeatures" dataset consists of different features of cortical topology available via neuromaps
-  (https://neuromaps-main.readthedocs.io/). Many of these maps were used in Shafiei et al., 2023. The maps are fetched directly
-  from neuromaps (space="fsLROriginal" or "fsaverageOriginal") or downloaded from the NiSpace-data GitHub repo (space="fsLR"
-  or "fsaverage"; recommended). Please cite the original publication for each map when used.
+description: The NiSpace "CortexFeatures" dataset consists of different features of cortical topology available via neuromaps.
+  Many of these maps were used in Shafiei et al., 2023. The maps are fetched directly from neuromaps (space="fsLROriginal" 
+  or "fsaverageOriginal") or downloaded from the NiSpace-data GitHub repo (space="fsLR" or "fsaverage"; recommended). 
+  Please cite neuromaps (https://neuromaps-main.readthedocs.io/) and the original publication for each map when used.
 cortex_only: true
 citations:
 - ref: Markello et al., 2022

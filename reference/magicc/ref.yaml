@@ -1,10 +1,10 @@
 name: magicc
 label: MAGICC
-description: The NiSpace "MAGICC" dataset is based on Allen Human Brain Atlas (AHBA) gene expression data published in Hawrylycz
-  et al., 2012. The dataset consists of mRNA expression data from postmortem brain tissue of six donors, mapped onto continuous
-  fsLR space as described in Wagstyl et al., 2024, and parcellated with integrated parcellation. Only genes that showed a
-  high reproducibility (>= 0.5, see paper) were retained. Please also cite publications associated with gene set collections
-  as appropriate.
+description: The NiSpace "MAGICC" dataset contains cortical gene expression maps for > 10,000 genes based on a continuous reconstruction.
+  The dataset consists of Allen Brain Atlas mRNA expression data from postmortem brain tissue of six donors (Hawrylycz et al., 2012), 
+  mapped onto continuous fsLR space as described in Wagstyl et al., 2024, and parcellated with integrated parcellation. 
+  Only genes that showed a high reproducibility (>= 0.5, see paper) were retained. 
+  Please cite the source publications, as well as publications associated with gene set collections as appropriate.
 default_collection: CellTypesPsychEncodeTPM
 cortex_only: true
 citations:

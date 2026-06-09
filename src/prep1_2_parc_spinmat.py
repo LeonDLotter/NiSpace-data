@@ -1,15 +1,14 @@
 # %% Init
 
 from pathlib import Path
+import tempfile
 import numpy as np
 from neuromaps import images
-from neuromaps.datasets import fetch_fsaverage, fetch_fslr
-from neuromaps.nulls.spins import gen_spinsamples, get_parcel_centroids
 
 wd = Path(__file__).parent.parent
 print(f"Working dir: {wd}")
 
-from nispace.nulls import _img_density_for_neuromaps
+from nispace.nulls import generate_cornblath_mat, _img_density_for_neuromaps
 
 # local utils
 import sys
@@ -22,13 +21,14 @@ nispace_source_data_path = wd
 # settings
 N_PERM = 10000
 SEED = 42
+N_PROC = -1  # -1 = all available cores; gen_spinsamples is GIL-free (cKDTree), threads scale well
 
 # all parcellations (aliases excluded)
 PARCS, _, _ = load_parc_lists(wd)
 print("PARCS:", PARCS)
 
 
-# %% Generate spin matrices
+# %% Generate Cornblath transition matrices
 
 for parc in PARCS:
     print(f"\n{'='*60}\nParcellation: {parc}")
@@ -55,50 +55,35 @@ for parc in PARCS:
         n_rh = len(np.trim_zeros(np.unique(parc_rh.darrays[0].data)))
         print(f"  Parcels: {n_lh} LH + {n_rh} RH = {n_lh + n_rh} total")
 
-        # detect density and atlas
         density = _img_density_for_neuromaps((parc_lh, parc_rh))
-        atlas = "fsaverage" if "fsa" in space.lower() else "fslr"
-        print(f"  Atlas: {atlas}, density: {density}")
+        print(f"  Density: {density}")
 
-        # fetch sphere surfaces for centroid extraction
-        if atlas == "fsaverage":
-            surfaces = fetch_fsaverage(density=density)["sphere"]
-        else:
-            surfaces = fetch_fslr(density=density)["sphere"]
-
-        # get parcel centroids on sphere
-        coords, hemiid = get_parcel_centroids(
-            surfaces,
-            parcellation=(parc_lh, parc_rh),
-            method="surface"
-        )
-        assert coords.shape[0] == n_lh + n_rh, f"Wrong number of parcels in centroid calculation: {n_lh + n_rh} != {coords.shape[0]}"
-        assert int((hemiid == 0).sum()) == n_lh, f"LH parcel count mismatch: {n_lh} != {int((hemiid == 0).sum())}"
-
-        # generate alexander_bloch spins ("original" = nearest-neighbor, fast)
-        print(f"  Generating {N_PERM} spins (alexander_bloch) ...", end=" ", flush=True)
-        spins = gen_spinsamples(
-            coords, hemiid,
-            n_rotate=N_PERM,
-            method="original",
-            seed=SEED,
-            verbose=False,
-        )  # shape: (n_lh + n_rh, N_PERM), dtype int
-
-        # split per hemisphere; make RH indices local to [0, n_rh)
-        spins_lh = spins[:n_lh, :].astype(np.int32)
-        spins_rh = (spins[n_lh:, :] - n_lh).astype(np.int32)
-        assert spins_lh.min() >= 0 and spins_lh.max() < n_lh
-        assert spins_rh.min() >= 0 and spins_rh.max() < n_rh
-
-        for mat, hemi in zip([spins_lh, spins_rh], ["L", "R"]):
-            out_path = (
-                nispace_source_data_path / "parcellation" / parc / space /
-                f"parc-{parc}_space-{space}_hemi-{hemi}.spin.npy"
+        # generate Cornblath fractional transition matrices
+        # T_lh: (N_PERM, n_lh, n_lh), T_rh: (N_PERM, n_rh, n_rh), dtype float16
+        print(f"  Generating {N_PERM} Cornblath transition matrices ...", end=" ", flush=True)
+        with tempfile.TemporaryDirectory() as memmap_dir:
+            T_lh, T_rh = generate_cornblath_mat(
+                parc=(parc_lh, parc_rh),
+                parc_space=space,
+                n_perm=N_PERM,
+                seed=SEED,
+                n_proc=N_PROC,
+                dtype=np.float16,
+                memmap_dir=memmap_dir,
             )
-            np.save(out_path, mat)
+            assert T_lh.shape == (N_PERM, n_lh, n_lh), f"T_lh shape mismatch: {T_lh.shape}"
+            assert T_rh.shape == (N_PERM, n_rh, n_rh), f"T_rh shape mismatch: {T_rh.shape}"
+            assert T_lh.dtype == np.float16
+            assert T_rh.dtype == np.float16
 
-        print(f"saved {spins_lh.shape}, {spins_rh.shape}")
+            for mat, hemi in zip([T_lh, T_rh], ["L", "R"]):
+                out_path = (
+                    nispace_source_data_path / "parcellation" / parc / space /
+                    f"parc-{parc}_space-{space}_hemi-{hemi}.spin.npz"
+                )
+                np.savez_compressed(str(out_path), data=mat)
+
+        print(f"saved hemi-L {T_lh.shape}, hemi-R {T_rh.shape}")
 
 print("\nDone.")
 
