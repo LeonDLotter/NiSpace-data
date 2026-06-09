@@ -13,9 +13,11 @@ citations:
   doi: 10.1016/j.neuroimage.2020.117038
 collections:
   All:
-    description: 4000 Gaussian random fields (1000 per smoothness level alpha 0, 1, 2, 3).
+    description: 13000 Gaussian random fields (10k for smoothness level alpha 0; 1000 per smoothness level alpha 1, 2, 3).
   Alpha0:
-    description: 1000 spatially unstructured (white noise) GRFs (alpha=0).
+    description: 10000 spatially unstructured (white noise) GRFs (alpha=0).
   ByAlpha:
-    description: All 4000 GRFs grouped by smoothness parameter (alpha).
+    description: All 13000 GRFs grouped by smoothness parameter (alpha).
+  ByAlpha1000:
+    description: 1000 GRFs for each smoothness level alpha, grouped by alpha.
 tabs: auto

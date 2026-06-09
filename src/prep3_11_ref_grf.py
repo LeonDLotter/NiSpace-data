@@ -80,8 +80,9 @@ def gaussian_random_field(x, y, z, noise=None, alpha=3.0, normalize=True, seed=N
 
 # %% Setup
 
-# reference space: 2mm MNI152NLin2009cAsym
-mask_img = nib.load(wd / "template" / "MNI152NLin2009cAsym" / "map" / "brainmask" / "tpl-MNI152NLin2009cAsym_desc-brainmask_res-2mm.nii.gz")
+# reference space: 2mm MNI152NLin6Asym
+space = "MNI152NLin6Asym"
+mask_img = nib.load(wd / "template" / space / "map" / "brainmask" / f"tpl-{space}_desc-brainmask_res-2mm.nii.gz")
 
 # generate + mask one GRF and return a float32 NIfTI
 def generate_grf(alpha, seed, mirrored=True):
@@ -99,8 +100,9 @@ def generate_grf(alpha, seed, mirrored=True):
 
 # settings
 alphas = [0.0, 1.0, 2.0, 3.0]
-n_grf  = 1000   # equal count for all alpha levels
-
+n_grf  = {alpha: 10000 if alpha == 0.0 else 1000 for alpha in alphas}
+overwrite_niftis = True
+overwrite_tables  = True
 
 # %% Phase 1 — generate and save GRF maps to external drive
 
@@ -110,7 +112,7 @@ grf_data_path.mkdir(parents=True, exist_ok=True)
 
 def _gen_and_save(alpha, seed):
     out = grf_data_path / f"alpha-{alpha:.1f}_seed-{seed:04d}.nii.gz"
-    if out.exists():
+    if out.exists() and not overwrite_niftis:
         return
     img = generate_grf(alpha=alpha, seed=seed)
     math_img("img.astype(np.float32)", img=img).to_filename(out)
@@ -120,7 +122,7 @@ for alpha in alphas:
     print(f"Alpha {alpha} ...")
     Parallel(n_jobs=-1)(
         delayed(_gen_and_save)(alpha, seed)
-        for seed in tqdm(range(n_grf), desc=f"alpha={alpha}")
+        for seed in tqdm(range(n_grf[alpha]), desc=f"alpha={alpha}")
     )
 
 
@@ -130,32 +132,30 @@ print("=== Phase 2: parcellating GRF maps ===")
 
 # ordered list of all map paths and their labels
 map_paths  = [grf_data_path / f"alpha-{a:.1f}_seed-{s:04d}.nii.gz"
-              for a in alphas for s in range(n_grf)]
-map_labels = [f"alpha-{a:.1f}_seed-{s:04d}" for a in alphas for s in range(n_grf)]
-
-parc_space = "MNI152NLin2009cAsym"
+              for a in alphas for s in range(n_grf[a])]
+map_labels = [f"alpha-{a:.1f}_seed-{s:04d}" for a in alphas for s in range(n_grf[a])]
 
 for parc_name in PARCS:
     print(parc_name)
 
     out_path = nispace_source_data_path / "reference" / "grf" / "tab" / f"dset-grf_parc-{parc_name}.csv.gz"
-    if out_path.exists():
+    if out_path.exists() and not overwrite_tables:
         print("  Already exists — skipping")
         continue
 
-    parc_img = load_parc(wd, parc_name, parc_space)
-    labels   = load_parc_labels(wd, parc_name, parc_space)
+    parc_img = load_parc(wd, parc_name, space)
+    labels   = load_parc_labels(wd, parc_name, space)
 
     parcellater = Parcellater(
         parcellation=parc_img,
-        space=parc_space,
+        space=space,
         resampling_target="data",
     ).fit()
 
     def _parcellate(map_path):
         return parcellater.transform(
             data=map_path,
-            space=parc_space,
+            space=space,
             **DATASET_PARCELLATE_KWARGS["grf"],
         ).astype(np.float16)
 
@@ -191,6 +191,12 @@ all_grf.loc[all_grf.str.contains("alpha-0.0")].to_csv(ref_dir / "collection-Alph
 write_json(
     {f"alpha-{a}": [idx for idx in map_labels if idx.startswith(f"alpha-{a:.01f}")] for a in alphas},
     ref_dir / "collection-ByAlpha.collect",
+)
+
+# ByAlpha1000
+write_json(
+    {f"alpha-{a}": [idx for idx in map_labels if idx.startswith(f"alpha-{a:.01f}")][:1000] for a in alphas},
+    ref_dir / "collection-ByAlpha1000.collect",
 )
 
 # %%
