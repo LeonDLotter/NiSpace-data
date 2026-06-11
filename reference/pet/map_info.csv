@@ -21,12 +21,12 @@ target-D1_tracer-sch23390_n-13_dx-hc_pub-kaller2017,D1,[11C]SCH23390,BPnd,kaller
 target-D23_tracer-fallypride_n-49_dx-hc_pub-jaworska2020,D23,[18F]Fallypride,BPnd,jaworska2020,hc,49,,18.41,0.57,,,10.1038/s41386-020-0662-7,neuromaps,CC BY-NC-SA 4.0,
 target-D23_tracer-flb457_n-37_dx-hc_pub-smith2017,D23,[11C]FLB-457,BPnd,smith2017,hc,37,20,48.36,16.93,,,10.1177/0271678X17737693,neuromaps,CC BY-NC-SA 4.0,
 target-D23_tracer-flb457_n-55_dx-hc_pub-sandiego2015,D23,[11C]FLB-457,BPnd,sandiego2015,hc,55,29,32.45,9.69,,,10.1038/jcbfm.2014.237; 10.1177/0271678X17737693; 10.1038/s41386-019-0456-y; 10.1001/jamapsychiatry.2014.2414; 10.1038/npp.2017.223 ,neuromaps,CC BY-NC-SA 4.0,
-target-D2_tracer-raclopride_n-156_dx-hc_pub-malen2022,D23,[11C]Raclopride,BPnd,malen2022,hc,156,36,27.76,9.44,19,71,10.1016/j.neuroimage.2022.119149,neuromaps,CC0 1.0,
-target-D2_tracer-raclopride_n-7_dx-hc_pub-alarkurtti2015,D23,[11C]Raclopride,BPnd,alarkurtti2015,hc,7,0,24,2,,,10.1038/jcbfm.2015.53 ,neuromaps,CC BY-NC-SA 4.0,
+target-D23_tracer-raclopride_n-156_dx-hc_pub-malen2022,D23,[11C]Raclopride,BPnd,malen2022,hc,156,36,27.76,9.44,19,71,10.1016/j.neuroimage.2022.119149,neuromaps,CC0 1.0,
+target-D23_tracer-raclopride_n-7_dx-hc_pub-alarkurtti2015,D23,[11C]Raclopride,BPnd,alarkurtti2015,hc,7,0,24,2,,,10.1038/jcbfm.2015.53 ,neuromaps,CC BY-NC-SA 4.0,
 target-DAT_tracer-fepe2i_n-6_dx-hc_pub-sasaki2012,DAT,[18F]FE-PE2I,BPnd,sasaki2012,hc,6,,31.06,7.7,,,10.2967/jnumed.111.101626,neuromaps,CC BY-NC-SA 4.0,
 target-DAT_tracer-fpcit_n-174_dx-hc_pub-dukart2018,DAT,[123I]-FP-CIT,SUVR,dukart2018,hc,174,65,61,11,,,10.1038/s41598-018-22444-0,neuromaps,CC BY-NC-SA 4.0,"SPECT, not PET!"
 target-DAT_tracer-fpcit_n-30_dx-hc_pub-garciagomez2013,DAT,[123I]-FP-CIT,SUVR,garciagomez2013,hc,30,,,,,,10.1016/j.remn.2013.02.009,author repository,free,"SPECT, not PET!"
-target-FDOPA_tracer-fluorodopa_n-12_dx-hc_pub-garciagomez2018,FDOPA,[18F]DOPA,,garciagomez2018,hc,12,,,,,,10.33588/imagendiagnostica.901.2,author repository,free,
+target-FDOPA_tracer-fluorodopa_n-12_dx-hc_pub-garciagomez2018,FDOPA,[18F]DOPA,,garciagomez2018,hc,12,,,,,,10.33588/imagendiagnostica.901.2,author repository,free,"Unlike other tracers, [18F]DOPA measures AADC activity (dopamine synthesis), not receptor/transporter density"
 target-GABAa_tracer-flumazenil_n-16_dx-hc_pub-norgaard2021,GABAa,[11C]Flumazenil,Bmax,norgaard2021,hc,16,9,26.6,8,19,46,10.1016/j.neuroimage.2021.117878,neuromaps,CC BY-NC-SA 4.0,"Processed in fsaverage space, use volumetric maps only for subcortex!"
 target-GABAa_tracer-flumazenil_n-6_dx-hc_pub-dukart2018,GABAa,[11C]Flumazenil,BPnd,dukart2018,hc,6,,43,4,,,10.1038/s41598-018-22444-0,neuromaps,CC BY-NC-SA 4.0,
 target-GABAa_tracer-flumazenil_n-10_dx-hc_pub-kaulen2022,GABAa,[11C]Flumazenil,BPnd,kaulen2022,hc,10,0,26.6,7,,,10.1002/hbm.25778; 10.1016/j.neuroimage.2020.117160,private NiSpace OSF; Juelich-data,on application,
