@@ -22,6 +22,9 @@ resolutions:
     subcortexmask:
       host: github-nispace
       remote: template/MNI152NLin6Asym/map/subcortexmask/tpl-MNI152NLin6Asym_desc-subcortexmask_res-1mm.nii.gz
+    cerebellummask:
+      host: github-nispace
+      remote: template/MNI152NLin6Asym/map/cerebellummask/tpl-MNI152NLin6Asym_desc-cerebellummask_res-1mm.nii.gz
     gmmask:
       host: github-nispace
       remote: template/MNI152NLin6Asym/map/gmmask/tpl-MNI152NLin6Asym_desc-gmmask_res-1mm.nii.gz
@@ -50,6 +53,9 @@ resolutions:
     subcortexmask:
       host: github-nispace
       remote: template/MNI152NLin6Asym/map/subcortexmask/tpl-MNI152NLin6Asym_desc-subcortexmask_res-2mm.nii.gz
+    cerebellummask:
+      host: github-nispace
+      remote: template/MNI152NLin6Asym/map/cerebellummask/tpl-MNI152NLin6Asym_desc-cerebellummask_res-2mm.nii.gz
     gmmask:
       host: github-nispace
       remote: template/MNI152NLin6Asym/map/gmmask/tpl-MNI152NLin6Asym_desc-gmmask_res-2mm.nii.gz
@@ -78,6 +84,9 @@ resolutions:
     subcortexmask:
       host: github-nispace
       remote: template/MNI152NLin6Asym/map/subcortexmask/tpl-MNI152NLin6Asym_desc-subcortexmask_res-3mm.nii.gz
+    cerebellummask:
+      host: github-nispace
+      remote: template/MNI152NLin6Asym/map/cerebellummask/tpl-MNI152NLin6Asym_desc-cerebellummask_res-3mm.nii.gz
     gmmask:
       host: github-nispace
       remote: template/MNI152NLin6Asym/map/gmmask/tpl-MNI152NLin6Asym_desc-gmmask_res-3mm.nii.gz

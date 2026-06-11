@@ -60,17 +60,27 @@ mask_tightcortex_MNI9_1mm = image.math_img(
 # Subcortex mask from HCP CIFTI grayordinates (natively MNI152NLin6Asym 2mm)
 # Atlas_ROIs.2.nii.gz defines exactly which subcortical voxels are included in fsLR grayordinates
 hcp_commit = "e2d5bbad6d48452deb15c4293556b535c1973a75"
+hcp_subcortex = download(f"https://github.com/Washington-University/HCPpipelines/raw/{hcp_commit}/global/templates/91282_Greyordinates/Atlas_ROIs.2.nii.gz")
 subcortexmask_MNI6_2mm = image.resample_img(
-    image.math_img(
-        "img > 0",
-        img=download(f"https://github.com/Washington-University/HCPpipelines/raw/{hcp_commit}/global/templates/91282_Greyordinates/Atlas_ROIs.2.nii.gz")
-    ),
+    image.math_img("(img != 0) & (img != 8) & (img != 47)", img=hcp_subcortex),
     target_affine=np.array(affines_db["MNI152NLin6Asym"]["2mm"]["affine"]),
     target_shape=tuple(affines_db["MNI152NLin6Asym"]["2mm"]["shape"]),
     interpolation="nearest", copy_header=True, force_resample=True,
 )
+cbmask_MNI6_2mm = image.resample_img(
+    image.math_img("(img == 8) | (img == 47)", img=hcp_subcortex),
+    target_affine=np.array(affines_db["MNI152NLin6Asym"]["2mm"]["affine"]),
+    target_shape=tuple(affines_db["MNI152NLin6Asym"]["2mm"]["shape"]),
+    interpolation="nearest", copy_header=True, force_resample=True,
+) 
 subcortexmask_MNI6_1mm = image.resample_img(
     subcortexmask_MNI6_2mm,
+    target_affine=np.array(affines_db["MNI152NLin6Asym"]["1mm"]["affine"]),
+    target_shape=tuple(affines_db["MNI152NLin6Asym"]["1mm"]["shape"]),
+    interpolation="nearest", copy_header=True, force_resample=True,
+)
+cbmask_MNI6_1mm = image.resample_img(
+    cbmask_MNI6_2mm,
     target_affine=np.array(affines_db["MNI152NLin6Asym"]["1mm"]["affine"]),
     target_shape=tuple(affines_db["MNI152NLin6Asym"]["1mm"]["shape"]),
     interpolation="nearest", copy_header=True, force_resample=True,
@@ -79,20 +89,29 @@ subcortexmask_MNI6_1mm = image.resample_img(
 subcortexmask_MNI9_2mm = mni_to_mni(
     subcortexmask_MNI6_2mm, "MNI152NLin6Asym", "MNI152NLin2009cAsym", res="2mm", order=0
 )
+cbmask_MNI9_2mm = mni_to_mni(
+    cbmask_MNI6_2mm, "MNI152NLin6Asym", "MNI152NLin2009cAsym", res="2mm", order=0
+)
 subcortexmask_MNI9_1mm = image.resample_img(
     subcortexmask_MNI9_2mm,
     target_affine=np.array(affines_db["MNI152NLin2009cAsym"]["1mm"]["affine"]),
     target_shape=tuple(affines_db["MNI152NLin2009cAsym"]["1mm"]["shape"]),
     interpolation="nearest", copy_header=True, force_resample=True,
 )
+cbmask_MNI9_1mm = image.resample_img(
+    cbmask_MNI9_2mm,
+    target_affine=np.array(affines_db["MNI152NLin2009cAsym"]["1mm"]["affine"]),
+    target_shape=tuple(affines_db["MNI152NLin2009cAsym"]["1mm"]["shape"]),
+    interpolation="nearest", copy_header=True, force_resample=True,
+)
 
-# Combined GM masks: cortex | subcortex (computed at 1mm and 2mm; 3mm resampled via tuple)
-gmmask_MNI6_1mm      = image.math_img("a | b", a=mask_liberalcortex_MNI6_1mm, b=subcortexmask_MNI6_1mm)
-gmmask_MNI6_2mm      = image.math_img("a | b", a=mask_liberalcortex_MNI6_2mm, b=subcortexmask_MNI6_2mm)
-gmmask_MNI9_1mm      = image.math_img("a | b", a=mask_liberalcortex_MNI9_1mm, b=subcortexmask_MNI9_1mm)
-gmmask_MNI9_2mm      = image.math_img("a | b", a=mask_liberalcortex_MNI9_2mm, b=subcortexmask_MNI9_2mm)
-tightgmmask_MNI6_1mm = image.math_img("a | b", a=mask_tightcortex_MNI6_1mm,   b=subcortexmask_MNI6_1mm)
-tightgmmask_MNI9_1mm = image.math_img("a | b", a=mask_tightcortex_MNI9_1mm,   b=subcortexmask_MNI9_1mm)
+# Combined GM masks: cortex | subcortex | cerebellum (computed at 1mm and 2mm; 3mm resampled via tuple)
+gmmask_MNI6_1mm      = image.math_img("a | b | c", a=mask_liberalcortex_MNI6_1mm, b=subcortexmask_MNI6_1mm, c=cbmask_MNI6_1mm)
+gmmask_MNI6_2mm      = image.math_img("a | b | c", a=mask_liberalcortex_MNI6_2mm, b=subcortexmask_MNI6_2mm, c=cbmask_MNI6_2mm)
+gmmask_MNI9_1mm      = image.math_img("a | b | c", a=mask_liberalcortex_MNI9_1mm, b=subcortexmask_MNI9_1mm, c=cbmask_MNI9_1mm)
+gmmask_MNI9_2mm      = image.math_img("a | b | c", a=mask_liberalcortex_MNI9_2mm, b=subcortexmask_MNI9_2mm, c=cbmask_MNI9_2mm)
+tightgmmask_MNI6_1mm = image.math_img("a | b | c", a=mask_tightcortex_MNI6_1mm,   b=subcortexmask_MNI6_1mm, c=cbmask_MNI6_1mm)
+tightgmmask_MNI9_1mm = image.math_img("a | b | c", a=mask_tightcortex_MNI9_1mm,   b=subcortexmask_MNI9_1mm, c=cbmask_MNI9_1mm)
 
 # Sources for MNI templates.
 # Values are either a URL string (load/download directly) or a (space, res, desc) tuple
@@ -107,6 +126,7 @@ MNI_TEMPLATE_SOURCES = {
             "cortexmask":      mask_liberalcortex_MNI9_1mm,
             "tightcortexmask": mask_tightcortex_MNI9_1mm,
             "subcortexmask":   subcortexmask_MNI9_1mm,
+            "cerebellummask":  cbmask_MNI9_1mm,
             "gmmask":          gmmask_MNI9_1mm,
             "tightgmmask":     tightgmmask_MNI9_1mm,
         },
@@ -118,6 +138,7 @@ MNI_TEMPLATE_SOURCES = {
             "cortexmask":      mask_liberalcortex_MNI9_2mm,
             "tightcortexmask": ("MNI152NLin2009cAsym", "1mm", "tightcortexmask"),
             "subcortexmask":   subcortexmask_MNI9_2mm,
+            "cerebellummask":  cbmask_MNI9_2mm,
             "gmmask":          gmmask_MNI9_2mm,
             "tightgmmask":     ("MNI152NLin2009cAsym", "1mm", "tightgmmask"),
         },
@@ -129,6 +150,7 @@ MNI_TEMPLATE_SOURCES = {
             "cortexmask":      ("MNI152NLin2009cAsym", "1mm", "cortexmask"),
             "tightcortexmask": ("MNI152NLin2009cAsym", "1mm", "tightcortexmask"),
             "subcortexmask":   ("MNI152NLin2009cAsym", "1mm", "subcortexmask"),
+            "cerebellummask":  ("MNI152NLin2009cAsym", "1mm", "cerebellummask"),
             "gmmask":          ("MNI152NLin2009cAsym", "1mm", "gmmask"),
             "tightgmmask":     ("MNI152NLin2009cAsym", "1mm", "tightgmmask"),
         },
@@ -142,6 +164,7 @@ MNI_TEMPLATE_SOURCES = {
             "cortexmask":      mask_liberalcortex_MNI6_1mm,
             "tightcortexmask": mask_tightcortex_MNI6_1mm,
             "subcortexmask":   subcortexmask_MNI6_1mm,
+            "cerebellummask":  cbmask_MNI6_1mm,
             "gmmask":          gmmask_MNI6_1mm,
             "tightgmmask":     tightgmmask_MNI6_1mm,
         },
@@ -153,6 +176,7 @@ MNI_TEMPLATE_SOURCES = {
             "cortexmask":      mask_liberalcortex_MNI6_2mm,
             "tightcortexmask": ("MNI152NLin6Asym", "1mm", "tightcortexmask"),
             "subcortexmask":   subcortexmask_MNI6_2mm,
+            "cerebellummask":  cbmask_MNI6_2mm,
             "gmmask":          gmmask_MNI6_2mm,
             "tightgmmask":     ("MNI152NLin6Asym", "1mm", "tightgmmask"),
         },
@@ -164,6 +188,7 @@ MNI_TEMPLATE_SOURCES = {
             "cortexmask":      ("MNI152NLin6Asym", "1mm", "cortexmask"),
             "tightcortexmask": ("MNI152NLin6Asym", "1mm", "tightcortexmask"),
             "subcortexmask":   ("MNI152NLin6Asym", "1mm", "subcortexmask"),
+            "cerebellummask":  ("MNI152NLin6Asym", "1mm", "cerebellummask"),
             "gmmask":          ("MNI152NLin6Asym", "1mm", "gmmask"),
             "tightgmmask":     ("MNI152NLin6Asym", "1mm", "tightgmmask"),
         },
