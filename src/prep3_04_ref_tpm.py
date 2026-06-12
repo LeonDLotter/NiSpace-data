@@ -1,10 +1,12 @@
 # %% Init
 
 from pathlib import Path
+import numpy as np
 import pandas as pd
 from neuromaps import transforms
 import nibabel as nib
 from nilearn import image
+from sklearn.preprocessing import minmax_scale
 
 wd = Path(__file__).parent.parent
 print(f"Working dir: {wd}")
@@ -17,6 +19,22 @@ from nispace.utils.utils_datasets import download
 
 # nispace data path 
 nispace_source_data_path = wd
+
+# function to rescale 
+def mask_and_rescale(img, mask):
+    dat3d = img.get_fdata()
+    dat3d_mask = mask.get_fdata().astype(bool)
+    dat1d = dat3d[dat3d_mask]
+    smallest_value = dat1d.min()
+    print(f"Smallest value within mask: {smallest_value}")
+    if smallest_value < 1e-6:
+        print("Map {m}: smallest value below 1e-6 -> rescaling")
+        dat1d = minmax_scale(dat1d, (1e-6, max(dat1d.max(), 1.0)))
+        dat3d = np.zeros_like(dat3d)
+        dat3d[dat3d_mask] = dat1d
+        return image.new_img_like(img, dat3d, copy_header=True)
+    else:
+        return image.new_img_like(img, dat3d * dat3d_mask, copy_header=True)
 
 
 # %% Prep the GM/WM/CSF TPM atlas
@@ -38,7 +56,8 @@ for idx, tissue in [(0, "gm"), (1, "wm"), (2, "csf")]:
     
         
 # %% Load all atlases via reference_lib
-template_MNI152NLin6Asym = wd / "template" / "MNI152NLin6Asym" / "map" / "brainmask" / "tpl-MNI152NLin6Asym_desc-brainmask_res-2mm.nii.gz"
+template_MNI152NLin6Asym = nib.load(wd / "template" / "MNI152NLin6Asym" / "map" / "brainmask" / "tpl-MNI152NLin6Asym_desc-brainmask_res-2mm.nii.gz")
+template_MNI152NLin2009cAsym = nib.load(wd / "template" / "MNI152NLin2009cAsym" / "map" / "brainmask" / "tpl-MNI152NLin2009cAsym_desc-brainmask_res-2mm.nii.gz")
 
 for m in reference_lib["tpm"]["map"]:
     print("Processing map:", m)
@@ -68,10 +87,13 @@ for m in reference_lib["tpm"]["map"]:
     # maps might be scaled from 0 or 1 to 100, we want them to be scaled from 0 to 1
     if map_MNI152NLin6Asym.get_fdata().max() > 50:
         map_MNI152NLin6Asym = image.math_img("img / 100", img=map_MNI152NLin6Asym)
-    print(map_MNI152NLin6Asym.get_fdata().min(), map_MNI152NLin6Asym.get_fdata().max())
+    # mask and ensure that the smallest value within mask is > 0
+    map_MNI152NLin6Asym_masked = mask_and_rescale(map_MNI152NLin6Asym, template_MNI152NLin6Asym)
+    # check and save
+    print(map_MNI152NLin6Asym_masked.get_fdata().min(), map_MNI152NLin6Asym_masked.get_fdata().max())
     fp = nispace_source_data_path / "reference" / "tpm" / "map" / m / f"{m}_space-MNI152NLin6Asym_desc-proc.nii.gz"
     fp.parent.mkdir(parents=True, exist_ok=True)
-    map_MNI152NLin6Asym.to_filename(fp)
+    map_MNI152NLin6Asym_masked.to_filename(fp)
     print(f"Saved {m} to {fp}...")
     
     # ----------------------------------------------------------------------------------------------
@@ -81,7 +103,10 @@ for m in reference_lib["tpm"]["map"]:
     map_MNI152NLin2009cAsym = mni_to_mni(
         map_MNI152NLin6Asym, mni_from="MNI152NLin6Asym", mni_to="MNI152NLin2009cAsym", order=3
     )
-    map_MNI152NLin2009cAsym.to_filename(fp.parent / fp.name.replace("6Asym", "2009cAsym"))
+    # mask and ensure that the smallest value within mask is > 0
+    map_MNI152NLin2009cAsym_masked = mask_and_rescale(map_MNI152NLin2009cAsym, template_MNI152NLin2009cAsym)
+    # save
+    map_MNI152NLin2009cAsym_masked.to_filename(fp.parent / fp.name.replace("6Asym", "2009cAsym"))
     
     # ----------------------------------------------------------------------------------------------
     # space: fsLR

@@ -194,7 +194,30 @@ def _ref_yaml_to_json_entry(cfg: dict, dset_name: str) -> dict:
     if "maps" in cfg:
         entry["map"] = _resolve_maps(cfg["maps"], dset_name)
 
+    # Plot
+    plot = _resolve_ref_plot(dset_name)
+    if plot:
+        entry["plot"] = plot
+
     return entry
+
+
+# ── Plot resolution ───────────────────────────────────────────────────────────
+
+def _resolve_parc_plot(parc_name: str, parc_dir: Path):
+    """Return a {host, remote} entry if the parcellation overview PNG exists."""
+    f = parc_dir / "plot" / f"parc-{parc_name}_plot-overview.png"
+    if f.exists():
+        return {"host": "github-nispace", "remote": f"parcellation/{parc_name}/plot/{f.name}"}
+    return None
+
+
+def _resolve_ref_plot(dset_name: str):
+    """Return a {host, remote} entry if the reference overview PNG exists."""
+    f = NISPACE_DATA_DIR / "reference" / dset_name / "plot" / f"dset-{dset_name}_plot-overview.png"
+    if f.exists():
+        return {"host": "github-nispace", "remote": f"reference/{dset_name}/plot/{f.name}"}
+    return None
 
 
 # ── Parcellation space resolution ─────────────────────────────────────────────
@@ -284,6 +307,12 @@ def _parc_yaml_to_json_entry(cfg: dict) -> dict:
 
     for space, space_cfg in spaces.items():
         entry[space] = {k: v for k, v in space_cfg.items() if k != "resolution"}
+
+    parc_name = cfg["name"]
+    plot = _resolve_parc_plot(parc_name, NISPACE_DATA_DIR / "parcellation" / parc_name)
+    if plot:
+        entry["plot"] = plot
+
     return entry
 
 
