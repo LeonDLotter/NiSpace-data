@@ -23,12 +23,12 @@ NV_BASE_URL = "https://neurovault.org/media/images/16418"
 
 # map_id : nv_filename
 MAP_INFO = {
-    "mito-complexi_pub-mosharov2025":    "CI",
-    "mito-complexii_pub-mosharov2025":   "CII",
-    "mito-complexiv_pub-mosharov2025":   "CIV",
-    "mito-mitodensity_pub-mosharov2025": "MitoD",
-    "mito-tissueresp_pub-mosharov2025":  "TRC",
-    "mito-mitoresp_pub-mosharov2025":    "MRC",
+    "feature-complexi_pub-mosharov2025":    "CI",
+    "feature-complexii_pub-mosharov2025":   "CII",
+    "feature-complexiv_pub-mosharov2025":   "CIV",
+    "feature-mitodensity_pub-mosharov2025": "MitoD",
+    "feature-tissueresp_pub-mosharov2025":  "TRC",
+    "feature-mitoresp_pub-mosharov2025":    "MRC",
 }
 
 

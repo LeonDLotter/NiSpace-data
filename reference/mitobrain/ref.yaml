@@ -20,7 +20,7 @@ collections:
     description: Six brain-wide mitochondrial phenotype maps from the MitoBrainMap (Mosharov et al., 2025).
 tabs: auto
 maps:
-  mito-complexi_pub-mosharov2025:
+  feature-complexi_pub-mosharov2025:
     MNIOriginal:
       host: url
       remote: https://neurovault.org/media/images/16418/CI.nii.gz
@@ -28,7 +28,7 @@ maps:
     MNI152NLin2009cAsym: auto
     fsLR: auto
     fsaverage: auto
-  mito-complexii_pub-mosharov2025:
+  feature-complexii_pub-mosharov2025:
     MNIOriginal:
       host: url
       remote: https://neurovault.org/media/images/16418/CII.nii.gz
@@ -36,7 +36,7 @@ maps:
     MNI152NLin2009cAsym: auto
     fsLR: auto
     fsaverage: auto
-  mito-complexiv_pub-mosharov2025:
+  feature-complexiv_pub-mosharov2025:
     MNIOriginal:
       host: url
       remote: https://neurovault.org/media/images/16418/CIV.nii.gz
@@ -44,7 +44,7 @@ maps:
     MNI152NLin2009cAsym: auto
     fsLR: auto
     fsaverage: auto
-  mito-mitodensity_pub-mosharov2025:
+  feature-mitodensity_pub-mosharov2025:
     MNIOriginal:
       host: url
       remote: https://neurovault.org/media/images/16418/MitoD.nii.gz
@@ -52,7 +52,7 @@ maps:
     MNI152NLin2009cAsym: auto
     fsLR: auto
     fsaverage: auto
-  mito-tissueresp_pub-mosharov2025:
+  feature-tissueresp_pub-mosharov2025:
     MNIOriginal:
       host: url
       remote: https://neurovault.org/media/images/16418/TRC.nii.gz
@@ -60,7 +60,7 @@ maps:
     MNI152NLin2009cAsym: auto
     fsLR: auto
     fsaverage: auto
-  mito-mitoresp_pub-mosharov2025:
+  feature-mitoresp_pub-mosharov2025:
     MNIOriginal:
       host: url
       remote: https://neurovault.org/media/images/16418/MRC.nii.gz
