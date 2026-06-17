@@ -2,7 +2,7 @@ name: DesikanKilliany
 label: Desikan-Killiany (DK40)
 level: cortex
 symmetric: true
-license: free
+license: 'Freesurfer license: attribution'
 citation:
   ref: Desikan et al., 2006, NeuroImage
   doi: 10.1016/j.neuroimage.2006.01.021

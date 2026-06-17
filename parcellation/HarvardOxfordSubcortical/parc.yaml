@@ -2,7 +2,7 @@ name: HarvardOxfordSubcortical
 label: Harvard-Oxford Subcortical
 level: subcortex
 symmetric: true
-license: free
+license: 'FSL custom: attribution'
 citation:
   ref: Frazier et al., 2005, Biol Psychiatry
   doi: 10.1176/appi.ajp.162.7.1256

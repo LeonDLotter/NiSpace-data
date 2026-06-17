@@ -2,7 +2,7 @@ name: Glasser
 label: HCP multimodal parcellation (Glasser atlas)
 level: cortex
 symmetric: true
-license: free
+license: CC BY 4.0
 citation:
   ref: Glasser et al., 2016, Nature
   doi: 10.1038/nature18933

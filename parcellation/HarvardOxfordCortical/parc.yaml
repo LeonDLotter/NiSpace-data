@@ -2,7 +2,7 @@ name: HarvardOxfordCortical
 label: Harvard-Oxford Cortical
 level: cortex
 symmetric: true
-license: free
+license: 'FSL custom: attribution'
 citation:
   ref: Makris et al., 2006, Schizophr Res
   doi: 10.1016/j.schres.2005.11.020

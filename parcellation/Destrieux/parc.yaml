@@ -2,7 +2,7 @@ name: Destrieux
 label: Destrieux (a2009s)
 level: cortex
 symmetric: true
-license: free
+license: 'Freesurfer custom: attribution'
 citation:
   ref: Destrieux et al., 2010, NeuroImage
   doi: 10.1016/j.neuroimage.2010.06.010

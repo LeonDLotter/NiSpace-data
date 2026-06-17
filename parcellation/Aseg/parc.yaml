@@ -2,7 +2,7 @@ name: Aseg
 label: FreeSurfer 'Aseg' subcortical parcels
 level: subcortex
 symmetric: true
-license: free
+license: 'Freesurfer custom: attribution'
 citation:
   ref: Fischl et al., 2002, Neuron
   doi: 10.1016/s0896-6273(02)00569-x

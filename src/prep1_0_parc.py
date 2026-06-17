@@ -369,7 +369,7 @@ for n_parcels in [100, 200, 400, 1000]:
 
     save_parc(
         parc=parc, name=name, space=space, labels=all_labels,
-        level="cortex", symmetric=True, license="free", doi=doi_yan,
+        level="cortex", symmetric=True, license="MIT", doi=doi_yan,
     )
 
     # MNI152NLin2009cAsym --------------------------------------------------------------------------
@@ -385,7 +385,7 @@ for n_parcels in [100, 200, 400, 1000]:
 
     save_parc(
         parc=parc, name=name, space=space, labels=all_labels,
-        level="cortex", symmetric=True, license="free", doi=doi_yan,
+        level="cortex", symmetric=True, license="MIT", doi=doi_yan,
     )
 
     # fsLR (native 32k dlabel) ---------------------------------------------------------------------
@@ -399,7 +399,7 @@ for n_parcels in [100, 200, 400, 1000]:
     )
     save_parc(
         parc=parc, name=name, space=space, labels=(labels_lh, labels_rh),
-        level="cortex", symmetric=True, license="free", doi=doi_yan,
+        level="cortex", symmetric=True, license="MIT", doi=doi_yan,
     )
 
     # fsaverage (annot → 164k → 41k) ---------------------------------------------------------------
@@ -419,7 +419,7 @@ for n_parcels in [100, 200, 400, 1000]:
     )
     save_parc(
         parc=parc, name=name, space=space, labels=(labels_lh, labels_rh),
-        level="cortex", symmetric=True, license="free", doi=doi_yan,
+        level="cortex", symmetric=True, license="MIT", doi=doi_yan,
     )
 
 
@@ -477,11 +477,11 @@ for tian in ["S1", "S2", "S3", "S4"]:
 # All loaded from associated FreeSurfer GIN repo: https://gin.g-node.org/llotter/mni_freesurfer
 gin_commit = "5839f92fdf207714fae18088da7a114b21a015c8"
         
-for name, fs_name, doi in [
-    ("DesikanKilliany", "aparc", "10.1016/j.neuroimage.2006.01.021; doi.org/10.12751/g-node.2mnxpm"), 
-    ("DesikanKillianyTourville", "aparc.DKTatlas", "10.3389/fnins.2012.00171; doi.org/10.12751/g-node.2mnxpm"), 
-    ("Destrieux", "aparc.a2009s", "10.1016/j.neuroimage.2010.06.010; doi.org/10.12751/g-node.2mnxpm"),
-    ("Glasser", "HCPMMP1", "10.1038/nature18933; https://figshare.com/articles/dataset/HCP-MMP1_0_projected_on_fsaverage/3498446")
+for name, fs_name, doi, license in [
+    ("DesikanKilliany",          "aparc",         "10.1016/j.neuroimage.2006.01.021; doi.org/10.12751/g-node.2mnxpm",                                          "Freesurfer license: attribution"),
+    ("DesikanKillianyTourville", "aparc.DKTatlas", "10.3389/fnins.2012.00171; doi.org/10.12751/g-node.2mnxpm",                                                 "Freesurfer license: attribution"),
+    ("Destrieux",                "aparc.a2009s",   "10.1016/j.neuroimage.2010.06.010; doi.org/10.12751/g-node.2mnxpm",                                          "Freesurfer custom: attribution"),
+    ("Glasser",                  "HCPMMP1",        "10.1038/nature18933; https://figshare.com/articles/dataset/HCP-MMP1_0_projected_on_fsaverage/3498446",       "CC BY 4.0"),
 ]:
     print(name)
     
@@ -516,7 +516,7 @@ for name, fs_name, doi in [
         # save and plot
         save_parc(
             parc=parc, name=name, space=space, labels=labels,
-            level="cortex", symmetric=True, license="free", doi=doi,
+            level="cortex", symmetric=True, license=license, doi=doi,
         )
 
 
@@ -588,7 +588,7 @@ for name, fs_name, doi in [
         # save and plot
         save_parc(
             parc=parc, name=name, space=space, labels=(labels_lh, labels_rh),
-            level="cortex", symmetric=True, license="free", doi=doi,
+            level="cortex", symmetric=True, license=license, doi=doi,
         )
 
 
@@ -626,7 +626,7 @@ for space in mni_spaces:
     # save and plot
     save_parc(
         parc=parc, name=name, space=space, labels=labels,
-        level="subcortex", symmetric=True, license="free", doi="10.1016/s0896-6273(02)00569-x",
+        level="subcortex", symmetric=True, license="Freesurfer custom: attribution", doi="10.1016/s0896-6273(02)00569-x",
     )
 
 # %% ===============================================================================================
@@ -679,7 +679,7 @@ for name, tf_name, nl_name, level, doi in [
         # save and plot
         save_parc(
             parc=parc, name=name, space=space, labels=labels,
-            level=level, symmetric=True, license="free", doi=doi,
+            level=level, symmetric=True, license="FSL custom: attribution", doi=doi,
         )
 
 
@@ -743,7 +743,7 @@ for name, tf_name, nl_name, level, doi in [
             parc=(tmp[space]["L"]["surf"], tmp[space]["R"]["surf"]),
             name=name, space=space,
             labels=(tmp[space]["L"]["labels"], tmp[space]["R"]["labels"]),
-            level="cortex", symmetric=True, license="free", doi=doi,
+            level="cortex", symmetric=True, license="FSL custom: attribution", doi=doi,
         )
 
 
@@ -825,7 +825,7 @@ for name, parc, labels, level in [
     # save
     save_parc(
         parc=parc, name=name, space=space, labels=labels,
-        level=level, symmetric=True, license="non-commercial, attribution, share alike", doi=doi,
+        level=level, symmetric=True, license="Brainnetome custom: non-commercial, attribution, share alike", doi=doi,
     )
 
 # MNI152NLin2009cAsym ------------------------------------------------------------------------------
@@ -851,7 +851,7 @@ for name, labels, level in [
     # save and plot
     save_parc(
         parc=parc, name=name, space=space, labels=labels,
-        level=level, symmetric=True, license="non-commercial, attribution, share alike", doi=doi,
+        level=level, symmetric=True, license="Brainnetome custom: non-commercial, attribution, share alike", doi=doi,
     )
 
 # fsaverage ----------------------------------------------------------------------------------------
@@ -893,7 +893,7 @@ print("RH values:", np.unique(parc[1].agg_data()))
 # save and plot
 save_parc(
     parc=parc, name=name, space=space, labels=(labels_lh, labels_rh),
-    level="cortex", symmetric=True, license="non-commercial, attribution, share alike", doi=doi,
+    level="cortex", symmetric=True, license="Brainnetome custom: non-commercial, attribution, share alike", doi=doi,
 )
 
 # fsLR ---------------------------------------------------------------------------------------------
@@ -935,7 +935,7 @@ print("RH values:", np.unique(parc[1].agg_data()))
 # save and plot
 save_parc(
     parc=parc, name=name, space=space, labels=(labels_lh, labels_rh),
-    level="cortex", symmetric=True, license="non-commercial, attribution, share alike", doi=doi,
+    level="cortex", symmetric=True, license="Brainnetome custom: non-commercial, attribution, share alike", doi=doi,
 )
 
 
@@ -995,7 +995,7 @@ for name, parc, labels, level in [
     # save
     save_parc(
         parc=parc, name=name, space=space, labels=labels,
-        level=level, symmetric=True, license="free", doi=doi,
+        level=level, symmetric=True, license="GNU GPL", doi=doi,
     )
 
 
@@ -1015,7 +1015,7 @@ for name, labels, level in [
     )
     save_parc(
         parc=parc, name=name, space=space, labels=labels,
-        level=level, symmetric=True, license="free", doi=doi,
+        level=level, symmetric=True, license="GNU GPL", doi=doi,
     )
 
 # fsaverage & fsLR (AALCortical only) --------------------------------------------------------------
@@ -1064,7 +1064,7 @@ for space in ["fsaverage", "fsLR"]:
         parc=(tmp_aal[space]["L"]["surf"], tmp_aal[space]["R"]["surf"]),
         name=name, space=space,
         labels=(tmp_aal[space]["L"]["labels"], tmp_aal[space]["R"]["labels"]),
-        level="cortex", symmetric=True, license="free", doi=doi,
+        level="cortex", symmetric=True, license="GNU GPL", doi=doi,
     )
 
 # build_datalib.py runs automatically via pre-commit hook on nispace-data commit
