@@ -418,4 +418,71 @@ pd.concat(
     axis=0, names=["set", "map"],
 ).astype(np.float16).to_csv(ref_dir / "collection-BrainSpanWeights.collect", index=True)
 
+# ASD-dysregulated WGCNA modules (Gandal et al., 2022)
+#
+# Source: Supplementary Data 5 (MOESM7, gene->WGCNA-module membership) and Supplementary
+# Data 6 (MOESM8, module characterization incl. Whole.Cortex_ASD_Beta/FDR from a linear
+# mixed model of module eigengene ~ ASD status across all 11 cortical regions).
+#
+# Filter: Whole.Cortex_ASD_FDR < 0.05 -> 18 of 35 gene modules retained (M0_grey, the
+# WGCNA "unassigned" bin, is never significant and excluded by convention regardless).
+# This threshold independently reproduces two numbers reported in the paper's Results text:
+# the headline "18 gene or transcript modules... dysregulated cortex-wide", and, using a
+# looser "FDR<0.05 in >=1 of 11 individual regions" criterion on the same 35 modules, exactly
+# 24 modules split into exactly 9 down / 15 up (paper: "Nine modules were downregulated and
+# 15 were upregulated in ASD"). Module gene counts also match Fig. 3 exactly (GeneM5: 398,
+# GeneM9: 243, GeneM24: 102, GeneM32: 65), confirming correct extraction.
+#
+# Direction: sign of Whole.Cortex_ASD_Beta (positive=up, negative=down in ASD).
+#
+# Labels: only these 4 of the 18 modules have an author-given descriptive label, and it only
+# appears in Fig. 3 of the paper (not in any supplementary data column) - manually transcribed
+# here. No per-set metadata mechanism exists in the nispace-data/.collect schema (ref.yaml
+# collections only support whole-collection description/citations), so direction and label are
+# encoded directly into the set name, as already done above for CellTypesSilettiClusters.
+asd_module_labels = {
+    "M5": "synaptic plasticity",
+    "M9": "neuronal noncoding genes",
+    "M24": "blood-brain barrier membrane transport",
+    "M32": "reactive astrocyte",
+}
+
+def _fix_excel_date_mangled_gene_symbol(v):
+    # Excel autocorrects gene symbols like "MARCH4"/"SEPT9" into dates on file creation;
+    # openpyxl then reads these cells back as datetime objects instead of strings. Only
+    # the MARCH1-11 and SEPT1-15 gene families are affected in this file (verified: all
+    # mangled cells have month 3 or 9). Reconstruct the original symbol from month/day.
+    if isinstance(v, str):
+        return v
+    month_prefix = {3: "MARCH", 9: "SEPT"}
+    return f"{month_prefix[v.month]}{v.day}"
+
+df_gandal_genes = pd.read_excel(
+    download("https://static-content.springer.com/esm/art%3A10.1038%2Fs41586-022-05377-7/MediaObjects/41586_2022_5377_MOESM7_ESM.xlsx"),
+    sheet_name="Gene_Level",
+)[["WGCNA_module", "external_gene_name"]]
+df_gandal_genes["external_gene_name"] = df_gandal_genes["external_gene_name"].apply(_fix_excel_date_mangled_gene_symbol)
+df_gandal_genes["module_n"] = df_gandal_genes["WGCNA_module"].str.split("_").str[0]  # "M5_green" -> "M5"
+
+df_gandal_stats = pd.read_excel(
+    download("https://static-content.springer.com/esm/art%3A10.1038%2Fs41586-022-05377-7/MediaObjects/41586_2022_5377_MOESM8_ESM.xlsx"),
+    sheet_name="GeneModules", header=1,
+)[["Module", "Whole.Cortex_ASD_Beta", "Whole.Cortex_ASD_FDR"]]
+df_gandal_stats["module_n"] = df_gandal_stats["Module"].str.replace("Gene", "").str.split("_").str[0]  # "GeneM5_green" -> "M5"
+df_gandal_sig = df_gandal_stats[df_gandal_stats["Whole.Cortex_ASD_FDR"] < 0.05]
+
+collection_asd = {}
+for _, row in df_gandal_sig.iterrows():
+    n = row["module_n"]
+    direction = "up" if row["Whole.Cortex_ASD_Beta"] > 0 else "down"
+    set_name = f"Gene{n}_{direction}"
+    if n in asd_module_labels:
+        set_name += f": {asd_module_labels[n]}"
+    genes = df_gandal_genes.loc[df_gandal_genes["module_n"] == n, "external_gene_name"].tolist()
+    collection_asd[set_name] = genes
+
+print(f"ASD modules (Gandal et al., 2022): {len(collection_asd)} significant modules "
+      f"(expected 18: 11 up, 7 down)")
+write_json(collection_asd, ref_dir / "collection-ASDModulesGandal2022.collect")
+
 # %%
