@@ -500,9 +500,18 @@ def _fix_excel_date_mangled_gene_symbol(v):
 df_gandal_genes = pd.read_excel(
     download("https://static-content.springer.com/esm/art%3A10.1038%2Fs41586-022-05377-7/MediaObjects/41586_2022_5377_MOESM7_ESM.xlsx"),
     sheet_name="Gene_Level",
-)[["WGCNA_module", "external_gene_name"]]
+)
+kme_cols = [c for c in df_gandal_genes.columns if c.startswith("kME")]
+df_gandal_genes = df_gandal_genes[["WGCNA_module", "external_gene_name"] + kme_cols]
 df_gandal_genes["external_gene_name"] = df_gandal_genes["external_gene_name"].apply(_fix_excel_date_mangled_gene_symbol)
 df_gandal_genes["module_n"] = df_gandal_genes["WGCNA_module"].str.split("_").str[0]  # "M5_green" -> "M5"
+# each gene's kME to its OWN assigned module (kME{n}_{color} column <-> "{n}_{color}" module) -
+# a continuous, per-gene module-membership-strength score, used below as an enrichment weight.
+kme_col_by_module_n = {f"M{c.split('_')[0].replace('kME', '')}": c for c in kme_cols}
+df_gandal_genes["own_kme"] = df_gandal_genes.apply(
+    lambda r: r[kme_col_by_module_n[r["module_n"]]] if r["module_n"] in kme_col_by_module_n else np.nan,
+    axis=1
+)
 
 region_beta_cols = sorted({f"ASD_{region}_Beta" for region in region_specific_modules.values()})
 df_gandal_stats = pd.read_excel(
@@ -511,7 +520,9 @@ df_gandal_stats = pd.read_excel(
 )[["Module", "Whole.Cortex_ASD_Beta", "Whole.Cortex_ASD_FDR"] + region_beta_cols]
 df_gandal_stats["module_n"] = df_gandal_stats["Module"].str.replace("Gene", "").str.split("_").str[0]  # "GeneM5_green" -> "M5"
 
-collection_asd = {}
+# resolve the set name for each of the 24 significant modules once, shared by both the
+# unweighted (plain gene list) and weighted (kME-weighted) collections built below.
+selected_modules = {}  # module_n -> set_name
 for _, row in df_gandal_stats.iterrows():
     n = row["module_n"]
     if n in region_specific_modules:
@@ -525,12 +536,30 @@ for _, row in df_gandal_stats.iterrows():
     set_name = f"Gene{n}_{direction}_{scope}"
     if n in asd_module_labels:
         set_name += f": {asd_module_labels[n]}"
-    genes = df_gandal_genes.loc[df_gandal_genes["module_n"] == n, "external_gene_name"].tolist()
-    collection_asd[set_name] = genes
+    selected_modules[n] = set_name
 
+collection_asd = {
+    set_name: df_gandal_genes.loc[df_gandal_genes["module_n"] == n, "external_gene_name"].tolist()
+    for n, set_name in selected_modules.items()
+}
 print(f"ASD modules (Gandal et al., 2022): {len(collection_asd)} modules "
       f"(expected 24: 18 whole-cortex significant + 6 regionally variable "
       f"[GeneM4, GeneM6, GeneM13, GeneM16, GeneM17, GeneM30])")
 write_json(collection_asd, ref_dir / "collection-ASDModulesGandal2022.collect")
+
+# Weighted companion: same 24 modules/genes as above, but every member gene keeps its own_kme
+# as a weight instead of being reduced to a binary in/out membership - avoids having to pick a
+# hub/marker-gene cutoff (a fixed top-N or percentile threshold was considered but rejected:
+# module "tightness" varies enough that any single threshold either empties out weakly-coherent
+# modules or barely filters strongly-coherent ones - see conversation/commit history).
+collection_asd_weighted = pd.concat(
+    {
+        set_name: df_gandal_genes.loc[df_gandal_genes["module_n"] == n]
+            .set_index("external_gene_name")["own_kme"]
+        for n, set_name in selected_modules.items()
+    },
+    axis=0, names=["set", "map"],
+).rename("weight").astype(np.float32)
+collection_asd_weighted.to_csv(ref_dir / "collection-ASDModulesGandal2022Weights.collect", index=True)
 
 # %%

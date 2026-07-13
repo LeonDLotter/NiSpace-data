@@ -117,4 +117,11 @@ collections:
     citations:
     - ref: Gandal et al., 2022
       doi: 10.1038/s41586-022-05377-7
+  ASDModulesGandal2022Weights:
+    description: Same gene sets as ASDModulesGandal2022, weighted by each gene's kME (module
+      eigengene correlation / intramodular connectivity) to its own assigned module, so
+      membership strength can be used as a continuous weight instead of binary in/out.
+    citations:
+    - ref: Gandal et al., 2022
+      doi: 10.1038/s41586-022-05377-7
 tabs: auto
