@@ -200,7 +200,8 @@ def parcellate_mapref(wd, dataset, spaces):
             "Check ref.yaml and that map files exist."
         )
 
-    for parc_name in parc_names:
+    from tqdm.auto import tqdm
+    for parc_name in tqdm(parc_names, desc=f"parcellate [{dataset}]"):
         labels = load_parc_labels(wd, parc_name, "MNI152NLin6Asym")
         ref_maps_df = pd.DataFrame(
             index=pd.Index(list(ref_maps_avail_all), name="map"),

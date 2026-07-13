@@ -38,7 +38,7 @@ for parc in PARCS:
 
     for space in spaces:
         # spin tests are surface-only
-        if "mni" in space.lower():
+        if not space.startswith("fs"):
             continue
         print(f"\n  Space: {space}")
 
@@ -60,7 +60,7 @@ for parc in PARCS:
 
         # generate Cornblath fractional transition matrices
         # T_lh: (N_PERM, n_lh, n_lh), T_rh: (N_PERM, n_rh, n_rh), dtype float16
-        print(f"  Generating {N_PERM} Cornblath transition matrices ...", end=" ", flush=True)
+        print(f"  Generating {N_PERM} Cornblath transition matrices ...")
         with tempfile.TemporaryDirectory() as memmap_dir:
             T_lh, T_rh = generate_cornblath_mat(
                 parc=(parc_lh, parc_rh),
@@ -70,6 +70,8 @@ for parc in PARCS:
                 n_proc=N_PROC,
                 dtype=np.float16,
                 memmap_dir=memmap_dir,
+                batch_size=100,
+                normalize=True,
             )
             assert T_lh.shape == (N_PERM, n_lh, n_lh), f"T_lh shape mismatch: {T_lh.shape}"
             assert T_rh.shape == (N_PERM, n_rh, n_rh), f"T_rh shape mismatch: {T_rh.shape}"
