@@ -421,31 +421,71 @@ pd.concat(
 # ASD-dysregulated WGCNA modules (Gandal et al., 2022)
 #
 # Source: Supplementary Data 5 (MOESM7, gene->WGCNA-module membership) and Supplementary
-# Data 6 (MOESM8, module characterization incl. Whole.Cortex_ASD_Beta/FDR from a linear
-# mixed model of module eigengene ~ ASD status across all 11 cortical regions).
+# Data 6 (MOESM8, module characterization incl. Whole.Cortex_ASD_Beta/FDR and per-region
+# ASD_{region}_Beta/FDR, both from linear mixed models of module eigengene ~ ASD status).
 #
-# Filter: Whole.Cortex_ASD_FDR < 0.05 -> 18 of 35 gene modules retained (M0_grey, the
-# WGCNA "unassigned" bin, is never significant and excluded by convention regardless).
-# This threshold independently reproduces two numbers reported in the paper's Results text:
-# the headline "18 gene or transcript modules... dysregulated cortex-wide", and, using a
-# looser "FDR<0.05 in >=1 of 11 individual regions" criterion on the same 35 modules, exactly
-# 24 modules split into exactly 9 down / 15 up (paper: "Nine modules were downregulated and
-# 15 were upregulated in ASD"). Module gene counts also match Fig. 3 exactly (GeneM5: 398,
+# The paper states (Results, "Cortex-wide modules..."): "In total, 38 modules were up- or
+# downregulated in at least one region in ASD. Most of these fell into two broad groups:
+# (1) dysregulated cortex-wide with comparable magnitude across regions (18 modules); or
+# (2) exhibiting variable changes across regions (13 modules)." That 38/18/13 pools combine
+# the 35 gene modules AND 39 non-overlapping transcript(isoform) modules (e.g. IsoformM37
+# is explicitly one of the 18 "cortex-wide" pool). This collection is gene-level only (the
+# nispace mrna/magicc reference datasets have no isoform-level tabs to match against), so it
+# reproduces the full GENE-only portion of that 38/18/13 breakdown - 24 of the 35 gene
+# modules - rather than the combined 31 (18+13).
+#
+# Core set (18 modules): Whole.Cortex_ASD_FDR < 0.05 -> 18 of 35 gene modules (M0_grey, the
+# WGCNA "unassigned" bin, is never significant and excluded by convention regardless). This
+# threshold independently reproduces the paper's headline "18" cortex-wide count, and,
+# using a looser "FDR<0.05 in >=1 of 11 individual regions" criterion on the same 35 modules,
+# exactly 24 modules split into exactly 9 down / 15 up (paper: "Nine modules were
+# downregulated and 15 were upregulated in ASD" - the pre-region-classification headline
+# figure for genes alone). Module gene counts also match Fig. 3 exactly (GeneM5: 398,
 # GeneM9: 243, GeneM24: 102, GeneM32: 65), confirming correct extraction.
 #
-# Direction: sign of Whole.Cortex_ASD_Beta (positive=up, negative=down in ASD).
+# Regionally variable extension (+6 modules): GeneM4, GeneM6, GeneM13, GeneM16, GeneM17,
+# GeneM30 are the remaining 6 of the 24 gene modules significant in >=1 region but NOT
+# whole-cortex (this is the complete gene-only "regionally variable" pool; the paper's 13
+# also includes 7 isoform-only modules not represented here). Four of these six -
+# GeneM4, GeneM6, GeneM16, GeneM30 - are exactly the "four modules exhibiting significant
+# associations with ASD that were only detectable in [BA17]" named in the paper's "Regional
+# variation" section (GeneM30: OPC module w/ hub genes SOX4/SOX11; GeneM4: inhibitory
+# neuron module w/ SCN9A). GeneM13 (BA7-only) and GeneM17 (BA17 + BA41/42/22) are not
+# individually named/discussed in the paper, so they get no label below. Direction for all
+# 6 is taken from the beta of their one (or, for GeneM17, both concordant-sign) significant
+# region rather than Whole.Cortex_ASD_Beta: the whole-cortex beta is not just non-significant
+# for these but can even have the opposite sign (GeneM30: whole-cortex beta -0.0019 [ns] vs
+# BA17 beta +0.0120 [FDR=0.0385]), so it would give the wrong direction if used here.
 #
-# Labels: only these 4 of the 18 modules have an author-given descriptive label, and it only
-# appears in Fig. 3 of the paper (not in any supplementary data column) - manually transcribed
-# here. No per-set metadata mechanism exists in the nispace-data/.collect schema (ref.yaml
-# collections only support whole-collection description/citations), so direction and label are
-# encoded directly into the set name, as already done above for CellTypesSilettiClusters.
+# Direction: sign of Whole.Cortex_ASD_Beta for the 18 cortex-wide modules; sign of each
+# module's own significant-region beta for the 6 regionally variable ones (see dict below).
+# Naming: "_cortex" vs "_region" suffix makes the scope explicit in the set name itself, e.g.
+# GeneM3_up_cortex (significant across the whole cortex) vs GeneM4_down_region (significant
+# in at least one region, not whole-cortex).
+#
+# Labels: an author-given descriptive label exists for 11 of these 24 modules, sourced from
+# Fig. 3 (GeneM5, GeneM9, GeneM24, GeneM32) and Fig. 4a / main text "Regional variation"
+# section (GeneM3, GeneM4, GeneM7, GeneM8, GeneM14, GeneM23, GeneM30) of the paper - not
+# present in any supplementary data column, manually transcribed here. No per-set metadata
+# mechanism exists in the nispace-data/.collect schema (ref.yaml collections only support
+# whole-collection description/citations), so direction and label are encoded directly into
+# the set name, as already done above for CellTypesSilettiClusters.
 asd_module_labels = {
+    "M3": "neuronal energy processes",
+    "M4": "neuronal signal transduction",
     "M5": "synaptic plasticity",
-    "M9": "neuronal noncoding genes",
-    "M24": "blood-brain barrier membrane transport",
+    "M7": "immune response",
+    "M8": "reactive microglia",
+    "M9": "neural noncoding",
+    "M14": "neurite morphogenesis",
+    "M23": "oligo organelle regulation",
+    "M24": "blood-brain barrier transport",
+    "M30": "oligodendrocyte progenitor",
     "M32": "reactive astrocyte",
 }
+# Modules significant in exactly one region (or, for M17, two concordant-sign regions) but
+# NOT whole-cortex - see "Regionally variable extension" above. Value = region used for direction.
+region_specific_modules = {"M4": "BA17", "M6": "BA17", "M13": "BA7", "M16": "BA17", "M17": "BA17", "M30": "BA17"}
 
 def _fix_excel_date_mangled_gene_symbol(v):
     # Excel autocorrects gene symbols like "MARCH4"/"SEPT9" into dates on file creation;
@@ -464,25 +504,33 @@ df_gandal_genes = pd.read_excel(
 df_gandal_genes["external_gene_name"] = df_gandal_genes["external_gene_name"].apply(_fix_excel_date_mangled_gene_symbol)
 df_gandal_genes["module_n"] = df_gandal_genes["WGCNA_module"].str.split("_").str[0]  # "M5_green" -> "M5"
 
+region_beta_cols = sorted({f"ASD_{region}_Beta" for region in region_specific_modules.values()})
 df_gandal_stats = pd.read_excel(
     download("https://static-content.springer.com/esm/art%3A10.1038%2Fs41586-022-05377-7/MediaObjects/41586_2022_5377_MOESM8_ESM.xlsx"),
     sheet_name="GeneModules", header=1,
-)[["Module", "Whole.Cortex_ASD_Beta", "Whole.Cortex_ASD_FDR"]]
+)[["Module", "Whole.Cortex_ASD_Beta", "Whole.Cortex_ASD_FDR"] + region_beta_cols]
 df_gandal_stats["module_n"] = df_gandal_stats["Module"].str.replace("Gene", "").str.split("_").str[0]  # "GeneM5_green" -> "M5"
-df_gandal_sig = df_gandal_stats[df_gandal_stats["Whole.Cortex_ASD_FDR"] < 0.05]
 
 collection_asd = {}
-for _, row in df_gandal_sig.iterrows():
+for _, row in df_gandal_stats.iterrows():
     n = row["module_n"]
-    direction = "up" if row["Whole.Cortex_ASD_Beta"] > 0 else "down"
-    set_name = f"Gene{n}_{direction}"
+    if n in region_specific_modules:
+        beta = row[f"ASD_{region_specific_modules[n]}_Beta"]
+    elif row["Whole.Cortex_ASD_FDR"] < 0.05:
+        beta = row["Whole.Cortex_ASD_Beta"]
+    else:
+        continue
+    direction = "up" if beta > 0 else "down"
+    scope = "region" if n in region_specific_modules else "cortex"
+    set_name = f"Gene{n}_{direction}_{scope}"
     if n in asd_module_labels:
         set_name += f": {asd_module_labels[n]}"
     genes = df_gandal_genes.loc[df_gandal_genes["module_n"] == n, "external_gene_name"].tolist()
     collection_asd[set_name] = genes
 
-print(f"ASD modules (Gandal et al., 2022): {len(collection_asd)} significant modules "
-      f"(expected 18: 11 up, 7 down)")
+print(f"ASD modules (Gandal et al., 2022): {len(collection_asd)} modules "
+      f"(expected 24: 18 whole-cortex significant + 6 regionally variable "
+      f"[GeneM4, GeneM6, GeneM13, GeneM16, GeneM17, GeneM30])")
 write_json(collection_asd, ref_dir / "collection-ASDModulesGandal2022.collect")
 
 # %%
