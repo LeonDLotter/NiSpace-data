@@ -94,9 +94,20 @@ for space, res_sources in MNI_SOURCES.items():
             tag = "native"
         else:
             target_mm = int(res.replace("mm", ""))
+            src_shape = np.array(src_img.shape[:3])
+            # Floor-safe shape: floor((N-1)/zoom)+1 ensures the last output
+            # voxel maps back within the 1mm source FOV (resample_img without
+            # target_shape can round up by 1, causing IndexError in nitransforms)
+            tgt_shape = tuple(((src_shape - 1) // target_mm + 1).tolist())
+            # Explicit origin: min world coord of source (handles ±voxel-size affines)
+            vox_last = (src_img.affine @ np.array([*(src_shape - 1), 1]))[:3]
+            origin = np.minimum(src_img.affine[:3, 3], vox_last)
+            tgt_affine = np.diag([float(target_mm)] * 3 + [1.0])
+            tgt_affine[:3, 3] = origin
             img = image.resample_img(
                 src_img,
-                target_affine=np.diag([target_mm] * 3),
+                target_affine=tgt_affine,
+                target_shape=tgt_shape,
                 interpolation="nearest",
                 copy_header=True,
                 force_resample=True,
