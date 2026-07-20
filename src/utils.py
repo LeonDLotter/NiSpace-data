@@ -334,16 +334,19 @@ def parcellate_mapref(wd, dataset, spaces):
 
 
 # Parcellate kwargs per dataset.
-# Used with parcellate_data (prep3_0) or Parcellater.transform (prep3_3, prep3_5).
-# neurosynth and grf use nispace.parcellate.Parcellater, which takes background_parcels_to_nan instead of drop_background_parcels
+# Used with parcellate_data (prep3_0) or Parcellater.transform (prep3_3, prep3_5) --
+# both now take the same param names (background_value/report_background_parcels),
+# unified 2026-07-20 (was background_value+ignore_background_data, and
+# drop_background_parcels at the parcellate_data layer vs background_parcels_to_nan
+# at the Parcellater layer -- both differences are gone now).
 DATASET_PARCELLATE_KWARGS = {
-    "pet":            dict(ignore_background_data=True,  drop_background_parcels=True,    min_num_valid_datapoints=5,    min_fraction_valid_datapoints=0.3),
-    "cortexfeatures": dict(ignore_background_data=True,  drop_background_parcels=True,    min_num_valid_datapoints=5,    min_fraction_valid_datapoints=0.3),
-    "bigbrain":       dict(ignore_background_data=True,  drop_background_parcels=True,    min_num_valid_datapoints=5,    min_fraction_valid_datapoints=0.3),
-    "rsn":            dict(ignore_background_data=False, drop_background_parcels=False,   min_num_valid_datapoints=None, min_fraction_valid_datapoints=None),
-    "rsn17":          dict(ignore_background_data=False, drop_background_parcels=False,   min_num_valid_datapoints=None, min_fraction_valid_datapoints=None),
-    "tpm":            dict(ignore_background_data=True, drop_background_parcels=True,   min_num_valid_datapoints=None, min_fraction_valid_datapoints=None),
-    "mitobrain":      dict(ignore_background_data=True,  drop_background_parcels=True,    min_num_valid_datapoints=5,    min_fraction_valid_datapoints=0.3),
-    "neurosynth":     dict(ignore_background_data=False, background_parcels_to_nan=False, min_num_valid_datapoints=None, min_fraction_valid_datapoints=None),
-    "grf":            dict(ignore_background_data=False, background_parcels_to_nan=False, min_num_valid_datapoints=None, min_fraction_valid_datapoints=None),
+    "pet":            dict(background_value="auto", report_background_parcels=True,  min_num_valid_datapoints=5,    min_fraction_valid_datapoints=0.3),
+    "cortexfeatures": dict(background_value="auto", report_background_parcels=True,  min_num_valid_datapoints=5,    min_fraction_valid_datapoints=0.3),
+    "bigbrain":       dict(background_value="auto", report_background_parcels=True,  min_num_valid_datapoints=5,    min_fraction_valid_datapoints=0.3),
+    "rsn":            dict(background_value=False,  report_background_parcels=False, min_num_valid_datapoints=None, min_fraction_valid_datapoints=None),
+    "rsn17":          dict(background_value=False,  report_background_parcels=False, min_num_valid_datapoints=None, min_fraction_valid_datapoints=None),
+    "tpm":            dict(background_value="auto", report_background_parcels=True,  min_num_valid_datapoints=None, min_fraction_valid_datapoints=None),
+    "mitobrain":      dict(background_value="auto", report_background_parcels=True,  min_num_valid_datapoints=5,    min_fraction_valid_datapoints=0.3),
+    "neurosynth":     dict(background_value=False,  report_background_parcels=False, min_num_valid_datapoints=None, min_fraction_valid_datapoints=None),
+    "grf":            dict(background_value=False,  report_background_parcels=False, min_num_valid_datapoints=None, min_fraction_valid_datapoints=None),
 }

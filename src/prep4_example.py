@@ -92,8 +92,8 @@ for parc_name in PARCS:
         parcellation=parc,
         parc_labels=target_labels,
         parc_space=parc_space,
-        ignore_background_data=False,
-        drop_background_parcels=False,
+        background_value="auto",
+        report_background_parcels=False,
         verbose=False,
     )
 
