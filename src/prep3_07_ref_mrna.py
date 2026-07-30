@@ -432,7 +432,8 @@ pd.concat(
 # is explicitly one of the 18 "cortex-wide" pool). This collection is gene-level only (the
 # nispace mrna/magicc reference datasets have no isoform-level tabs to match against), so it
 # reproduces the full GENE-only portion of that 38/18/13 breakdown - 24 of the 35 gene
-# modules - rather than the combined 31 (18+13).
+# modules - rather than the combined 31 (18+13). One of these 24, GeneM9, is further excluded
+# below for a nispace-specific data-quality reason (see "excluded_modules" below), leaving 23.
 #
 # Core set (18 modules): Whole.Cortex_ASD_FDR < 0.05 -> 18 of 35 gene modules (M0_grey, the
 # WGCNA "unassigned" bin, is never significant and excluded by convention regardless). This
@@ -463,29 +464,67 @@ pd.concat(
 # GeneM3_up_cortex (significant across the whole cortex) vs GeneM4_down_region (significant
 # in at least one region, not whole-cortex).
 #
-# Labels: an author-given descriptive label exists for 11 of these 24 modules, sourced from
-# Fig. 3 (GeneM5, GeneM9, GeneM24, GeneM32) and Fig. 4a / main text "Regional variation"
-# section (GeneM3, GeneM4, GeneM7, GeneM8, GeneM14, GeneM23, GeneM30) of the paper - not
-# present in any supplementary data column, manually transcribed here. No per-set metadata
-# mechanism exists in the nispace-data/.collect schema (ref.yaml collections only support
+# Labels: an author-given descriptive label exists for 10 of these modules, sourced from
+# Fig. 3 (GeneM5, GeneM24, GeneM32) and Fig. 4a / main text "Regional variation" section
+# (GeneM3, GeneM4, GeneM7, GeneM8, GeneM14, GeneM23, GeneM30) of the paper - not present in
+# any supplementary data column, manually transcribed here. No per-set metadata mechanism
+# exists in the nispace-data/.collect schema (ref.yaml collections only support
 # whole-collection description/citations), so direction and label are encoded directly into
 # the set name, as already done above for CellTypesSilettiClusters.
+#
+# The remaining 13 modules have no author-given label, so a label was INFERRED here (not from
+# the paper) from each module's top Neural_Cell_Type enrichment + top GeneModule_Ontology GO
+# term (both from Supp Data 6 / MOESM8). This heuristic was validated against the 10 known
+# paper labels first: cell-type top-hit alone reconstructs the 5 purely cell-type-defined
+# labels (microglia/oligo/endothelial/OPC/astrocyte) but is unreliable alone (gets GeneM7
+# "immune response" wrong, predicting Endothelial); adding the top GO term fixes that case and
+# reconstructs/supports 9 of 10 labels. Applying both signals together to the 13 unlabeled
+# modules: where BOTH the cell-type FDR and the GO FDR are significant and thematically
+# coherent, a specific inferred label is used (8 modules); where either signal is
+# non-significant or the top GO terms don't cohere, the label is prefixed "uncertain (...)"
+# to flag it as a weak/low-confidence guess rather than a confident functional call (5 modules).
 asd_module_labels = {
+    "M2": "astrocyte metabolism",
     "M3": "neuronal energy processes",
     "M4": "neuronal signal transduction",
     "M5": "synaptic plasticity",
+    "M6": "oligodendrocyte RNA processing",
     "M7": "immune response",
     "M8": "reactive microglia",
-    "M9": "neural noncoding",
+    "M12": "uncertain (cell cycle / chromatin)",
+    "M13": "uncertain (immune / vascular)",
     "M14": "neurite morphogenesis",
+    "M15": "pericyte immune signaling",
+    "M16": "synapse assembly",
+    "M17": "neuronal protein regulation",
+    "M19": "synaptic signaling",
+    "M21": "OPC signaling",
     "M23": "oligo organelle regulation",
     "M24": "blood-brain barrier transport",
+    "M25": "uncertain (RNA metabolism)",
+    "M27": "ribosome biogenesis",
     "M30": "oligodendrocyte progenitor",
     "M32": "reactive astrocyte",
+    "M33": "uncertain (chromatin regulation)",
+    "M34": "uncertain (inflammatory signaling)",
 }
 # Modules significant in exactly one region (or, for M17, two concordant-sign regions) but
 # NOT whole-cortex - see "Regionally variable extension" above. Value = region used for direction.
 region_specific_modules = {"M4": "BA17", "M6": "BA17", "M13": "BA7", "M16": "BA17", "M17": "BA17", "M30": "BA17"}
+
+# GeneM9 ("neural noncoding") is EXCLUDED despite being ASD-significant (whole-cortex FDR=0.0014,
+# one of the strongest of the 24) because its defining "noncoding" property is essentially
+# eliminated by nispace's mrna/magicc reproducibility-based gene dropout: of GeneM9's 241
+# biotype-annotated genes, 97 are non-coding (lincRNA/pseudogene/antisense/etc.), of which only
+# 3 pseudogenes survive dropout (0% survival for every other non-coding biotype) - vs. 47%
+# survival for GeneM9's 144 protein-coding genes. What nispace actually delivers for "GeneM9"
+# is therefore a 71-gene remnant that is ~96% protein-coding (68/71) - i.e., a set that no
+# longer represents what the label describes, only an incidental leftover. Verified this is not
+# a general problem: the other 10 labeled modules' paper-cited emblematic/hub genes (GRIN2A,
+# MYO5A, BTRC for GeneM5; SOX4, SOX11 for GeneM30; SCN9A for GeneM4) all survive dropout in
+# both mrna and magicc, and their aggregate dropout rates (30-48%) are unremarkable relative to
+# the collection's 17-71% range - GeneM9's 71%/68% (mrna/magicc) dropout is a genuine outlier.
+excluded_modules = {"M9"}
 
 def _fix_excel_date_mangled_gene_symbol(v):
     # Excel autocorrects gene symbols like "MARCH4"/"SEPT9" into dates on file creation;
@@ -525,6 +564,8 @@ df_gandal_stats["module_n"] = df_gandal_stats["Module"].str.replace("Gene", "").
 selected_modules = {}  # module_n -> set_name
 for _, row in df_gandal_stats.iterrows():
     n = row["module_n"]
+    if n in excluded_modules:
+        continue
     if n in region_specific_modules:
         beta = row[f"ASD_{region_specific_modules[n]}_Beta"]
     elif row["Whole.Cortex_ASD_FDR"] < 0.05:
@@ -543,8 +584,8 @@ collection_asd = {
     for n, set_name in selected_modules.items()
 }
 print(f"ASD modules (Gandal et al., 2022): {len(collection_asd)} modules "
-      f"(expected 24: 18 whole-cortex significant + 6 regionally variable "
-      f"[GeneM4, GeneM6, GeneM13, GeneM16, GeneM17, GeneM30])")
+      f"(expected 23: 18 whole-cortex significant + 6 regionally variable "
+      f"[GeneM4, GeneM6, GeneM13, GeneM16, GeneM17, GeneM30], minus 1 excluded [GeneM9])")
 write_json(collection_asd, ref_dir / "collection-ASDModulesGandal2022.collect")
 
 # Weighted companion: same 24 modules/genes as above, but every member gene keeps its own_kme
