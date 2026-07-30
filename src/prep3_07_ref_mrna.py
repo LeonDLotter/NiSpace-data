@@ -1,6 +1,7 @@
 # %% Init
 
 import sys
+import datetime
 from pathlib import Path
 import numpy as np
 import pandas as pd
@@ -527,12 +528,16 @@ region_specific_modules = {"M4": "BA17", "M6": "BA17", "M13": "BA7", "M16": "BA1
 excluded_modules = {"M9"}
 
 def _fix_excel_date_mangled_gene_symbol(v):
-    # Excel autocorrects gene symbols like "MARCH4"/"SEPT9" into dates on file creation;
-    # openpyxl then reads these cells back as datetime objects instead of strings. Only
-    # the MARCH1-11 and SEPT1-15 gene families are affected in this file (verified: all
-    # mangled cells have month 3 or 9). Reconstruct the original symbol from month/day.
+    # Excel autocorrects gene symbols like "MARCH4"/"SEPT9" into dates on file creation. Readers
+    # then return either a datetime object (openpyxl) or a raw Excel serial date number - a plain
+    # int/float counting days since 1899-12-30 (pandas' read_excel, seen with the Li et al. 2020
+    # GEO file) - instead of the original string. Only the MARCH1-11 and SEPT1-15 gene families
+    # are affected in the files used here (verified: all mangled cells resolve to month 3 or 9).
+    # Reconstruct the original symbol from month/day in either representation.
     if isinstance(v, str):
         return v
+    if isinstance(v, (int, float)):
+        v = datetime.datetime(1899, 12, 30) + datetime.timedelta(days=v)
     month_prefix = {3: "MARCH", 9: "SEPT"}
     return f"{month_prefix[v.month]}{v.day}"
 
@@ -602,5 +607,100 @@ collection_asd_weighted = pd.concat(
     axis=0, names=["set", "map"],
 ).rename("weight").astype(np.float32)
 collection_asd_weighted.to_csv(ref_dir / "collection-ASDModulesGandal2022Weights.collect", index=True)
+
+# FMR1/FMRP-related gene sets: CLIP-seq binding targets (Li et al., 2020, human iPSC-derived
+# cells, plus 3 earlier groups' target lists bundled in that paper's own supplementary data)
+# and RNA-editing-based gene sets (Tran et al., 2019) linking ASD and Fragile X syndrome.
+#
+# Source (CLIP targets): GEO GSE128860, file GSE128860_CLIP.xlsx, sheet "gene lists". Four
+# columns are Li et al.'s own human CLIP-seq targets per cell type/lineage (dNPC/vNPC = dorsal/
+# ventral forebrain neural progenitor cells; dNeuron/vNeuron = dorsal excitatory/ventral
+# inhibitory neurons, all differentiated from human ESC/iPSC lines). Three further columns are
+# OTHER groups' previously published FMRP target lists, reproduced by Li et al. for comparison
+# (Ascano et al. 2012, human HEK293 - non-neuronal; Darnell et al. 2011, mouse brain; Maurin
+# et al. 2018, mouse brain). Verified counts match the paper exactly: dNPC=1232, vNPC=1234,
+# dNeuron=629, vNeuron=721 (union=1653); Darnell=844 (~842 commonly cited elsewhere). Excel
+# gene-symbol date-mangling affects only the Ascano (9 cells) and Darnell (2 cells) columns.
+#
+# Source (RNA editing): Tran et al. 2019 Supplementary Tables 5 (module memberships of RNA-
+# editing sites from WGCNA) and 7 (differential RNA-editing sites in Fragile X samples),
+# obtained as the paper's own Nature-hosted supplementary files (local archive, not
+# re-downloaded here, since Nature/PMC gate the direct download behind a JS/bot challenge).
+# Table 5's "turquoise" module (per brain region) is the editing-site co-variation module
+# significantly associated with ASD diagnosis - these genes are from idiopathic ASD brains,
+# NOT Fragile X patients (their FXS relevance is only via the paper's own convergence finding
+# with Table 7). Table 7 gives genes with direct differential RNA editing (Fisher's p<0.05,
+# table is pre-filtered to significant sites) between Fragile X patients/carriers/controls, in
+# two independent cohorts: NeuroBioBank (full-mutation FXS vs. carriers) and UC Davis (FXTAS -
+# premutation carriers with tremor/ataxia syndrome vs. controls - a mechanistically distinct
+# condition from full-mutation FXS, kept as its own set for that reason).
+#
+# Naming: {EvidenceType}_{Context}_{StudyTag} - no per-set metadata mechanism exists in the
+# nispace-data/.collect schema (see ASDModulesGandal2022 above), so evidence type/species/
+# tissue/cohort/study all have to be encoded in the set name itself. EvidenceType is one of
+# FMR1Target (CLIP-seq binding target), ASDEditMod (RNA-editing co-module linked to ASD
+# diagnosis - a module-membership call), or FXSEditDiff (direct differential RNA editing in
+# Fragile-X-spectrum patients - a case-control significance call). EditMod and EditDiff are
+# deliberately different suffixes: both are RNA-editing-based, but module co-membership and
+# direct case-control difference are different statistical claims, not interchangeable. No
+# weights are included for any set in this collection (unlike ASDModulesGandal2022's kME,
+# there is no single quantity here that would mean the same thing across all 12 sets).
+fmr1_target_labels = {
+    "dNPC": "FMR1Target_dNPC_Li2020",
+    "vNPC": "FMR1Target_vNPC_Li2020",
+    "dNeuron": "FMR1Target_dNeuron_Li2020",
+    "vNeuron": "FMR1Target_vNeuron_Li2020",
+    "Ascano": "FMR1Target_NonNeuronal_Ascano2012",
+    "Darnell": "FMR1Target_MouseBrain_Darnell2011",
+    "Maurin": "FMR1Target_MouseBrain_Maurin2018",
+}
+df_fmr1 = pd.read_excel(
+    download("https://ftp.ncbi.nlm.nih.gov/geo/series/GSE128nnn/GSE128860/suppl/GSE128860_CLIP.xlsx"),
+    sheet_name="gene lists",
+)[list(fmr1_target_labels)]
+collection_fmr1 = {
+    set_name: df_fmr1[col].dropna().apply(_fix_excel_date_mangled_gene_symbol).tolist()
+    for col, set_name in fmr1_target_labels.items()
+}
+
+tran_table5_path = nispace_source_data_path / "_archive" / "Tran2018" / "41593_2018_287_MOESM7_ESM.xlsx"
+asd_editmod_sheets = {
+    "5b": "ASDEditMod_FrontalCx_Tran2019",
+    "5c": "ASDEditMod_TemporalCx_Tran2019",
+    "5d": "ASDEditMod_Cerebellum_Tran2019",
+}
+for sheet, set_name in asd_editmod_sheets.items():
+    df = pd.read_excel(tran_table5_path, sheet_name=sheet, header=2)
+    collection_fmr1[set_name] = sorted(set(df.loc[df["moduleColor"] == "turquoise", "gene_name"].dropna()))
+
+tran_table7_path = nispace_source_data_path / "_archive" / "Tran2018" / "41593_2018_287_MOESM9_ESM.xlsx"
+fxs_editdiff_sheets = {
+    "7b": "FXSEditDiff_NeuroBioBank_Tran2019",
+    "7c": "FXSEditDiff_UCDavisFXTAS_Tran2019",
+}
+for sheet, set_name in fxs_editdiff_sheets.items():
+    df = pd.read_excel(tran_table7_path, sheet_name=sheet, header=2)
+    collection_fmr1[set_name] = sorted(set(df["gene_name"].dropna().apply(_fix_excel_date_mangled_gene_symbol)))
+
+print(f"FMR1Targets: {len(collection_fmr1)} sets (expected 12: 7 FMR1Target + 3 ASDEditMod + 2 FXSEditDiff)")
+write_json(collection_fmr1, ref_dir / "collection-FMR1Targets.collect")
+
+# FXSEditDiffWeights: NOT a full weighted parallel of FMR1Targets (which has no weights at all -
+# no single quantity applies across all 12 sets), just the 2 FXSEditDiff sets, weighted by
+# editing_level_effect_size (Tran et al. 2019, Supplementary Table 7b/c) - an unsigned magnitude
+# (0.06-0.9, verified no negative values) of how much a site's editing level differs between
+# Fragile-X-spectrum patients and carriers/controls. ~1/3 of genes have multiple differentially
+# edited sites (up to 32 in NeuroBioBank, 15 in UC Davis) - each gene's weight is the MAX
+# effect size across its own sites (the single strongest piece of evidence for that gene,
+# analogous to how ASDModulesGandal2022Weights uses one kME value per gene, not an aggregate
+# across a network).
+collection_fxs_weighted = {}
+for sheet, set_name in fxs_editdiff_sheets.items():
+    df = pd.read_excel(tran_table7_path, sheet_name=sheet, header=2).dropna(subset=["gene_name"])
+    df["gene_name"] = df["gene_name"].apply(_fix_excel_date_mangled_gene_symbol)
+    collection_fxs_weighted[set_name] = df.groupby("gene_name")["editing_level_effect_size"].max()
+
+collection_fxs_weighted = pd.concat(collection_fxs_weighted, names=["set", "map"]).rename("weight").astype(np.float32)
+collection_fxs_weighted.to_csv(ref_dir / "collection-FXSEditDiffWeights.collect", index=True)
 
 # %%

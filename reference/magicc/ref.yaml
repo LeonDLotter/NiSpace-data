@@ -125,4 +125,28 @@ collections:
     citations:
     - ref: Gandal et al., 2022
       doi: 10.1038/s41586-022-05377-7
+  FMR1Targets:
+    description: FMR1/FMRP-related gene sets, 3 evidence types encoded in the set name -
+      FMR1Target (CLIP-seq binding targets), ASDEditMod (RNA-editing co-module linked to ASD
+      diagnosis), FXSEditDiff (differential RNA editing in Fragile-X-spectrum patients).
+      Naming - {EvidenceType}_{Context}_{Study}, e.g. FMR1Target_dNPC_Li2020. Note - NonNeuronal
+      = HEK293 cells, MouseBrain = mouse not human; UCDavisFXTAS is premutation FXTAS, not
+      full-mutation FXS.
+    citations:
+    - ref: Li et al., 2020
+      doi: 10.1101/gr.251405.119
+    - ref: Ascano et al., 2012
+      doi: 10.1038/nature11737
+    - ref: Darnell et al., 2011
+      doi: 10.1016/j.cell.2011.06.013
+    - ref: Maurin et al., 2018
+      doi: 10.1093/nar/gky267
+    - ref: Tran et al., 2019
+      doi: 10.1038/s41593-018-0287-x
+  FXSEditDiffWeights:
+    description: Same data as the two FXSEditDiff sets in FMR1Targets, with differential
+      editing effect size as weights.
+    citations:
+    - ref: Tran et al., 2019
+      doi: 10.1038/s41593-018-0287-x
 tabs: auto
