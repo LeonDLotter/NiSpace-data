@@ -100,8 +100,8 @@ def generate_grf(alpha, seed, mirrored=True):
 
 # settings
 alphas = [0.0, 1.0, 2.0, 3.0]
-n_grf  = {alpha: 10000 if alpha == 0.0 else 1000 for alpha in alphas}
-overwrite_niftis = True
+n_grf  = {alpha: 10000 for alpha in alphas}
+overwrite_niftis = False
 overwrite_tables  = True
 
 # %% Phase 1 — generate and save GRF maps to external drive
