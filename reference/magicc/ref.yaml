@@ -149,4 +149,85 @@ collections:
     citations:
     - ref: Tran et al., 2019
       doi: 10.1038/s41593-018-0287-x
+  GWASAtlas:
+    description: MAGMA gene-based genome-wide-significant genes (p < 2.477e-6) for 17 psychiatric,
+      neurological and neurodevelopmental disorders, computed by Watanabe et al., 2019 (GWAS ATLAS)
+      from public GWAS summary statistics. Naming - {Disorder}_n{sample size}_{SourceStudy}, e.g.
+      SCZ_n105318_Pardinas2018. 4 additional curated disorders (AlcoholDependence, AnxietyDisorder,
+      FocalEpilepsy, PTSD) had zero genome-wide-significant genes and are not included here - see
+      GWASAtlasWeights.
+    citations:
+    - ref: Watanabe et al., 2019
+      doi: 10.1038/s41588-019-0481-0
+    - ref: Pardiñas et al., 2018
+      doi: 10.1038/s41588-018-0059-2
+    - ref: Ruderfer et al., 2018
+      doi: 10.1016/j.cell.2018.05.046
+    - ref: Wray et al., 2018
+      doi: 10.1038/s41588-018-0090-3
+    - ref: Howard et al., 2019
+      doi: 10.1038/s41593-018-0326-7
+    - ref: Demontis et al., 2019
+      doi: 10.1038/s41588-018-0269-7
+    - ref: Grove et al., 2019
+      doi: 10.1038/s41588-019-0344-8
+    - ref: Duncan et al., 2017
+      doi: 10.1176/appi.ajp.2017.16121402
+    - ref: Arnold et al., 2018
+      doi: 10.1038/mp.2017.154
+    - ref: Jansen et al., 2019
+      doi: 10.1038/s41588-018-0311-9
+    - ref: Nalls et al., 2019
+      doi: 10.1016/S1474-4422(19)30320-5
+    - ref: Nicolas et al., 2018
+      doi: 10.1016/j.neuron.2018.02.027
+    - ref: Sawcer et al., 2011
+      doi: 10.1038/nature10251
+    - ref: International League Against Epilepsy Consortium on Complex Epilepsies, 2018
+      doi: 10.1038/s41467-018-07524-z
+    - ref: International League Against Epilepsy Consortium on Complex Epilepsies, 2014
+      doi: 10.1016/S1474-4422(14)70171-1
+  GWASAtlasWeights:
+    description: Same 21 disorders as GWASAtlas, including the 4 with zero genome-wide-significant
+      genes, weighted by -log10(MAGMA gene-based p-value). This reflects statistical confidence in
+      gene-disorder association, not a direct effect-size estimate - valid for thresholding
+      uniformly across all disorders (recovering GWASAtlas is weight > 5.606), not for
+      comparing raw weight magnitude between disorders of very different sample size.
+    citations:
+    - ref: Watanabe et al., 2019
+      doi: 10.1038/s41588-019-0481-0
+    - ref: Pardiñas et al., 2018
+      doi: 10.1038/s41588-018-0059-2
+    - ref: Ruderfer et al., 2018
+      doi: 10.1016/j.cell.2018.05.046
+    - ref: Wray et al., 2018
+      doi: 10.1038/s41588-018-0090-3
+    - ref: Howard et al., 2019
+      doi: 10.1038/s41593-018-0326-7
+    - ref: Demontis et al., 2019
+      doi: 10.1038/s41588-018-0269-7
+    - ref: Grove et al., 2019
+      doi: 10.1038/s41588-019-0344-8
+    - ref: Duncan et al., 2017
+      doi: 10.1176/appi.ajp.2017.16121402
+    - ref: Walters et al., 2018
+      doi: 10.1038/s41593-018-0275-1
+    - ref: Otowa et al., 2016
+      doi: 10.1038/mp.2015.197
+    - ref: Arnold et al., 2018
+      doi: 10.1038/mp.2017.154
+    - ref: Duncan et al., 2018
+      doi: 10.1038/mp.2017.77
+    - ref: Jansen et al., 2019
+      doi: 10.1038/s41588-018-0311-9
+    - ref: Nalls et al., 2019
+      doi: 10.1016/S1474-4422(19)30320-5
+    - ref: Nicolas et al., 2018
+      doi: 10.1016/j.neuron.2018.02.027
+    - ref: Sawcer et al., 2011
+      doi: 10.1038/nature10251
+    - ref: International League Against Epilepsy Consortium on Complex Epilepsies, 2018
+      doi: 10.1038/s41467-018-07524-z
+    - ref: International League Against Epilepsy Consortium on Complex Epilepsies, 2014
+      doi: 10.1016/S1474-4422(14)70171-1
 tabs: auto

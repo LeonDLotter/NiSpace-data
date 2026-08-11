@@ -703,4 +703,112 @@ for sheet, set_name in fxs_editdiff_sheets.items():
 collection_fxs_weighted = pd.concat(collection_fxs_weighted, names=["set", "map"]).rename("weight").astype(np.float32)
 collection_fxs_weighted.to_csv(ref_dir / "collection-FXSEditDiffWeights.collect", index=True)
 
+# %% Psychiatric/neurological/neurodevelopmental disorder GWAS genes (Watanabe et al., 2019 GWAS ATLAS)
+#
+# Source: gwasATLAS_v20191115 bulk download (_archive/gwasATLAS_v20191115/), not the interactive
+# atlas.ctglab.nl website. Two files used: the trait metadata table (id/PMID/N/Ncase/Ncontrol/...)
+# and gwasATLAS_v20191115_magma_P.txt.gz - MAGMA gene-based association p-values (SNP-wise mean
+# model, hg19, 1kb gene window both sides) for every gene x every one of 4,756 GWAS in the atlas.
+# These are CTG Lab's own independently-computed output from public GWAS summary statistics
+# (including several PGC studies) - not a redistribution of the underlying study's raw data, so
+# PGC's "do not cross-post these data" clause (which restricts the summary-statistics file itself,
+# not derived/computed output - see memory reference-gwas-data-licensing) does not apply here.
+#
+# Disorder + study selection: out of ~800 psychiatric/neurological/neurodevelopmental keyword or
+# domain matches in the atlas, manually curated down to 21 actual diagnosed disorders (excluding
+# UKB Mental Health Questionnaire symptom/severity items, medication/treatment-response traits,
+# family-history-of-relative proxy phenotypes, and case-case contrasts like "Schizophrenia vs
+# Bipolar disorder"), then one best-powered version selected per disorder (by effective sample
+# size Neff = 4/(1/Ncase+1/Ncontrol), preferring genuine case-control designs over ancestry-arm
+# duplicates of the same underlying study). 3 disorders (Migraine, Narcolepsy, NicotineDependence)
+# have no independent source publication - Watanabe et al. themselves ran these directly on UK
+# Biobank fields, so they cite only the GWAS ATLAS paper itself.
+#
+# Genes: MAGMA output uses Ensembl gene IDs, mapped to HGNC symbols via the HGNC complete gene
+# set (single canonical, stable source), keeping only unambiguous 1:1 symbol<->Ensembl mappings
+# (18,888 of 20,187 tested genes retained; the rest have no clean current HGNC symbol).
+#
+# Two collections:
+# - GWASAtlas: binary, genome-wide-significant genes only (p < 0.05 / 20,187 genes tested
+#   = 2.477e-6, the standard MAGMA/Bonferroni gene-wide threshold, computed BEFORE symbol mapping
+#   to match MAGMA's actual multiple-testing burden). 4 of 21 disorders (AlcoholDependence,
+#   AnxietyDisorder, FocalEpilepsy, PTSD) have zero genes at this threshold and are excluded
+#   entirely from this collection (not included as empty sets).
+# - GWASAtlasWeights: all 21 disorders, every tested gene, weighted by -log10(p). This is a
+#   confidence/significance measure, not a direct effect-size estimate (MAGMA's gene-based test
+#   already corrects for gene size/SNP density/LD via its null, but does not fully separate true
+#   effect magnitude from per-gene tagging power - see memory reference-mrna-magicc-genesets for
+#   the full reasoning). A threshold applied uniformly across all 21 sets (e.g. recovering
+#   GWASAtlas from GWASAtlasWeights via weight > -log10(2.477e-6) = 5.606) is
+#   statistically well-calibrated across disorders despite their very different sample sizes,
+#   because MAGMA's null is the same test for every column; comparing raw weight *magnitude*
+#   between disorders is not valid for the same reason (confounded by each disorder's own power).
+#
+# Sample size (n) in each set name is the plain total N as reported by the source study itself
+# (not the Neff used for study selection) - e.g. MDD_n173005_Wray2018 is exactly Wray et al.
+# 2018's public (non-23andMe) total: (135458-75607) + (344901-231747) = 59851+113154 = 173005,
+# an exact match to the paper's stated 23andMe contribution subtracted from its headline number.
+# Depression_n500199_Howard2019 is likewise the standard "PGC+UKB, 23andMe excluded" public
+# release of Howard et al. 2019 (source file literally named PGC_UKB_depression_genome-wide.txt),
+# smaller than the paper's 23andMe-inclusive headline number for the same reason.
+gwasatlas_dir = nispace_source_data_path / "_archive" / "gwasATLAS_v20191115"
+
+gwasatlas_disorders = {
+    3982: "SCZ_n105318_Pardinas2018",
+    4039: "BD_n74194_Ruderfer2018",
+    4014: "MDD_n173005_Wray2018",
+    4293: "Depression_n500199_Howard2019",
+    3: "ADHD_n55374_Demontis2019",
+    4037: "ASD_n46350_Grove2019",
+    17: "AN_n14477_Duncan2017",
+    4027: "AlcoholDependence_n52848_Walters2018",
+    3689: "NicotineDependence_n244890_Watanabe2019",
+    6: "AnxietyDisorder_n17310_Otowa2016",
+    4042: "OCD_n9725_Arnold2018",
+    16: "PTSD_n19884_Duncan2018",
+    4094: "AD_n455258_Jansen2019",
+    4167: "PD_n482730_Nalls2019",
+    4010: "ALS_n80610_Nicolas2018",
+    3819: "MS_n27148_Sawcer2011",
+    4156: "Epilepsy_n44889_ILAE2018",
+    1201: "FocalEpilepsy_n31467_ILAE2014",
+    1200: "GGE_n28763_ILAE2014",
+    3603: "Migraine_n289307_Watanabe2019",
+    3234: "Narcolepsy_n384879_Watanabe2019",
+}
+
+df_magma = pd.read_csv(
+    gwasatlas_dir / "gwasATLAS_v20191115_magma_P.txt.gz", sep="\t",
+    usecols=["GENE"] + [str(i) for i in gwasatlas_disorders],
+)
+gwas_threshold = 0.05 / len(df_magma)
+
+df_hgnc = pd.read_csv(
+    "https://storage.googleapis.com/public-download-files/hgnc/tsv/tsv/hgnc_complete_set.txt",
+    sep="\t", usecols=["symbol", "ensembl_gene_id"],
+)
+df_hgnc = df_hgnc.dropna(subset=["ensembl_gene_id"])
+df_hgnc = df_hgnc[~df_hgnc["ensembl_gene_id"].duplicated(keep=False)]  # drop ambiguous 1:many
+ensg_to_symbol = df_hgnc.set_index("ensembl_gene_id")["symbol"].to_dict()
+df_magma["symbol"] = df_magma["GENE"].map(ensg_to_symbol)
+df_magma = df_magma.dropna(subset=["symbol"]).drop_duplicates(subset=["symbol"])
+
+collection_gwasatlas_weighted = {}
+for gwas_id, set_name in gwasatlas_disorders.items():
+    collection_gwasatlas_weighted[set_name] = -np.log10(df_magma.set_index("symbol")[str(gwas_id)].dropna())
+collection_gwasatlas_weighted = (
+    pd.concat(collection_gwasatlas_weighted, names=["set", "map"]).rename("weight").astype(np.float32)
+)
+collection_gwasatlas_weighted.to_csv(ref_dir / "collection-GWASAtlasWeights.collect", index=True)
+
+collection_gwasatlas = {}
+for gwas_id, set_name in gwasatlas_disorders.items():
+    s = df_magma.set_index("symbol")[str(gwas_id)].dropna()
+    sig_genes = sorted(s[s < gwas_threshold].index.tolist())
+    if len(sig_genes) > 0:
+        collection_gwasatlas[set_name] = sig_genes
+print(f"GWASAtlas: {len(collection_gwasatlas)} sets (of {len(gwasatlas_disorders)} disorders; "
+      f"{len(gwasatlas_disorders) - len(collection_gwasatlas)} excluded for 0 genome-wide-significant genes)")
+write_json(collection_gwasatlas, ref_dir / "collection-GWASAtlas.collect")
+
 # %%
