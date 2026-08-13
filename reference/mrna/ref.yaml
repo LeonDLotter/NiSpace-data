@@ -231,4 +231,23 @@ collections:
       doi: 10.1038/s41467-018-07524-z
     - ref: International League Against Epilepsy Consortium on Complex Epilepsies, 2014
       doi: 10.1016/S1474-4422(14)70171-1
+  HPOAllPsychiatric:
+    description: Genes annotated to 214 hand-curated Human Phenotype Ontology terms under
+      "Abnormality of mental function", covering rare/monogenic disease-causing gene-phenotype
+      annotations (OMIM/Orphanet case reports). "Psychiatric" is used in the DSM-5
+      nosological sense, covering neurodevelopmental, sleep-wake and neurocognitive/dementia
+      terms alongside classic psychiatric diagnoses. 214 terms were manually selected.
+    citations:
+    - ref: Köhler et al., 2014
+      doi: 10.1093/nar/gkt1026
+    - ref: Köhler et al., 2017
+      doi: 10.1093/nar/gkw1039
+  HPOCorePsychiatric:
+    description: A subset of HPOAllPsychiatric's 214 terms that are actual diagnosis(-like) labels 
+      (e.g. Schizophrenia, Autism, Bipolar affective disorder) rather than granular symptom terms.
+    citations:
+    - ref: Köhler et al., 2014
+      doi: 10.1093/nar/gkt1026
+    - ref: Köhler et al., 2017
+      doi: 10.1093/nar/gkw1039
 tabs: auto

@@ -811,4 +811,286 @@ print(f"GWASAtlas: {len(collection_gwasatlas)} sets (of {len(gwasatlas_disorders
       f"{len(gwasatlas_disorders) - len(collection_gwasatlas)} excluded for 0 genome-wide-significant genes)")
 write_json(collection_gwasatlas, ref_dir / "collection-GWASAtlas.collect")
 
+# %% Psychiatric-relevant genes from the Human Phenotype Ontology (HPO)
+#
+# Source: genes_to_phenotype.txt, HPO's gene<->phenotype annotation file (pinned to release
+# v2026-06-23, a GitHub Releases asset - a release tag is the correct immutable anchor for an
+# asset that is not part of the git tree, unlike a raw repo file pinned by commit hash).
+# Unlike GWASAtlas, this reflects rare/monogenic disease-causing gene<->clinical-feature
+# annotations (curated from OMIM/Orphanet case reports), not common-variant GWAS association -
+# a complementary, not redundant, evidence type to GWASAtlas for the same disorder names.
+#
+# Term selection: started from the term HP:0025792 "Abnormal cognitive process", traced up to
+# its parent HP:0011446 "Abnormality of mental function" as the working heading, then manually
+# reviewed every one of its ~600 descendant terms across all 10 direct child branches
+# (excluding Reduced consciousness, Micrographia and Synesthesia entirely at the branch level
+# for being acute/critical-care neurology, a single Parkinsonian motor-sign leaf term, and 0
+# genes respectively) - keeping 214 terms with >=1 annotated gene after excluding non-
+# psychiatric noise found during review: physical/sensory symptoms like Photophobia/Polydipsia
+# that happen to be filed under behavioral branches, motor speech/articulation disorders like
+# Dysarthria, libido/sexual-physiology terms, generic neurologic-deterioration terms that do
+# not specify cognitive involvement, and a false-cognate "Anorexia" term that in HPO means
+# clinical loss-of-appetite, not the eating disorder - it is not even in this branch, its
+# parent is "Abdominal symptom". Full per-term include/exclude/reason audit trail is in
+# _archive/HPO/hpo_psych_term_tracker.csv.
+#
+# Two collections from the same 214-term review:
+# - HPOAllPsychiatric: all 214 terms as individual sets (not flattened into one background
+#   list) so users can pick their own combination downstream (set_size_range etc.).
+# - HPOCorePsychiatric: 38 of the 214 that are actual diagnosis(-like) labels rather than
+#   granular symptom terms (e.g. Schizophrenia, Autism, Bipolar affective disorder) - a subset
+#   of HPOAllPsychiatric, not a separate/independent selection.
+# "Psychiatric" is used in the DSM-5 nosological sense (which covers Neurodevelopmental
+# Disorders/intellectual disability, Sleep-Wake Disorders and Neurocognitive Disorders/dementia
+# under the same manual as Schizophrenia etc.), not narrowly "distinct from neurological" -
+# genuinely neurological-disease-defining phenotypes (Parkinsonism, muscle weakness, aphasia
+# from stroke) were never in scope, since HPO files their core symptoms under the separate
+# "Abnormality of the nervous system" branch, not "Abnormality of mental function".
+#
+# No weights: HPO's only continuous-ish field (per-annotation "frequency", e.g. "15/15") mixes
+# fraction strings, missing values and categorical HPO frequency-modifier term codes - usable
+# in principle but not built here; binary set membership only for now.
+#
+# Gene identifiers are already HGNC symbols in this file (unlike GWASAtlas's Ensembl IDs) - no
+# ID mapping needed. "-" is a missing-gene-symbol placeholder in the raw file, dropped.
+# Dict values are (set_name, is_core_diagnosis) - set_name is the term name in CamelCase.
+
+hpo_psychiatric_terms = {
+    "HP:0000709": ("Psychosis", True),  # Psychosis
+    "HP:0000710": ("Hyperorality",False),  # Hyperorality
+    "HP:0000711": ("Restlessness",False),  # Restlessness
+    "HP:0000712": ("EmotionalLability",False),  # Emotional lability
+    "HP:0000713": ("Agitation",False),  # Agitation
+    "HP:0000716": ("Depression", True),  # Depression
+    "HP:0000717": ("Autism", True),  # Autism
+    "HP:0000718": ("AggressiveBehavior", True),  # Aggressive behavior
+    "HP:0000719": ("InappropriateBehavior",False),  # Inappropriate behavior
+    "HP:0000721": ("LackOfSpontaneousPlay",False),  # Lack of spontaneous play
+    "HP:0000722": ("CompulsiveBehaviors", True),  # Compulsive behaviors
+    "HP:0000723": ("RestrictiveBehavior",False),  # Restrictive behavior
+    "HP:0000725": ("PsychoticEpisodes",False),  # Psychotic episodes
+    "HP:0000726": ("Dementia", True),  # Dementia
+    "HP:0000727": ("FrontalLobeDementia",False),  # Frontal lobe dementia
+    "HP:0000728": ("ReducedAbilityToFormPeerRelationships",False),  # Reduced ability to form peer relationships
+    "HP:0000729": ("AutisticBehavior", True),  # Autistic behavior
+    "HP:0000732": ("InflexibleAdherenceToRoutines",False),  # Inflexible adherence to routines
+    "HP:0000733": ("MotorStereotypy", True),  # Motor stereotypy
+    "HP:0000734": ("Disinhibition",False),  # Disinhibition
+    "HP:0000736": ("ShortAttentionSpan",False),  # Short attention span
+    "HP:0000737": ("Irritability",False),  # Irritability
+    "HP:0000738": ("Hallucinations", True),  # Hallucinations
+    "HP:0000739": ("Anxiety", True),  # Anxiety
+    "HP:0000740": ("EpisodicParoxysmalAnxiety",False),  # Episodic paroxysmal anxiety
+    "HP:0000741": ("Apathy",False),  # Apathy
+    "HP:0000742": ("SelfMutilation",False),  # Self-mutilation
+    "HP:0000744": ("LowFrustrationTolerance",False),  # Low frustration tolerance
+    "HP:0000745": ("AbnormalDiminishedVolition",False),  # Abnormal diminished volition
+    "HP:0000746": ("Delusion", True),  # Delusion
+    "HP:0000748": ("InappropriateLaughter",False),  # Inappropriate laughter
+    "HP:0000749": ("ParoxysmalBurstsOfLaughter",False),  # Paroxysmal bursts of laughter
+    "HP:0000750": ("DelayedSpeechAndLanguageDevelopment",False),  # Delayed speech and language development
+    "HP:0000751": ("PersonalityChanges",False),  # Personality changes
+    "HP:0000752": ("Hyperactivity", True),  # Hyperactivity
+    "HP:0000756": ("Agoraphobia", True),  # Agoraphobia
+    "HP:0000757": ("LackOfInsight",False),  # Lack of insight
+    "HP:0000758": ("AbnormalNonverbalCommunicativeBehavior",False),  # Abnormal nonverbal communicative behavior
+    "HP:0000817": ("ReducedEyeContact",False),  # Reduced eye contact
+    "HP:0001249": ("IntellectualDisability", True),  # Intellectual disability
+    "HP:0001254": ("Lethargy",False),  # Lethargy
+    "HP:0001256": ("MildIntellectualDisability", True),  # Mild intellectual disability
+    "HP:0001262": ("ExcessiveDaytimeSomnolence",False),  # Excessive daytime somnolence
+    "HP:0001268": ("MentalDeterioration",False),  # Mental deterioration
+    "HP:0001289": ("Confusion",False),  # Confusion
+    "HP:0001344": ("AbsentSpeech",False),  # Absent speech
+    "HP:0001345": ("PsychoticMentation",False),  # Psychotic mentation
+    "HP:0001483": ("EyePoking",False),  # Eye poking
+    "HP:0002145": ("FrontotemporalDementia", True),  # Frontotemporal dementia
+    "HP:0002167": ("AbnormalSpeechPattern",False),  # Abnormal speech pattern
+    "HP:0002187": ("ProfoundIntellectualDisability", True),  # Profound intellectual disability
+    "HP:0002300": ("Mutism",False),  # Mutism
+    "HP:0002330": ("SleepAttack",False),  # Sleep attack
+    "HP:0002332": ("LackOfPeerRelationships",False),  # Lack of peer relationships
+    "HP:0002342": ("ModerateIntellectualDisability", True),  # Moderate intellectual disability
+    "HP:0002354": ("MemoryImpairment",False),  # Memory impairment
+    "HP:0002360": ("SleepDisturbance", True),  # Sleep disturbance
+    "HP:0002367": ("VisualHallucination",False),  # Visual hallucination
+    "HP:0002371": ("LossOfSpeech",False),  # Loss of speech
+    "HP:0002381": ("Aphasia",False),  # Aphasia
+    "HP:0002427": ("ExpressiveAphasia",False),  # Expressive aphasia
+    "HP:0002439": ("FrontolimbicDementia",False),  # Frontolimbic dementia
+    "HP:0002463": ("LanguageImpairment",False),  # Language impairment
+    "HP:0002465": ("PoorSpeech",False),  # Poor speech
+    "HP:0002474": ("ExpressiveLanguageDelay",False),  # Expressive language delay
+    "HP:0002494": ("AbnormalRapidEyeMovementSleep",False),  # Abnormal rapid eye movement sleep
+    "HP:0002519": ("HypnagogicHallucination",False),  # Hypnagogic hallucination
+    "HP:0002549": ("DeficitInPhonologicShortTermMemory",False),  # Deficit in phonologic short-term memory
+    "HP:0003763": ("Bruxism",False),  # Bruxism
+    "HP:0006863": ("SevereExpressiveLanguageDelay",False),  # Severe expressive language delay
+    "HP:0006889": ("BorderlineIntellectualDisability", True),  # Borderline intellectual disability
+    "HP:0006896": ("HypnopompicHallucination",False),  # Hypnopompic hallucination
+    "HP:0006977": ("DeficitInGrammar",False),  # Deficit in grammar
+    "HP:0006979": ("SleepWakeCycleDisturbance",False),  # Sleep-wake cycle disturbance
+    "HP:0007017": ("ProgressiveForgetfulness",False),  # Progressive forgetfulness
+    "HP:0007018": ("AttentionDeficitHyperactivityDisorder", True),  # Attention deficit hyperactivity disorder
+    "HP:0007064": ("ProgressiveLanguageDeterioration",False),  # Progressive language deterioration
+    "HP:0007086": ("SocialAndOccupationalDeterioration",False),  # Social and occupational deterioration
+    "HP:0007123": ("SubcorticalDementia",False),  # Subcortical dementia
+    "HP:0007200": ("EpisodicHypersomnia",False),  # Episodic hypersomnia
+    "HP:0007302": ("BipolarAffectiveDisorder", True),  # Bipolar affective disorder
+    "HP:0008760": ("ViolentBehavior",False),  # Violent behavior
+    "HP:0008762": ("RepetitiveCompulsiveBehavior",False),  # Repetitive compulsive behavior
+    "HP:0008763": ("NoSocialInteraction",False),  # No social interaction
+    "HP:0008765": ("AuditoryHallucination",False),  # Auditory hallucination
+    "HP:0008767": ("SelfMutilationOfTongueAndLipsDueToInvoluntaryMovements",False),  # Self-mutilation of tongue and lips due to involuntary movements
+    "HP:0008768": ("AbnormalSexualBehavior",False),  # Abnormal sexual behavior
+    "HP:0008770": ("ObsessiveCompulsiveTrait", True),  # Obsessive-compulsive trait
+    "HP:0009088": ("SpeechArticulationDifficulties",False),  # Speech articulation difficulties
+    "HP:0010523": ("Alexia",False),  # Alexia
+    "HP:0010524": ("DisturbedSensoryPerception",False),  # Disturbed sensory perception
+    "HP:0010526": ("Dysgraphia",False),  # Dysgraphia
+    "HP:0010534": ("TransientGlobalAmnesia",False),  # Transient global amnesia
+    "HP:0010863": ("ReceptiveLanguageDelay",False),  # Receptive language delay
+    "HP:0010864": ("SevereIntellectualDisability", True),  # Severe intellectual disability
+    "HP:0010865": ("OppositionalDefiantDisorder", True),  # Oppositional defiant disorder
+    "HP:0011346": ("MildExpressiveLanguageDelay",False),  # Mild expressive language delay
+    "HP:0011351": ("ModerateReceptiveLanguageDelay",False),  # Moderate receptive language delay
+    "HP:0011352": ("SevereReceptiveLanguageDelay",False),  # Severe receptive language delay
+    "HP:0011856": ("Pica", True),  # Pica
+    "HP:0011973": ("ParoxysmalLethargy",False),  # Paroxysmal lethargy
+    "HP:0011999": ("Paranoia", True),  # Paranoia
+    "HP:0012075": ("PersonalityDisorder", True),  # Personality disorder
+    "HP:0012076": ("BorderlinePersonalityDisorder", True),  # Borderline personality disorder
+    "HP:0012166": ("SkinPicking",False),  # Skin-picking
+    "HP:0012167": ("HairPulling",False),  # Hair-pulling
+    "HP:0012168": ("HeadBanging",False),  # Head-banging
+    "HP:0012169": ("SelfBiting",False),  # Self-biting
+    "HP:0012170": ("NailBiting",False),  # Nail-biting
+    "HP:0012171": ("StereotypicalHandWringing",False),  # Stereotypical hand wringing
+    "HP:0012172": ("StereotypicalBodyRocking",False),  # Stereotypical body rocking
+    "HP:0012433": ("AbnormalSocialBehavior",False),  # Abnormal social behavior
+    "HP:0012434": ("DelayedEarlyChildhoodSocialMilestoneDevelopment",False),  # Delayed early-childhood social milestone development
+    "HP:0012523": ("OralAversion",False),  # Oral aversion
+    "HP:0012671": ("Abulia",False),  # Abulia
+    "HP:0012672": ("AkineticMutism",False),  # Akinetic mutism
+    "HP:0012760": ("ReducedSocialResponsiveness",False),  # Reduced social responsiveness
+    "HP:0025160": ("AbnormalTemperTantrums",False),  # Abnormal temper tantrums
+    "HP:0025161": ("FrequentTemperTantrums",False),  # Frequent temper tantrums
+    "HP:0025162": ("SevereTemperTantrums",False),  # Severe temper tantrums
+    "HP:0025233": ("SleepParalysis",False),  # Sleep paralysis
+    "HP:0025234": ("Parasomnia",False),  # Parasomnia
+    "HP:0025235": ("NREMParasomnia",False),  # NREM parasomnia
+    "HP:0025236": ("SleepWalking",False),  # Sleep walking
+    "HP:0025268": ("Stuttering",False),  # Stuttering
+    "HP:0025269": ("PanicAttack", True),  # Panic attack
+    "HP:0025479": ("SelfNeglect",False),  # Self-neglect
+    "HP:0025732": ("AbnormalSocialDevelopment",False),  # Abnormal social development
+    "HP:0030082": ("AbnormalDrinkingBehavior",False),  # Abnormal drinking behavior
+    "HP:0030212": ("Collectionism",False),  # Collectionism
+    "HP:0030213": ("EmotionalDearth",False),  # Emotional dearth
+    "HP:0030215": ("InappropriateCrying",False),  # Inappropriate crying
+    "HP:0030216": ("Inertia",False),  # Inertia
+    "HP:0030218": ("Punding",False),  # Punding
+    "HP:0030219": ("SemanticDementia",False),  # Semantic dementia
+    "HP:0030223": ("PerseverativeThought",False),  # Perseverative thought
+    "HP:0030391": ("SpokenWordRecognitionDeficit",False),  # Spoken word recognition deficit
+    "HP:0030765": ("SleepTerror",False),  # Sleep terror
+    "HP:0030784": ("AnomicAphasia",False),  # Anomic aphasia
+    "HP:0030955": ("AddictiveAlcoholUse",False),  # Addictive alcohol use
+    "HP:0031258": ("Delirium",False),  # Delirium
+    "HP:0031354": ("SleepOnsetInsomnia",False),  # Sleep onset insomnia
+    "HP:0031355": ("MaintenanceInsomnia",False),  # Maintenance insomnia
+    "HP:0031432": ("RestrictedOrRepetitiveBehaviorsOrInterests",False),  # Restricted or repetitive behaviors or interests
+    "HP:0031434": ("AbnormalProsody",False),  # Abnormal prosody
+    "HP:0031467": ("DysregulatedNegativeEmotionalState",False),  # Dysregulated negative emotional state
+    "HP:0031468": ("SeparationInsecurity",False),  # Separation insecurity
+    "HP:0031469": ("LowSelfEsteem",False),  # Low self-esteem
+    "HP:0031473": ("Anger",False),  # Anger
+    "HP:0031589": ("SuicidalIdeation", True),  # Suicidal ideation
+    "HP:0031843": ("AbnormallySlowThoughtProcess",False),  # Abnormally slow thought process
+    "HP:0031844": ("Euphoria",False),  # Euphoria
+    "HP:0031849": ("SleepWakeInversion",False),  # Sleep-wake inversion
+    "HP:0031873": ("EarlyChronotype",False),  # Early chronotype
+    "HP:0031874": ("LateChronotype",False),  # Late chronotype
+    "HP:0031943": ("Akathisia",False),  # Akathisia
+    "HP:0031987": ("DiminishedAbilityToConcentrate",False),  # Diminished ability to concentrate
+    "HP:0032508": ("Polyembolokoilamania",False),  # Polyembolokoilamania
+    "HP:0032509": ("Onychotillomania",False),  # Onychotillomania
+    "HP:0032521": ("SelfHugging",False),  # Self hugging
+    "HP:0032936": ("IntrusionSymptom",False),  # Intrusion symptom
+    "HP:0033051": ("ImpairedExecutiveFunctioning",False),  # Impaired executive functioning
+    "HP:0033052": ("NonEpilepticSeizure",False),  # Non-epileptic seizure
+    "HP:0033063": ("ShortenedSleepPhase",False),  # Shortened sleep phase
+    "HP:0033511": ("AddictiveSubstanceUse",False),  # Addictive substance use
+    "HP:0033687": ("ShortTermMemoryImpairment",False),  # Short term memory impairment
+    "HP:0033689": ("AnterogradeMemoryImpairment",False),  # Anterograde memory impairment
+    "HP:0033705": ("Tearfulness",False),  # Tearfulness
+    "HP:0033838": ("Dysphoria",False),  # Dysphoria
+    "HP:0034435": ("AbnormalEyeContact",False),  # Abnormal eye contact
+    "HP:0040082": ("HappyDemeanor",False),  # Happy demeanor
+    "HP:0100023": ("RecurrentHandFlapping",False),  # Recurrent hand flapping
+    "HP:0100024": ("ConspicuouslyHappyDisposition",False),  # Conspicuously happy disposition
+    "HP:0100025": ("Overfriendliness",False),  # Overfriendliness
+    "HP:0100033": ("Tics", True),  # Tics
+    "HP:0100034": ("MotorTics",False),  # Motor tics
+    "HP:0100035": ("PhonicTics",False),  # Phonic tics
+    "HP:0100543": ("CognitiveImpairment",False),  # Cognitive impairment
+    "HP:0100703": ("TongueThrusting",False),  # Tongue thrusting
+    "HP:0100710": ("Impulsivity", True),  # Impulsivity
+    "HP:0100716": ("SelfInjuriousBehavior", True),  # Self-injurious behavior
+    "HP:0100738": ("AbnormalEatingBehavior",False),  # Abnormal eating behavior
+    "HP:0100739": ("Bulimia", True),  # Bulimia
+    "HP:0100753": ("Schizophrenia", True),  # Schizophrenia
+    "HP:0100754": ("Mania", True),  # Mania
+    "HP:0100785": ("Insomnia", True),  # Insomnia
+    "HP:0100851": ("AbnormalEmotionalState",False),  # Abnormal emotional state
+    "HP:0100852": ("AbnormalFearInducedBehavior",False),  # Abnormal fear-induced behavior
+    "HP:0100962": ("ExcessiveShyness",False),  # Excessive shyness
+    "HP:0410291": ("Negativism",False),  # Negativism
+    "HP:4000064": ("PoorSleep",False),  # Poor sleep
+    "HP:4000070": ("FixatedInterests",False),  # Fixated interests
+    "HP:4000073": ("PronounReversal",False),  # Pronoun reversal
+    "HP:4000076": ("UseOfAnotherPerson'sBodyToCommunicate",False),  # Use of another person's body to communicate
+    "HP:4000079": ("SensorySeeking",False),  # Sensory seeking
+    "HP:4000081": ("ReducedProductionOfGestures",False),  # Reduced production of gestures
+    "HP:5200001": ("SelectiveMutism",False),  # Selective mutism
+    "HP:5200018": ("StereotypicUpperExtremityMovements",False),  # Stereotypic upper-extremity movements
+    "HP:5200021": ("ReducedSocialInsight",False),  # Reduced social insight
+    "HP:5200044": ("ReducedAttentionRegulation",False),  # Reduced attention regulation
+    "HP:5200045": ("ReducedImpulseControl",False),  # Reduced impulse control
+    "HP:5200057": ("LimitedPointing",False),  # Limited pointing
+    "HP:5200069": ("Spinning",False),  # Spinning
+    "HP:5200102": ("ReducedSocialSmiling",False),  # Reduced social smiling
+    "HP:5200134": ("Jumping",False),  # Jumping
+    "HP:5200136": ("ReducedSocialReciprocity",False),  # Reduced social reciprocity
+    "HP:5200218": ("Derealization",False),  # Derealization
+    "HP:5200291": ("REMSleepBehaviorDisorder",False),  # REM sleep behavior disorder
+    "HP:5200310": ("DiminishmentOfSocialInteractions",False),  # Diminishment of social interactions
+    "HP:5200321": ("AmplificationOfSexualBehavior",False),  # Amplification of sexual behavior
+    "HP:5200330": ("SuicideBehaviors",False),  # Suicide behaviors
+    "HP:5200356": ("SleepOnsetRapidEyeMovementPeriod",False),  # Sleep onset rapid eye movement period
+    "HP:5200360": ("ShortREMSleep",False),  # Short REM sleep
+    "HP:6000029": ("SocialAnxiety",False),  # Social anxiety
+}
+
+df_hpo = pd.read_csv(
+    "https://github.com/obophenotype/human-phenotype-ontology/releases/download/v2026-06-23/genes_to_phenotype.txt",
+    sep="\t",
+)
+df_hpo = df_hpo[df_hpo["gene_symbol"] != "-"]
+df_hpo = df_hpo[df_hpo["hpo_id"].isin(hpo_psychiatric_terms)]
+
+collection_hpo_all = {}
+collection_hpo_core = {}
+for hpo_id, (set_name, is_core) in hpo_psychiatric_terms.items():
+    genes = sorted(set(df_hpo.loc[df_hpo["hpo_id"] == hpo_id, "gene_symbol"]))
+    collection_hpo_all[set_name] = genes
+    if is_core:
+        collection_hpo_core[set_name] = genes
+
+print(f"HPOAllPsychiatric: {len(collection_hpo_all)} sets (expected 214)")
+print(f"HPOCorePsychiatric: {len(collection_hpo_core)} sets (expected 38)")
+write_json(collection_hpo_all, ref_dir / "collection-HPOAllPsychiatric.collect")
+write_json(collection_hpo_core, ref_dir / "collection-HPOCorePsychiatric.collect")
+
 # %%
+
