@@ -18,7 +18,7 @@ print(f"Working dir: {wd}")
 from abagen import get_expression_data, keep_stable_genes
 
 # Nispace
-from nispace.io import load_labels, write_json, read_msigdb_json, read_json
+from nispace.io import load_labels, write_json, read_msigdb_json
 from nispace.utils.utils_datasets import download
 
 # local utils
@@ -344,16 +344,31 @@ write_json(
     ref_dir / "collection-CorticalLayers.collect",
 )
 
-# Protein Atlas — brain expression categories
+# Protein Atlas — brain expression categories (HPA v25.1, fetched 2026-08-14; no immutable version
+# pin available - v25.proteinatlas.org still redirects to the live site since v25 hasn't been
+# superseded yet, unlike e.g. v24.proteinatlas.org which is a frozen prior-version snapshot)
 collection_pa = {}
 for s, url in [
-    ("ExpressedElevated",      "https://www.proteinatlas.org/search/tissue_category_rna%3Abrain%3BTissue+enriched%2CGroup+enriched%2CTissue+enhanced+AND+sort_by%3Atissue+specific+score?format=tsv&download=yes"),
-    ("ExpressedNotElevated",   "https://www.proteinatlas.org/search/tissue_category_rna%3AAny%3BTissue+enriched%2CGroup+enriched%2CTissue+enhanced+NOT+tissue_category_rna%3Abrain%3BTissue+enriched%2CGroup+enriched%2CTissue+enhanced+NOT+tissue_category_rna%3Abrain%3BNot+detected+AND+sort_by%3Atissue+specific+score?format=tsv&download=yes"),
-    ("ExpressedLowSpecificity","https://www.proteinatlas.org/search/tissue_category_rna%3AAny%3BLow+tissue+specificity+AND+NOT+tissue_category_rna%3Abrain%3BNot+detected?format=tsv&download=yes"),
-    ("NotInBrain",             "https://www.proteinatlas.org/search/tissue_category_rna%3Abrain%3BNot+detected+AND+NOT+tissue_category_rna%3AAny%3BNot+detected?format=tsv&download=yes"),
-    ("NotInTissue",            "https://www.proteinatlas.org/search/tissue_category_rna%3AAny%3BNot+detected?format=tsv&download=yes"),
+    # order is ordinal by brain-relevance - used below to resolve the handful of gene symbols
+    # that HPA's search-export returns in two adjacent categories at once (duplicate Ensembl-level
+    # records sharing one HGNC symbol, with differing category calls)
+    ("ElevatedInBrain",       "https://www.proteinatlas.org/search/tissue_category_rna%3Abrain%3BTissue+enriched%2CGroup+enriched%2CTissue+enhanced+AND+sort_by%3Atissue+specific+score?format=tsv&download=yes"),
+    ("NotElevatedInBrain",    "https://www.proteinatlas.org/search/tissue_category_rna%3AAny%3BTissue+enriched%2CGroup+enriched%2CTissue+enhanced+NOT+tissue_category_rna%3Abrain%3BTissue+enriched%2CGroup+enriched%2CTissue+enhanced+NOT+tissue_category_rna%3Abrain%3BNot+detected+AND+sort_by%3Atissue+specific+score?format=tsv&download=yes"),
+    ("LowSpecificityInBrain", "https://www.proteinatlas.org/search/tissue_category_rna%3AAny%3BLow+tissue+specificity+AND+NOT+tissue_category_rna%3Abrain%3BNot+detected?format=tsv&download=yes"),
+    ("NotInBrain",            "https://www.proteinatlas.org/search/tissue_category_rna%3Abrain%3BNot+detected+AND+NOT+tissue_category_rna%3AAny%3BNot+detected?format=tsv&download=yes"),
+    ("NotInTissue",           "https://www.proteinatlas.org/search/tissue_category_rna%3AAny%3BNot+detected?format=tsv&download=yes"),
 ]:
-    collection_pa[s] = sorted(pd.read_table(url)["Gene"].unique().tolist())
+    collection_pa[s] = set(pd.read_table(url)["Gene"].unique().tolist())
+seen_pa = set()
+for s in collection_pa:
+    collection_pa[s] -= seen_pa
+    seen_pa |= collection_pa[s]
+collection_pa = {s: sorted(genes) for s, genes in collection_pa.items()}
+# derived rollups - the practical "is this gene brain-expressed" filter/background
+collection_pa["ExpressedInBrain"] = sorted(
+    set(collection_pa["ElevatedInBrain"]) | set(collection_pa["NotElevatedInBrain"]) | set(collection_pa["LowSpecificityInBrain"])
+)
+collection_pa["NotExpressedInBrain"] = sorted(set(collection_pa["NotInBrain"]) | set(collection_pa["NotInTissue"]))
 write_json(collection_pa, ref_dir / "collection-ProteinAtlas.collect")
 
 # BrainSpan — developmental expression marker genes (ABAEnrichment)
@@ -384,9 +399,11 @@ expr_matrix = expression[["gene_symbol", "region_stage", "expression"]].pivot_ta
     columns="region_stage", index="gene_symbol"
 ).droplevel(0, axis=1)
 
-genes_in_brain = read_json(ref_dir / "collection-ProteinAtlas.collect")
-genes_in_brain = genes_in_brain["ExpressedElevated"] + genes_in_brain["ExpressedNotElevated"] + genes_in_brain["ExpressedLowSpecificity"]
-expr_matrix = expr_matrix.loc[expr_matrix.index.isin(genes_in_brain)]
+# Restricted to Protein-Atlas-confirmed brain-expressed genes before stage-enrichment testing:
+# unlike every other collection in this script, BrainSpan derives set membership from its own
+# t-test/fold-change on raw expression magnitude, which floor-noise from non-brain-expressed genes
+# can spuriously trip.
+expr_matrix = expr_matrix.loc[expr_matrix.index.isin(collection_pa["ExpressedInBrain"])]
 expr_matrix = expr_matrix[np.not_equal(expr_matrix.sum(axis=1), 0)]
 expr_matrix = np.log2(expr_matrix + 1)
 

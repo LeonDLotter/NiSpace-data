@@ -90,7 +90,12 @@ collections:
     - ref: Maynard et al., 2021
       doi: 10.1038/s41593-020-00787-0
   ProteinAtlas:
-    description: Brain-expressed genes from the Human Protein Atlas.
+    description: Human Protein Atlas RNA tissue specificity categories (HPA v25.1). Categories
+      taken directly from HPA - ElevatedInBrain (in brain > other tissue), NotElevatedInBrain
+      (deteced in brain but elevated elsewhere), LowSpecificityInBrain (broadly expressed, incl brain),
+      NotInBrain (detected somewhere but not in brain), NotInTissue (not detected in any tissue). 
+      Combined categories for practical gene filtering - ExpressedInBrain (union of ElevatedInBrain,
+      NotElevatedInBrain, LowSpecificityInBrain), NotExpressedInBrain (union of NotInBrain, NotInTissue).
     citations:
     - ref: Sjöstedt et al., 2020
       doi: 10.1126/science.aay5947
