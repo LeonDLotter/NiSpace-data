@@ -142,6 +142,7 @@ PLOT_CMAP = {
     "cortexfeatures": "magma",
     "mitobrain": "magma",
     "tpm": "magma",
+    "mabaseline": "crest",
     "mrna": "viridis",
     "magicc": "viridis",
     "neurosynth": "crest",
@@ -181,7 +182,7 @@ def _resolve_ids(curated, available, n=N_MAPS):
 def _short_title(map_id):
     """Derive a compact display title from a BIDS-style map ID."""
     label = map_id.split("_")[0]
-    for prefix in ("target-", "feature-", "nw-", "mito-", "tissue-",
+    for prefix in ("target-", "feature-", "nw-", "mito-", "tissue-", "db-",
                    "dx-", "alpha-", "gene-"):
         if label.startswith(prefix):
             key = prefix.rstrip("-")
@@ -402,17 +403,24 @@ def _plot_reference_maps(name, ref_cfg, kind, space, out_path, avail_text=None):
             return
 
         try:
-            fig, axes = plt.subplots(2, 3, figsize=(24, 5), gridspec_kw={"hspace": 0.2, "wspace": 0.05})
+            # grid sized to the number of maps (brainplot requires one axis per map); 2x3 for 4-6 maps
+            ncols = min(3, len(niis))
+            nrows = -(-len(niis) // ncols)
+            fig, axes = plt.subplots(nrows, ncols, figsize=(8 * ncols, 2.5 * nrows), squeeze=False,
+                                     gridspec_kw={"hspace": 0.2, "wspace": 0.05})
             for ax in axes.ravel(): ax.set_axis_off()
             fig, _ = brainplot(
                 niis, kind="slice", space=space, cut_coords=SLICE_CUT_COORDS,
-                ncols=3, title=titles, title_kwargs={"fontsize": TITLE_SIZE, "y": 1.0},
+                ncols=ncols, title=titles, title_kwargs={"fontsize": TITLE_SIZE, "y": 1.0},
                 cmap=PLOT_CMAP.get(name),
                 axes=axes, fig=fig, colorbar=False, verbose=False,
             )
-            fig.suptitle(name, fontsize=SUPTITLE_SIZE, fontweight="bold", y=1.05, x=0.512)
+            # 0.85 in above the top row (= 1.05 for the 2x3 grid)
+            fig.suptitle(name, fontsize=SUPTITLE_SIZE, fontweight="bold",
+                         y=0.88 + 0.85 / fig.get_figheight(), x=0.512)
             if avail_text:
-                fig.text(0.512, 0.07, avail_text, ha="center", va="top",
+                # 0.2 in below the lowest row (= 0.07 for the 2x3 grid)
+                fig.text(0.512, 0.11 - 0.2 / fig.get_figheight(), avail_text, ha="center", va="top",
                          fontsize=SUBTITLE_SIZE, style="italic", color="#555555",
                          transform=fig.transFigure)
             fig.savefig(out_path, dpi=DPI, bbox_inches="tight")

@@ -1,0 +1,36 @@
+name: mabaseline
+label: MABaseline
+description: The NiSpace "MABaseline" dataset contains meta-analytic "reporting baseline" maps as introduced with the C-SALE
+  method (Magielse et al., 2025). Each map is the voxel-wise density of activation foci reported across a coordinate-based
+  meta-analysis database or a subset of it, i.e., every focus convolved with an ALE kernel for a fixed sample size of n=20,
+  then summed. Values are unnormalized. NiSpace uses these maps as sampling priors for coordinate-based (NiMARE) null maps, with
+  null foci drawn with probability proportional to the map value; the relative voxel values therefore are the model and are
+  not rescaled in any space. Fetch the original maps by requesting space="MNIOriginal" (downloaded unchanged from the source
+  repository, https://github.com/CNG-LAB/cerebellum_specific_ALE). The processed maps are downloaded from the NiSpace-data
+  GitHub repo; the original maps are on the MNI152NLin6Asym 2mm grid and were masked to the template brain mask, transformed
+  to MNI152NLin2009cAsym with a pre-estimated MNI-to-MNI transformation, and to fsLR/fsaverage using neuromaps.
+cortex_only: false
+citations:
+- ref: Magielse et al., 2025
+  doi: 10.1016/j.neubiorev.2025.106418
+- ref: Yarkoni et al., 2011
+  doi: 10.1038/nmeth.1635
+map_info:
+  cite_column: doi
+  display_columns:
+  - database
+  - subset
+  - license
+collections:
+  All:
+    description: All meta-analytic reporting-baseline maps (currently the whole Neurosynth v7 database; Magielse et al., 2025).
+tabs: auto
+maps:
+  db-neurosynth_subset-all_pub-magielse2025:
+    MNIOriginal:
+      host: url
+      remote: https://raw.githubusercontent.com/CNG-LAB/cerebellum_specific_ALE/943417e389efb12dab5660a7c94b19354917ff44/output/data/Neurosynth_dump_kernels_sum.nii.gz
+    MNI152NLin6Asym: auto
+    MNI152NLin2009cAsym: auto
+    fsLR: auto
+    fsaverage: auto

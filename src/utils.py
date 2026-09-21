@@ -347,6 +347,7 @@ DATASET_PARCELLATE_KWARGS = {
     "rsn17":          dict(background_value=False,  report_background_parcels=False, min_num_valid_datapoints=None, min_fraction_valid_datapoints=None),
     "tpm":            dict(background_value="auto", report_background_parcels=True,  min_num_valid_datapoints=None, min_fraction_valid_datapoints=None),
     "mitobrain":      dict(background_value="auto", report_background_parcels=True,  min_num_valid_datapoints=5,    min_fraction_valid_datapoints=0.3),
+    "mabaseline":     dict(background_value="auto", report_background_parcels=True,  min_num_valid_datapoints=None, min_fraction_valid_datapoints=None),
     "neurosynth":     dict(background_value=False,  report_background_parcels=False, min_num_valid_datapoints=None, min_fraction_valid_datapoints=None),
     "grf":            dict(background_value=False,  report_background_parcels=False, min_num_valid_datapoints=None, min_fraction_valid_datapoints=None),
 }
