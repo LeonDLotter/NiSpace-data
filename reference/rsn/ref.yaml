@@ -6,6 +6,7 @@ description: The NiSpace "RSN" dataset is based on resting-state network probabi
   transformation, divided by 100, masked with a liberal grey matter mask, and transformed to fsLR and fsaverage. Please cite
   the original publication when using these maps.
 cortex_only: true
+license: GPL 3.0
 citations:
 - ref: Dworetsky et al., 2021
   doi: 10.1016/j.neuroimage.2021.118164

@@ -7,6 +7,7 @@ description: The NiSpace "MitoBrain" datasets contains mitochondrial phenotypes 
   (https://identifiers.org/neurovault.collection:16418; space MNIOriginal), masked, resampled to 2mm 
   MNI152NLin6Asym space, and transformed to MNI152NLin2009cAsym, fsLR, and fsaverage surface spaces.
 cortex_only: false
+license: CC0 1.0
 citations:
 - ref: Mosharov et al., 2025
   doi: 10.1038/s41586-025-08740-6

@@ -6,7 +6,7 @@ Saves PNGs at:
   reference/{name}/plot/dset-{name}_plot-overview.png
 
 Usage:
-  python src/prep_plots.py [--parcs] [--refs] [--overwrite] [--name NAME]
+  python src/prep5_plots.py [--parcs] [--refs] [--overwrite] [--name NAME]
 
   --parcs     Only generate parcellation plots
   --refs      Only generate reference plots
@@ -104,6 +104,14 @@ PLOT_MAP_SELECTION = {
 }
 
 PLOT_TAB_SELECTION = {
+    "celltypes-zhang2025": [
+        "cell-L23IT_class-excitatory_pub-zhang2025",
+        "cell-Pvalb_class-inhibitory_pub-zhang2025",
+        "cell-Sst_class-inhibitory_pub-zhang2025",
+        "cell-Vip_class-inhibitory_pub-zhang2025",
+        "cell-Astro_class-nonneuronal_pub-zhang2025",
+        "cell-Oligo_class-nonneuronal_pub-zhang2025",
+    ],
     "mrna": ["PVALB", "SST", "VIP", "SLC17A7", "HTR2A", "MAOA"],
     "magicc": ["PVALB", "SST", "VIP", "SLC17A7", "HTR2A", "MAOA"],
     "neurosynth": ["attention", "memory", "language", "pain", "reward", "motion"],
@@ -141,6 +149,8 @@ PLOT_CMAP = {
     "bigbrain": "magma",
     "cortexfeatures": "magma",
     "mitobrain": "magma",
+    "celltypes-pak2024": "magma",
+    "celltypes-zhang2025": "magma",
     "tpm": "magma",
     "mabaseline": "crest",
     "mrna": "viridis",
@@ -160,6 +170,7 @@ TAB_PARC = {
     "magicc": "Yan1000",
     "enigmaarea": "DesikanKilliany",
     "enigmathick": "DesikanKilliany",
+    "celltypes-zhang2025": "Schaefer400Parcels7Networks",
 }
 
 
@@ -183,7 +194,7 @@ def _short_title(map_id):
     """Derive a compact display title from a BIDS-style map ID."""
     label = map_id.split("_")[0]
     for prefix in ("target-", "feature-", "nw-", "mito-", "tissue-", "db-",
-                   "dx-", "alpha-", "gene-"):
+                   "dx-", "alpha-", "gene-", "cell-"):
         if label.startswith(prefix):
             key = prefix.rstrip("-")
             value = label[len(prefix):]
@@ -234,6 +245,9 @@ def _availability_text(name, ref_cfg, PARCS_CX, PARCS_SC):
         parc_text = "all parcellations"
     elif tab_parcs >= cx_set:
         parc_text = "all cortex parcellations"
+    elif tab_parcs and tab_parcs <= cx_set and len(cx_set - tab_parcs) < len(tab_parcs):
+        # most cortex parcellations: name the missing ones (keeps the caption short)
+        parc_text = "all cortex parcellations except " + ", ".join(sorted(cx_set - tab_parcs))
     elif tab_parcs:
         parc_text = ", ".join(sorted(tab_parcs))
     else:

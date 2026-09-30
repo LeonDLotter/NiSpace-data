@@ -1,0 +1,31 @@
+name: celltypes-zhang2025
+label: CellTypes-Zhang2025
+description: The NiSpace "CellTypes-Zhang2025" dataset contains cortical abundances of 24 cell types (9 excitatory, 9
+  inhibitory, 6 non-neuronal) as published by Zhang et al. (2025). Cell-type fractions were imputed for each Allen Human
+  Brain Atlas (AHBA) cortical bulk microarray sample with CIBERSORTx, using the single-nucleus RNA-seq data of Jorstad et
+  al. (2023) as reference, and samples were mapped to the fsLR 32k surface. NiSpace recomputes parcel-wise values from
+  these sample-level data (https://github.com/XihanZhang/human-cellular-func-con), following the authors' approach 
+  (exclusion of samples >4 mm from the surface; average of all samples within a parcel). Samples were additionally mirrored 
+  across hemispheres. Parcels without samples are NaN. Map names follow the Jorstad et al. (2023) subclass names
+  (e.g., "cell-L23IT" for L2/3 IT neurons, "cell-Pvalb" for PVALB interneurons, "cell-MicroPVM" for microglia/perivascular
+  macrophages), with the Jorstad et al. (2023) class given as "class-excitatory", "class-inhibitory", or
+  "class-nonneuronal". The data are used with permission of the authors; please cite the original publication.
+cortex_only: true
+license: attribution (by permission)
+citations:
+- ref: Zhang et al., 2025
+  doi: 10.1038/s41593-024-01812-2
+- ref: Jorstad et al., 2023
+  doi: 10.1126/science.adf6812
+- ref: Hawrylycz et al., 2012
+  doi: 10.1038/nature11405
+collections:
+  All:
+    description: All 24 cortical cell-type abundance maps imputed with the Jorstad et al. (2023) reference (Zhang et al., 2025).
+  Excitatory:
+    description: Nine excitatory neuron cell types.
+  Inhibitory:
+    description: Nine inhibitory neuron cell types.
+  NonNeuronal:
+    description: Six non-neuronal cell types.
+tabs: auto

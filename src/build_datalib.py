@@ -161,7 +161,7 @@ def _ref_yaml_to_json_entry(cfg: dict, dset_name: str) -> dict:
     """Convert a ref.yaml config dict to a reference.json dataset entry."""
     entry = {}
 
-    for key in ("label", "description", "default_collection", "cortex_only", "citations"):
+    for key in ("label", "description", "default_collection", "cortex_only", "citations", "license"):
         if key in cfg:
             entry[key] = cfg[key]
 
@@ -172,7 +172,7 @@ def _ref_yaml_to_json_entry(cfg: dict, dset_name: str) -> dict:
             "remote": f"reference/{dset_name}/map_info.csv",
         }
 
-    # Collections: merge inferred file path with description/citations
+    # Collections: merge inferred file path with description/citations/license
     if "collections" in cfg:
         entry["collection"] = {}
         for coll_name, coll_meta in cfg["collections"].items():
@@ -184,6 +184,8 @@ def _ref_yaml_to_json_entry(cfg: dict, dset_name: str) -> dict:
                 coll_entry["description"] = desc
             if cites := (coll_meta or {}).get("citations"):
                 coll_entry["citations"] = cites
+            if license_ := (coll_meta or {}).get("license"):
+                coll_entry["license"] = license_
             entry["collection"][coll_name] = coll_entry
 
     # Tabs

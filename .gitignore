@@ -1,5 +1,6 @@
 # local
 _archive/
+logs/
 
 # Python
 __pycache__/

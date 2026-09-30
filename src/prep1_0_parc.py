@@ -475,7 +475,7 @@ for tian in ["S1", "S2", "S3", "S4"]:
 # %% ===============================================================================================
 # FreeSurfer DK, DKT, Destrieux, and Glasser/HCPMMP
 # All loaded from associated FreeSurfer GIN repo: https://gin.g-node.org/llotter/mni_freesurfer
-gin_commit = "5839f92fdf207714fae18088da7a114b21a015c8"
+gin_commit = "4e7d399d6f10f28b5310189798e40b85d23ac438"
         
 for name, fs_name, doi, license in [
     ("DesikanKilliany",          "aparc",         "10.1016/j.neuroimage.2006.01.021; doi.org/10.12751/g-node.2mnxpm",                                          "Freesurfer license: attribution"),
@@ -782,8 +782,9 @@ labels = [
         .replace("-","+").replace("_","+").replace("/","+").replace(".","+")
     for l in labels
 ]
-labels_cx = labels[:210]
-labels_sc = labels[210:]
+# LUT order alternates L/R; images below are relabeled to all-L-then-all-R, so the labels must be too
+labels_cx = [l for l in labels[:210] if "hemi-L" in l] + [l for l in labels[:210] if "hemi-R" in l]
+labels_sc = [l for l in labels[210:] if "hemi-L" in l] + [l for l in labels[210:] if "hemi-R" in l]
 
 # sanity check
 print(f"All: {len(labels)} labels, first/last 5:", labels[:5], labels[-5:])

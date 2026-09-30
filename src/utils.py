@@ -225,6 +225,12 @@ def parcellate_mapref(wd, dataset, spaces):
             parc = load_parc(wd, parc_name, parc_space)
             ref_paths = _fetch_paths(ref_maps_avail, parc_space)
 
+            # labels are assigned by parcel index, so they must be identical (incl. order) across spaces
+            if not np.array_equal(load_parc_labels(wd, parc_name, parc_space), labels):
+                raise ValueError(
+                    f"[{dataset}/{parc_name}] labels in {parc_space} differ from MNI152NLin6Asym labels"
+                )
+
             # bilateral: MNI space, or all surface maps have two hemispheres
             if ("MNI152" in parc_space) or (
                 "MNI152" not in parc_space and all(len(fp) == 2 for fp in ref_paths)
@@ -347,6 +353,7 @@ DATASET_PARCELLATE_KWARGS = {
     "rsn17":          dict(background_value=False,  report_background_parcels=False, min_num_valid_datapoints=None, min_fraction_valid_datapoints=None),
     "tpm":            dict(background_value="auto", report_background_parcels=True,  min_num_valid_datapoints=None, min_fraction_valid_datapoints=None),
     "mitobrain":      dict(background_value="auto", report_background_parcels=True,  min_num_valid_datapoints=5,    min_fraction_valid_datapoints=0.3),
+    "celltypes-pak2024": dict(background_value="auto", report_background_parcels=True,  min_num_valid_datapoints=5,    min_fraction_valid_datapoints=0.3),
     "mabaseline":     dict(background_value="auto", report_background_parcels=True,  min_num_valid_datapoints=None, min_fraction_valid_datapoints=None),
     "neurosynth":     dict(background_value=False,  report_background_parcels=False, min_num_valid_datapoints=None, min_fraction_valid_datapoints=None),
     "grf":            dict(background_value=False,  report_background_parcels=False, min_num_valid_datapoints=None, min_fraction_valid_datapoints=None),

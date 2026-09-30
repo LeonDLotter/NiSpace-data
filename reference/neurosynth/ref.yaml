@@ -6,6 +6,7 @@ description: The NiSpace "Neurosynth" dataset contains > 1,000 meta-analytic map
   available only as parcellation tables.
 default_collection: CognitiveFunctions
 cortex_only: false
+license: ODbL 1.0
 citations:
 - ref: Yarkoni et al., 2011
   doi: 10.1038/nmeth.1635

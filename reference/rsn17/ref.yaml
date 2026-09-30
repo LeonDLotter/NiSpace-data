@@ -6,6 +6,7 @@ description: The NiSpace "RSN17" dataset contains resting-state network probabil
   The maps are only available in fsLR and fsaverage spaces. Note that the networks follow the Kong et al. naming convention, 
   which differs from the 17 "Yeo networks". Please cite the original publication when using these maps.
 cortex_only: true
+license: GPL 2.0
 citations:
 - ref: Kong et al., 2021
   doi: 10.1093/cercor/bhab101

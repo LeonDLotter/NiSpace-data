@@ -7,6 +7,7 @@ description: The NiSpace "GRF" dataset consists of Gaussian Random Field Maps (G
   The code was adopted from Markello et al., 2021 and Burt et al., 2020.
 default_collection: ByAlpha
 cortex_only: false
+license: CC BY 4.0
 citations:
 - ref: Markello et al., 2021
   doi: 10.1016/j.neuroimage.2021.118052

@@ -1,4 +1,3 @@
-hemi-L_lab-bankssts
 hemi-L_lab-caudalanteriorcingulate
 hemi-L_lab-caudalmiddlefrontal
 hemi-L_lab-cuneus
@@ -28,4 +27,5 @@ hemi-L_lab-superiorfrontal
 hemi-L_lab-superiorparietal
 hemi-L_lab-superiortemporal
 hemi-L_lab-supramarginal
-hemi-L_lab-frontalpole
+hemi-L_lab-transversetemporal
+hemi-L_lab-insula

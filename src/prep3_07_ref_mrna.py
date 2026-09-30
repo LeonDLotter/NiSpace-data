@@ -800,8 +800,11 @@ df_magma = pd.read_csv(
 )
 gwas_threshold = 0.05 / len(df_magma)
 
+# pinned monthly HGNC release (the unversioned "current" file renames symbols over time, e.g. TBRG4 -> FASTKD4,
+# which then no longer match the AHBA gene symbols of the mrna tables)
 df_hgnc = pd.read_csv(
-    "https://storage.googleapis.com/public-download-files/hgnc/tsv/tsv/hgnc_complete_set.txt",
+    "https://storage.googleapis.com/public-download-files/hgnc/archive/archive/monthly/tsv/"
+    "hgnc_complete_set_2026-08-07.txt",
     sep="\t", usecols=["symbol", "ensembl_gene_id"],
 )
 df_hgnc = df_hgnc.dropna(subset=["ensembl_gene_id"])

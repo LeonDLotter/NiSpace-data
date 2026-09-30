@@ -30,8 +30,8 @@ with zipfile.ZipFile(fp_zip, "r") as z:
 
 # %% Process each network map
 
-mask_MNI6 = wd / "template" / "MNI152NLin6Asym" / "map" / "cortexmask" / "tpl-MNI152NLin6Asym_desc-mask_cortexmask_res-2mm.nii.gz"
-mask_MNI9 = wd / "template" / "MNI152NLin2009cAsym" / "map" / "cortexmask" / "tpl-MNI152NLin2009cAsym_desc-mask_cortexmask_res-2mm.nii.gz"
+mask_MNI6 = wd / "template" / "MNI152NLin6Asym" / "map" / "cortexmask" / "tpl-MNI152NLin6Asym_desc-cortexmask_res-2mm.nii.gz"
+mask_MNI9 = wd / "template" / "MNI152NLin2009cAsym" / "map" / "cortexmask" / "tpl-MNI152NLin2009cAsym_desc-cortexmask_res-2mm.nii.gz"
 
 for nii_fp in sorted(archive_dir.rglob("*.nii")):
     if nii_fp.name == "711-2B_333.nii":

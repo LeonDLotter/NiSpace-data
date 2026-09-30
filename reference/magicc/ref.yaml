@@ -7,6 +7,7 @@ description: The NiSpace "MAGICC" dataset contains cortical gene expression maps
   Please cite the source publications, as well as publications associated with gene set collections as appropriate.
 default_collection: CellTypesPsychEncodeTPM
 cortex_only: true
+license: CC BY 4.0
 citations:
 - ref: Hawrylycz et al., 2012
   doi: 10.1038/nature11405
@@ -17,6 +18,7 @@ collections:
     description: All brain-expressed genes passing MAGICC reproducibility threshold (r ≥ 0.5).
   CellTypesPsychEncodeTPM:
     description: Cell-type marker genes from PsychENCODE single-cell data (TPM-normalized).
+    license: free
     citations:
     - ref: Lake et al., 2016
       doi: 10.1126/science.aaf1204
@@ -26,6 +28,7 @@ collections:
       doi: 10.1126/science.aat8464
   CellTypesPsychEncodeUMI:
     description: Cell-type marker genes from PsychENCODE single-cell data (UMI counts).
+    license: free
     citations:
     - ref: Lake et al., 2018
       doi: 10.1038/nbt.4038
@@ -33,16 +36,19 @@ collections:
       doi: 10.1126/science.aat8464
   CellTypesSilettiClusters:
     description: Cell-type cluster marker genes (Siletti et al., 2023 single-nucleus RNA-seq).
+    license: BSD 2-Clause
     citations:
     - ref: Siletti et al., 2023
       doi: 10.1126/science.add7046
   CellTypesSilettiSuperclusters:
     description: Cell-type supercluster marker genes (Siletti et al., 2023).
+    license: BSD 2-Clause
     citations:
     - ref: Siletti et al., 2023
       doi: 10.1126/science.add7046
   Chromosome:
     description: Genes grouped by chromosomal location (GSEA/MSigDB gene sets).
+    license: CC BY 4.0
     citations:
     - ref: Dyer et al., 2025
       doi: 10.1093/nar/gkae1071
@@ -50,11 +56,13 @@ collections:
       doi: 10.1073/pnas.0506580102
   SynGO:
     description: Synaptic gene ontology gene sets (SynGO database).
+    license: free (attribution)
     citations:
     - ref: Koopmans et al., 2019
       doi: 10.1016/j.neuron.2019.05.002
   GOBiologicalProcess:
     description: Gene Ontology biological process gene sets (GSEA/MSigDB).
+    license: CC BY 4.0
     citations:
     - ref: Ashburner et al., 2000
       doi: 10.1038/75556
@@ -64,6 +72,7 @@ collections:
       doi: 10.1073/pnas.0506580102
   GOCellularComponent:
     description: Gene Ontology cellular component gene sets (GSEA/MSigDB).
+    license: CC BY 4.0
     citations:
     - ref: Ashburner et al., 2000
       doi: 10.1038/75556
@@ -73,6 +82,7 @@ collections:
       doi: 10.1073/pnas.0506580102
   GOMolecularFunction:
     description: Gene Ontology molecular function gene sets (GSEA/MSigDB).
+    license: CC BY 4.0
     citations:
     - ref: Ashburner et al., 2000
       doi: 10.1038/75556
@@ -82,6 +92,7 @@ collections:
       doi: 10.1073/pnas.0506580102
   CorticalLayers:
     description: Layer-enriched marker genes for cortical layers 1–6.
+    license: CC0 1.0
     citations:
     - ref: Wagstyl et al., 2024
       doi: 10.7554/eLife.86933.2
@@ -96,11 +107,13 @@ collections:
       NotInBrain (detected somewhere but not in brain), NotInTissue (not detected in any tissue). 
       Combined categories for practical gene filtering - ExpressedInBrain (union of ElevatedInBrain,
       NotElevatedInBrain, LowSpecificityInBrain), NotExpressedInBrain (union of NotInBrain, NotInTissue).
+    license: CC BY 4.0
     citations:
     - ref: Sjöstedt et al., 2020
       doi: 10.1126/science.aay5947
   BrainSpan:
     description: Genes grouped by peak developmental expression stage (BrainSpan; ABAEnrichment).
+    license: GPL 2.0+
     citations:
     - ref: Miller et al., 2014
       doi: 10.1038/nature13185
@@ -108,6 +121,7 @@ collections:
       doi: 10.1093/bioinformatics/btw392
   BrainSpanWeights:
     description: Gene-set scores per developmental expression stage weighted by log2-fold expression.
+    license: GPL 2.0+
     citations:
     - ref: Miller et al., 2014
       doi: 10.1038/nature13185
@@ -120,6 +134,7 @@ collections:
       Modules have labels assigned in the source publication, or retroactively by us. GeneM9
       ("neural noncoding") is excluded - almost all of its non-coding member genes are dropped by
       nispace's reproducibility-based gene filtering, so the remnant no longer represents the module.
+    license: CC BY 4.0
     citations:
     - ref: Gandal et al., 2022
       doi: 10.1038/s41586-022-05377-7
@@ -127,6 +142,7 @@ collections:
     description: Same gene sets as ASDModulesGandal2022, weighted by each gene's kME (module
       eigengene correlation / intramodular connectivity) to its own assigned module, so
       membership strength can be used as a continuous weight instead of binary in/out.
+    license: CC BY 4.0
     citations:
     - ref: Gandal et al., 2022
       doi: 10.1038/s41586-022-05377-7
@@ -137,6 +153,7 @@ collections:
       Naming - {EvidenceType}_{Context}_{Study}, e.g. FMR1Target_dNPC_Li2020. Note - NonNeuronal
       = HEK293 cells, MouseBrain = mouse not human; UCDavisFXTAS is premutation FXTAS, not
       full-mutation FXS.
+    license: free
     citations:
     - ref: Li et al., 2020
       doi: 10.1101/gr.251405.119
@@ -151,6 +168,7 @@ collections:
   FXSEditDiffWeights:
     description: Same data as the two FXSEditDiff sets in FMR1Targets, with differential
       editing effect size as weights.
+    license: free
     citations:
     - ref: Tran et al., 2019
       doi: 10.1038/s41593-018-0287-x
@@ -161,6 +179,7 @@ collections:
       SCZ_n105318_Pardinas2018. 4 additional curated disorders (AlcoholDependence, AnxietyDisorder,
       FocalEpilepsy, PTSD) had zero genome-wide-significant genes and are not included here - see
       GWASAtlasWeights.
+    license: free
     citations:
     - ref: Watanabe et al., 2019
       doi: 10.1038/s41588-019-0481-0
@@ -198,6 +217,7 @@ collections:
       gene-disorder association, not a direct effect-size estimate - valid for thresholding
       uniformly across all disorders (recovering GWASAtlas is weight > 5.606), not for
       comparing raw weight magnitude between disorders of very different sample size.
+    license: free
     citations:
     - ref: Watanabe et al., 2019
       doi: 10.1038/s41588-019-0481-0
@@ -241,6 +261,7 @@ collections:
       annotations (OMIM/Orphanet case reports). "Psychiatric" is used in the DSM-5
       nosological sense, covering neurodevelopmental, sleep-wake and neurocognitive/dementia
       terms alongside classic psychiatric diagnoses. 214 terms were manually selected.
+    license: HPO License
     citations:
     - ref: Köhler et al., 2014
       doi: 10.1093/nar/gkt1026
@@ -249,6 +270,7 @@ collections:
   HPOCorePsychiatric:
     description: A subset of HPOAllPsychiatric's 214 terms that are actual diagnosis(-like) labels 
       (e.g. Schizophrenia, Autism, Bipolar affective disorder) rather than granular symptom terms.
+    license: HPO License
     citations:
     - ref: Köhler et al., 2014
       doi: 10.1093/nar/gkt1026

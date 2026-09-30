@@ -28,7 +28,8 @@ print("PARCS:", PARCS)
 for parc in PARCS:
     print("Parcellation:", parc)
     spaces = sorted(
-        [s.name for s in (nispace_source_data_path / "parcellation" / parc).glob("*") if s.is_dir()]
+        [s.name for s in (nispace_source_data_path / "parcellation" / parc).glob("*")
+         if s.is_dir() and s.name != "plot"]
     )
     print("Available spaces:", spaces)
     

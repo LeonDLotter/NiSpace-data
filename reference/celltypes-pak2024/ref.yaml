@@ -1,0 +1,70 @@
+name: celltypes-pak2024
+label: CellTypes-Pak2024
+description: The NiSpace "CellTypes-Pak2024" dataset contains whole-brain maps of the relative abundance of six canonical
+  cell types (astrocytes, endothelial cells, microglia, neurons, oligodendrocytes, and oligodendrocyte precursor cells) as
+  published by Pak et al. (2024). Maps were reconstructed from Allen Human Brain Atlas (AHBA) bulk microarray data by
+  Gaussian-process interpolation of 80 cell-type marker genes to all gray matter voxels and marker-gene-based
+  deconvolution (BRETIGEA); per voxel, cell-type values sum to one and are scaled by gray matter density. Original maps
+  are retrieved from the authors' GitHub repository (https://github.com/neuropm-lab/cellmaps; space MNIOriginal, 1.5mm
+  SPM MNI grid, treated as MNI152NLin6Asym), resampled to 2mm MNI152NLin6Asym space and masked, and transformed to
+  MNI152NLin2009cAsym, fsLR, and fsaverage spaces.
+cortex_only: false
+license: CC BY 4.0
+citations:
+- ref: Pak et al., 2024
+  doi: 10.7554/eLife.89368
+- ref: Hawrylycz et al., 2012
+  doi: 10.1038/nature11405
+collections:
+  All:
+    description: Six whole-brain canonical cell-type abundance maps (Pak et al., 2024).
+tabs: auto
+maps:
+  cell-astrocytes_pub-pak2024:
+    MNIOriginal:
+      host: url
+      remote: https://raw.githubusercontent.com/neuropm-lab/cellmaps/9f97684e8cf2b8196e5b13c11d1001236aec2665/ast.nii
+    MNI152NLin6Asym: auto
+    MNI152NLin2009cAsym: auto
+    fsLR: auto
+    fsaverage: auto
+  cell-endothelial_pub-pak2024:
+    MNIOriginal:
+      host: url
+      remote: https://raw.githubusercontent.com/neuropm-lab/cellmaps/9f97684e8cf2b8196e5b13c11d1001236aec2665/end.nii
+    MNI152NLin6Asym: auto
+    MNI152NLin2009cAsym: auto
+    fsLR: auto
+    fsaverage: auto
+  cell-microglia_pub-pak2024:
+    MNIOriginal:
+      host: url
+      remote: https://raw.githubusercontent.com/neuropm-lab/cellmaps/9f97684e8cf2b8196e5b13c11d1001236aec2665/mic.nii
+    MNI152NLin6Asym: auto
+    MNI152NLin2009cAsym: auto
+    fsLR: auto
+    fsaverage: auto
+  cell-neurons_pub-pak2024:
+    MNIOriginal:
+      host: url
+      remote: https://raw.githubusercontent.com/neuropm-lab/cellmaps/9f97684e8cf2b8196e5b13c11d1001236aec2665/neu.nii
+    MNI152NLin6Asym: auto
+    MNI152NLin2009cAsym: auto
+    fsLR: auto
+    fsaverage: auto
+  cell-oligodendrocytes_pub-pak2024:
+    MNIOriginal:
+      host: url
+      remote: https://raw.githubusercontent.com/neuropm-lab/cellmaps/9f97684e8cf2b8196e5b13c11d1001236aec2665/oli.nii
+    MNI152NLin6Asym: auto
+    MNI152NLin2009cAsym: auto
+    fsLR: auto
+    fsaverage: auto
+  cell-opc_pub-pak2024:
+    MNIOriginal:
+      host: url
+      remote: https://raw.githubusercontent.com/neuropm-lab/cellmaps/9f97684e8cf2b8196e5b13c11d1001236aec2665/opc.nii
+    MNI152NLin6Asym: auto
+    MNI152NLin2009cAsym: auto
+    fsLR: auto
+    fsaverage: auto

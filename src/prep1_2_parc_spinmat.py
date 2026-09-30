@@ -33,7 +33,8 @@ print("PARCS:", PARCS)
 for parc in PARCS:
     print(f"\n{'='*60}\nParcellation: {parc}")
     spaces = sorted(
-        [s.name for s in (nispace_source_data_path / "parcellation" / parc).glob("*") if s.is_dir()]
+        [s.name for s in (nispace_source_data_path / "parcellation" / parc).glob("*")
+         if s.is_dir() and s.name != "plot"]
     )
 
     for space in spaces:
