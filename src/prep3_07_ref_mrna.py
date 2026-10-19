@@ -656,12 +656,14 @@ collection_asd_weighted.to_csv(ref_dir / "collection-ASDModulesGandal2022Weights
 # nispace-data/.collect schema (see ASDModulesGandal2022 above), so evidence type/species/
 # tissue/cohort/study all have to be encoded in the set name itself. EvidenceType is one of
 # FMR1Target (CLIP-seq binding target), ASDEditMod (RNA-editing co-module linked to ASD
-# diagnosis - a module-membership call), or FXSEditDiff (direct differential RNA editing in
-# Fragile-X-spectrum patients - a case-control significance call). EditMod and EditDiff are
-# deliberately different suffixes: both are RNA-editing-based, but module co-membership and
-# direct case-control difference are different statistical claims, not interchangeable. No
-# weights are included for any set in this collection (unlike ASDModulesGandal2022's kME,
-# there is no single quantity here that would mean the same thing across all 12 sets).
+# diagnosis - a module-membership call), or FXSEditDiff/FXSEditDiffHypo/FXSEditDiffHyper
+# (direct differential RNA editing in Fragile-X-spectrum patients - a case-control significance
+# call; Hypo/Hyper = genes with >=1 site edited less/more in FX than in carriers/controls, see
+# FXSEditDiffWeights below). EditMod and EditDiff are deliberately different suffixes: both are
+# RNA-editing-based, but module co-membership and direct case-control difference are different
+# statistical claims, not interchangeable. No weights are included for any set in this
+# collection (unlike ASDModulesGandal2022's kME, there is no single quantity here that would
+# mean the same thing across all 16 sets).
 fmr1_target_labels = {
     "dNPC": "FMR1Target_dNPC_Li2020",
     "vNPC": "FMR1Target_vNPC_Li2020",
@@ -690,32 +692,45 @@ for sheet, set_name in asd_editmod_sheets.items():
     df = pd.read_excel(tran_table5_path, sheet_name=sheet, header=2)
     collection_fmr1[set_name] = sorted(set(df.loc[df["moduleColor"] == "turquoise", "gene_name"].dropna()))
 
+# FXSEditDiffWeights: NOT a full weighted parallel of FMR1Targets (which has no weights at all -
+# no single quantity applies across all 16 sets), just the 6 FXSEditDiff* sets, weighted by
+# editing_level_effect_size (Tran et al. 2019, Supplementary Table 7b/c). Table 7a defines it as
+# |fragile X - carrier/control editing level| (pooled editing levels = total edited reads /
+# total coverage per group, i.e. a difference of editing fractions, 0-1 scale; 0.06-0.9 here
+# since the table is pre-filtered to p<0.05) - unsigned by definition, verified against the two
+# level columns to ~1e-15. ~1/3 of genes have multiple differentially edited sites (up to 32 in
+# NeuroBioBank, 15 in UC Davis) - each gene's weight is the MAX effect size across its own sites
+# (the single strongest piece of evidence for that gene, analogous to how
+# ASDModulesGandal2022Weights uses one kME value per gene, not an aggregate across a network).
+# Direction is recovered from the two level columns (~60% of sites are hypo-edited in FX) but
+# kept in the set name, NOT as signed weights: nispace's "weightedmean" divides by sum(weights),
+# and the weight filters rank by value, so all shipped weights must be positive. Hypo/Hyper
+# include every gene with >=1 site in that direction (weight = max effect among those sites),
+# so the ~15% of genes with mixed-direction sites are in both. This keeps everything recoverable
+# at the gene level: FXSEditDiff = Hypo | Hyper with weight = max of the two; the signed
+# max-effect weight = the larger of the two with its direction; direction-consistent genes =
+# genes in only one of the two.
 tran_table7_path = nispace_source_data_path / "_archive" / "Tran2018" / "41593_2018_287_MOESM9_ESM.xlsx"
 fxs_editdiff_sheets = {
-    "7b": "FXSEditDiff_NeuroBioBank_Tran2019",
-    "7c": "FXSEditDiff_UCDavisFXTAS_Tran2019",
+    "7b": "NeuroBioBank",
+    "7c": "UCDavisFXTAS",
 }
-for sheet, set_name in fxs_editdiff_sheets.items():
-    df = pd.read_excel(tran_table7_path, sheet_name=sheet, header=2)
-    collection_fmr1[set_name] = sorted(set(df["gene_name"].dropna().apply(_fix_excel_date_mangled_gene_symbol)))
-
-print(f"FMR1Targets: {len(collection_fmr1)} sets (expected 12: 7 FMR1Target + 3 ASDEditMod + 2 FXSEditDiff)")
-write_json(collection_fmr1, ref_dir / "collection-FMR1Targets.collect")
-
-# FXSEditDiffWeights: NOT a full weighted parallel of FMR1Targets (which has no weights at all -
-# no single quantity applies across all 12 sets), just the 2 FXSEditDiff sets, weighted by
-# editing_level_effect_size (Tran et al. 2019, Supplementary Table 7b/c) - an unsigned magnitude
-# (0.06-0.9, verified no negative values) of how much a site's editing level differs between
-# Fragile-X-spectrum patients and carriers/controls. ~1/3 of genes have multiple differentially
-# edited sites (up to 32 in NeuroBioBank, 15 in UC Davis) - each gene's weight is the MAX
-# effect size across its own sites (the single strongest piece of evidence for that gene,
-# analogous to how ASDModulesGandal2022Weights uses one kME value per gene, not an aggregate
-# across a network).
 collection_fxs_weighted = {}
-for sheet, set_name in fxs_editdiff_sheets.items():
+for sheet, context in fxs_editdiff_sheets.items():
     df = pd.read_excel(tran_table7_path, sheet_name=sheet, header=2).dropna(subset=["gene_name"])
     df["gene_name"] = df["gene_name"].apply(_fix_excel_date_mangled_gene_symbol)
-    collection_fxs_weighted[set_name] = df.groupby("gene_name")["editing_level_effect_size"].max()
+    # comparison group is carriers (7b) or controls (7c)
+    delta = df["fragile_X_editing_level"] - df.filter(regex=r"^(carrier|control)_editing_level$").squeeze(axis=1)
+    for direction, mask in [("", delta.notna()), ("Hypo", delta < 0), ("Hyper", delta > 0)]:
+        set_name = f"FXSEditDiff{direction}_{context}_Tran2019"
+        weights = df.loc[mask].groupby("gene_name")["editing_level_effect_size"].max()
+        collection_fmr1[set_name] = weights.index.tolist()
+        collection_fxs_weighted[set_name] = weights
+    assert set(collection_fmr1[f"FXSEditDiff_{context}_Tran2019"]) == \
+        set(collection_fmr1[f"FXSEditDiffHypo_{context}_Tran2019"]) | set(collection_fmr1[f"FXSEditDiffHyper_{context}_Tran2019"])
+
+print(f"FMR1Targets: {len(collection_fmr1)} sets (expected 16: 7 FMR1Target + 3 ASDEditMod + 6 FXSEditDiff*)")
+write_json(collection_fmr1, ref_dir / "collection-FMR1Targets.collect")
 
 collection_fxs_weighted = pd.concat(collection_fxs_weighted, names=["set", "map"]).rename("weight").astype(np.float32)
 collection_fxs_weighted.to_csv(ref_dir / "collection-FXSEditDiffWeights.collect", index=True)

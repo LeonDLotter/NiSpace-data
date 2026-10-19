@@ -151,6 +151,8 @@ collections:
     description: FMR1/FMRP-related gene sets, 3 evidence types encoded in the set name -
       FMR1Target (CLIP-seq binding targets), ASDEditMod (RNA-editing co-module linked to ASD
       diagnosis), FXSEditDiff (differential RNA editing in Fragile-X-spectrum patients).
+      FXSEditDiffHypo/FXSEditDiffHyper = FXSEditDiff genes with at least one site edited less/more
+      in Fragile X than in carriers/controls (genes with mixed-direction sites are in both).
       Naming - {EvidenceType}_{Context}_{Study}, e.g. FMR1Target_dNPC_Li2020. Note - NonNeuronal
       = HEK293 cells, MouseBrain = mouse not human; UCDavisFXTAS is premutation FXTAS, not
       full-mutation FXS.
@@ -167,8 +169,12 @@ collections:
     - ref: Tran et al., 2019
       doi: 10.1038/s41593-018-0287-x
   FXSEditDiffWeights:
-    description: Same data as the two FXSEditDiff sets in FMR1Targets, with differential
-      editing effect size as weights.
+    description: Same data as the six FXSEditDiff/FXSEditDiffHypo/FXSEditDiffHyper sets in
+      FMR1Targets, weighted by the unsigned differential editing effect size (absolute difference
+      of pooled editing levels, Fragile X vs. carriers/controls, 0-1 fraction scale; Tran et al.
+      2019 Supplementary Table 7), maximum over each gene's significant sites. In Hypo/Hyper sets,
+      the maximum is taken over the sites in that direction only, so direction is encoded in the
+      set name and all weights are positive.
     license: free
     citations:
     - ref: Tran et al., 2019
