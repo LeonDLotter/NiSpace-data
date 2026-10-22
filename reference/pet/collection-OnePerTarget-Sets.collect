@@ -1,0 +1,65 @@
+set,x
+Dopamine,target-D1_tracer-sch23390_n-13_dx-hc_pub-kaller2017
+Dopamine,target-D23_tracer-flb457_n-55_dx-hc_pub-sandiego2015
+Dopamine,target-DAT_tracer-fpcit_n-174_dx-hc_pub-dukart2018
+Dopamine,target-FDOPA_tracer-fluorodopa_n-12_dx-hc_pub-garciagomez2018
+Dopamine,target-VMAT2_tracer-dtbz_n-76_dx-hc_pub-larsen2020
+Serotonin,target-5HT1a_tracer-way100635_n-35_dx-hc_pub-savli2012
+Serotonin,target-5HT1b_tracer-p943_n-23_dx-hc_pub-savli2012
+Serotonin,target-5HT2a_tracer-altanserin_n-19_dx-hc_pub-savli2012
+Serotonin,target-5HT4_tracer-sb207145_n-59_dx-hc_pub-beliveau2017
+Serotonin,target-5HT6_tracer-gsk215083_n-30_dx-hc_pub-radhakrishnan2018
+Serotonin,target-5HTT_tracer-dasb_n-18_dx-hc_pub-savli2012
+Serotonin,target-VMAT2_tracer-dtbz_n-76_dx-hc_pub-larsen2020
+Noradrenaline,target-NET_tracer-mrb_n-10_dx-hc_pub-hesse2017
+Noradrenaline,target-VMAT2_tracer-dtbz_n-76_dx-hc_pub-larsen2020
+Monoamines,target-5HT1a_tracer-way100635_n-35_dx-hc_pub-savli2012
+Monoamines,target-5HT1b_tracer-p943_n-23_dx-hc_pub-savli2012
+Monoamines,target-5HT2a_tracer-altanserin_n-19_dx-hc_pub-savli2012
+Monoamines,target-5HT4_tracer-sb207145_n-59_dx-hc_pub-beliveau2017
+Monoamines,target-5HT6_tracer-gsk215083_n-30_dx-hc_pub-radhakrishnan2018
+Monoamines,target-5HTT_tracer-dasb_n-18_dx-hc_pub-savli2012
+Monoamines,target-D1_tracer-sch23390_n-13_dx-hc_pub-kaller2017
+Monoamines,target-D23_tracer-flb457_n-55_dx-hc_pub-sandiego2015
+Monoamines,target-DAT_tracer-fpcit_n-174_dx-hc_pub-dukart2018
+Monoamines,target-FDOPA_tracer-fluorodopa_n-12_dx-hc_pub-garciagomez2018
+Monoamines,target-H3_tracer-gsk189254_n-8_dx-hc_pub-gallezot2017
+Monoamines,target-NET_tracer-mrb_n-10_dx-hc_pub-hesse2017
+Monoamines,target-VMAT2_tracer-dtbz_n-76_dx-hc_pub-larsen2020
+Acetylcholine,target-A4B2_tracer-flubatine_n-30_dx-hc_pub-hillmer2016
+Acetylcholine,target-M1_tracer-lsn3172176_n-24_dx-hc_pub-naganawa2020
+Acetylcholine,target-VAChT_tracer-feobv_n-18_dx-hc_pub-aghourian2017
+Glutamate,target-NMDA_tracer-ge179_n-29_dx-hc_pub-galovic2021
+Glutamate,target-mGluR5_tracer-abp688_n-73_dx-hc_pub-smart2019
+GABA,target-GABAa5_tracer-ro154513_n-10_dx-hc_pub-lukow2022
+GABA,target-GABAa_tracer-flumazenil_n-6_dx-hc_pub-dukart2018
+Opioids,target-KOR_tracer-ly2795050_n-28_dx-hc_pub-vijay2018
+Opioids,target-MOR_tracer-carfentanil_n-204_dx-hc_pub-kantonen2020
+Transporters,target-5HTT_tracer-dasb_n-18_dx-hc_pub-savli2012
+Transporters,target-DAT_tracer-fpcit_n-174_dx-hc_pub-dukart2018
+Transporters,target-NET_tracer-mrb_n-10_dx-hc_pub-hesse2017
+Transporters,target-VAChT_tracer-feobv_n-18_dx-hc_pub-aghourian2017
+Transporters,target-VMAT2_tracer-dtbz_n-76_dx-hc_pub-larsen2020
+Ionotropic receptors,target-A4B2_tracer-flubatine_n-30_dx-hc_pub-hillmer2016
+Ionotropic receptors,target-GABAa5_tracer-ro154513_n-10_dx-hc_pub-lukow2022
+Ionotropic receptors,target-GABAa_tracer-flumazenil_n-6_dx-hc_pub-dukart2018
+Ionotropic receptors,target-NMDA_tracer-ge179_n-29_dx-hc_pub-galovic2021
+Metabotropic receptors,target-5HT1a_tracer-way100635_n-35_dx-hc_pub-savli2012
+Metabotropic receptors,target-5HT1b_tracer-p943_n-23_dx-hc_pub-savli2012
+Metabotropic receptors,target-5HT2a_tracer-altanserin_n-19_dx-hc_pub-savli2012
+Metabotropic receptors,target-5HT4_tracer-sb207145_n-59_dx-hc_pub-beliveau2017
+Metabotropic receptors,target-5HT6_tracer-gsk215083_n-30_dx-hc_pub-radhakrishnan2018
+Metabotropic receptors,target-CB1_tracer-omar_n-77_dx-hc_pub-normandin2015
+Metabotropic receptors,target-D1_tracer-sch23390_n-13_dx-hc_pub-kaller2017
+Metabotropic receptors,target-D23_tracer-flb457_n-55_dx-hc_pub-sandiego2015
+Metabotropic receptors,target-H3_tracer-gsk189254_n-8_dx-hc_pub-gallezot2017
+Metabotropic receptors,target-KOR_tracer-ly2795050_n-28_dx-hc_pub-vijay2018
+Metabotropic receptors,target-M1_tracer-lsn3172176_n-24_dx-hc_pub-naganawa2020
+Metabotropic receptors,target-MOR_tracer-carfentanil_n-204_dx-hc_pub-kantonen2020
+Metabotropic receptors,target-mGluR5_tracer-abp688_n-73_dx-hc_pub-smart2019
+Neuroinflammation,target-COX1_tracer-ps13_n-11_dx-hc_pub-kim2020
+Neuroinflammation,target-TSPO_tracer-pbr28_n-6_dx-hc_pub-lois2018
+Synapse/Metabolism,target-CMRglu_tracer-fdg_n-20_dx-hc_pub-castrillon2023
+Synapse/Metabolism,target-HDAC_tracer-martinostat_n-8_dx-hc_pub-wey2016
+Synapse/Metabolism,target-SV2A_tracer-ucbj_n-76_dx-hc_pub-finnema2016
+Synapse/Metabolism,target-rCPS_tracer-leucine_n-42_dx-hc_pub-smith2023

@@ -10,6 +10,7 @@ description: The NiSpace "PET" dataset contains a growing collection of nuclear 
   tracers, source samples, original publications and data sources, as well as the publication licenses.
   Every map should be cited when used. The responsibility for this lies with the user!
 default_collection: UniqueTracers
+default_set_collection: OnePerTarget-Sets
 cortex_only: false
 citations:
 - ref: Markello et al., 2022
@@ -30,12 +31,39 @@ map_info:
 collections:
   All:
     description: All PET receptor/transporter density maps.
+  OnePerTarget:
+    description: One map per molecular target (29 maps), without sets; the same maps as the legacy UniqueTracers.
+      Selection order - maps processed in volume space over fsaverage-processed ones, tracer suitability, sample
+      size - with exceptions - Savli et al. 2012 maps for homogeneity across serotonin targets; [11C]FLB457 for
+      D2/3 (strongest cortical signal; striatal values compressed); [11C]MRB from Hesse et al. 2017 for NET. For
+      per-target sets, use fetch_reference(..., set_by="target").
+  OnePerTracer:
+    description: One map per molecular target and tracer (37 maps), without sets - OnePerTarget plus the
+      largest-sample map of every further tracer, preferring maps processed in volume space. Includes
+      fsaverage-processed maps where no other map of that tracer exists (see the map notes).
+  OnePerTarget-Sets:
+    description: OnePerTarget maps in 13 overlapping sets for set enrichment - transmitter systems (Dopamine,
+      Serotonin, Noradrenaline, Monoamines, Acetylcholine, Glutamate, GABA, Opioids), target classes
+      (Transporters, Ionotropic receptors, Metabotropic receptors), Neuroinflammation, and Synapse/Metabolism.
+      Maps can belong to several sets (e.g., VMAT2), so use it for set enrichment, not plain colocalization.
+      Unweighted.
+  OnePerTracer-Sets:
+    description: OnePerTracer maps in the same 13 overlapping sets as OnePerTarget-Sets, for set enrichment.
+      Weighted - each map's weight is 1 divided by the number of the same target's maps in that set, so every
+      target counts once.
+  All-Sets:
+    description: All maps in the same 13 overlapping sets as OnePerTarget-Sets, for set enrichment. Weighted
+      like OnePerTracer-Sets, so every target counts once.
   AllTargetSets:
-    description: All maps grouped by molecular target (may include multiple tracers per target).
+    description: Legacy, to be removed at the first non-dev release - all maps grouped by molecular target,
+      weighted by sample size. Use fetch_reference(..., set_by="target") instead.
   UniqueTracers:
-    description: One representative map per molecular target, selected for quality/sample size.
+    description: Legacy, to be removed at the first non-dev release - one map per molecular target in 9 system
+      sets. Use OnePerTarget or OnePerTarget-Sets instead.
   UniqueTracerSets:
-    description: UniqueTracers maps grouped by molecular target.
+    description: Legacy, to be removed at the first non-dev release - all maps of the UniqueTracers tracers
+      (replicates included), grouped by molecular target and weighted by sample size. Use OnePerTracer or
+      fetch_reference(..., set_by="target") instead.
 tabs: auto
 maps:
   target-5HT1a_tracer-cumi101_n-8_dx-hc_pub-beliveau2017:

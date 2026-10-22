@@ -161,7 +161,7 @@ def _ref_yaml_to_json_entry(cfg: dict, dset_name: str) -> dict:
     """Convert a ref.yaml config dict to a reference.json dataset entry."""
     entry = {}
 
-    for key in ("label", "description", "default_collection", "cortex_only", "citations", "license"):
+    for key in ("label", "description", "default_collection", "default_set_collection", "cortex_only", "citations", "license"):
         if key in cfg:
             entry[key] = cfg[key]
 
