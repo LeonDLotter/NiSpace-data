@@ -544,17 +544,25 @@ region_specific_modules = {"M4": "BA17", "M6": "BA17", "M13": "BA7", "M16": "BA1
 # the collection's 17-71% range - GeneM9's 71%/68% (mrna/magicc) dropout is a genuine outlier.
 excluded_modules = {"M9"}
 
-def _fix_excel_date_mangled_gene_symbol(v):
+def _fix_excel_date_mangled_gene_symbol(v, description=""):
     # Excel autocorrects gene symbols like "MARCH4"/"SEPT9" into dates on file creation. Readers
     # then return either a datetime object (openpyxl) or a raw Excel serial date number - a plain
     # int/float counting days since 1899-12-30 (pandas' read_excel, seen with the Li et al. 2020
     # GEO file) - instead of the original string. Only the MARCH1-11 and SEPT1-15 gene families
     # are affected in the files used here (verified: all mangled cells resolve to month 3 or 9).
     # Reconstruct the original symbol from month/day in either representation.
+    # Ambiguous dates: MARC1/MARC2 (mitochondrial amidoxime reducing component) and SEP15 (15 kDa
+    # selenoprotein) are mangled to the same dates as MARCH1/MARCH2/SEPT15. They are resolved via the
+    # gene description where the source has one (Gandal et al. 2022); the Ascano/Darnell columns
+    # without descriptions contain no such dates (verified: Mar 5-9, Sep 2/3/5/8/9/11 only).
     if isinstance(v, str):
         return v
     if isinstance(v, (int, float)):
         v = datetime.datetime(1899, 12, 30) + datetime.timedelta(days=v)
+    if "amidoxime" in description:
+        return f"MARC{v.day}"
+    if "selenoprotein" in description:
+        return f"SEP{v.day}"
     month_prefix = {3: "MARCH", 9: "SEPT"}
     return f"{month_prefix[v.month]}{v.day}"
 
@@ -563,8 +571,11 @@ df_gandal_genes = pd.read_excel(
     sheet_name="Gene_Level",
 )
 kme_cols = [c for c in df_gandal_genes.columns if c.startswith("kME")]
+df_gandal_genes["external_gene_name"] = [
+    _fix_excel_date_mangled_gene_symbol(v, d)
+    for v, d in zip(df_gandal_genes["external_gene_name"], df_gandal_genes["description"].fillna(""))
+]
 df_gandal_genes = df_gandal_genes[["WGCNA_module", "external_gene_name"] + kme_cols]
-df_gandal_genes["external_gene_name"] = df_gandal_genes["external_gene_name"].apply(_fix_excel_date_mangled_gene_symbol)
 df_gandal_genes["module_n"] = df_gandal_genes["WGCNA_module"].str.split("_").str[0]  # "M5_green" -> "M5"
 # each gene's kME to its OWN assigned module (kME{n}_{color} column <-> "{n}_{color}" module) -
 # a continuous, per-gene module-membership-strength score, used below as an enrichment weight.
@@ -601,8 +612,10 @@ for _, row in df_gandal_stats.iterrows():
         set_name += f": {asd_module_labels[n]}"
     selected_modules[n] = set_name
 
+# HIST1H4A appears twice in GeneM32 (two Ensembl IDs on an alternative-haplotype patch scaffold):
+# one entry per gene and set, here and in the weighted collection (max kME there)
 collection_asd = {
-    set_name: df_gandal_genes.loc[df_gandal_genes["module_n"] == n, "external_gene_name"].tolist()
+    set_name: df_gandal_genes.loc[df_gandal_genes["module_n"] == n, "external_gene_name"].drop_duplicates().tolist()
     for n, set_name in selected_modules.items()
 }
 print(f"ASD modules (Gandal et al., 2022): {len(collection_asd)} modules "
@@ -618,7 +631,7 @@ write_json(collection_asd, ref_dir / "collection-ASDModulesGandal2022.collect")
 collection_asd_weighted = pd.concat(
     {
         set_name: df_gandal_genes.loc[df_gandal_genes["module_n"] == n]
-            .set_index("external_gene_name")["own_kme"]
+            .groupby("external_gene_name", sort=False)["own_kme"].max()
         for n, set_name in selected_modules.items()
     },
     axis=0, names=["set", "map"],
@@ -677,8 +690,8 @@ df_fmr1 = pd.read_excel(
     download("https://ftp.ncbi.nlm.nih.gov/geo/series/GSE128nnn/GSE128860/suppl/GSE128860_CLIP.xlsx"),
     sheet_name="gene lists",
 )[list(fmr1_target_labels)]
-collection_fmr1 = {
-    set_name: df_fmr1[col].dropna().apply(_fix_excel_date_mangled_gene_symbol).tolist()
+collection_fmr1 = {  # drop_duplicates: NPTXR is listed twice in the Darnell column
+    set_name: df_fmr1[col].dropna().apply(_fix_excel_date_mangled_gene_symbol).drop_duplicates().tolist()
     for col, set_name in fmr1_target_labels.items()
 }
 

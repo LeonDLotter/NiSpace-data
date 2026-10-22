@@ -10,7 +10,7 @@ description: The NiSpace "PET" dataset contains a growing collection of nuclear 
   tracers, source samples, original publications and data sources, as well as the publication licenses.
   Every map should be cited when used. The responsibility for this lies with the user!
 default_collection: UniqueTracers
-default_set_collection: OnePerTarget-Sets
+default_set_collection: UniqueTracers
 cortex_only: false
 citations:
 - ref: Markello et al., 2022

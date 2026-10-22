@@ -1497,7 +1497,7 @@ GeneM4_up_region: neuronal signal transduction,SDC1,0.5103652
 GeneM4_up_region: neuronal signal transduction,SOS1,0.34217402
 GeneM4_up_region: neuronal signal transduction,KISS1R,0.32746464
 GeneM4_up_region: neuronal signal transduction,PAPPA2,0.39247224
-GeneM4_up_region: neuronal signal transduction,MARCH2,0.21052189
+GeneM4_up_region: neuronal signal transduction,MARC2,0.21052189
 GeneM4_up_region: neuronal signal transduction,FILIP1,0.44399714
 GeneM4_up_region: neuronal signal transduction,IRF2BPL,0.2191724
 GeneM4_up_region: neuronal signal transduction,ELOVL3,0.48085877
@@ -1679,7 +1679,7 @@ GeneM4_up_region: neuronal signal transduction,NR2F2,0.46382
 GeneM4_up_region: neuronal signal transduction,NTF3,0.221097
 GeneM4_up_region: neuronal signal transduction,DNAH14,0.6159254
 GeneM4_up_region: neuronal signal transduction,CYP4F2,0.2793874
-GeneM4_up_region: neuronal signal transduction,MARCH1,0.2019335
+GeneM4_up_region: neuronal signal transduction,MARC1,0.2019335
 GeneM4_up_region: neuronal signal transduction,AKAP14,0.409997
 GeneM4_up_region: neuronal signal transduction,C17orf58,0.3164995
 GeneM4_up_region: neuronal signal transduction,CYP27C1,0.179428
@@ -4995,7 +4995,6 @@ GeneM32_up_cortex: reactive astrocyte,HSPD1P11,0.6285683
 GeneM32_up_cortex: reactive astrocyte,RP11-334C17.5,0.4998516
 GeneM32_up_cortex: reactive astrocyte,RP5-890E16.2,0.5463891
 GeneM32_up_cortex: reactive astrocyte,HIST1H4A,0.7027672
-GeneM32_up_cortex: reactive astrocyte,HIST1H4A,0.7011323
 GeneM33_up_cortex: uncertain (chromatin regulation),ZZZ3,0.78932464
 GeneM33_up_cortex: uncertain (chromatin regulation),NFATC3,0.74101305
 GeneM33_up_cortex: uncertain (chromatin regulation),IKZF5,0.6277747

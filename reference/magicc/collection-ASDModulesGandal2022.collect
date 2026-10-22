@@ -1502,7 +1502,7 @@
         "SOS1",
         "KISS1R",
         "PAPPA2",
-        "MARCH2",
+        "MARC2",
         "FILIP1",
         "IRF2BPL",
         "ELOVL3",
@@ -1684,7 +1684,7 @@
         "NTF3",
         "DNAH14",
         "CYP4F2",
-        "MARCH1",
+        "MARC1",
         "AKAP14",
         "C17orf58",
         "CYP27C1",
@@ -5035,7 +5035,6 @@
         "HSPD1P11",
         "RP11-334C17.5",
         "RP5-890E16.2",
-        "HIST1H4A",
         "HIST1H4A"
     ],
     "GeneM33_up_cortex: uncertain (chromatin regulation)": [
