@@ -57,9 +57,57 @@ gi_agg_L_img.to_filename(save_dir / "feature-glycindex_pub-vaishnavi2010_space-f
 gi_agg_R_img.to_filename(save_dir / "feature-glycindex_pub-vaishnavi2010_space-fsLROriginal_hemi-R.surf.gii.gz")
 
 
-# %% Convert to NiSpace-format surface maps
+# %% HCP S1200 group-average structural maps
+# Source: "Human HCP 1200 Group Average + Individuals; Structural + fMRI Atlas" on BALSA
+# (HCP_S1200_GroupAvg_BALSA.scene, ID: D4w0w; login required), stored in _archive/hcps1200.
+# 32k fsLR CIFTI dscalars (59412 cortical vertices) -> per-hemisphere fsLR GIFTIs (medial wall = 0,
+# like the neuromaps maps) -> fsaverage 41k. Sulc/curvature keep the HCP sign (negative = sulcal).
+
+hcp_dir = wd / "_archive" / "hcps1200"
+HCP_MAPS = {
+    "feature-thickness_pub-hcps1200": "S1200.thickness_MSMAll.32k_fs_LR.dscalar.nii",
+    "feature-t1t2_pub-hcps1200": "S1200.MyelinMap_BC_MSMAll.32k_fs_LR.dscalar.nii",
+    "feature-sulc_pub-hcps1200": "S1200.sulc_MSMAll.32k_fs_LR.dscalar.nii",
+    "feature-curv_pub-hcps1200": "S1200.curvature_MSMAll.32k_fs_LR.dscalar.nii",
+}
+CIFTI_HEMIS = {"CIFTI_STRUCTURE_CORTEX_LEFT": "L", "CIFTI_STRUCTURE_CORTEX_RIGHT": "R"}
+
+for m, fn in HCP_MAPS.items():
+    print("Processing HCP map:", m)
+    cifti = nib.load(hcp_dir / fn)
+    data = cifti.get_fdata(dtype=np.float32).ravel()
+
+    # CIFTI -> fsLR 32k GIFTIs
+    map_fslr = {}
+    for name, slc, model in cifti.header.get_axis(1).iter_structures():
+        if name not in CIFTI_HEMIS:
+            continue
+        arr = np.zeros(model.nvertices[name], dtype=np.float32)
+        arr[model.vertex] = data[slc]
+        map_fslr[CIFTI_HEMIS[name]] = nib.GiftiImage(darrays=[nib.gifti.GiftiDataArray(data=arr)])
+    assert list(map_fslr) == ["L", "R"]
+
+    # fsLR -> fsaverage 41k
+    map_fsa = transforms.fslr_to_fsaverage(
+        data=(map_fslr["L"], map_fslr["R"]),
+        target_density="41k",
+        method="linear",
+    )
+
+    # save
+    save_dir = nispace_source_data_path / "reference" / "cortexfeatures" / "map" / m
+    save_dir.mkdir(parents=True, exist_ok=True)
+    for i_h, h in enumerate(["L", "R"]):
+        map_fslr[h].to_filename(save_dir / f"{m}_space-fsLR_desc-proc_hemi-{h}.surf.gii.gz")
+        map_fsa[i_h].to_filename(save_dir / f"{m}_space-fsaverage_desc-proc_hemi-{h}.surf.gii.gz")
+    print(f"Saved {m} to fsLR and fsaverage")
+
+
+# %% Convert neuromaps maps to NiSpace-format surface maps
 
 for m in reference_lib["cortexfeatures"]["map"]:
+    if m in HCP_MAPS:
+        continue
     print("Processing map:", m)
 
     # get transforms
@@ -138,6 +186,8 @@ pd.Series([
 pd.Series([
     "feature-thickness_pub-hcps1200",
     "feature-t1t2_pub-hcps1200",
+    "feature-sulc_pub-hcps1200",
+    "feature-curv_pub-hcps1200",
     "feature-saaxis_pub-sydnor2021",
     "feature-geneexpr_pub-markello2021",
     "feature-develexpansion_pub-hill2010",
@@ -154,8 +204,8 @@ sys.path.insert(0, str(Path(__file__).parent))
 from utils import parcellate_mapref
 
 parcellate_mapref(wd, "cortexfeatures", spaces=[
-    "fsLROriginal",       # fsLR-native maps
-    "fsaverageOriginal",  # fsaverage-native maps (no overlap → no overwrite)
+    "fsLR",               # all maps (HCP maps have no Original space)
+    "fsaverageOriginal",  # fsaverage-native maps (overwrites their fsLR pass)
 ])
 
 # %%

@@ -1,21 +1,30 @@
 name: cortexfeatures
 label: CortexFeatures
-description: The NiSpace "CortexFeatures" dataset consists of different features of cortical topology available via neuromaps.
-  Many of these maps were used in Shafiei et al., 2023. The maps are fetched directly from neuromaps (space="fsLROriginal" 
-  or "fsaverageOriginal") or downloaded from the NiSpace-data GitHub repo (space="fsLR" or "fsaverage"; recommended). 
-  Please cite neuromaps (https://neuromaps-main.readthedocs.io/) and the original publication for each map when used.
+description: The NiSpace "CortexFeatures" dataset consists of different features of cortical topology, most of them available via neuromaps.
+  Many of these maps were used in Shafiei et al., 2023. The neuromaps maps are fetched directly from neuromaps (space="fsLROriginal"
+  or "fsaverageOriginal") or downloaded from the NiSpace-data GitHub repo (space="fsLR" or "fsaverage"; recommended).
+  The structural maps of the Human Connectome Project (HCP) S1200 release (cortical thickness, T1w/T2w ratio, sulcal depth,
+  curvature; 1096 subjects, MSMAll registration) were obtained from the S1200 group-average data on BALSA and converted to
+  GIFTI (fsLR) and transformed to fsaverage. Note that the HCP sulcal depth and curvature maps follow the HCP sign convention
+  (negative = sulcal, positive = gyral), which is inverted relative to FreeSurfer. Please cite neuromaps
+  (https://neuromaps-main.readthedocs.io/) and the original publication for each map when used. For HCP maps, please include
+  the HCP acknowledgment ("Data were provided [in part] by the Human Connectome Project, WU-Minn Consortium (Principal
+  Investigators David Van Essen and Kamil Ugurbil; 1U54MH091657) funded by the 16 NIH Institutes and Centers that support
+  the NIH Blueprint for Neuroscience Research; and by the McDonnell Center for Systems Neuroscience at Washington University.").
 cortex_only: true
-license: CC BY-NC-SA 4.0
 citations:
 - ref: Markello et al., 2022
   doi: 10.1038/s41592-022-01625-w
 - ref: Shafiei et al., 2023
   doi: 10.1038/s41467-023-41689-6
+- ref: Glasser et al., 2013
+  doi: 10.1016/j.neuroimage.2013.04.127
 map_info:
   cite_column: doi
   display_columns:
   - feature
   - doi
+  - license
 collections:
   All:
     description: All cortical feature maps.
@@ -30,43 +39,15 @@ maps:
   feature-thickness_pub-hcps1200:
     fsaverage: auto
     fsLR: auto
-    fsLROriginal:
-      L:
-        host: neuromaps
-        remote:
-        - hcps1200
-        - thickness
-        - fsLR
-        - L
-        ext: .surf.gii
-      R:
-        host: neuromaps
-        remote:
-        - hcps1200
-        - thickness
-        - fsLR
-        - R
-        ext: .surf.gii
   feature-t1t2_pub-hcps1200:
     fsaverage: auto
     fsLR: auto
-    fsLROriginal:
-      L:
-        host: neuromaps
-        remote:
-        - hcps1200
-        - myelinmap
-        - fsLR
-        - L
-        ext: .surf.gii
-      R:
-        host: neuromaps
-        remote:
-        - hcps1200
-        - myelinmap
-        - fsLR
-        - R
-        ext: .surf.gii
+  feature-sulc_pub-hcps1200:
+    fsaverage: auto
+    fsLR: auto
+  feature-curv_pub-hcps1200:
+    fsaverage: auto
+    fsLR: auto
   feature-saaxis_pub-sydnor2021:
     fsaverage: auto
     fsLR: auto

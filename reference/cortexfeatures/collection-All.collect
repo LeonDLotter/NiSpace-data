@@ -3,6 +3,7 @@ feature-cbf_pub-vaishnavi2010
 feature-cbv_pub-vaishnavi2010
 feature-cmrglc_pub-vaishnavi2010
 feature-cmro2_pub-vaishnavi2010
+feature-curv_pub-hcps1200
 feature-develexpansion_pub-hill2010
 feature-evolexpansion_pub-hill2010
 feature-evolexpansion_pub-xu2020
@@ -20,5 +21,6 @@ feature-megpowertheta_pub-shafiei2022
 feature-megtimescale_pub-shafiei2022
 feature-saaxis_pub-sydnor2021
 feature-specieshomology_pub-xu2020
+feature-sulc_pub-hcps1200
 feature-t1t2_pub-hcps1200
 feature-thickness_pub-hcps1200
