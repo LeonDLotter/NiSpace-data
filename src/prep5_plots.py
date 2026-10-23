@@ -99,8 +99,15 @@ PLOT_MAP_SELECTION = {
         "feature-fcgradient1_pub-margulies2016",
         "feature-megpoweralpha_pub-shafiei2022",
         "feature-cbf_pub-vaishnavi2010",
-    ]
-        
+    ],
+    "hcptask": [
+        "task-WM_contrast-2BKvs0BK_pub-hcps1200",
+        "task-MOTOR_contrast-RHvsAVG_pub-hcps1200",
+        "task-LANGUAGE_contrast-STORYvsMATH_pub-hcps1200",
+        "task-SOCIAL_contrast-TOMvsRANDOM_pub-hcps1200",
+        "task-RELATIONAL_contrast-RELvsMATCH_pub-hcps1200",
+        "task-EMOTION_contrast-FACESvsSHAPES_pub-hcps1200",
+    ],
 }
 
 PLOT_TAB_SELECTION = {
@@ -159,6 +166,13 @@ PLOT_CMAP = {
     "grf": "mako",
     "enigmaarea": "RdBu_r",
     "enigmathick": "RdBu_r",
+    "hcptask": "RdBu_r",
+}
+
+# Number of leading map-ID entities shown in plot titles (default 1), for datasets whose
+# first entity alone is not informative (e.g. "task-WM" without the contrast).
+TITLE_N_ENTITIES = {
+    "hcptask": 2,
 }
 
 # Parcellation to use when tab-based datasets need tabular → brain mapping.
@@ -190,8 +204,15 @@ def _resolve_ids(curated, available, n=N_MAPS):
     return selected[:n]
 
 
-def _short_title(map_id):
-    """Derive a compact display title from a BIDS-style map ID."""
+def _short_title(map_id, n_entities=1):
+    """Derive a compact display title from a BIDS-style map ID.
+
+    n_entities > 1: values of the first n entities, e.g. "WM: 2BKvs0BK" for
+    "task-WM_contrast-2BKvs0BK_pub-hcps1200" (see TITLE_N_ENTITIES).
+    """
+    if n_entities > 1:
+        values = [e.partition("-")[2] or e for e in map_id.split("_")[:n_entities]]
+        return f"{values[0]}: {' '.join(values[1:])}"
     label = map_id.split("_")[0]
     for prefix in ("target-", "feature-", "nw-", "mito-", "tissue-", "db-",
                    "dx-", "alpha-", "gene-", "cell-"):
@@ -371,7 +392,7 @@ def _plot_reference_maps(name, ref_cfg, kind, space, out_path, avail_text=None):
                 continue
             if isinstance(path, tuple):
                 pairs.append(path)
-                titles.append(_short_title(mid))
+                titles.append(_short_title(mid, TITLE_N_ENTITIES.get(name, 1)))
 
         if not pairs:
             print(f"    WARNING: no surface files found for {name}, skipping")
@@ -410,7 +431,7 @@ def _plot_reference_maps(name, ref_cfg, kind, space, out_path, avail_text=None):
                 continue
             if isinstance(path, Path):
                 niis.append(path)
-                titles.append(_short_title(mid))
+                titles.append(_short_title(mid, TITLE_N_ENTITIES.get(name, 1)))
 
         if not niis:
             print(f"    WARNING: no MNI files found for {name}, skipping")
@@ -475,7 +496,7 @@ def _plot_reference_tabs(name, ref_cfg, out_path, PARCS_CX, avail_text=None):
     selected_ids = _resolve_ids(curated, list(tab_df.index))
 
     df = tab_df.loc[selected_ids]
-    titles = [_short_title(i) for i in selected_ids]
+    titles = [_short_title(i, TITLE_N_ENTITIES.get(name, 1)) for i in selected_ids]
 
     if kind == "surface":
         fig, axes = plt.subplots(2, 3, figsize=(24, 4.5), gridspec_kw={"hspace": 0.1, "wspace": 0.05})

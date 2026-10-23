@@ -80,6 +80,8 @@ For `auto` spaces: volumetric → looks for `*_space-{space}[_.].nii.gz` (prefer
 
 External hosts (`neuromaps`, `url`, `osfprivate`) must always be listed explicitly.
 
+**Spaces to provide:** processed maps are provided in all spaces the source data allows. Volumetric source data → all four spaces (`MNI152NLin6Asym`, `MNI152NLin2009cAsym`, `fsLR`, `fsaverage`); surface-only source data → `fsLR` and `fsaverage`. Exception: volumes that cover only part of the brain (e.g. the subcortical part of a CIFTI) are not distributed as images, since they would silently break whole-brain or custom volumetric parcellations; their data is provided via tabs only (see `hcptask`, `split_cifti` and `parcellate_mapref(..., local_spaces=...)` in `src/utils.py`).
+
 **`map_info.csv`** — present only for: pet, enigmathick, enigmaarea, cortexfeatures, tpm, bigbrain. Contains per-map citation info. Registered automatically in the JSON if `map_info:` section exists in `ref.yaml`.
 
 ---

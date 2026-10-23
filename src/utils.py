@@ -119,7 +119,72 @@ def save_csv_gz(df, path, **kwargs):
     df.to_csv(path, compression={"method": "gzip", "mtime": 1}, **kwargs)
 
 
-def parcellate_mapref(wd, dataset, spaces):
+CIFTI_CORTEX = {"CIFTI_STRUCTURE_CORTEX_LEFT": "L", "CIFTI_STRUCTURE_CORTEX_RIGHT": "R"}
+
+
+def split_cifti(cifti, maps=None):
+    """Split a dense CIFTI-2 file into NiSpace-format surface and volume images.
+
+    NiSpace has no CIFTI support yet, so CIFTI maps are stored and parcellated as two parts:
+    - cortex: one GIFTI per hemisphere on the CIFTI surface mesh (fsLR 32k for HCP 91k
+      grayordinates); medial wall = 0
+    - volume: all CIFTI volume structures (subcortex, cerebellum, brainstem) in one NIfTI on
+      the CIFTI volume grid (MNI152NLin6Asym 2mm for HCP 91k grayordinates); voxels outside
+      the CIFTI structures = 0
+    Both background zeros are excluded by parcellate_data's default background_value="auto".
+    Parcellate cortex parcellations on the surface part and subcortex parcellations on the
+    volume part (parcellate_mapref with spaces={"cortex": [...], "subcortex": [...]}).
+
+    Args:
+        cifti : path or nib.Cifti2Image (dense, axis 1 = BrainModelAxis), e.g. dscalar.nii
+        maps  : optional list of row names (axis 0) to extract; default all, in file order
+
+    Returns: dict {row name: {"surface": (L GiftiImage, R GiftiImage), "volume": Nifti1Image}}
+             ("volume" is None if the CIFTI has no volume structures)
+    """
+    import nibabel as nib
+
+    img = nib.load(cifti) if not isinstance(cifti, nib.Cifti2Image) else cifti
+    ax_maps, ax_bm = img.header.get_axis(0), img.header.get_axis(1)
+    if not isinstance(ax_bm, nib.cifti2.BrainModelAxis):
+        raise ValueError(f"CIFTI axis 1 is {type(ax_bm).__name__}, expected BrainModelAxis (dense CIFTI)")
+    names = list(ax_maps.name) if hasattr(ax_maps, "name") else [str(i) for i in range(img.shape[0])]
+    maps = names if maps is None else list(maps)
+    missing = [m for m in maps if m not in names]
+    if missing:
+        raise ValueError(f"Maps not in CIFTI: {missing}")
+    rows = [names.index(m) for m in maps]
+    data = img.get_fdata(dtype=np.float32)[rows, :]
+
+    # cortex: CIFTI vertex indices -> full-mesh arrays per hemisphere
+    surf = {}
+    for name, slc, model in ax_bm.iter_structures():
+        if name in CIFTI_CORTEX:
+            arr = np.zeros((len(maps), model.nvertices[name]), dtype=np.float32)
+            arr[:, model.vertex] = data[:, slc]
+            surf[CIFTI_CORTEX[name]] = arr
+    if sorted(surf) != ["L", "R"]:
+        raise ValueError(f"CIFTI must contain left and right cortex, found: {sorted(surf)}")
+
+    # volume: all voxel brain models -> one array on the CIFTI volume grid
+    vol_mask = ax_bm.volume_mask
+    if vol_mask.any():
+        vox = ax_bm.voxel[vol_mask]
+        vol = np.zeros((len(maps), *ax_bm.volume_shape), dtype=np.float32)
+        vol[:, vox[:, 0], vox[:, 1], vox[:, 2]] = data[:, vol_mask]
+
+    out = {}
+    for i, m in enumerate(maps):
+        out[m] = {
+            "surface": tuple(
+                nib.GiftiImage(darrays=[nib.gifti.GiftiDataArray(data=surf[h][i])]) for h in ["L", "R"]
+            ),
+            "volume": nib.Nifti1Image(vol[i], ax_bm.affine) if vol_mask.any() else None,
+        }
+    return out
+
+
+def parcellate_mapref(wd, dataset, spaces, local_spaces=None):
     """Parcellate a map-based reference dataset across all parcellations.
 
     Args:
@@ -128,6 +193,14 @@ def parcellate_mapref(wd, dataset, spaces):
         spaces  : ordered list of space keys. An "Original"-suffixed key means
                   "filter maps by this tag but load/parcellate in the base space."
                   Later entries overwrite earlier ones for maps present in both.
+                  Alternatively a dict {parc level: list of space keys}, e.g.
+                  {"cortex": ["fsLR"], "subcortex": ["MNI152NLin6Asym"]} for CIFTI-derived
+                  maps (see split_cifti): each parcellation is then only parcellated in the
+                  spaces of its parc.yaml level.
+        local_spaces : optional dict {space: directory} for spaces that are parcellated but
+                  not distributed (not in ref.yaml): all ref.yaml maps are read from
+                  <directory>/<map>/<map>_space-<space>_*. E.g. hcptask subcortical CIFTI
+                  volumes, which are not shipped as images because they lack the cortex.
 
     Saves: reference/<dataset>/tab/dset-<dataset>_parc-<PARC>.csv.gz
     Raises: ValueError on missing maps, wrong output shape, or all-NaN map rows.
@@ -141,8 +214,22 @@ def parcellate_mapref(wd, dataset, spaces):
     yaml_maps = ref_cfg.get("maps", {})
     cx_only = ref_cfg.get("cortex_only", False)
 
-    PARCS, PARCS_CX, _ = load_parc_lists(wd)
+    PARCS, PARCS_CX, PARCS_SC = load_parc_lists(wd)
     parc_names = PARCS_CX if cx_only else PARCS
+
+    # spaces per parcellation
+    if isinstance(spaces, dict):
+        parc_level = {p: "cortex" for p in PARCS_CX} | {p: "subcortex" for p in PARCS_SC}
+        missing = [p for p in parc_names if parc_level.get(p) not in spaces]
+        if missing:
+            raise ValueError(
+                f"[{dataset}] no spaces given for the level of parcellation(s) {missing}: "
+                f"levels {[parc_level.get(p) for p in missing]}, spaces {spaces}"
+            )
+        parc_spaces = {p: spaces[parc_level[p]] for p in parc_names}
+        spaces = list(dict.fromkeys(s for s_list in spaces.values() for s in s_list))
+    else:
+        parc_spaces = {p: spaces for p in parc_names}
 
     def _is_private(entry):
         if not isinstance(entry, dict):
@@ -155,8 +242,10 @@ def parcellate_mapref(wd, dataset, spaces):
             return "private" in str(entry["R"].get("host", ""))
         return False
 
+    local_spaces = {s: Path(d) for s, d in (local_spaces or {}).items()}
+
     def _fetch_paths(maps, space):
-        map_dir = wd / "reference" / dataset / "map"
+        map_dir = local_spaces.get(space, wd / "reference" / dataset / "map")
         paths = []
         for m in maps:
             fp = sorted((map_dir / m).glob(f"{m}_space-{space}_*"))
@@ -178,7 +267,14 @@ def parcellate_mapref(wd, dataset, spaces):
     for space in spaces:
         maps_in_space = []
         for m, m_spaces in yaml_maps.items():
-            if not isinstance(m_spaces, dict) or space not in m_spaces:
+            if not isinstance(m_spaces, dict):
+                continue
+            if space in local_spaces:
+                # local, non-distributed space: all maps that are public in any listed space
+                if not all(_is_private(e) for e in m_spaces.values()):
+                    maps_in_space.append(m)
+                continue
+            if space not in m_spaces:
                 continue
             if not _is_private(m_spaces[space]):
                 maps_in_space.append(m)
@@ -209,7 +305,7 @@ def parcellate_mapref(wd, dataset, spaces):
         )
 
         passes_run = 0
-        for space in spaces:
+        for space in parc_spaces[parc_name]:
             filter_space = space
             parc_space = space.replace("Original", "")
             if filter_space not in ref_maps:
@@ -299,7 +395,7 @@ def parcellate_mapref(wd, dataset, spaces):
         if passes_run == 0:
             raise ValueError(
                 f"[{dataset}/{parc_name}] No parcellation pass ran. "
-                f"Check that at least one of {spaces} has a matching parcellation dir."
+                f"Check that at least one of {parc_spaces[parc_name]} has a matching parcellation dir."
             )
 
         if len(ref_maps_df) != len(ref_maps_avail_all):
@@ -357,4 +453,5 @@ DATASET_PARCELLATE_KWARGS = {
     "mabaseline":     dict(background_value="auto", report_background_parcels=True,  min_num_valid_datapoints=None, min_fraction_valid_datapoints=None),
     "neurosynth":     dict(background_value=False,  report_background_parcels=False, min_num_valid_datapoints=None, min_fraction_valid_datapoints=None),
     "grf":            dict(background_value=False,  report_background_parcels=False, min_num_valid_datapoints=None, min_fraction_valid_datapoints=None),
+    "hcptask":        dict(background_value="auto", report_background_parcels=True,  min_num_valid_datapoints=5,    min_fraction_valid_datapoints=0.3),
 }

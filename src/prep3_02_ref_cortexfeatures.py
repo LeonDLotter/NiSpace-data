@@ -59,7 +59,7 @@ gi_agg_R_img.to_filename(save_dir / "feature-glycindex_pub-vaishnavi2010_space-f
 
 # %% HCP S1200 group-average structural maps
 # Source: "Human HCP 1200 Group Average + Individuals; Structural + fMRI Atlas" on BALSA
-# (HCP_S1200_GroupAvg_BALSA.scene, ID: D4w0w; login required), stored in _archive/hcps1200.
+# (reference pkXDZ; HCP_S1200_GroupAvg_BALSA.scene, ID: D4w0w; login required), stored in _archive/hcps1200.
 # 32k fsLR CIFTI dscalars (59412 cortical vertices) -> per-hemisphere fsLR GIFTIs (medial wall = 0,
 # like the neuromaps maps) -> fsaverage 41k. Sulc/curvature keep the HCP sign (negative = sulcal).
 
@@ -70,26 +70,19 @@ HCP_MAPS = {
     "feature-sulc_pub-hcps1200": "S1200.sulc_MSMAll.32k_fs_LR.dscalar.nii",
     "feature-curv_pub-hcps1200": "S1200.curvature_MSMAll.32k_fs_LR.dscalar.nii",
 }
-CIFTI_HEMIS = {"CIFTI_STRUCTURE_CORTEX_LEFT": "L", "CIFTI_STRUCTURE_CORTEX_RIGHT": "R"}
+import sys
+sys.path.insert(0, str(Path(__file__).parent))
+from utils import split_cifti
 
 for m, fn in HCP_MAPS.items():
     print("Processing HCP map:", m)
-    cifti = nib.load(hcp_dir / fn)
-    data = cifti.get_fdata(dtype=np.float32).ravel()
 
-    # CIFTI -> fsLR 32k GIFTIs
-    map_fslr = {}
-    for name, slc, model in cifti.header.get_axis(1).iter_structures():
-        if name not in CIFTI_HEMIS:
-            continue
-        arr = np.zeros(model.nvertices[name], dtype=np.float32)
-        arr[model.vertex] = data[slc]
-        map_fslr[CIFTI_HEMIS[name]] = nib.GiftiImage(darrays=[nib.gifti.GiftiDataArray(data=arr)])
-    assert list(map_fslr) == ["L", "R"]
+    # CIFTI -> fsLR 32k GIFTIs (cortex-only dscalar: single map, no volume part)
+    (map_fslr,) = [v["surface"] for v in split_cifti(hcp_dir / fn).values()]
 
     # fsLR -> fsaverage 41k
     map_fsa = transforms.fslr_to_fsaverage(
-        data=(map_fslr["L"], map_fslr["R"]),
+        data=map_fslr,
         target_density="41k",
         method="linear",
     )
@@ -98,7 +91,7 @@ for m, fn in HCP_MAPS.items():
     save_dir = nispace_source_data_path / "reference" / "cortexfeatures" / "map" / m
     save_dir.mkdir(parents=True, exist_ok=True)
     for i_h, h in enumerate(["L", "R"]):
-        map_fslr[h].to_filename(save_dir / f"{m}_space-fsLR_desc-proc_hemi-{h}.surf.gii.gz")
+        map_fslr[i_h].to_filename(save_dir / f"{m}_space-fsLR_desc-proc_hemi-{h}.surf.gii.gz")
         map_fsa[i_h].to_filename(save_dir / f"{m}_space-fsaverage_desc-proc_hemi-{h}.surf.gii.gz")
     print(f"Saved {m} to fsLR and fsaverage")
 

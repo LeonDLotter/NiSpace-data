@@ -1,0 +1,180 @@
+name: hcptask
+label: HCPTask
+description: HCP S1200 group-average task-fMRI maps (Cohen's d; 997 subjects; MSMAll, 2mm smoothing) from BALSA (reference pkXDZ);
+  47 conditions and contrasts (HCP's 39 sign-flipped duplicates omitted). Map images are cortical
+  (fsLR, fsaverage); subcortical data (incl. cerebellum, brainstem) is only available as parcellated tables
+  for subcortical parcellations. The "Canonical" collection selects the key contrasts from each task
+  (Barch et al., 2013). Cite the original HCP papers and include the HCP acknowledgment if you use the
+  maps in any publication (see HCP Open Access Data Use Terms).
+default_set_collection: All-Sets
+cortex_only: false
+license: HCP Open Access Data Use Terms
+citations:
+- ref: Barch et al., 2013
+  doi: 10.1016/j.neuroimage.2013.05.033
+- ref: Van Essen et al., 2013
+  doi: 10.1016/j.neuroimage.2013.05.041
+- ref: Glasser et al., 2013
+  doi: 10.1016/j.neuroimage.2013.04.127
+map_info:
+  cite_column: doi
+  display_columns:
+  - task
+  - label
+  - type
+collections:
+  All:
+    description: All 47 HCP task-fMRI maps (conditions vs. baseline and contrasts).
+  Canonical:
+    description: The focused contrast of each task (Barch et al., 2013), e.g., 2-back vs. 0-back; for the motor task,
+      each movement vs. the average of all movements (11 maps).
+  Conditions:
+    description: All task conditions vs. baseline (31 maps).
+  Contrasts:
+    description: All contrasts between task conditions (16 maps).
+  All-Sets:
+    description: All maps in 7 sets, one per task (WorkingMemory, Gambling, Motor, Language, Social, Relational,
+      Emotion), for set enrichment. Unweighted.
+tabs: auto
+maps:
+  task-WM_contrast-2BKBODY_pub-hcps1200:
+    fsLR: auto
+    fsaverage: auto
+  task-WM_contrast-2BKFACE_pub-hcps1200:
+    fsLR: auto
+    fsaverage: auto
+  task-WM_contrast-2BKPLACE_pub-hcps1200:
+    fsLR: auto
+    fsaverage: auto
+  task-WM_contrast-2BKTOOL_pub-hcps1200:
+    fsLR: auto
+    fsaverage: auto
+  task-WM_contrast-0BKBODY_pub-hcps1200:
+    fsLR: auto
+    fsaverage: auto
+  task-WM_contrast-0BKFACE_pub-hcps1200:
+    fsLR: auto
+    fsaverage: auto
+  task-WM_contrast-0BKPLACE_pub-hcps1200:
+    fsLR: auto
+    fsaverage: auto
+  task-WM_contrast-0BKTOOL_pub-hcps1200:
+    fsLR: auto
+    fsaverage: auto
+  task-WM_contrast-2BK_pub-hcps1200:
+    fsLR: auto
+    fsaverage: auto
+  task-WM_contrast-0BK_pub-hcps1200:
+    fsLR: auto
+    fsaverage: auto
+  task-WM_contrast-2BKvs0BK_pub-hcps1200:
+    fsLR: auto
+    fsaverage: auto
+  task-WM_contrast-BODY_pub-hcps1200:
+    fsLR: auto
+    fsaverage: auto
+  task-WM_contrast-FACE_pub-hcps1200:
+    fsLR: auto
+    fsaverage: auto
+  task-WM_contrast-PLACE_pub-hcps1200:
+    fsLR: auto
+    fsaverage: auto
+  task-WM_contrast-TOOL_pub-hcps1200:
+    fsLR: auto
+    fsaverage: auto
+  task-WM_contrast-BODYvsAVG_pub-hcps1200:
+    fsLR: auto
+    fsaverage: auto
+  task-WM_contrast-FACEvsAVG_pub-hcps1200:
+    fsLR: auto
+    fsaverage: auto
+  task-WM_contrast-PLACEvsAVG_pub-hcps1200:
+    fsLR: auto
+    fsaverage: auto
+  task-WM_contrast-TOOLvsAVG_pub-hcps1200:
+    fsLR: auto
+    fsaverage: auto
+  task-GAMBLING_contrast-PUNISH_pub-hcps1200:
+    fsLR: auto
+    fsaverage: auto
+  task-GAMBLING_contrast-REWARD_pub-hcps1200:
+    fsLR: auto
+    fsaverage: auto
+  task-GAMBLING_contrast-REWARDvsPUNISH_pub-hcps1200:
+    fsLR: auto
+    fsaverage: auto
+  task-MOTOR_contrast-CUE_pub-hcps1200:
+    fsLR: auto
+    fsaverage: auto
+  task-MOTOR_contrast-LF_pub-hcps1200:
+    fsLR: auto
+    fsaverage: auto
+  task-MOTOR_contrast-LH_pub-hcps1200:
+    fsLR: auto
+    fsaverage: auto
+  task-MOTOR_contrast-RF_pub-hcps1200:
+    fsLR: auto
+    fsaverage: auto
+  task-MOTOR_contrast-RH_pub-hcps1200:
+    fsLR: auto
+    fsaverage: auto
+  task-MOTOR_contrast-T_pub-hcps1200:
+    fsLR: auto
+    fsaverage: auto
+  task-MOTOR_contrast-AVG_pub-hcps1200:
+    fsLR: auto
+    fsaverage: auto
+  task-MOTOR_contrast-CUEvsAVG_pub-hcps1200:
+    fsLR: auto
+    fsaverage: auto
+  task-MOTOR_contrast-LFvsAVG_pub-hcps1200:
+    fsLR: auto
+    fsaverage: auto
+  task-MOTOR_contrast-LHvsAVG_pub-hcps1200:
+    fsLR: auto
+    fsaverage: auto
+  task-MOTOR_contrast-RFvsAVG_pub-hcps1200:
+    fsLR: auto
+    fsaverage: auto
+  task-MOTOR_contrast-RHvsAVG_pub-hcps1200:
+    fsLR: auto
+    fsaverage: auto
+  task-MOTOR_contrast-TvsAVG_pub-hcps1200:
+    fsLR: auto
+    fsaverage: auto
+  task-LANGUAGE_contrast-MATH_pub-hcps1200:
+    fsLR: auto
+    fsaverage: auto
+  task-LANGUAGE_contrast-STORY_pub-hcps1200:
+    fsLR: auto
+    fsaverage: auto
+  task-LANGUAGE_contrast-STORYvsMATH_pub-hcps1200:
+    fsLR: auto
+    fsaverage: auto
+  task-SOCIAL_contrast-RANDOM_pub-hcps1200:
+    fsLR: auto
+    fsaverage: auto
+  task-SOCIAL_contrast-TOM_pub-hcps1200:
+    fsLR: auto
+    fsaverage: auto
+  task-SOCIAL_contrast-TOMvsRANDOM_pub-hcps1200:
+    fsLR: auto
+    fsaverage: auto
+  task-RELATIONAL_contrast-MATCH_pub-hcps1200:
+    fsLR: auto
+    fsaverage: auto
+  task-RELATIONAL_contrast-REL_pub-hcps1200:
+    fsLR: auto
+    fsaverage: auto
+  task-RELATIONAL_contrast-RELvsMATCH_pub-hcps1200:
+    fsLR: auto
+    fsaverage: auto
+  task-EMOTION_contrast-FACES_pub-hcps1200:
+    fsLR: auto
+    fsaverage: auto
+  task-EMOTION_contrast-SHAPES_pub-hcps1200:
+    fsLR: auto
+    fsaverage: auto
+  task-EMOTION_contrast-FACESvsSHAPES_pub-hcps1200:
+    fsLR: auto
+    fsaverage: auto

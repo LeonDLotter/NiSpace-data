@@ -1,0 +1,48 @@
+map,task,label,type,hcp_name,doi
+task-WM_contrast-2BKBODY_pub-hcps1200,Working memory,2-back body vs. baseline,condition,tfMRI_WM_2BK_BODY,10.1016/j.neuroimage.2013.05.033
+task-WM_contrast-2BKFACE_pub-hcps1200,Working memory,2-back face vs. baseline,condition,tfMRI_WM_2BK_FACE,10.1016/j.neuroimage.2013.05.033
+task-WM_contrast-2BKPLACE_pub-hcps1200,Working memory,2-back place vs. baseline,condition,tfMRI_WM_2BK_PLACE,10.1016/j.neuroimage.2013.05.033
+task-WM_contrast-2BKTOOL_pub-hcps1200,Working memory,2-back tool vs. baseline,condition,tfMRI_WM_2BK_TOOL,10.1016/j.neuroimage.2013.05.033
+task-WM_contrast-0BKBODY_pub-hcps1200,Working memory,0-back body vs. baseline,condition,tfMRI_WM_0BK_BODY,10.1016/j.neuroimage.2013.05.033
+task-WM_contrast-0BKFACE_pub-hcps1200,Working memory,0-back face vs. baseline,condition,tfMRI_WM_0BK_FACE,10.1016/j.neuroimage.2013.05.033
+task-WM_contrast-0BKPLACE_pub-hcps1200,Working memory,0-back place vs. baseline,condition,tfMRI_WM_0BK_PLACE,10.1016/j.neuroimage.2013.05.033
+task-WM_contrast-0BKTOOL_pub-hcps1200,Working memory,0-back tool vs. baseline,condition,tfMRI_WM_0BK_TOOL,10.1016/j.neuroimage.2013.05.033
+task-WM_contrast-2BK_pub-hcps1200,Working memory,2-back vs. baseline,condition,tfMRI_WM_2BK,10.1016/j.neuroimage.2013.05.033
+task-WM_contrast-0BK_pub-hcps1200,Working memory,0-back vs. baseline,condition,tfMRI_WM_0BK,10.1016/j.neuroimage.2013.05.033
+task-WM_contrast-2BKvs0BK_pub-hcps1200,Working memory,2-back vs. 0-back,contrast,tfMRI_WM_2BK-0BK,10.1016/j.neuroimage.2013.05.033
+task-WM_contrast-BODY_pub-hcps1200,Working memory,body vs. baseline,condition,tfMRI_WM_BODY,10.1016/j.neuroimage.2013.05.033
+task-WM_contrast-FACE_pub-hcps1200,Working memory,face vs. baseline,condition,tfMRI_WM_FACE,10.1016/j.neuroimage.2013.05.033
+task-WM_contrast-PLACE_pub-hcps1200,Working memory,place vs. baseline,condition,tfMRI_WM_PLACE,10.1016/j.neuroimage.2013.05.033
+task-WM_contrast-TOOL_pub-hcps1200,Working memory,tool vs. baseline,condition,tfMRI_WM_TOOL,10.1016/j.neuroimage.2013.05.033
+task-WM_contrast-BODYvsAVG_pub-hcps1200,Working memory,body vs. average,contrast,tfMRI_WM_BODY-AVG,10.1016/j.neuroimage.2013.05.033
+task-WM_contrast-FACEvsAVG_pub-hcps1200,Working memory,face vs. average,contrast,tfMRI_WM_FACE-AVG,10.1016/j.neuroimage.2013.05.033
+task-WM_contrast-PLACEvsAVG_pub-hcps1200,Working memory,place vs. average,contrast,tfMRI_WM_PLACE-AVG,10.1016/j.neuroimage.2013.05.033
+task-WM_contrast-TOOLvsAVG_pub-hcps1200,Working memory,tool vs. average,contrast,tfMRI_WM_TOOL-AVG,10.1016/j.neuroimage.2013.05.033
+task-GAMBLING_contrast-PUNISH_pub-hcps1200,Gambling,punishment vs. baseline,condition,tfMRI_GAMBLING_PUNISH,10.1016/j.neuroimage.2013.05.033
+task-GAMBLING_contrast-REWARD_pub-hcps1200,Gambling,reward vs. baseline,condition,tfMRI_GAMBLING_REWARD,10.1016/j.neuroimage.2013.05.033
+task-GAMBLING_contrast-REWARDvsPUNISH_pub-hcps1200,Gambling,reward vs. punishment,contrast,tfMRI_GAMBLING_REWARD-PUNISH,10.1016/j.neuroimage.2013.05.033
+task-MOTOR_contrast-CUE_pub-hcps1200,Motor,cue vs. baseline,condition,tfMRI_MOTOR_CUE,10.1016/j.neuroimage.2013.05.033
+task-MOTOR_contrast-LF_pub-hcps1200,Motor,left foot vs. baseline,condition,tfMRI_MOTOR_LF,10.1016/j.neuroimage.2013.05.033
+task-MOTOR_contrast-LH_pub-hcps1200,Motor,left hand vs. baseline,condition,tfMRI_MOTOR_LH,10.1016/j.neuroimage.2013.05.033
+task-MOTOR_contrast-RF_pub-hcps1200,Motor,right foot vs. baseline,condition,tfMRI_MOTOR_RF,10.1016/j.neuroimage.2013.05.033
+task-MOTOR_contrast-RH_pub-hcps1200,Motor,right hand vs. baseline,condition,tfMRI_MOTOR_RH,10.1016/j.neuroimage.2013.05.033
+task-MOTOR_contrast-T_pub-hcps1200,Motor,tongue vs. baseline,condition,tfMRI_MOTOR_T,10.1016/j.neuroimage.2013.05.033
+task-MOTOR_contrast-AVG_pub-hcps1200,Motor,average movement vs. baseline,condition,tfMRI_MOTOR_AVG,10.1016/j.neuroimage.2013.05.033
+task-MOTOR_contrast-CUEvsAVG_pub-hcps1200,Motor,cue vs. average,contrast,tfMRI_MOTOR_CUE-AVG,10.1016/j.neuroimage.2013.05.033
+task-MOTOR_contrast-LFvsAVG_pub-hcps1200,Motor,left foot vs. average,contrast,tfMRI_MOTOR_LF-AVG,10.1016/j.neuroimage.2013.05.033
+task-MOTOR_contrast-LHvsAVG_pub-hcps1200,Motor,left hand vs. average,contrast,tfMRI_MOTOR_LH-AVG,10.1016/j.neuroimage.2013.05.033
+task-MOTOR_contrast-RFvsAVG_pub-hcps1200,Motor,right foot vs. average,contrast,tfMRI_MOTOR_RF-AVG,10.1016/j.neuroimage.2013.05.033
+task-MOTOR_contrast-RHvsAVG_pub-hcps1200,Motor,right hand vs. average,contrast,tfMRI_MOTOR_RH-AVG,10.1016/j.neuroimage.2013.05.033
+task-MOTOR_contrast-TvsAVG_pub-hcps1200,Motor,tongue vs. average,contrast,tfMRI_MOTOR_T-AVG,10.1016/j.neuroimage.2013.05.033
+task-LANGUAGE_contrast-MATH_pub-hcps1200,Language,math vs. baseline,condition,tfMRI_LANGUAGE_MATH,10.1016/j.neuroimage.2013.05.033
+task-LANGUAGE_contrast-STORY_pub-hcps1200,Language,story vs. baseline,condition,tfMRI_LANGUAGE_STORY,10.1016/j.neuroimage.2013.05.033
+task-LANGUAGE_contrast-STORYvsMATH_pub-hcps1200,Language,story vs. math,contrast,tfMRI_LANGUAGE_STORY-MATH,10.1016/j.neuroimage.2013.05.033
+task-SOCIAL_contrast-RANDOM_pub-hcps1200,Social cognition,random motion vs. baseline,condition,tfMRI_SOCIAL_RANDOM,10.1016/j.neuroimage.2013.05.033
+task-SOCIAL_contrast-TOM_pub-hcps1200,Social cognition,theory of mind vs. baseline,condition,tfMRI_SOCIAL_TOM,10.1016/j.neuroimage.2013.05.033
+task-SOCIAL_contrast-TOMvsRANDOM_pub-hcps1200,Social cognition,theory of mind vs. random motion,contrast,tfMRI_SOCIAL_TOM-RANDOM,10.1016/j.neuroimage.2013.05.033
+task-RELATIONAL_contrast-MATCH_pub-hcps1200,Relational processing,matching vs. baseline,condition,tfMRI_RELATIONAL_MATCH,10.1016/j.neuroimage.2013.05.033
+task-RELATIONAL_contrast-REL_pub-hcps1200,Relational processing,relational vs. baseline,condition,tfMRI_RELATIONAL_REL,10.1016/j.neuroimage.2013.05.033
+task-RELATIONAL_contrast-RELvsMATCH_pub-hcps1200,Relational processing,relational vs. matching,contrast,tfMRI_RELATIONAL_REL-MATCH,10.1016/j.neuroimage.2013.05.033
+task-EMOTION_contrast-FACES_pub-hcps1200,Emotion processing,faces vs. baseline,condition,tfMRI_EMOTION_FACES,10.1016/j.neuroimage.2013.05.033
+task-EMOTION_contrast-SHAPES_pub-hcps1200,Emotion processing,shapes vs. baseline,condition,tfMRI_EMOTION_SHAPES,10.1016/j.neuroimage.2013.05.033
+task-EMOTION_contrast-FACESvsSHAPES_pub-hcps1200,Emotion processing,faces vs. shapes,contrast,tfMRI_EMOTION_FACES-SHAPES,10.1016/j.neuroimage.2013.05.033
