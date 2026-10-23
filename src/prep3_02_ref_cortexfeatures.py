@@ -139,7 +139,7 @@ pd.Series([
     "feature-thickness_pub-hcps1200",
     "feature-t1t2_pub-hcps1200",
     "feature-saaxis_pub-sydnor2021",
-    "feature-geneexpr-abagen",
+    "feature-geneexpr_pub-markello2021",
     "feature-develexpansion_pub-hill2010",
     "feature-evolexpansion_pub-hill2010",
     "feature-evolexpansion_pub-xu2020",

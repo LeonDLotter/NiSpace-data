@@ -5,6 +5,7 @@ description: The NiSpace "CortexFeatures" dataset consists of different features
   or "fsaverageOriginal") or downloaded from the NiSpace-data GitHub repo (space="fsLR" or "fsaverage"; recommended). 
   Please cite neuromaps (https://neuromaps-main.readthedocs.io/) and the original publication for each map when used.
 cortex_only: true
+license: CC BY-NC-SA 4.0
 citations:
 - ref: Markello et al., 2022
   doi: 10.1038/s41592-022-01625-w
@@ -15,7 +16,6 @@ map_info:
   display_columns:
   - feature
   - doi
-  - license
 collections:
   All:
     description: All cortical feature maps.
@@ -87,7 +87,7 @@ maps:
         - fsLR
         - R
         ext: .surf.gii
-  feature-geneexpr-abagen:
+  feature-geneexpr_pub-markello2021:
     fsaverage: auto
     fsLR: auto
     fsaverageOriginal:
@@ -279,7 +279,7 @@ maps:
         host: neuromaps
         remote:
         - raichle
-        - cbf
+        - cbv
         - fsLR
         - R
         ext: .surf.gii
