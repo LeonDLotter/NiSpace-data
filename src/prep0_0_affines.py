@@ -14,6 +14,11 @@ wd = Path(__file__).parent.parent
 print(f"Working dir: {wd}")
 
 from utils import tflow_get
+from nispace.utils.utils_datasets import download
+
+# GIN commit hash for llotter/mni_freesurfer (non-templateflow templates; same as prep0_2_transforms.py)
+gin_commit = "ee79841bda3984689d726c2592bed7f68b1bbae6"
+gin_url = f"https://gin.g-node.org/llotter/mni_freesurfer/raw/{gin_commit}/templates"
 
 nispace_toolbox_path = Path.home() / "projects" / "nispace"
 
@@ -48,6 +53,15 @@ MNI_SOURCES = {
     },
     "MNI152NLin6Sym": {
         "1mm": tflow_get("MNI152NLin6Sym", resolution="01", desc=None, suffix="T1w", extension="nii.gz"),
+    },
+    # Not on templateflow: T1w templates from GIN, i.e., the grids the EasyReg fields were estimated on
+    "CAT12IXI555": {
+        # SPM12 TPM frame: 181x217x181, LAS
+        "1mm": download(f"{gin_url}/tpl-CAT12IXI555_T1w.nii.gz"),
+    },
+    "CVSavg35inMNI152": {
+        # FreeSurfer conformed 256^3 LIA grid
+        "1mm": download(f"{gin_url}/tpl-CVSavg35inMNI152_T1w.nii.gz"),
     },
 }
 ALL_RESOLUTIONS = ["1mm", "2mm", "3mm", "4mm"]  # always produced for every space
