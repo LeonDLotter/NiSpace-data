@@ -1,0 +1,30 @@
+{
+ "MNI152NLin2009cAsym/dist": {
+  "inputs": {
+   "parcellation/TianS3/MNI152NLin2009cAsym/parc-TianS3_space-MNI152NLin2009cAsym.label.nii.gz": "b693cf43a400057f8ae617cf72614665c08f4a14b13056262ce9f08dc567f205"
+  },
+  "key": "9060c1d08d2a203ea933dd0025697e50be7e7bbd524d04d6000542b5531a280c",
+  "params": {
+   "centroids": false,
+   "dtype": "float32",
+   "resample": 2,
+   "surf_euclidean": false,
+   "version": 1
+  },
+  "script": "prep1_1_parc_distmat.py"
+ },
+ "MNI152NLin6Asym/dist": {
+  "inputs": {
+   "parcellation/TianS3/MNI152NLin6Asym/parc-TianS3_space-MNI152NLin6Asym.label.nii.gz": "66bb5f1b6f6499859f0e2492a74632a68ccc6c3e276c8da1d505ffd24490dab4"
+  },
+  "key": "d17fb70b831e3cc021c500bf8960032926dd3caf08e8bdbb4e9e9da7edab345f",
+  "params": {
+   "centroids": false,
+   "dtype": "float32",
+   "resample": 2,
+   "surf_euclidean": false,
+   "version": 1
+  },
+  "script": "prep1_1_parc_distmat.py"
+ }
+}

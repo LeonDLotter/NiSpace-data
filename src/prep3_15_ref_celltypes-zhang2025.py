@@ -9,7 +9,7 @@ wd = Path(__file__).parent.parent
 print(f"Working dir: {wd}")
 
 sys.path.insert(0, str(Path(__file__).parent))
-from utils import load_parc_lists, load_parc, load_parc_labels, save_csv_gz
+from utils import load_parc_lists, load_parc, load_parc_labels, save_csv_gz, parc_files, InputStamps
 from nispace.utils.utils_datasets import download
 
 nispace_source_data_path = wd
@@ -36,6 +36,7 @@ GH_BASE_URL = ("https://raw.githubusercontent.com/XihanZhang/human-cellular-func
                "3ba46aa0b1b031d171d331ab185c475792bdda57/cell_maps/vertex_level")
 N_VERTICES_HEMI = 32492
 MAX_MM_TO_SURF = 4
+TAB_VERSION = 1  # bump when the parcellation step changes (invalidates all tables)
 
 # original Jorstad subclass : map id cell name (subclass name without spaces/slashes)
 CELL_NAMES = {
@@ -117,8 +118,23 @@ parc_names = [p for p in PARCS_CX if "1000" not in p]
 tab_dir = ref_dir / "tab"
 tab_dir.mkdir(parents=True, exist_ok=True)
 
+stamps = InputStamps.for_dataset(dataset)
+stamps.warn_orphans(parc_names)
 coverage = []
 for parc_name in parc_names:
+    # skip if fsLR parcellation, labels, source data, and settings are unchanged
+    out_path = tab_dir / f"dset-{dataset}_parc-{parc_name}.csv.gz"
+    stamp = stamps.check(
+        parc_name,
+        files=parc_files(wd, parc_name, "fsLR")
+              + [f for f in parc_files(wd, parc_name, "MNI152NLin6Asym") if f.suffix == ".txt"],
+        params={"version": TAB_VERSION, "source": GH_BASE_URL, "max_mm_to_surf": MAX_MM_TO_SURF,
+                "lr_mirror": True, "map_ids": MAP_IDS},
+        outputs=[out_path],
+    )
+    if stamp is None:
+        continue
+
     # fsLR parcel index i corresponds to the i-th label (L then R), identical across spaces
     labels = load_parc_labels(wd, parc_name, "MNI152NLin6Asym")
     assert np.array_equal(labels, load_parc_labels(wd, parc_name, "fsLR")), f"{parc_name}: MNI and fsLR labels differ"
@@ -149,9 +165,12 @@ for parc_name in parc_names:
                          pct_nan=round(100 * n_nan / len(labels), 1)))
     print(f"  [{parc_name}] shape {tab.shape} | {n_nan} all-NaN parcels")
 
-    save_csv_gz(tab, tab_dir / f"dset-{dataset}_parc-{parc_name}.csv.gz")
+    save_csv_gz(tab, out_path)
+    stamps.write(parc_name, stamp)
 
-print(pd.DataFrame(coverage).to_string(index=False))
+stamps.summary()
+if coverage:
+    print(pd.DataFrame(coverage).to_string(index=False))
 
 
 # %% Collections

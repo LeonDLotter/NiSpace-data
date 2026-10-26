@@ -10,7 +10,7 @@ from neuromaps import transforms
 wd = Path(__file__).parent.parent
 print(f"Working dir: {wd}")
 
-from nispace.transforms import mni_to_mni
+from nispace.transform import mni_to_mni
 from nispace.utils.utils_datasets import download
 
 nispace_source_data_path = wd

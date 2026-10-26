@@ -1,0 +1,92 @@
+{
+ "MNI152NLin2009cAsym/dist": {
+  "inputs": {
+   "parcellation/DesikanKilliany/MNI152NLin2009cAsym/parc-DesikanKilliany_space-MNI152NLin2009cAsym.label.nii.gz": "91dd41d559367c6665794da3062ba9de60aeccec5d2b348edbcda4a4d16b37f7"
+  },
+  "key": "ee96fd68163a94f34efd0c22f516b7d261101960f6df65bdd1ebb27ce6355e27",
+  "params": {
+   "centroids": false,
+   "dtype": "float32",
+   "resample": 2,
+   "surf_euclidean": false,
+   "version": 1
+  },
+  "script": "prep1_1_parc_distmat.py"
+ },
+ "MNI152NLin6Asym/dist": {
+  "inputs": {
+   "parcellation/DesikanKilliany/MNI152NLin6Asym/parc-DesikanKilliany_space-MNI152NLin6Asym.label.nii.gz": "c2059247e177500d1efb401014a12148b3c99b7219e7475cf194940178129cc9"
+  },
+  "key": "4dd7672e931a5ffe6526097a86dd8edc603a58df23ac117ed8698d39da8e567e",
+  "params": {
+   "centroids": false,
+   "dtype": "float32",
+   "resample": 2,
+   "surf_euclidean": false,
+   "version": 1
+  },
+  "script": "prep1_1_parc_distmat.py"
+ },
+ "fsLR/dist": {
+  "inputs": {
+   "parcellation/DesikanKilliany/fsLR/parc-DesikanKilliany_space-fsLR_hemi-L.label.gii.gz": "9b2ac890814c690140e6127288a53f85e641ca1a8564e1e41ac3bd21b15f2b26",
+   "parcellation/DesikanKilliany/fsLR/parc-DesikanKilliany_space-fsLR_hemi-R.label.gii.gz": "baf28c3fd45252dca59ff9cdb174661ed63e06f330564ed0396e55191fd19354"
+  },
+  "key": "23511ee6be0d4b7f3367bd505ceacbd4e5b800788f061aacd673fc1963dd5292",
+  "params": {
+   "centroids": false,
+   "dtype": "float32",
+   "resample": "32k",
+   "surf_euclidean": false,
+   "version": 1
+  },
+  "script": "prep1_1_parc_distmat.py"
+ },
+ "fsLR/spin": {
+  "inputs": {
+   "parcellation/DesikanKilliany/fsLR/parc-DesikanKilliany_space-fsLR_hemi-L.label.gii.gz": "9b2ac890814c690140e6127288a53f85e641ca1a8564e1e41ac3bd21b15f2b26",
+   "parcellation/DesikanKilliany/fsLR/parc-DesikanKilliany_space-fsLR_hemi-R.label.gii.gz": "baf28c3fd45252dca59ff9cdb174661ed63e06f330564ed0396e55191fd19354"
+  },
+  "key": "ab5ccc73d9cd42b916cc7daee7a8fcc37940da1f9cfadfe303831f5aba259d05",
+  "params": {
+   "batch_size": 100,
+   "dtype": "float16",
+   "n_perm": 10000,
+   "normalize": true,
+   "seed": 42,
+   "version": 1
+  },
+  "script": "prep1_2_parc_spinmat.py"
+ },
+ "fsaverage/dist": {
+  "inputs": {
+   "parcellation/DesikanKilliany/fsaverage/parc-DesikanKilliany_space-fsaverage_hemi-L.label.gii.gz": "a54207fa8ee3c6a5a3ee63ba160990417ac510493b230b7dec0743d51fbb6f58",
+   "parcellation/DesikanKilliany/fsaverage/parc-DesikanKilliany_space-fsaverage_hemi-R.label.gii.gz": "be0e99ec8c52d5ba5642baace868588e8903a02056151369037a6d5383222496"
+  },
+  "key": "20db439ef3939fafb9eb788ad5896e8b3bb1a2c49d2973f281d42fbcb1faa3a3",
+  "params": {
+   "centroids": false,
+   "dtype": "float32",
+   "resample": "41k",
+   "surf_euclidean": false,
+   "version": 1
+  },
+  "script": "prep1_1_parc_distmat.py"
+ },
+ "fsaverage/spin": {
+  "inputs": {
+   "parcellation/DesikanKilliany/fsaverage/parc-DesikanKilliany_space-fsaverage_hemi-L.label.gii.gz": "a54207fa8ee3c6a5a3ee63ba160990417ac510493b230b7dec0743d51fbb6f58",
+   "parcellation/DesikanKilliany/fsaverage/parc-DesikanKilliany_space-fsaverage_hemi-R.label.gii.gz": "be0e99ec8c52d5ba5642baace868588e8903a02056151369037a6d5383222496"
+  },
+  "key": "6bcaa3322653d0b4088826e3df7a6d40fe39853151120c5d733cfea0f2aa77b3",
+  "params": {
+   "batch_size": 100,
+   "dtype": "float16",
+   "n_perm": 10000,
+   "normalize": true,
+   "seed": 42,
+   "version": 1
+  },
+  "script": "prep1_2_parc_spinmat.py"
+ }
+}

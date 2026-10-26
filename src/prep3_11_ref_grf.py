@@ -18,7 +18,8 @@ from nispace.parcellate import Parcellater
 
 # local utils
 sys.path.insert(0, str(Path(__file__).parent))
-from utils import load_parc_lists, load_parc, load_parc_labels, DATASET_PARCELLATE_KWARGS, save_csv_gz
+from utils import (load_parc_lists, load_parc, load_parc_labels, DATASET_PARCELLATE_KWARGS, save_csv_gz,
+                   parc_files, InputStamps)
 
 # nispace data path
 nispace_source_data_path = wd
@@ -101,8 +102,10 @@ def generate_grf(alpha, seed, mirrored=True):
 # settings
 alphas = [0.0, 1.0, 2.0, 3.0]
 n_grf  = {alpha: 10000 for alpha in alphas}
-overwrite_niftis = False
-overwrite_tables  = True
+overwrite_niftis = False  # the maps are fully determined by alpha + seed; regenerate only if lost
+# bump when generate_grf or the parcellation step changes (invalidates all grf tables; the maps
+# themselves are not hashed - 40k files)
+GRF_VERSION = 1
 
 # %% Phase 1 — generate and save GRF maps to external drive
 
@@ -135,12 +138,20 @@ map_paths  = [grf_data_path / f"alpha-{a:.1f}_seed-{s:04d}.nii.gz"
               for a in alphas for s in range(n_grf[a])]
 map_labels = [f"alpha-{a:.1f}_seed-{s:04d}" for a in alphas for s in range(n_grf[a])]
 
+stamps = InputStamps.for_dataset("grf")
+stamps.warn_orphans(PARCS)
 for parc_name in PARCS:
     print(parc_name)
 
     out_path = nispace_source_data_path / "reference" / "grf" / "tab" / f"dset-grf_parc-{parc_name}.csv.gz"
-    if out_path.exists() and not overwrite_tables:
-        print("  Already exists — skipping")
+    stamp = stamps.check(
+        parc_name,
+        files=parc_files(wd, parc_name, space),
+        params={"version": GRF_VERSION, "alphas": alphas, "n_grf": n_grf, "space": space,
+                "kwargs": DATASET_PARCELLATE_KWARGS["grf"]},
+        outputs=[out_path],
+    )
+    if stamp is None:
         continue
 
     parc_img = load_parc(wd, parc_name, space)
@@ -171,7 +182,10 @@ for parc_name in PARCS:
         dtype=np.float16,
     )
     save_csv_gz(df, out_path)
+    stamps.write(parc_name, stamp)
     print(f"  Saved {df.shape} → {out_path.name}")
+
+stamps.summary()
 
 
 # %% Collections

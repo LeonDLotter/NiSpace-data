@@ -1,0 +1,92 @@
+{
+ "MNI152NLin2009cAsym/dist": {
+  "inputs": {
+   "parcellation/DesikanKillianyTourville/MNI152NLin2009cAsym/parc-DesikanKillianyTourville_space-MNI152NLin2009cAsym.label.nii.gz": "fd24358284cc45f6cf33103cffb0f2d72a818369f86ddf5616c5cff7ce32d49f"
+  },
+  "key": "b610af2d8e5a494b341e195572257ea4940a9a5aa7bd72859ebf5ca2d1420c45",
+  "params": {
+   "centroids": false,
+   "dtype": "float32",
+   "resample": 2,
+   "surf_euclidean": false,
+   "version": 1
+  },
+  "script": "prep1_1_parc_distmat.py"
+ },
+ "MNI152NLin6Asym/dist": {
+  "inputs": {
+   "parcellation/DesikanKillianyTourville/MNI152NLin6Asym/parc-DesikanKillianyTourville_space-MNI152NLin6Asym.label.nii.gz": "bc8e480e7cc1e076c7773eb677194c7907f088bbe0ef1fcd80627baf7315fb4d"
+  },
+  "key": "cbe3efac79c6eba14ba2d48518cfb72b0208f58fddbfd6aca5a120cab8226980",
+  "params": {
+   "centroids": false,
+   "dtype": "float32",
+   "resample": 2,
+   "surf_euclidean": false,
+   "version": 1
+  },
+  "script": "prep1_1_parc_distmat.py"
+ },
+ "fsLR/dist": {
+  "inputs": {
+   "parcellation/DesikanKillianyTourville/fsLR/parc-DesikanKillianyTourville_space-fsLR_hemi-L.label.gii.gz": "31cee50a8bbc51a934ba7401cfb2e425d7beaf8ec23d2315669b247af4609e98",
+   "parcellation/DesikanKillianyTourville/fsLR/parc-DesikanKillianyTourville_space-fsLR_hemi-R.label.gii.gz": "1d4238d81afdfe493d1c7dca2c1f994797af6dfcc84a05ab9cf8aa22944bedba"
+  },
+  "key": "cd0eef22de72a5dad38d5c6ca454299857264c2106e9e9280847d2a02235a584",
+  "params": {
+   "centroids": false,
+   "dtype": "float32",
+   "resample": "32k",
+   "surf_euclidean": false,
+   "version": 1
+  },
+  "script": "prep1_1_parc_distmat.py"
+ },
+ "fsLR/spin": {
+  "inputs": {
+   "parcellation/DesikanKillianyTourville/fsLR/parc-DesikanKillianyTourville_space-fsLR_hemi-L.label.gii.gz": "31cee50a8bbc51a934ba7401cfb2e425d7beaf8ec23d2315669b247af4609e98",
+   "parcellation/DesikanKillianyTourville/fsLR/parc-DesikanKillianyTourville_space-fsLR_hemi-R.label.gii.gz": "1d4238d81afdfe493d1c7dca2c1f994797af6dfcc84a05ab9cf8aa22944bedba"
+  },
+  "key": "d6289163dde92668475ce54cfd52d8102acf28a155cf4e49e9d8b18ed30393f3",
+  "params": {
+   "batch_size": 100,
+   "dtype": "float16",
+   "n_perm": 10000,
+   "normalize": true,
+   "seed": 42,
+   "version": 1
+  },
+  "script": "prep1_2_parc_spinmat.py"
+ },
+ "fsaverage/dist": {
+  "inputs": {
+   "parcellation/DesikanKillianyTourville/fsaverage/parc-DesikanKillianyTourville_space-fsaverage_hemi-L.label.gii.gz": "3b32f4bf8d76f9a2b923d5d6e0f242a58f0af1b38621e3820d61eb4c5ae52cea",
+   "parcellation/DesikanKillianyTourville/fsaverage/parc-DesikanKillianyTourville_space-fsaverage_hemi-R.label.gii.gz": "90215885dfe7168dc0833ff949a43c150533befb1e34f13617cb37bdac8e58b5"
+  },
+  "key": "a4629e13541056f62ad0f093bebe52b6aad32a432d1ca6503efc302f1f2c39d7",
+  "params": {
+   "centroids": false,
+   "dtype": "float32",
+   "resample": "41k",
+   "surf_euclidean": false,
+   "version": 1
+  },
+  "script": "prep1_1_parc_distmat.py"
+ },
+ "fsaverage/spin": {
+  "inputs": {
+   "parcellation/DesikanKillianyTourville/fsaverage/parc-DesikanKillianyTourville_space-fsaverage_hemi-L.label.gii.gz": "3b32f4bf8d76f9a2b923d5d6e0f242a58f0af1b38621e3820d61eb4c5ae52cea",
+   "parcellation/DesikanKillianyTourville/fsaverage/parc-DesikanKillianyTourville_space-fsaverage_hemi-R.label.gii.gz": "90215885dfe7168dc0833ff949a43c150533befb1e34f13617cb37bdac8e58b5"
+  },
+  "key": "34b19401789964623f4c7139f35aa3591e51f621b50f66d156dcdd28ee4e66a5",
+  "params": {
+   "batch_size": 100,
+   "dtype": "float16",
+   "n_perm": 10000,
+   "normalize": true,
+   "seed": 42,
+   "version": 1
+  },
+  "script": "prep1_2_parc_spinmat.py"
+ }
+}

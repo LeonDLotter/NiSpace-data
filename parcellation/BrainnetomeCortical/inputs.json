@@ -1,0 +1,92 @@
+{
+ "MNI152NLin2009cAsym/dist": {
+  "inputs": {
+   "parcellation/BrainnetomeCortical/MNI152NLin2009cAsym/parc-BrainnetomeCortical_space-MNI152NLin2009cAsym.label.nii.gz": "8165880049eb403fd03cce0263643f739b2e19ccc5c1d07f9d0201ffe47e05b6"
+  },
+  "key": "3f7f465fb9a8891ef87d6cd5c08260707ac155bfd8f984551100c9945fb445d7",
+  "params": {
+   "centroids": false,
+   "dtype": "float32",
+   "resample": 2,
+   "surf_euclidean": false,
+   "version": 1
+  },
+  "script": "prep1_1_parc_distmat.py"
+ },
+ "MNI152NLin6Asym/dist": {
+  "inputs": {
+   "parcellation/BrainnetomeCortical/MNI152NLin6Asym/parc-BrainnetomeCortical_space-MNI152NLin6Asym.label.nii.gz": "5d4bb05331d18c60b5ec88d88a645535c663db3002769bf0628c118cd7cb7b6e"
+  },
+  "key": "e78392faa98a2a2d161f39618ed7f02f6961ea12699b40dfce5ab68f0c254291",
+  "params": {
+   "centroids": false,
+   "dtype": "float32",
+   "resample": 2,
+   "surf_euclidean": false,
+   "version": 1
+  },
+  "script": "prep1_1_parc_distmat.py"
+ },
+ "fsLR/dist": {
+  "inputs": {
+   "parcellation/BrainnetomeCortical/fsLR/parc-BrainnetomeCortical_space-fsLR_hemi-L.label.gii.gz": "71a6f9081386dfb11c9ea111e5aa7fc21bb7799245384c6d01cf144acabcb627",
+   "parcellation/BrainnetomeCortical/fsLR/parc-BrainnetomeCortical_space-fsLR_hemi-R.label.gii.gz": "be29482bd437f87aeb28dd75c1ecb27cf000162cc39f454586819e91826b99d2"
+  },
+  "key": "10f3683e0bc542397e666171b7d3df92d6316cd2b627f8218c6d9c382cc53dcd",
+  "params": {
+   "centroids": false,
+   "dtype": "float32",
+   "resample": "32k",
+   "surf_euclidean": false,
+   "version": 1
+  },
+  "script": "prep1_1_parc_distmat.py"
+ },
+ "fsLR/spin": {
+  "inputs": {
+   "parcellation/BrainnetomeCortical/fsLR/parc-BrainnetomeCortical_space-fsLR_hemi-L.label.gii.gz": "71a6f9081386dfb11c9ea111e5aa7fc21bb7799245384c6d01cf144acabcb627",
+   "parcellation/BrainnetomeCortical/fsLR/parc-BrainnetomeCortical_space-fsLR_hemi-R.label.gii.gz": "be29482bd437f87aeb28dd75c1ecb27cf000162cc39f454586819e91826b99d2"
+  },
+  "key": "44f2a99fd1a03c65802423f7386a413f16df06344a797bed6b24c4f6a60885ee",
+  "params": {
+   "batch_size": 100,
+   "dtype": "float16",
+   "n_perm": 10000,
+   "normalize": true,
+   "seed": 42,
+   "version": 1
+  },
+  "script": "prep1_2_parc_spinmat.py"
+ },
+ "fsaverage/dist": {
+  "inputs": {
+   "parcellation/BrainnetomeCortical/fsaverage/parc-BrainnetomeCortical_space-fsaverage_hemi-L.label.gii.gz": "8e58d871d3b55411f7ac4e091cf741ed5e4f3cfe3d684e59fcc2a56dec212cf5",
+   "parcellation/BrainnetomeCortical/fsaverage/parc-BrainnetomeCortical_space-fsaverage_hemi-R.label.gii.gz": "80652a5402c66ebf21ee90c61cf6c3ae02f64dc63041d1543a5862e095e72a1d"
+  },
+  "key": "40a1dd57bf377a9f1758f6107606bfe4a7b13253ae64714d1461962046ade1b9",
+  "params": {
+   "centroids": false,
+   "dtype": "float32",
+   "resample": "41k",
+   "surf_euclidean": false,
+   "version": 1
+  },
+  "script": "prep1_1_parc_distmat.py"
+ },
+ "fsaverage/spin": {
+  "inputs": {
+   "parcellation/BrainnetomeCortical/fsaverage/parc-BrainnetomeCortical_space-fsaverage_hemi-L.label.gii.gz": "8e58d871d3b55411f7ac4e091cf741ed5e4f3cfe3d684e59fcc2a56dec212cf5",
+   "parcellation/BrainnetomeCortical/fsaverage/parc-BrainnetomeCortical_space-fsaverage_hemi-R.label.gii.gz": "80652a5402c66ebf21ee90c61cf6c3ae02f64dc63041d1543a5862e095e72a1d"
+  },
+  "key": "40feef4d07d6aa8d251cb577cf831e021b78ef0855bc5d18e307bbf558783c28",
+  "params": {
+   "batch_size": 100,
+   "dtype": "float16",
+   "n_perm": 10000,
+   "normalize": true,
+   "seed": 42,
+   "version": 1
+  },
+  "script": "prep1_2_parc_spinmat.py"
+ }
+}

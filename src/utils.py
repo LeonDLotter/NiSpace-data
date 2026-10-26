@@ -1,5 +1,10 @@
 """Shared helpers for nispace-data prep scripts."""
 
+import gzip
+import hashlib
+import json
+import os
+import sys
 import yaml
 import numpy as np
 import pandas as pd
@@ -184,6 +189,161 @@ def split_cifti(cifti, maps=None):
     return out
 
 
+# --- Input stamps ---------------------------------------------------------------------------------
+# Expensive outputs (parcellated tables, distance/spin matrices) are only recomputed when the
+# content of their inputs changed. Each output records the hashes of its inputs in a committed
+# inputs.json (reference/<dataset>/ or parcellation/<parc>/). Force recomputation with --force
+# (workflows.py or a single script) or NISPACE_FORCE=all|<scope>[,<scope>...], where a scope is a
+# dataset name, "distmat", or "spinmat".
+
+WD = Path(__file__).resolve().parent.parent
+_HASH_CACHE = {}
+
+
+def content_hash(path):
+    """sha256 of a file's content; .gz files are hashed decompressed (the gzip header holds a
+    timestamp). Cached per run, so shared inputs are hashed once."""
+    path = Path(path).resolve()
+    if path not in _HASH_CACHE:
+        h = hashlib.sha256()
+        opener = gzip.open if path.suffix == ".gz" else open
+        with opener(path, "rb") as f:
+            for block in iter(lambda: f.read(1 << 20), b""):
+                h.update(block)
+        _HASH_CACHE[path] = h.hexdigest()
+    return _HASH_CACHE[path]
+
+
+def parc_files(wd, parc_name, space, labels=True):
+    """Parcellation files of one space (image(s) and, optionally, label files), as used by
+    load_parc / load_parc_labels."""
+    base = Path(wd) / "parcellation" / parc_name / space
+    if "mni" in space.lower():
+        stems = [f"parc-{parc_name}_space-{space}"]
+        exts = [".label.nii.gz"]
+    else:
+        stems = [f"parc-{parc_name}_space-{space}_hemi-{h}" for h in ("L", "R")]
+        exts = [".label.gii.gz"]
+    if labels:
+        exts.append(".label.txt")
+    return [base / f"{stem}{ext}" for stem in stems for ext in exts]
+
+
+def force_requested(scope):
+    """True if recomputation is forced for this scope (dataset name, "distmat", "spinmat")."""
+    value = os.environ.get("NISPACE_FORCE", "")
+    for arg in sys.argv[1:]:
+        if arg == "--force":
+            value = "all"
+        elif arg.startswith("--force="):
+            value = arg.split("=", 1)[1]
+    scopes = {s.strip() for s in value.split(",") if s.strip()}
+    return bool(scopes & {"1", "all", scope})
+
+
+class InputStamps:
+    """Input hashes of the outputs recorded in one inputs.json.
+
+    Usage:
+        stamps = InputStamps.for_dataset("mrna")
+        stamp = stamps.check(parc, files=[...], params={...}, outputs=[tab_path])
+        if stamp:                      # None = up to date
+            ... compute and save ...
+            stamps.write(parc, stamp)  # only after the outputs were saved
+        stamps.summary()
+
+    files: repo paths (named by their path relative to the repo). external: {name: path} for files
+    outside the repo (logical names keep the key independent of where the drive is mounted).
+    groups: {name: [paths]} for large file sets (e.g. all maps of a dataset), recorded as one
+    combined hash to keep inputs.json small.
+    params: JSON-serializable settings; bump a *_VERSION param when the computation changes.
+    """
+
+    def __init__(self, path, scope):
+        self.path = Path(path)
+        self.scope = scope
+        self.force = force_requested(scope)
+        self.n_computed = 0
+        self.n_fresh = 0
+
+    @classmethod
+    def for_dataset(cls, dataset):
+        return cls(WD / "reference" / dataset / "inputs.json", scope=dataset)
+
+    @classmethod
+    def for_parc(cls, parc_name, scope):
+        return cls(WD / "parcellation" / parc_name / "inputs.json", scope=scope)
+
+    def _load(self):
+        return json.loads(self.path.read_text()) if self.path.exists() else {}
+
+    @staticmethod
+    def _named(files):
+        if isinstance(files, dict):
+            return {name: Path(p) for name, p in files.items()}
+        named = {}
+        for p in files:
+            p = Path(p).resolve()
+            if not p.is_relative_to(WD):
+                raise ValueError(f"{p} is outside the repo; pass it as {{logical_name: path}}")
+            named[p.relative_to(WD).as_posix()] = p
+        return named
+
+    def check(self, entry, files, params, outputs, external=None, groups=None):
+        """Return the new stamp if the outputs must be (re)computed, else None."""
+        named = {**self._named(files), **self._named(external or {})}
+        inputs = {name: content_hash(p) for name, p in named.items()}
+        for name, paths in (groups or {}).items():
+            members = sorted(f"{Path(p).name}:{content_hash(p)}" for p in paths)
+            inputs[name] = hashlib.sha256("\n".join(members).encode()).hexdigest()
+        inputs = dict(sorted(inputs.items()))
+        params = json.loads(json.dumps(params, sort_keys=True, default=str))
+        key = hashlib.sha256(
+            json.dumps({"inputs": inputs, "params": params}, sort_keys=True).encode()
+        ).hexdigest()
+        stamp = {"key": key, "inputs": inputs, "params": params, "script": Path(sys.argv[0]).name}
+
+        old = self._load().get(entry)
+        missing = [Path(o).name for o in outputs if not Path(o).exists()]
+        if self.force:
+            reason = "forced"
+        elif missing:
+            reason = f"output missing ({', '.join(missing)})"
+        elif old is None:
+            reason = "no stamp"
+        elif old["key"] != key:
+            changed = sorted(n for n in inputs.keys() | old["inputs"].keys()
+                             if inputs.get(n) != old["inputs"].get(n))
+            changed += sorted(f"param:{n}" for n in params.keys() | old["params"].keys()
+                              if params.get(n) != old["params"].get(n))
+            reason = "changed: " + ", ".join(changed[:5]) + (" ..." if len(changed) > 5 else "")
+        else:
+            self.n_fresh += 1
+            print(f"  [{self.scope}/{entry}] up to date")
+            return None
+        self.n_computed += 1
+        print(f"  [{self.scope}/{entry}] stale: {reason}")
+        return stamp
+
+    def write(self, entry, stamp):
+        """Record a stamp (re-reads the file first; atomic replace)."""
+        data = self._load()
+        data[entry] = stamp
+        tmp = self.path.with_name(self.path.name + ".tmp")
+        tmp.write_text(json.dumps(dict(sorted(data.items())), indent=1, sort_keys=True) + "\n")
+        os.replace(tmp, self.path)
+
+    def warn_orphans(self, valid_entries, prefix=""):
+        """Warn about stamp entries (with the given prefix) that no longer have an output."""
+        orphans = [e for e in self._load() if e.startswith(prefix) and e not in set(valid_entries)]
+        if orphans:
+            print(f"  WARNING [{self.scope}] stamps without a current parcellation/output: {orphans}")
+
+    def summary(self):
+        print(f"[inputs] {self.scope}: {self.n_computed} computed, {self.n_fresh} up to date"
+              + (" (forced)" if self.force else ""))
+
+
 def parcellate_mapref(wd, dataset, spaces, local_spaces=None):
     """Parcellate a map-based reference dataset across all parcellations.
 
@@ -296,8 +456,36 @@ def parcellate_mapref(wd, dataset, spaces, local_spaces=None):
             "Check ref.yaml and that map files exist."
         )
 
+    # map paths per filter_space (independent of the parcellation)
+    ref_paths_all = {
+        space: _fetch_paths(maps, space.replace("Original", "")) for space, maps in ref_maps.items()
+    }
+
+    stamps = InputStamps.for_dataset(dataset)
+    stamps.warn_orphans(parc_names)
+
     from tqdm.auto import tqdm
     for parc_name in tqdm(parc_names, desc=f"parcellate [{dataset}]"):
+        tab_path = wd / "reference" / dataset / "tab" / f"dset-{dataset}_parc-{parc_name}.csv.gz"
+        stamp_files, stamp_groups = parc_files(wd, parc_name, "MNI152NLin6Asym"), {}
+        for space in parc_spaces[parc_name]:
+            parc_space = space.replace("Original", "")
+            if space in ref_paths_all and (wd / "parcellation" / parc_name / parc_space).exists():
+                stamp_files += parc_files(wd, parc_name, parc_space)
+                stamp_groups[f"maps/{space}"] = [
+                    f for fp in ref_paths_all[space] for f in ((fp,) if isinstance(fp, Path) else fp)
+                ]
+        stamp = stamps.check(
+            parc_name,
+            files=list(dict.fromkeys(stamp_files)),
+            groups=stamp_groups,
+            params={"version": MAPREF_TAB_VERSION, "spaces": parc_spaces[parc_name],
+                    "cortex_only": cx_only, "kwargs": DATASET_PARCELLATE_KWARGS[dataset]},
+            outputs=[tab_path],
+        )
+        if stamp is None:
+            continue
+
         labels = load_parc_labels(wd, parc_name, "MNI152NLin6Asym")
         ref_maps_df = pd.DataFrame(
             index=pd.Index(list(ref_maps_avail_all), name="map"),
@@ -319,7 +507,7 @@ def parcellate_mapref(wd, dataset, spaces, local_spaces=None):
             passes_run += 1
 
             parc = load_parc(wd, parc_name, parc_space)
-            ref_paths = _fetch_paths(ref_maps_avail, parc_space)
+            ref_paths = ref_paths_all[filter_space]
 
             # labels are assigned by parcel index, so they must be identical (incl. order) across spaces
             if not np.array_equal(load_parc_labels(wd, parc_name, parc_space), labels):
@@ -430,10 +618,15 @@ def parcellate_mapref(wd, dataset, spaces, local_spaces=None):
             f"{len(nan_cols)} all-NaN parcels | shape {ref_maps_df.shape}"
         )
 
-        save_dir = wd / "reference" / dataset / "tab"
-        save_dir.mkdir(parents=True, exist_ok=True)
-        save_csv_gz(ref_maps_df, save_dir / f"dset-{dataset}_parc-{parc_name}.csv.gz")
+        tab_path.parent.mkdir(parents=True, exist_ok=True)
+        save_csv_gz(ref_maps_df, tab_path)
+        stamps.write(parc_name, stamp)
 
+    stamps.summary()
+
+
+# Bump when parcellate_mapref's computation changes (invalidates all map-based dataset tables)
+MAPREF_TAB_VERSION = 1
 
 # Parcellate kwargs per dataset.
 # Used with parcellate_data (prep3_0) or Parcellater.transform (prep3_3, prep3_5) --

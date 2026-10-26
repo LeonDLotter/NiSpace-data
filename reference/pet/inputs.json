@@ -1,0 +1,718 @@
+{
+ "AALCortical": {
+  "inputs": {
+   "maps/MNI152NLin6Asym": "bae451e796b5e704b1c52741df3d27f066363e67d3e5cd734a70bcc8d9ee76af",
+   "maps/fsaverageOriginal": "ec35a52d1cc578954e087d0277c201166efa32aadfd7f8ea528a20341a35cf58",
+   "parcellation/AALCortical/MNI152NLin6Asym/parc-AALCortical_space-MNI152NLin6Asym.label.nii.gz": "539b97ff5a297d86f531d34be42a02462ee340b72131ee9253728b16de3d8277",
+   "parcellation/AALCortical/MNI152NLin6Asym/parc-AALCortical_space-MNI152NLin6Asym.label.txt": "5f959e18a0a50fbfc9efb0b9eac78b2092b4c292277ab729b3db54542bff3117",
+   "parcellation/AALCortical/fsaverage/parc-AALCortical_space-fsaverage_hemi-L.label.gii.gz": "89c647a06b719c8056c795f2f9e1d33945060c0aa00a446bc524842d6e954ca6",
+   "parcellation/AALCortical/fsaverage/parc-AALCortical_space-fsaverage_hemi-L.label.txt": "d985b0598a8ee429c655b0affe87dcd464237f6253915563be46c80ab35e4c30",
+   "parcellation/AALCortical/fsaverage/parc-AALCortical_space-fsaverage_hemi-R.label.gii.gz": "f4df7861bfd1da33aa7e7149a67f52201e775223723d2f07c8c6417c32c652b5",
+   "parcellation/AALCortical/fsaverage/parc-AALCortical_space-fsaverage_hemi-R.label.txt": "a94a92897926f68f1ee262ed3377a7878234953f6c4855904f34e8b510380a24"
+  },
+  "key": "af89bf06a70a47b20591489ced4447a0ea6fca1a97a5d73ff9866f461f757597",
+  "params": {
+   "cortex_only": false,
+   "kwargs": {
+    "background_value": "auto",
+    "min_fraction_valid_datapoints": 0.3,
+    "min_num_valid_datapoints": 5,
+    "report_background_parcels": true
+   },
+   "spaces": [
+    "MNI152NLin6Asym",
+    "fsaverageOriginal"
+   ],
+   "version": 1
+  },
+  "script": "prep3_01_ref_pet.py"
+ },
+ "AALSubcortical": {
+  "inputs": {
+   "maps/MNI152NLin6Asym": "bae451e796b5e704b1c52741df3d27f066363e67d3e5cd734a70bcc8d9ee76af",
+   "parcellation/AALSubcortical/MNI152NLin6Asym/parc-AALSubcortical_space-MNI152NLin6Asym.label.nii.gz": "0f7e1af0cccd499330405d52ef06279ca66d1f1d640c4fd92e39270aab520623",
+   "parcellation/AALSubcortical/MNI152NLin6Asym/parc-AALSubcortical_space-MNI152NLin6Asym.label.txt": "33f852abd1f3ff5f8c81fcfb697d694f42f7a0327fa35f560aa3f0e030eafef2"
+  },
+  "key": "937c23443c086a31b6a56181bf64b2d35743b069e96f6e359e19e2057c55e788",
+  "params": {
+   "cortex_only": false,
+   "kwargs": {
+    "background_value": "auto",
+    "min_fraction_valid_datapoints": 0.3,
+    "min_num_valid_datapoints": 5,
+    "report_background_parcels": true
+   },
+   "spaces": [
+    "MNI152NLin6Asym",
+    "fsaverageOriginal"
+   ],
+   "version": 1
+  },
+  "script": "prep3_01_ref_pet.py"
+ },
+ "Aseg": {
+  "inputs": {
+   "maps/MNI152NLin6Asym": "bae451e796b5e704b1c52741df3d27f066363e67d3e5cd734a70bcc8d9ee76af",
+   "parcellation/Aseg/MNI152NLin6Asym/parc-Aseg_space-MNI152NLin6Asym.label.nii.gz": "5fc1bac02b381fd1c4d3a35184a8d4e9324d8af50ddee99a57698edaa05731f3",
+   "parcellation/Aseg/MNI152NLin6Asym/parc-Aseg_space-MNI152NLin6Asym.label.txt": "df1c6d737c1c33f1c3a4e3492164fca8f46a89b632203c457d8d38e1670bc3b7"
+  },
+  "key": "244bf0807fe705cf3e7d4a19dc3e49456406f3e37e45bf8d8087fde6adcc7317",
+  "params": {
+   "cortex_only": false,
+   "kwargs": {
+    "background_value": "auto",
+    "min_fraction_valid_datapoints": 0.3,
+    "min_num_valid_datapoints": 5,
+    "report_background_parcels": true
+   },
+   "spaces": [
+    "MNI152NLin6Asym",
+    "fsaverageOriginal"
+   ],
+   "version": 1
+  },
+  "script": "prep3_01_ref_pet.py"
+ },
+ "BrainnetomeCortical": {
+  "inputs": {
+   "maps/MNI152NLin6Asym": "bae451e796b5e704b1c52741df3d27f066363e67d3e5cd734a70bcc8d9ee76af",
+   "maps/fsaverageOriginal": "ec35a52d1cc578954e087d0277c201166efa32aadfd7f8ea528a20341a35cf58",
+   "parcellation/BrainnetomeCortical/MNI152NLin6Asym/parc-BrainnetomeCortical_space-MNI152NLin6Asym.label.nii.gz": "5d4bb05331d18c60b5ec88d88a645535c663db3002769bf0628c118cd7cb7b6e",
+   "parcellation/BrainnetomeCortical/MNI152NLin6Asym/parc-BrainnetomeCortical_space-MNI152NLin6Asym.label.txt": "9a1c4ed5e07dcf995b8ac6cbe9bc1933f70b29fb0ad54b38623996e6d3a8a588",
+   "parcellation/BrainnetomeCortical/fsaverage/parc-BrainnetomeCortical_space-fsaverage_hemi-L.label.gii.gz": "8e58d871d3b55411f7ac4e091cf741ed5e4f3cfe3d684e59fcc2a56dec212cf5",
+   "parcellation/BrainnetomeCortical/fsaverage/parc-BrainnetomeCortical_space-fsaverage_hemi-L.label.txt": "f7144733f547e01e37668761993a41c7453c046e0e831d7d82961533590de3f8",
+   "parcellation/BrainnetomeCortical/fsaverage/parc-BrainnetomeCortical_space-fsaverage_hemi-R.label.gii.gz": "80652a5402c66ebf21ee90c61cf6c3ae02f64dc63041d1543a5862e095e72a1d",
+   "parcellation/BrainnetomeCortical/fsaverage/parc-BrainnetomeCortical_space-fsaverage_hemi-R.label.txt": "e3c9db7ea9c6dd09f361d0da8e937fa6aea19c9caea40998a6704c00ca3e2cbc"
+  },
+  "key": "3d166c4b7b6e0bea2497601b861c408ab2b57b0b019d4ba16a901db0318d7db2",
+  "params": {
+   "cortex_only": false,
+   "kwargs": {
+    "background_value": "auto",
+    "min_fraction_valid_datapoints": 0.3,
+    "min_num_valid_datapoints": 5,
+    "report_background_parcels": true
+   },
+   "spaces": [
+    "MNI152NLin6Asym",
+    "fsaverageOriginal"
+   ],
+   "version": 1
+  },
+  "script": "prep3_01_ref_pet.py"
+ },
+ "BrainnetomeSubcortical": {
+  "inputs": {
+   "maps/MNI152NLin6Asym": "bae451e796b5e704b1c52741df3d27f066363e67d3e5cd734a70bcc8d9ee76af",
+   "parcellation/BrainnetomeSubcortical/MNI152NLin6Asym/parc-BrainnetomeSubcortical_space-MNI152NLin6Asym.label.nii.gz": "2b3ed8af1abf1cb728763dab1deb89bedb2d6cdb7daa5062480785a76946d1bd",
+   "parcellation/BrainnetomeSubcortical/MNI152NLin6Asym/parc-BrainnetomeSubcortical_space-MNI152NLin6Asym.label.txt": "b1018035e281405fc6a617da199d58282e297b10651897f4ade49659d9ce5f83"
+  },
+  "key": "c31ced6f7beaacc443dbca97efc1a0aa27d57981441cfcdd5ce16b3c46a0b071",
+  "params": {
+   "cortex_only": false,
+   "kwargs": {
+    "background_value": "auto",
+    "min_fraction_valid_datapoints": 0.3,
+    "min_num_valid_datapoints": 5,
+    "report_background_parcels": true
+   },
+   "spaces": [
+    "MNI152NLin6Asym",
+    "fsaverageOriginal"
+   ],
+   "version": 1
+  },
+  "script": "prep3_01_ref_pet.py"
+ },
+ "DesikanKilliany": {
+  "inputs": {
+   "maps/MNI152NLin6Asym": "bae451e796b5e704b1c52741df3d27f066363e67d3e5cd734a70bcc8d9ee76af",
+   "maps/fsaverageOriginal": "ec35a52d1cc578954e087d0277c201166efa32aadfd7f8ea528a20341a35cf58",
+   "parcellation/DesikanKilliany/MNI152NLin6Asym/parc-DesikanKilliany_space-MNI152NLin6Asym.label.nii.gz": "c2059247e177500d1efb401014a12148b3c99b7219e7475cf194940178129cc9",
+   "parcellation/DesikanKilliany/MNI152NLin6Asym/parc-DesikanKilliany_space-MNI152NLin6Asym.label.txt": "1de37ace51df05bbd46fc6eb7ce00998100f5bc3b98bd7566003b1db2f6b11aa",
+   "parcellation/DesikanKilliany/fsaverage/parc-DesikanKilliany_space-fsaverage_hemi-L.label.gii.gz": "a54207fa8ee3c6a5a3ee63ba160990417ac510493b230b7dec0743d51fbb6f58",
+   "parcellation/DesikanKilliany/fsaverage/parc-DesikanKilliany_space-fsaverage_hemi-L.label.txt": "e5da8eeb99022a4a275a430793daa3c130690586197e5bd22e26b4bbf37c24d6",
+   "parcellation/DesikanKilliany/fsaverage/parc-DesikanKilliany_space-fsaverage_hemi-R.label.gii.gz": "be0e99ec8c52d5ba5642baace868588e8903a02056151369037a6d5383222496",
+   "parcellation/DesikanKilliany/fsaverage/parc-DesikanKilliany_space-fsaverage_hemi-R.label.txt": "cbc6be2cb1bc9b761cf602a6da24ae0134c82741a6d434e68e6729928d5586a0"
+  },
+  "key": "390daf8461244bc8e42ed31b2c01f49e8f21c61b833276694160b7f744294804",
+  "params": {
+   "cortex_only": false,
+   "kwargs": {
+    "background_value": "auto",
+    "min_fraction_valid_datapoints": 0.3,
+    "min_num_valid_datapoints": 5,
+    "report_background_parcels": true
+   },
+   "spaces": [
+    "MNI152NLin6Asym",
+    "fsaverageOriginal"
+   ],
+   "version": 1
+  },
+  "script": "prep3_01_ref_pet.py"
+ },
+ "DesikanKillianyTourville": {
+  "inputs": {
+   "maps/MNI152NLin6Asym": "bae451e796b5e704b1c52741df3d27f066363e67d3e5cd734a70bcc8d9ee76af",
+   "maps/fsaverageOriginal": "ec35a52d1cc578954e087d0277c201166efa32aadfd7f8ea528a20341a35cf58",
+   "parcellation/DesikanKillianyTourville/MNI152NLin6Asym/parc-DesikanKillianyTourville_space-MNI152NLin6Asym.label.nii.gz": "bc8e480e7cc1e076c7773eb677194c7907f088bbe0ef1fcd80627baf7315fb4d",
+   "parcellation/DesikanKillianyTourville/MNI152NLin6Asym/parc-DesikanKillianyTourville_space-MNI152NLin6Asym.label.txt": "de3434a5cb4a38b6468fe4ae3a57dedaa2d9e4aa48ece72039e45d3c57fcbd5d",
+   "parcellation/DesikanKillianyTourville/fsaverage/parc-DesikanKillianyTourville_space-fsaverage_hemi-L.label.gii.gz": "3b32f4bf8d76f9a2b923d5d6e0f242a58f0af1b38621e3820d61eb4c5ae52cea",
+   "parcellation/DesikanKillianyTourville/fsaverage/parc-DesikanKillianyTourville_space-fsaverage_hemi-L.label.txt": "8f01682d9b8bd14e9300e1e84f09e713b3bf7c20ecb9c4379cc40828054d960d",
+   "parcellation/DesikanKillianyTourville/fsaverage/parc-DesikanKillianyTourville_space-fsaverage_hemi-R.label.gii.gz": "90215885dfe7168dc0833ff949a43c150533befb1e34f13617cb37bdac8e58b5",
+   "parcellation/DesikanKillianyTourville/fsaverage/parc-DesikanKillianyTourville_space-fsaverage_hemi-R.label.txt": "171398e01c72a48f11c6c8db7b1279e78c594dad2657173377a163efa02b49a5"
+  },
+  "key": "f7ef7689d71a2c88c804e900a0f21270568e39e70a7ecad2a8c654e220809a90",
+  "params": {
+   "cortex_only": false,
+   "kwargs": {
+    "background_value": "auto",
+    "min_fraction_valid_datapoints": 0.3,
+    "min_num_valid_datapoints": 5,
+    "report_background_parcels": true
+   },
+   "spaces": [
+    "MNI152NLin6Asym",
+    "fsaverageOriginal"
+   ],
+   "version": 1
+  },
+  "script": "prep3_01_ref_pet.py"
+ },
+ "Destrieux": {
+  "inputs": {
+   "maps/MNI152NLin6Asym": "bae451e796b5e704b1c52741df3d27f066363e67d3e5cd734a70bcc8d9ee76af",
+   "maps/fsaverageOriginal": "ec35a52d1cc578954e087d0277c201166efa32aadfd7f8ea528a20341a35cf58",
+   "parcellation/Destrieux/MNI152NLin6Asym/parc-Destrieux_space-MNI152NLin6Asym.label.nii.gz": "8dec262679fd740138cec14dc6f94172c0e953b14429cd5ed80b94351b1896b2",
+   "parcellation/Destrieux/MNI152NLin6Asym/parc-Destrieux_space-MNI152NLin6Asym.label.txt": "cd1e38a1553913a6f8b3f8b75ae6cc9bafcaf03bd1d26e56e65391906fd4315d",
+   "parcellation/Destrieux/fsaverage/parc-Destrieux_space-fsaverage_hemi-L.label.gii.gz": "44b97d1c8dbea54e8e2c3323a2284c266ebf960f3b27b139c348d9a94b6dd01a",
+   "parcellation/Destrieux/fsaverage/parc-Destrieux_space-fsaverage_hemi-L.label.txt": "5eb09ff8bc9048427b1fa122d8af81beba8c40c866fd68de9ef61e6f6fe7c9b3",
+   "parcellation/Destrieux/fsaverage/parc-Destrieux_space-fsaverage_hemi-R.label.gii.gz": "3eeca35a198dc77960d273c2d4b5a8dbc14fbf3d813805e18fa846878797b3cc",
+   "parcellation/Destrieux/fsaverage/parc-Destrieux_space-fsaverage_hemi-R.label.txt": "07a55cd7a18fc80521ef61efb6487512c25fd817ee7e8e758279f1153fc3b1ff"
+  },
+  "key": "f6d45b4d05e90d3a5e5ac173210e75576721f78c48fc3c9e8cea77387a92d8e9",
+  "params": {
+   "cortex_only": false,
+   "kwargs": {
+    "background_value": "auto",
+    "min_fraction_valid_datapoints": 0.3,
+    "min_num_valid_datapoints": 5,
+    "report_background_parcels": true
+   },
+   "spaces": [
+    "MNI152NLin6Asym",
+    "fsaverageOriginal"
+   ],
+   "version": 1
+  },
+  "script": "prep3_01_ref_pet.py"
+ },
+ "Glasser": {
+  "inputs": {
+   "maps/MNI152NLin6Asym": "bae451e796b5e704b1c52741df3d27f066363e67d3e5cd734a70bcc8d9ee76af",
+   "maps/fsaverageOriginal": "ec35a52d1cc578954e087d0277c201166efa32aadfd7f8ea528a20341a35cf58",
+   "parcellation/Glasser/MNI152NLin6Asym/parc-Glasser_space-MNI152NLin6Asym.label.nii.gz": "53bbd186943d62c6ea56f30deee468016600e83187d32582c596dfc343680993",
+   "parcellation/Glasser/MNI152NLin6Asym/parc-Glasser_space-MNI152NLin6Asym.label.txt": "12eef3e3728a2e559ccf4d11429edbfcea10f6099fe639b48ef47c3305dacd56",
+   "parcellation/Glasser/fsaverage/parc-Glasser_space-fsaverage_hemi-L.label.gii.gz": "3e855c0ead7c383065117848641eb6fc10be601424bc354c44be59dc15416b5e",
+   "parcellation/Glasser/fsaverage/parc-Glasser_space-fsaverage_hemi-L.label.txt": "c2103b712062aeb13cca24cbbccf647576321ec8efb0fa370c24fff0a234e693",
+   "parcellation/Glasser/fsaverage/parc-Glasser_space-fsaverage_hemi-R.label.gii.gz": "e47b77e99f43a0f72f8114b0e13e777e2ae9f1dc95b7098e7e6b77f2ddee8379",
+   "parcellation/Glasser/fsaverage/parc-Glasser_space-fsaverage_hemi-R.label.txt": "b3bac4d433633330b4e8ef4edb716ab0dfd6e87f38ab382a2f4121805e3eeb3c"
+  },
+  "key": "a88c3b0afd22c719cc076a7e12ad1eab9f523595297ef1993ed9c2a0cb142564",
+  "params": {
+   "cortex_only": false,
+   "kwargs": {
+    "background_value": "auto",
+    "min_fraction_valid_datapoints": 0.3,
+    "min_num_valid_datapoints": 5,
+    "report_background_parcels": true
+   },
+   "spaces": [
+    "MNI152NLin6Asym",
+    "fsaverageOriginal"
+   ],
+   "version": 1
+  },
+  "script": "prep3_01_ref_pet.py"
+ },
+ "HarvardOxfordCortical": {
+  "inputs": {
+   "maps/MNI152NLin6Asym": "bae451e796b5e704b1c52741df3d27f066363e67d3e5cd734a70bcc8d9ee76af",
+   "maps/fsaverageOriginal": "ec35a52d1cc578954e087d0277c201166efa32aadfd7f8ea528a20341a35cf58",
+   "parcellation/HarvardOxfordCortical/MNI152NLin6Asym/parc-HarvardOxfordCortical_space-MNI152NLin6Asym.label.nii.gz": "ebcb126c4d0aaf58cf33b588d376df3435836587cf5fc14005502aa33f062be2",
+   "parcellation/HarvardOxfordCortical/MNI152NLin6Asym/parc-HarvardOxfordCortical_space-MNI152NLin6Asym.label.txt": "4c87849f154f2915e87fa97ee46fbf3cbfe0465f81c7894825a8cec190bda319",
+   "parcellation/HarvardOxfordCortical/fsaverage/parc-HarvardOxfordCortical_space-fsaverage_hemi-L.label.gii.gz": "88fe9933fadec0083001bf4c408f5d23b24e0ffbcac6812316bfab5f5a8dfe9b",
+   "parcellation/HarvardOxfordCortical/fsaverage/parc-HarvardOxfordCortical_space-fsaverage_hemi-L.label.txt": "672207fb0fbf2ae453e5bf5749cc6339c10c81b5db7fb77fe1126747dc261b76",
+   "parcellation/HarvardOxfordCortical/fsaverage/parc-HarvardOxfordCortical_space-fsaverage_hemi-R.label.gii.gz": "193baeba24effc65b550e5eca6fc679ce61e72dd62c163c8c89f5503fdc547fe",
+   "parcellation/HarvardOxfordCortical/fsaverage/parc-HarvardOxfordCortical_space-fsaverage_hemi-R.label.txt": "7157fb231104ebbf122934cb1993019f375c8f739e88049c1f66f6589893a1ea"
+  },
+  "key": "240bc6f62fdb8f133c3c650e358eb6d2792db128a105aca549e3ebaf22d1536a",
+  "params": {
+   "cortex_only": false,
+   "kwargs": {
+    "background_value": "auto",
+    "min_fraction_valid_datapoints": 0.3,
+    "min_num_valid_datapoints": 5,
+    "report_background_parcels": true
+   },
+   "spaces": [
+    "MNI152NLin6Asym",
+    "fsaverageOriginal"
+   ],
+   "version": 1
+  },
+  "script": "prep3_01_ref_pet.py"
+ },
+ "HarvardOxfordSubcortical": {
+  "inputs": {
+   "maps/MNI152NLin6Asym": "bae451e796b5e704b1c52741df3d27f066363e67d3e5cd734a70bcc8d9ee76af",
+   "parcellation/HarvardOxfordSubcortical/MNI152NLin6Asym/parc-HarvardOxfordSubcortical_space-MNI152NLin6Asym.label.nii.gz": "1369dfafbe915d6aeea9ee3d431be47023e5895c0a4ebe3741cbb0216c3ed9b6",
+   "parcellation/HarvardOxfordSubcortical/MNI152NLin6Asym/parc-HarvardOxfordSubcortical_space-MNI152NLin6Asym.label.txt": "cd067c21868fa0b456af40e0fb42d122947feb732916d843767ce8340ab30abe"
+  },
+  "key": "2f6f3394befaeb38fd536c9e940ff2f27d2422e7a1aeee124a51620abd10c415",
+  "params": {
+   "cortex_only": false,
+   "kwargs": {
+    "background_value": "auto",
+    "min_fraction_valid_datapoints": 0.3,
+    "min_num_valid_datapoints": 5,
+    "report_background_parcels": true
+   },
+   "spaces": [
+    "MNI152NLin6Asym",
+    "fsaverageOriginal"
+   ],
+   "version": 1
+  },
+  "script": "prep3_01_ref_pet.py"
+ },
+ "Schaefer1000Parcels17Networks": {
+  "inputs": {
+   "maps/MNI152NLin6Asym": "bae451e796b5e704b1c52741df3d27f066363e67d3e5cd734a70bcc8d9ee76af",
+   "maps/fsaverageOriginal": "ec35a52d1cc578954e087d0277c201166efa32aadfd7f8ea528a20341a35cf58",
+   "parcellation/Schaefer1000Parcels17Networks/MNI152NLin6Asym/parc-Schaefer1000Parcels17Networks_space-MNI152NLin6Asym.label.nii.gz": "90820b09cae6f8186f28a7156f07685c8cd74ca15e5998c9d4c7446222f714da",
+   "parcellation/Schaefer1000Parcels17Networks/MNI152NLin6Asym/parc-Schaefer1000Parcels17Networks_space-MNI152NLin6Asym.label.txt": "2d94bce47a3f368881b410e58a1632f48d590300cf43edf8ac92395aa63de643",
+   "parcellation/Schaefer1000Parcels17Networks/fsaverage/parc-Schaefer1000Parcels17Networks_space-fsaverage_hemi-L.label.gii.gz": "39f4d0c975d3b1b030d21efabf5a84a8acd4e4a1ec6e569365467618ed079371",
+   "parcellation/Schaefer1000Parcels17Networks/fsaverage/parc-Schaefer1000Parcels17Networks_space-fsaverage_hemi-L.label.txt": "25c32e6d7b905a0a66704d8bfe5fc3f49b0dc3a4859354c1b4e24fb41f93443a",
+   "parcellation/Schaefer1000Parcels17Networks/fsaverage/parc-Schaefer1000Parcels17Networks_space-fsaverage_hemi-R.label.gii.gz": "8a25c276fd974443084e7b4f383e592f3023f0bdf461b8085f8b95b05efc3c7d",
+   "parcellation/Schaefer1000Parcels17Networks/fsaverage/parc-Schaefer1000Parcels17Networks_space-fsaverage_hemi-R.label.txt": "ca7ef10cbdb454d27f646c385a06697614183301420e55d223533e504cc6e0de"
+  },
+  "key": "0e5ed848c69d369e9978890a8bff40c80a204d6a86aa90a0dc14e31648e6bd4e",
+  "params": {
+   "cortex_only": false,
+   "kwargs": {
+    "background_value": "auto",
+    "min_fraction_valid_datapoints": 0.3,
+    "min_num_valid_datapoints": 5,
+    "report_background_parcels": true
+   },
+   "spaces": [
+    "MNI152NLin6Asym",
+    "fsaverageOriginal"
+   ],
+   "version": 1
+  },
+  "script": "prep3_01_ref_pet.py"
+ },
+ "Schaefer1000Parcels7Networks": {
+  "inputs": {
+   "maps/MNI152NLin6Asym": "bae451e796b5e704b1c52741df3d27f066363e67d3e5cd734a70bcc8d9ee76af",
+   "maps/fsaverageOriginal": "ec35a52d1cc578954e087d0277c201166efa32aadfd7f8ea528a20341a35cf58",
+   "parcellation/Schaefer1000Parcels7Networks/MNI152NLin6Asym/parc-Schaefer1000Parcels7Networks_space-MNI152NLin6Asym.label.nii.gz": "90f400612a9c1ede09cdeb361411f65ad04493943c4cb567ac0c3ba30316e7b1",
+   "parcellation/Schaefer1000Parcels7Networks/MNI152NLin6Asym/parc-Schaefer1000Parcels7Networks_space-MNI152NLin6Asym.label.txt": "e2f6678cacb2964418f9125120aa0596aac1ab6d36b8ac84556a3c4d4a5a47e8",
+   "parcellation/Schaefer1000Parcels7Networks/fsaverage/parc-Schaefer1000Parcels7Networks_space-fsaverage_hemi-L.label.gii.gz": "9b84600287221fe33fd589cec1f3524ef77bb91a56e1e05499ce2e4187e7f93c",
+   "parcellation/Schaefer1000Parcels7Networks/fsaverage/parc-Schaefer1000Parcels7Networks_space-fsaverage_hemi-L.label.txt": "8ae786a2b8ffcb1f6f7990f957a68cdeb0ed372623d5155067e9a6b4809d0618",
+   "parcellation/Schaefer1000Parcels7Networks/fsaverage/parc-Schaefer1000Parcels7Networks_space-fsaverage_hemi-R.label.gii.gz": "b57b8178c8f1cbfe828f7b471cdb3e859c960bf7726bce69f9094aaaa35d6acf",
+   "parcellation/Schaefer1000Parcels7Networks/fsaverage/parc-Schaefer1000Parcels7Networks_space-fsaverage_hemi-R.label.txt": "8e979f9c883c2fdcd5265700715374b805d136704011182516a4b7cb4f3dbdcf"
+  },
+  "key": "3a2976667fe6b29ac8cf8ba6e5814b0954edb8e12e322fdc97675f13892d4f15",
+  "params": {
+   "cortex_only": false,
+   "kwargs": {
+    "background_value": "auto",
+    "min_fraction_valid_datapoints": 0.3,
+    "min_num_valid_datapoints": 5,
+    "report_background_parcels": true
+   },
+   "spaces": [
+    "MNI152NLin6Asym",
+    "fsaverageOriginal"
+   ],
+   "version": 1
+  },
+  "script": "prep3_01_ref_pet.py"
+ },
+ "Schaefer100Parcels17Networks": {
+  "inputs": {
+   "maps/MNI152NLin6Asym": "bae451e796b5e704b1c52741df3d27f066363e67d3e5cd734a70bcc8d9ee76af",
+   "maps/fsaverageOriginal": "ec35a52d1cc578954e087d0277c201166efa32aadfd7f8ea528a20341a35cf58",
+   "parcellation/Schaefer100Parcels17Networks/MNI152NLin6Asym/parc-Schaefer100Parcels17Networks_space-MNI152NLin6Asym.label.nii.gz": "7f2570ff8a480218ce2f7c3703f8667f02f8c5cf7cb077953a1274ee1be2e0d1",
+   "parcellation/Schaefer100Parcels17Networks/MNI152NLin6Asym/parc-Schaefer100Parcels17Networks_space-MNI152NLin6Asym.label.txt": "90e9a8e1a7f93390b0199a97dbc157500ac09b16d304b25bbb234b1d69ffef7a",
+   "parcellation/Schaefer100Parcels17Networks/fsaverage/parc-Schaefer100Parcels17Networks_space-fsaverage_hemi-L.label.gii.gz": "f50c6f986ececcc170f3f6900ed4e0b2a434311aa3849d7d3fe6e0fd6346fed7",
+   "parcellation/Schaefer100Parcels17Networks/fsaverage/parc-Schaefer100Parcels17Networks_space-fsaverage_hemi-L.label.txt": "384043175a74eabaab3cc7065ae7d64c21a0cbb79bc709692a0851f29a9cd24c",
+   "parcellation/Schaefer100Parcels17Networks/fsaverage/parc-Schaefer100Parcels17Networks_space-fsaverage_hemi-R.label.gii.gz": "72086ecb433bbd75e93c2f7888f47c3d03efdce5f1bd3c6a6c8a224c3d903e78",
+   "parcellation/Schaefer100Parcels17Networks/fsaverage/parc-Schaefer100Parcels17Networks_space-fsaverage_hemi-R.label.txt": "e68b16e6c2b37eeace0e5abc9568ff5afd976625bf655f704b430f8d33ac4272"
+  },
+  "key": "829e4596eafd453663c93f5fd0bea3a2daac1d381279d26fca9e73ef36bc1142",
+  "params": {
+   "cortex_only": false,
+   "kwargs": {
+    "background_value": "auto",
+    "min_fraction_valid_datapoints": 0.3,
+    "min_num_valid_datapoints": 5,
+    "report_background_parcels": true
+   },
+   "spaces": [
+    "MNI152NLin6Asym",
+    "fsaverageOriginal"
+   ],
+   "version": 1
+  },
+  "script": "prep3_01_ref_pet.py"
+ },
+ "Schaefer100Parcels7Networks": {
+  "inputs": {
+   "maps/MNI152NLin6Asym": "bae451e796b5e704b1c52741df3d27f066363e67d3e5cd734a70bcc8d9ee76af",
+   "maps/fsaverageOriginal": "ec35a52d1cc578954e087d0277c201166efa32aadfd7f8ea528a20341a35cf58",
+   "parcellation/Schaefer100Parcels7Networks/MNI152NLin6Asym/parc-Schaefer100Parcels7Networks_space-MNI152NLin6Asym.label.nii.gz": "9d176c8923c7afbfa078f7ea53c9350bbdb24b7345dc6c22abc214450c6d0549",
+   "parcellation/Schaefer100Parcels7Networks/MNI152NLin6Asym/parc-Schaefer100Parcels7Networks_space-MNI152NLin6Asym.label.txt": "40cf1079a6b478700a3103fe23cb774e46e14ede8f54d590cc6f4916d7308b58",
+   "parcellation/Schaefer100Parcels7Networks/fsaverage/parc-Schaefer100Parcels7Networks_space-fsaverage_hemi-L.label.gii.gz": "7dafb1fccd812733310b5c0cdcb14969c2386062b74a6a949d083145ea8a3264",
+   "parcellation/Schaefer100Parcels7Networks/fsaverage/parc-Schaefer100Parcels7Networks_space-fsaverage_hemi-L.label.txt": "0ece4643eedf2074368a74190537f520decd0fe3662c96642e913574aa86671e",
+   "parcellation/Schaefer100Parcels7Networks/fsaverage/parc-Schaefer100Parcels7Networks_space-fsaverage_hemi-R.label.gii.gz": "3d62e4b56f97e14fe828b672bafed64f2459b55ab3442175d30719e37b5c70ad",
+   "parcellation/Schaefer100Parcels7Networks/fsaverage/parc-Schaefer100Parcels7Networks_space-fsaverage_hemi-R.label.txt": "f122e7e5a59877df4c61258030aa1efc93fdb7c7c9bec0290742b1f5aa88706f"
+  },
+  "key": "296723cfb4983777eb4c2945336c3eaf4e17242714b22c91b73f804800b44f7d",
+  "params": {
+   "cortex_only": false,
+   "kwargs": {
+    "background_value": "auto",
+    "min_fraction_valid_datapoints": 0.3,
+    "min_num_valid_datapoints": 5,
+    "report_background_parcels": true
+   },
+   "spaces": [
+    "MNI152NLin6Asym",
+    "fsaverageOriginal"
+   ],
+   "version": 1
+  },
+  "script": "prep3_01_ref_pet.py"
+ },
+ "Schaefer200Parcels17Networks": {
+  "inputs": {
+   "maps/MNI152NLin6Asym": "bae451e796b5e704b1c52741df3d27f066363e67d3e5cd734a70bcc8d9ee76af",
+   "maps/fsaverageOriginal": "ec35a52d1cc578954e087d0277c201166efa32aadfd7f8ea528a20341a35cf58",
+   "parcellation/Schaefer200Parcels17Networks/MNI152NLin6Asym/parc-Schaefer200Parcels17Networks_space-MNI152NLin6Asym.label.nii.gz": "235a37fc37d58159b220dbfc4e5fa6857746504011d7de0a46b236ec4fc6ad92",
+   "parcellation/Schaefer200Parcels17Networks/MNI152NLin6Asym/parc-Schaefer200Parcels17Networks_space-MNI152NLin6Asym.label.txt": "0e74b3aff17611773ea02438e5c91b5211c168ae91885da26fe4649184a643ec",
+   "parcellation/Schaefer200Parcels17Networks/fsaverage/parc-Schaefer200Parcels17Networks_space-fsaverage_hemi-L.label.gii.gz": "8090602eb3fdcb3201d386e5c6ac6a690ba294cce60f717fa9a32e07acf215dc",
+   "parcellation/Schaefer200Parcels17Networks/fsaverage/parc-Schaefer200Parcels17Networks_space-fsaverage_hemi-L.label.txt": "af0c4956603f6bbb7ec281b5dbfc78dc33013040cb10d204e2e5d92b0e87a48a",
+   "parcellation/Schaefer200Parcels17Networks/fsaverage/parc-Schaefer200Parcels17Networks_space-fsaverage_hemi-R.label.gii.gz": "5c2f20b0677e933141947daea066b04475c9ed77bcd15ff165d5a1298279d7fe",
+   "parcellation/Schaefer200Parcels17Networks/fsaverage/parc-Schaefer200Parcels17Networks_space-fsaverage_hemi-R.label.txt": "895ef7575277dac6f1d0132b81be8f63fa22d1198ac307ff6cba39ce6a8c6058"
+  },
+  "key": "af228ede097d1236c5fad6942e99522453c416f09dae20124135db9bd1ad4671",
+  "params": {
+   "cortex_only": false,
+   "kwargs": {
+    "background_value": "auto",
+    "min_fraction_valid_datapoints": 0.3,
+    "min_num_valid_datapoints": 5,
+    "report_background_parcels": true
+   },
+   "spaces": [
+    "MNI152NLin6Asym",
+    "fsaverageOriginal"
+   ],
+   "version": 1
+  },
+  "script": "prep3_01_ref_pet.py"
+ },
+ "Schaefer200Parcels7Networks": {
+  "inputs": {
+   "maps/MNI152NLin6Asym": "bae451e796b5e704b1c52741df3d27f066363e67d3e5cd734a70bcc8d9ee76af",
+   "maps/fsaverageOriginal": "ec35a52d1cc578954e087d0277c201166efa32aadfd7f8ea528a20341a35cf58",
+   "parcellation/Schaefer200Parcels7Networks/MNI152NLin6Asym/parc-Schaefer200Parcels7Networks_space-MNI152NLin6Asym.label.nii.gz": "5fe2778ebed6e7e6ed8a4f24be17773a02a5e5110c0f996a3b4067a3e8f6ae5f",
+   "parcellation/Schaefer200Parcels7Networks/MNI152NLin6Asym/parc-Schaefer200Parcels7Networks_space-MNI152NLin6Asym.label.txt": "5fb7e239d3bf421749cb55a272adaa81b70f60a29834e170e2fab3a68e96d2cc",
+   "parcellation/Schaefer200Parcels7Networks/fsaverage/parc-Schaefer200Parcels7Networks_space-fsaverage_hemi-L.label.gii.gz": "7114581e68744c735630e24aaa72c1c96d85cce68d0e7af80a133108ad098b35",
+   "parcellation/Schaefer200Parcels7Networks/fsaverage/parc-Schaefer200Parcels7Networks_space-fsaverage_hemi-L.label.txt": "5772791d184b4f11b8e0b01ac29789057d5d2e2bdd07e76157f7eafb06f7cd9f",
+   "parcellation/Schaefer200Parcels7Networks/fsaverage/parc-Schaefer200Parcels7Networks_space-fsaverage_hemi-R.label.gii.gz": "5e3349b8dfd264ef6a12e471176a303a4b15706d08d68b493e28832ad6fd63e9",
+   "parcellation/Schaefer200Parcels7Networks/fsaverage/parc-Schaefer200Parcels7Networks_space-fsaverage_hemi-R.label.txt": "20fbddff430887e1549afbdf5a5ec04f08e771fa679e526269c35c1ab5a8c707"
+  },
+  "key": "0fb8e4f79edb0a726442ee3e3723cf48aa3d0647253968bd14dc205fcd99d510",
+  "params": {
+   "cortex_only": false,
+   "kwargs": {
+    "background_value": "auto",
+    "min_fraction_valid_datapoints": 0.3,
+    "min_num_valid_datapoints": 5,
+    "report_background_parcels": true
+   },
+   "spaces": [
+    "MNI152NLin6Asym",
+    "fsaverageOriginal"
+   ],
+   "version": 1
+  },
+  "script": "prep3_01_ref_pet.py"
+ },
+ "Schaefer400Parcels17Networks": {
+  "inputs": {
+   "maps/MNI152NLin6Asym": "bae451e796b5e704b1c52741df3d27f066363e67d3e5cd734a70bcc8d9ee76af",
+   "maps/fsaverageOriginal": "ec35a52d1cc578954e087d0277c201166efa32aadfd7f8ea528a20341a35cf58",
+   "parcellation/Schaefer400Parcels17Networks/MNI152NLin6Asym/parc-Schaefer400Parcels17Networks_space-MNI152NLin6Asym.label.nii.gz": "a5ea60a9744e9f669fa051e761885d604b6404d8d9ded9ff289baec39c00a8c2",
+   "parcellation/Schaefer400Parcels17Networks/MNI152NLin6Asym/parc-Schaefer400Parcels17Networks_space-MNI152NLin6Asym.label.txt": "a2d866041ca27a95c67780bafff99520483b676bdc546fd30d724da9da990ac7",
+   "parcellation/Schaefer400Parcels17Networks/fsaverage/parc-Schaefer400Parcels17Networks_space-fsaverage_hemi-L.label.gii.gz": "a57860da5a258aecca6b830bb264dcd5ffe5ec05c88a67e74296878ab8c22a82",
+   "parcellation/Schaefer400Parcels17Networks/fsaverage/parc-Schaefer400Parcels17Networks_space-fsaverage_hemi-L.label.txt": "737f6b7caf26a2ac59443a2c3f7b630aa9b473cf8ea1d1e43e45588db564d75a",
+   "parcellation/Schaefer400Parcels17Networks/fsaverage/parc-Schaefer400Parcels17Networks_space-fsaverage_hemi-R.label.gii.gz": "ebd3fabc3592fb3204083c52d1798014ae736a1c60025e2092a819b5d46f0509",
+   "parcellation/Schaefer400Parcels17Networks/fsaverage/parc-Schaefer400Parcels17Networks_space-fsaverage_hemi-R.label.txt": "cc8fd2aae081b3094bc43250bc5b638ad2384d9c40284622704d6bc7598f0489"
+  },
+  "key": "dc8c9ca08c4aeabf31c1e056b923d083003a8fca1bf792f52bc8868168d33f50",
+  "params": {
+   "cortex_only": false,
+   "kwargs": {
+    "background_value": "auto",
+    "min_fraction_valid_datapoints": 0.3,
+    "min_num_valid_datapoints": 5,
+    "report_background_parcels": true
+   },
+   "spaces": [
+    "MNI152NLin6Asym",
+    "fsaverageOriginal"
+   ],
+   "version": 1
+  },
+  "script": "prep3_01_ref_pet.py"
+ },
+ "Schaefer400Parcels7Networks": {
+  "inputs": {
+   "maps/MNI152NLin6Asym": "bae451e796b5e704b1c52741df3d27f066363e67d3e5cd734a70bcc8d9ee76af",
+   "maps/fsaverageOriginal": "ec35a52d1cc578954e087d0277c201166efa32aadfd7f8ea528a20341a35cf58",
+   "parcellation/Schaefer400Parcels7Networks/MNI152NLin6Asym/parc-Schaefer400Parcels7Networks_space-MNI152NLin6Asym.label.nii.gz": "6b2b967e7512edddef4bf5a172884d772c268c76d8a12a2b15753a82e0ece3bb",
+   "parcellation/Schaefer400Parcels7Networks/MNI152NLin6Asym/parc-Schaefer400Parcels7Networks_space-MNI152NLin6Asym.label.txt": "86e26d7c4119e995b58c72ebd8adbcd7f87bb591c2831018d73e5866297d5983",
+   "parcellation/Schaefer400Parcels7Networks/fsaverage/parc-Schaefer400Parcels7Networks_space-fsaverage_hemi-L.label.gii.gz": "3bf7048bd9f3ab63a2c77dfa24ad30c0e051652cd60cca92662b49ada3db7bce",
+   "parcellation/Schaefer400Parcels7Networks/fsaverage/parc-Schaefer400Parcels7Networks_space-fsaverage_hemi-L.label.txt": "a5b3301bbaca55bb450455e3623d6057ecb43b571d4419447f7a66b7f589ee87",
+   "parcellation/Schaefer400Parcels7Networks/fsaverage/parc-Schaefer400Parcels7Networks_space-fsaverage_hemi-R.label.gii.gz": "920e1fb2210e0413cedffb06d5c1b7537e16a04b926183769bdf6d6c70f8e5d5",
+   "parcellation/Schaefer400Parcels7Networks/fsaverage/parc-Schaefer400Parcels7Networks_space-fsaverage_hemi-R.label.txt": "c2b158994f41161487e7ef93573c0bd01b8c5d724f0cef69e04afed1d04acf17"
+  },
+  "key": "08b7e24dd3a70a3ba52512ec6dcdcd71bf63b62d206ca672d6802d5d36d4fe01",
+  "params": {
+   "cortex_only": false,
+   "kwargs": {
+    "background_value": "auto",
+    "min_fraction_valid_datapoints": 0.3,
+    "min_num_valid_datapoints": 5,
+    "report_background_parcels": true
+   },
+   "spaces": [
+    "MNI152NLin6Asym",
+    "fsaverageOriginal"
+   ],
+   "version": 1
+  },
+  "script": "prep3_01_ref_pet.py"
+ },
+ "TianS1": {
+  "inputs": {
+   "maps/MNI152NLin6Asym": "bae451e796b5e704b1c52741df3d27f066363e67d3e5cd734a70bcc8d9ee76af",
+   "parcellation/TianS1/MNI152NLin6Asym/parc-TianS1_space-MNI152NLin6Asym.label.nii.gz": "aa4c98963ed54b3c70e1d725ce40368ae51e20ff05f3a3e2794f821d20557d73",
+   "parcellation/TianS1/MNI152NLin6Asym/parc-TianS1_space-MNI152NLin6Asym.label.txt": "ba7f8983d7c6784a1bc2ac6edcc19be6dc88107a21b179727adcaa68acf6f9ab"
+  },
+  "key": "aa7328632640495021b15a35cd80d151daaacb099fdf40778a5471b1e655697a",
+  "params": {
+   "cortex_only": false,
+   "kwargs": {
+    "background_value": "auto",
+    "min_fraction_valid_datapoints": 0.3,
+    "min_num_valid_datapoints": 5,
+    "report_background_parcels": true
+   },
+   "spaces": [
+    "MNI152NLin6Asym",
+    "fsaverageOriginal"
+   ],
+   "version": 1
+  },
+  "script": "prep3_01_ref_pet.py"
+ },
+ "TianS2": {
+  "inputs": {
+   "maps/MNI152NLin6Asym": "bae451e796b5e704b1c52741df3d27f066363e67d3e5cd734a70bcc8d9ee76af",
+   "parcellation/TianS2/MNI152NLin6Asym/parc-TianS2_space-MNI152NLin6Asym.label.nii.gz": "088461600ae071585782c233314cc597f72affeb55010e09d8f0e06d852015eb",
+   "parcellation/TianS2/MNI152NLin6Asym/parc-TianS2_space-MNI152NLin6Asym.label.txt": "c1a1e73115200d1019ac32bf6ba4a1ce19f96c9f2bdfe969a29d089b99e9d945"
+  },
+  "key": "23e2a35a3a3797f11943c7addaaf646826dcdd93456bf43ff07e8def28937fab",
+  "params": {
+   "cortex_only": false,
+   "kwargs": {
+    "background_value": "auto",
+    "min_fraction_valid_datapoints": 0.3,
+    "min_num_valid_datapoints": 5,
+    "report_background_parcels": true
+   },
+   "spaces": [
+    "MNI152NLin6Asym",
+    "fsaverageOriginal"
+   ],
+   "version": 1
+  },
+  "script": "prep3_01_ref_pet.py"
+ },
+ "TianS3": {
+  "inputs": {
+   "maps/MNI152NLin6Asym": "bae451e796b5e704b1c52741df3d27f066363e67d3e5cd734a70bcc8d9ee76af",
+   "parcellation/TianS3/MNI152NLin6Asym/parc-TianS3_space-MNI152NLin6Asym.label.nii.gz": "66bb5f1b6f6499859f0e2492a74632a68ccc6c3e276c8da1d505ffd24490dab4",
+   "parcellation/TianS3/MNI152NLin6Asym/parc-TianS3_space-MNI152NLin6Asym.label.txt": "34d6a1eadd144a28225a144993bb9b38ae04994713ad9525add84b6a9a292337"
+  },
+  "key": "acc4ca8283b6509445e6eb2c95d33e1216c85ef9bcc84cadde69fa91b83e9a80",
+  "params": {
+   "cortex_only": false,
+   "kwargs": {
+    "background_value": "auto",
+    "min_fraction_valid_datapoints": 0.3,
+    "min_num_valid_datapoints": 5,
+    "report_background_parcels": true
+   },
+   "spaces": [
+    "MNI152NLin6Asym",
+    "fsaverageOriginal"
+   ],
+   "version": 1
+  },
+  "script": "prep3_01_ref_pet.py"
+ },
+ "TianS4": {
+  "inputs": {
+   "maps/MNI152NLin6Asym": "bae451e796b5e704b1c52741df3d27f066363e67d3e5cd734a70bcc8d9ee76af",
+   "parcellation/TianS4/MNI152NLin6Asym/parc-TianS4_space-MNI152NLin6Asym.label.nii.gz": "f51079aa35e05f27e235daf8bb00f59b67d247759bd583e9b5f8e985a5f52723",
+   "parcellation/TianS4/MNI152NLin6Asym/parc-TianS4_space-MNI152NLin6Asym.label.txt": "64feda604ef42b94449853b329894de2681b83d56e36b37d16fff476d7848856"
+  },
+  "key": "c003e6437265277ccde7fea9d045f921c18718cf3c0cacb7f7f73a37e869784b",
+  "params": {
+   "cortex_only": false,
+   "kwargs": {
+    "background_value": "auto",
+    "min_fraction_valid_datapoints": 0.3,
+    "min_num_valid_datapoints": 5,
+    "report_background_parcels": true
+   },
+   "spaces": [
+    "MNI152NLin6Asym",
+    "fsaverageOriginal"
+   ],
+   "version": 1
+  },
+  "script": "prep3_01_ref_pet.py"
+ },
+ "Yan100": {
+  "inputs": {
+   "maps/MNI152NLin6Asym": "bae451e796b5e704b1c52741df3d27f066363e67d3e5cd734a70bcc8d9ee76af",
+   "maps/fsaverageOriginal": "ec35a52d1cc578954e087d0277c201166efa32aadfd7f8ea528a20341a35cf58",
+   "parcellation/Yan100/MNI152NLin6Asym/parc-Yan100_space-MNI152NLin6Asym.label.nii.gz": "73491c7626f35a04b0f01adaee9d74e4048a71b9d486dbff59b70362e3de3ffb",
+   "parcellation/Yan100/MNI152NLin6Asym/parc-Yan100_space-MNI152NLin6Asym.label.txt": "fd2017d6677d979e6ef4e5deb209cfdeb50e5e47c3d45384ae9cc6782ebbf82a",
+   "parcellation/Yan100/fsaverage/parc-Yan100_space-fsaverage_hemi-L.label.gii.gz": "4f5db7c8bb65de49cae79f56c58c668c44915962016b2ac65d41476960372c8c",
+   "parcellation/Yan100/fsaverage/parc-Yan100_space-fsaverage_hemi-L.label.txt": "31d569e07d8ad92263812183ad99a8425652c0045a7536c01e4914de4728bf1d",
+   "parcellation/Yan100/fsaverage/parc-Yan100_space-fsaverage_hemi-R.label.gii.gz": "22ac8f93d3f36bfade0449599d5304b4f05cb52e1752537c1fc130bdf24972b7",
+   "parcellation/Yan100/fsaverage/parc-Yan100_space-fsaverage_hemi-R.label.txt": "8417c2b910d4652a5096da632b36db448e067167573cbcdb1a5635f61ce4e435"
+  },
+  "key": "16c45603a05c996ac3ea7661fff6bdbd0caa61e955a7ab59b1bc5d7fd2bb7208",
+  "params": {
+   "cortex_only": false,
+   "kwargs": {
+    "background_value": "auto",
+    "min_fraction_valid_datapoints": 0.3,
+    "min_num_valid_datapoints": 5,
+    "report_background_parcels": true
+   },
+   "spaces": [
+    "MNI152NLin6Asym",
+    "fsaverageOriginal"
+   ],
+   "version": 1
+  },
+  "script": "prep3_01_ref_pet.py"
+ },
+ "Yan1000": {
+  "inputs": {
+   "maps/MNI152NLin6Asym": "bae451e796b5e704b1c52741df3d27f066363e67d3e5cd734a70bcc8d9ee76af",
+   "maps/fsaverageOriginal": "ec35a52d1cc578954e087d0277c201166efa32aadfd7f8ea528a20341a35cf58",
+   "parcellation/Yan1000/MNI152NLin6Asym/parc-Yan1000_space-MNI152NLin6Asym.label.nii.gz": "93d059e6f7bc5e1eed7b85d317d14675e5f2b1a98ef6aa7eb8da3fbd8c26f426",
+   "parcellation/Yan1000/MNI152NLin6Asym/parc-Yan1000_space-MNI152NLin6Asym.label.txt": "261b344fa61ece01039314604ed89dc46e2c52089b464d1c2dccc9ad1afb5835",
+   "parcellation/Yan1000/fsaverage/parc-Yan1000_space-fsaverage_hemi-L.label.gii.gz": "837321e2ea75092db84b71cbf1399ce838a4db198f40ac7d5c1e9990320bb562",
+   "parcellation/Yan1000/fsaverage/parc-Yan1000_space-fsaverage_hemi-L.label.txt": "86ea9439276262b0331a4bd9120f87c6ba1afea9b33f909432139af5402bd8ad",
+   "parcellation/Yan1000/fsaverage/parc-Yan1000_space-fsaverage_hemi-R.label.gii.gz": "681b97937a02b5de7852adcb22f78caced02d437d8e3e15fc801fbff46c20d19",
+   "parcellation/Yan1000/fsaverage/parc-Yan1000_space-fsaverage_hemi-R.label.txt": "9d59af14f61b753683180fbd93d1829f72a8c4a962efd9d71aabe8f717f463d8"
+  },
+  "key": "96be7e54824f308799bd7395556e79c1afd7bff9f9c292e5c78e9009c589cdb6",
+  "params": {
+   "cortex_only": false,
+   "kwargs": {
+    "background_value": "auto",
+    "min_fraction_valid_datapoints": 0.3,
+    "min_num_valid_datapoints": 5,
+    "report_background_parcels": true
+   },
+   "spaces": [
+    "MNI152NLin6Asym",
+    "fsaverageOriginal"
+   ],
+   "version": 1
+  },
+  "script": "prep3_01_ref_pet.py"
+ },
+ "Yan200": {
+  "inputs": {
+   "maps/MNI152NLin6Asym": "bae451e796b5e704b1c52741df3d27f066363e67d3e5cd734a70bcc8d9ee76af",
+   "maps/fsaverageOriginal": "ec35a52d1cc578954e087d0277c201166efa32aadfd7f8ea528a20341a35cf58",
+   "parcellation/Yan200/MNI152NLin6Asym/parc-Yan200_space-MNI152NLin6Asym.label.nii.gz": "289b29d17a0e5a1f62b2f39cfaab874624bed74ae7b1cdebc6a70e341e901b97",
+   "parcellation/Yan200/MNI152NLin6Asym/parc-Yan200_space-MNI152NLin6Asym.label.txt": "4301c40baa63334ad1b6badf73170ce7e0b1d0c4f4687a22a5a68852d5abf3f0",
+   "parcellation/Yan200/fsaverage/parc-Yan200_space-fsaverage_hemi-L.label.gii.gz": "727bf6efd1060ef38cffde0ddd0131fe3aac73c3d75c85bb62a66ee95587029a",
+   "parcellation/Yan200/fsaverage/parc-Yan200_space-fsaverage_hemi-L.label.txt": "bff6c40967abdbc3b1ee8072181b260c39d173fd797658488e8ee713c59cb54a",
+   "parcellation/Yan200/fsaverage/parc-Yan200_space-fsaverage_hemi-R.label.gii.gz": "023f4b93c98144523a7e2b9c22ad0ee14faa326ad7811d6d37304e3a0aa620cc",
+   "parcellation/Yan200/fsaverage/parc-Yan200_space-fsaverage_hemi-R.label.txt": "366f48c320a84ec411640da06ff2e0f569e0dcab5644b6842b732d19329fae59"
+  },
+  "key": "63614b5c6c015dcde97e0de0377f8a7076415292edabcea51f955a06111f82ff",
+  "params": {
+   "cortex_only": false,
+   "kwargs": {
+    "background_value": "auto",
+    "min_fraction_valid_datapoints": 0.3,
+    "min_num_valid_datapoints": 5,
+    "report_background_parcels": true
+   },
+   "spaces": [
+    "MNI152NLin6Asym",
+    "fsaverageOriginal"
+   ],
+   "version": 1
+  },
+  "script": "prep3_01_ref_pet.py"
+ },
+ "Yan400": {
+  "inputs": {
+   "maps/MNI152NLin6Asym": "bae451e796b5e704b1c52741df3d27f066363e67d3e5cd734a70bcc8d9ee76af",
+   "maps/fsaverageOriginal": "ec35a52d1cc578954e087d0277c201166efa32aadfd7f8ea528a20341a35cf58",
+   "parcellation/Yan400/MNI152NLin6Asym/parc-Yan400_space-MNI152NLin6Asym.label.nii.gz": "586ba98465effaa2f3887a7849a587b78e6744528b76b019e57fec983bf9abd5",
+   "parcellation/Yan400/MNI152NLin6Asym/parc-Yan400_space-MNI152NLin6Asym.label.txt": "ba79d60de9a91a204f99bd1a7c176a02f94352069d90415c2e0d025b3f48bcfe",
+   "parcellation/Yan400/fsaverage/parc-Yan400_space-fsaverage_hemi-L.label.gii.gz": "6e44c8babd55df5badfd35995dc3e7c179dbefae629c676ade174006a2b63adc",
+   "parcellation/Yan400/fsaverage/parc-Yan400_space-fsaverage_hemi-L.label.txt": "eab60feff1d88e4126fe0809c8473e4161309b81379f591073e5be3989de4f0f",
+   "parcellation/Yan400/fsaverage/parc-Yan400_space-fsaverage_hemi-R.label.gii.gz": "7e6546cac3997933a25efc012cd95cd335c128499432ed81eb6803068822bce8",
+   "parcellation/Yan400/fsaverage/parc-Yan400_space-fsaverage_hemi-R.label.txt": "73dfc4e1f519cc09bf767a4b01458fa57450e0330c2ea8a000373b6fbf12cdf8"
+  },
+  "key": "3c9f7b357cf87e5831e6a4fb5d684958498bcb8926c139c0ca07c23dd797d5a6",
+  "params": {
+   "cortex_only": false,
+   "kwargs": {
+    "background_value": "auto",
+    "min_fraction_valid_datapoints": 0.3,
+    "min_num_valid_datapoints": 5,
+    "report_background_parcels": true
+   },
+   "spaces": [
+    "MNI152NLin6Asym",
+    "fsaverageOriginal"
+   ],
+   "version": 1
+  },
+  "script": "prep3_01_ref_pet.py"
+ }
+}

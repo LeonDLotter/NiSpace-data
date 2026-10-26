@@ -14,7 +14,7 @@ print(f"Working dir: {wd}")
 # import NiSpace functions
 from nispace.datasets import fetch_reference, reference_lib
 from nispace.io import load_img
-from nispace.transforms import mni_to_mni
+from nispace.transform import mni_to_mni
 from nispace.utils.utils_datasets import download
 
 # nispace data path 
@@ -63,30 +63,39 @@ for m in reference_lib["tpm"]["map"]:
     print("Processing map:", m)
 
     # get original map — SPM-derived maps exist locally; arteries/veins are fetched from remote
+    # source spaces:
+    # - SPM12 tpm/TPM.nii: SPM-TPM space (= CAT12IXI555, the SPM12 TPM frame)
+    # - veins (Huck 2019): FSL FLIRT to the MNI152 0.5 mm template; arteries (Mouches 2019): 0.5 mm MNI atlas;
+    #   both on the FSL MNI152 0.5 mm grid -> MNI152NLin6Asym
     if any(t in m for t in ["gm", "wm", "csf"]):
         fp = [nispace_source_data_path / "reference" / "tpm" / "map" / m / f"{m}_space-MNIOriginal.nii.gz"]
+        src_space = "CAT12IXI555"
     else:
         fp = fetch_reference("tpm", maps=m, space="MNIOriginal", verbose=False, check_file_hash=False)
-    print(fp)
-    
+        src_space = "MNI152NLin6Asym"
+    print(fp, src_space)
+    map_orig = load_img(fp)
+    # maps might be scaled from 0 or 1 to 100, we want them to be scaled from 0 to 1
+    if map_orig.get_fdata().max() > 50:
+        map_orig = image.math_img("img / 100", img=map_orig)
+
     # ----------------------------------------------------------------------------------------------
     # space: MNI152NLin6Asym
     # ----------------------------------------------------------------------------------------------
-    # maps are already in MNI152NLin6Asym-like spaces, so we start with that
-    map_MNI152NLin6Asym = load_img(fp)
-    # resample to target space
+    if src_space != "MNI152NLin6Asym":
+        map_MNI152NLin6Asym = mni_to_mni(map_orig, mni_from=src_space, mni_to="MNI152NLin6Asym", order=3, res=2)
+    else:
+        map_MNI152NLin6Asym = map_orig
+    # resample to target space (identity for transformed maps; ensures template header)
     map_MNI152NLin6Asym = image.resample_to_img(
-        source_img=map_MNI152NLin6Asym, 
-        target_img=template_MNI152NLin6Asym, 
+        source_img=map_MNI152NLin6Asym,
+        target_img=template_MNI152NLin6Asym,
         interpolation="continuous",
         force_resample=True,
         copy_header=True
     )
     # fix data type
     map_MNI152NLin6Asym = image.math_img("img.astype(np.float32)", img=map_MNI152NLin6Asym)
-    # maps might be scaled from 0 or 1 to 100, we want them to be scaled from 0 to 1
-    if map_MNI152NLin6Asym.get_fdata().max() > 50:
-        map_MNI152NLin6Asym = image.math_img("img / 100", img=map_MNI152NLin6Asym)
     # mask and ensure that the smallest value within mask is > 0
     map_MNI152NLin6Asym_masked = mask_and_rescale(map_MNI152NLin6Asym, template_MNI152NLin6Asym)
     # check and save
@@ -100,9 +109,15 @@ for m in reference_lib["tpm"]["map"]:
     # space: MNI152NLin2009cAsym
     # ----------------------------------------------------------------------------------------------
     print("Attempting MNI152NLin2009cAsym transform...")
-    map_MNI152NLin2009cAsym = mni_to_mni(
-        map_MNI152NLin6Asym, mni_from="MNI152NLin6Asym", mni_to="MNI152NLin2009cAsym", order=3
-    )
+    if src_space != "MNI152NLin6Asym":
+        # directly from the source space (one interpolation)
+        map_MNI152NLin2009cAsym = mni_to_mni(
+            map_orig, mni_from=src_space, mni_to="MNI152NLin2009cAsym", order=3, res=2
+        )
+    else:
+        map_MNI152NLin2009cAsym = mni_to_mni(
+            map_MNI152NLin6Asym, mni_from="MNI152NLin6Asym", mni_to="MNI152NLin2009cAsym", order=3
+        )
     # mask and ensure that the smallest value within mask is > 0
     map_MNI152NLin2009cAsym_masked = mask_and_rescale(map_MNI152NLin2009cAsym, template_MNI152NLin2009cAsym)
     # save

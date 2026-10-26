@@ -2,9 +2,14 @@
 Run a named workflow: executes a sequence of prep scripts in order.
 
 Usage:
-    python src/workflows.py <workflow_name> [script_to_exclude ...] [--from <script>]
+    python src/workflows.py <workflow_name> [script_to_exclude ...] [--from <script>] [--force[=<scopes>]]
 
     --from <script>   start at this step (name with or without .py, or a unique prefix, e.g. prep3_12)
+    --force           recompute all parcellated tables and distance/spin matrices, even if their
+                      inputs are unchanged (see "input stamps" in src/utils.py)
+    --force=<scopes>  only for these comma-separated scopes: dataset names, distmat, spinmat
+                      (e.g. --force=mrna,grf). Without --force, only outputs whose inputs changed
+                      are recomputed.
 
 All output (incl. that of the scripts) is also written to logs/<YYYYmmdd>_<HHMMSS>_<workflow>.log
 (never overwritten; logs/ is gitignored). The log header records the nispace-data and nispace commits.
@@ -158,13 +163,15 @@ def _open_log(name: str):
     return path, open(path, "w")
 
 
-def _run_logged(cmd, log) -> int:
+def _run_logged(cmd, log, force=None) -> int:
     """Run a command, streaming its output (stdout + stderr) to the terminal and the log.
 
     The terminal gets the raw stream (progress bars work); the log only gets the final state of
     each carriage-return-updated line, so tqdm bars don't bloat it.
     """
     env = {**os.environ, "PYTHONUNBUFFERED": "1"}
+    if force:
+        env["NISPACE_FORCE"] = force
     proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, env=env)
     pending = b""
     while chunk := proc.stdout.read1(65536):
@@ -193,7 +200,7 @@ def _resolve_from(entries, start: str) -> int:
     sys.exit(1)
 
 
-def run_workflow(name: str, exclude: list[str] = [], start: str = None) -> None:
+def run_workflow(name: str, exclude: list[str] = [], start: str = None, force: str = None) -> None:
     entries = WORKFLOWS.get(name)
     if entries is None:
         print(f"Unknown workflow '{name}'. Available: {', '.join(WORKFLOWS)}")
@@ -222,6 +229,8 @@ def run_workflow(name: str, exclude: list[str] = [], start: str = None) -> None:
         out(f"from:         {_script(entries[0]) if entries else start}")
     if exclude:
         out(f"excluding:    {', '.join(exclude)}")
+    if force:
+        out(f"force:        {force}")
     out(f"log:          {log_path}")
     out()
 
@@ -230,7 +239,7 @@ def run_workflow(name: str, exclude: list[str] = [], start: str = None) -> None:
         script, *args = (entry,) if isinstance(entry, str) else entry
         out(f"[{i}/{len(entries)}] {' '.join([script, *args])}  ({datetime.now():%H:%M:%S})")
         t = time.time()
-        returncode = _run_logged([sys.executable, str(SRC / script), *args], log)
+        returncode = _run_logged([sys.executable, str(SRC / script), *args], log, force=force)
         if returncode != 0:
             out(f"\nFailed at {script} (exit {returncode}) after {_fmt(time.time() - t)}. Stopping.")
             log.close()
@@ -255,5 +264,11 @@ if __name__ == "__main__":
     if len(sys.argv) < 2:
         print(__doc__)
         sys.exit(1)
+    # --force / --force=<scopes> parsed by hand: an optional argparse value would swallow a
+    # following script name (e.g. "--force prep1_0_parc.py")
+    force = None
+    for arg in [a for a in sys.argv[1:] if a == "--force" or a.startswith("--force=")]:
+        force = "all" if arg == "--force" else arg.split("=", 1)[1]
+        sys.argv.remove(arg)
     a = parser.parse_intermixed_args()
-    run_workflow(a.workflow, exclude=a.exclude, start=a.start)
+    run_workflow(a.workflow, exclude=a.exclude, start=a.start, force=force)

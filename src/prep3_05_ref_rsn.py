@@ -9,7 +9,7 @@ from neuromaps import transforms
 wd = Path(__file__).parent.parent
 print(f"Working dir: {wd}")
 
-from nispace.transforms import mni_to_mni
+from nispace.transform import mni_to_mni
 from nispace.utils.utils_datasets import download
 
 nispace_source_data_path = wd
@@ -18,6 +18,17 @@ nispace_source_data_path = wd
 # %% Download RSN maps from Dworetsky et al. 2021
 # source: https://github.com/GrattonLab/Dworetsky_etal_ConsensusNetworks
 # paper: https://doi.org/10.1016/j.neuroimage.2021.118164
+# NOTE source space: the maps are in WashU 711-2B (Talairach-conforming) atlas space, 3 mm ("t88_333"; the zip contains
+# the 711-2B_333.nii template), NOT MNI. The repo has no MNI versions and NiSpace has no 711-2B transform, so the maps are
+# treated as MNI152NLin6Asym (resampling only).
+# Tested 2026-10-24: the Lancaster et al. 2007 Talairach->MNI affine (NiMARE tal2mni / tal2icbm_other) makes the fit much
+# worse (map mass outside the MNI152NLin6Asym brain 3-9 % -> 13-32 %): 711-2B is close to MNI size, not true T88 size.
+# Treating the maps as MNI305 / MNI152Lin / MNIColin27 / SPM-TPM and warping them to MNI152NLin6Asym (EasyReg) is not
+# clearly better either. Mean over the 14 maps of the map mass outside the MNI152NLin6Asym brain mask (inside the cortex
+# mask): as-is 6.3 % (65.0 %), MNI305 9.8 % (63.0 %), MNI152Lin 7.6 % (64.4 %), MNIColin27 5.1 % (65.5 %), SPM-TPM 7.6 %
+# (64.2 %). MNIColin27 is only marginally better and there is no reason to assume it for 711-2B data.
+# -> 711-2B behaves like an MNI152-sized space; the maps are kept as MNI152NLin6Asym without a transformation.
+# A proper fix would add 711-2B as an EasyReg space on GIN (llotter/mni_freesurfer).
 
 url = "https://raw.githubusercontent.com/GrattonLab/Dworetsky_etal_ConsensusNetworks/4521ead/Probabilistic_Network_Maps_t88_333.zip"
 archive_dir = nispace_source_data_path / "_archive" / "rsn"
@@ -49,7 +60,7 @@ for nii_fp in sorted(archive_dir.rglob("*.nii")):
         img = image.index_img(img, 0)
     nib.save(img, map_dir / f"{map_id}_space-MNIOriginal.nii.gz")
 
-    # space: MNI152NLin6Asym — resample to 2mm (maps are already in this space)
+    # space: MNI152NLin6Asym — resample to 2mm (maps are in 711-2B space, treated as MNI152NLin6Asym; see note above)
     # also apply mask and scale to [0, 1]
     map_MNI6 = image.resample_to_img(img, mask_MNI6, interpolation="continuous",
                                      force_resample=True, copy_header=True)

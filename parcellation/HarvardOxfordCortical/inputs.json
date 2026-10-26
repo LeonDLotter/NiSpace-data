@@ -1,0 +1,92 @@
+{
+ "MNI152NLin2009cAsym/dist": {
+  "inputs": {
+   "parcellation/HarvardOxfordCortical/MNI152NLin2009cAsym/parc-HarvardOxfordCortical_space-MNI152NLin2009cAsym.label.nii.gz": "27299dd98209695fd87c9a58923e028035c628f3884cefaa0adc70371917edf0"
+  },
+  "key": "f8e5e6fa1c485c90be5cbb258a5812c67728e2f28c436155191faf30bcf59f76",
+  "params": {
+   "centroids": false,
+   "dtype": "float32",
+   "resample": 2,
+   "surf_euclidean": false,
+   "version": 1
+  },
+  "script": "prep1_1_parc_distmat.py"
+ },
+ "MNI152NLin6Asym/dist": {
+  "inputs": {
+   "parcellation/HarvardOxfordCortical/MNI152NLin6Asym/parc-HarvardOxfordCortical_space-MNI152NLin6Asym.label.nii.gz": "ebcb126c4d0aaf58cf33b588d376df3435836587cf5fc14005502aa33f062be2"
+  },
+  "key": "cdb0fe7101e1c9f63d51bebf92c0b7bf9f0653cf9b2a1ad47054e6605298e318",
+  "params": {
+   "centroids": false,
+   "dtype": "float32",
+   "resample": 2,
+   "surf_euclidean": false,
+   "version": 1
+  },
+  "script": "prep1_1_parc_distmat.py"
+ },
+ "fsLR/dist": {
+  "inputs": {
+   "parcellation/HarvardOxfordCortical/fsLR/parc-HarvardOxfordCortical_space-fsLR_hemi-L.label.gii.gz": "1ef2f8c1d11f7585d439a3b4536c09f55ec5639a7e2396204ba9da7204fd83a2",
+   "parcellation/HarvardOxfordCortical/fsLR/parc-HarvardOxfordCortical_space-fsLR_hemi-R.label.gii.gz": "86d755877c8bfb1c855dd1c5dbd137c561a7003052ed3ead31a113b390d6d85d"
+  },
+  "key": "8e8448c178d93d29818607b4d448e2b3f46bcbd9951b3c162b6a11cc53efbf4e",
+  "params": {
+   "centroids": false,
+   "dtype": "float32",
+   "resample": "32k",
+   "surf_euclidean": false,
+   "version": 1
+  },
+  "script": "prep1_1_parc_distmat.py"
+ },
+ "fsLR/spin": {
+  "inputs": {
+   "parcellation/HarvardOxfordCortical/fsLR/parc-HarvardOxfordCortical_space-fsLR_hemi-L.label.gii.gz": "1ef2f8c1d11f7585d439a3b4536c09f55ec5639a7e2396204ba9da7204fd83a2",
+   "parcellation/HarvardOxfordCortical/fsLR/parc-HarvardOxfordCortical_space-fsLR_hemi-R.label.gii.gz": "86d755877c8bfb1c855dd1c5dbd137c561a7003052ed3ead31a113b390d6d85d"
+  },
+  "key": "91b8bdd74279d25e92004b174fbe996c1073f43be79f1600f8f0e22335a8380f",
+  "params": {
+   "batch_size": 100,
+   "dtype": "float16",
+   "n_perm": 10000,
+   "normalize": true,
+   "seed": 42,
+   "version": 1
+  },
+  "script": "prep1_2_parc_spinmat.py"
+ },
+ "fsaverage/dist": {
+  "inputs": {
+   "parcellation/HarvardOxfordCortical/fsaverage/parc-HarvardOxfordCortical_space-fsaverage_hemi-L.label.gii.gz": "88fe9933fadec0083001bf4c408f5d23b24e0ffbcac6812316bfab5f5a8dfe9b",
+   "parcellation/HarvardOxfordCortical/fsaverage/parc-HarvardOxfordCortical_space-fsaverage_hemi-R.label.gii.gz": "193baeba24effc65b550e5eca6fc679ce61e72dd62c163c8c89f5503fdc547fe"
+  },
+  "key": "33e21704817a74751b96e961ac60b36c761de9983d259abff6ecf9fcb235f08c",
+  "params": {
+   "centroids": false,
+   "dtype": "float32",
+   "resample": "41k",
+   "surf_euclidean": false,
+   "version": 1
+  },
+  "script": "prep1_1_parc_distmat.py"
+ },
+ "fsaverage/spin": {
+  "inputs": {
+   "parcellation/HarvardOxfordCortical/fsaverage/parc-HarvardOxfordCortical_space-fsaverage_hemi-L.label.gii.gz": "88fe9933fadec0083001bf4c408f5d23b24e0ffbcac6812316bfab5f5a8dfe9b",
+   "parcellation/HarvardOxfordCortical/fsaverage/parc-HarvardOxfordCortical_space-fsaverage_hemi-R.label.gii.gz": "193baeba24effc65b550e5eca6fc679ce61e72dd62c163c8c89f5503fdc547fe"
+  },
+  "key": "98de99608806f292dc91138c9f82f73a9c5b1dce49dacf8708d97656c58cff26",
+  "params": {
+   "batch_size": 100,
+   "dtype": "float16",
+   "n_perm": 10000,
+   "normalize": true,
+   "seed": 42,
+   "version": 1
+  },
+  "script": "prep1_2_parc_spinmat.py"
+ }
+}

@@ -1,0 +1,92 @@
+{
+ "MNI152NLin2009cAsym/dist": {
+  "inputs": {
+   "parcellation/Schaefer1000Parcels7Networks/MNI152NLin2009cAsym/parc-Schaefer1000Parcels7Networks_space-MNI152NLin2009cAsym.label.nii.gz": "564a2595751d2c311b0b995a5c82e49a6fd8db102c2ddb03e3efdac688dd51fc"
+  },
+  "key": "69da33c6f4a4f382022149073ea8daf3f2d9161cc5c1c5dc15d92d726b375de7",
+  "params": {
+   "centroids": false,
+   "dtype": "float32",
+   "resample": 2,
+   "surf_euclidean": false,
+   "version": 1
+  },
+  "script": "prep1_1_parc_distmat.py"
+ },
+ "MNI152NLin6Asym/dist": {
+  "inputs": {
+   "parcellation/Schaefer1000Parcels7Networks/MNI152NLin6Asym/parc-Schaefer1000Parcels7Networks_space-MNI152NLin6Asym.label.nii.gz": "90f400612a9c1ede09cdeb361411f65ad04493943c4cb567ac0c3ba30316e7b1"
+  },
+  "key": "9f1543c2d476676c237f6301bfe304b39da5987655ef07df35973f59530c14b2",
+  "params": {
+   "centroids": false,
+   "dtype": "float32",
+   "resample": 2,
+   "surf_euclidean": false,
+   "version": 1
+  },
+  "script": "prep1_1_parc_distmat.py"
+ },
+ "fsLR/dist": {
+  "inputs": {
+   "parcellation/Schaefer1000Parcels7Networks/fsLR/parc-Schaefer1000Parcels7Networks_space-fsLR_hemi-L.label.gii.gz": "1f42b9b899dfd1c01b7f7f7529ab4061e7362407da0f018d9aaf87d9111ef497",
+   "parcellation/Schaefer1000Parcels7Networks/fsLR/parc-Schaefer1000Parcels7Networks_space-fsLR_hemi-R.label.gii.gz": "4bff34fb7d3ba8c7ae811c460d4d30b7ab13e4f792e3002f367c4626a9a12c6f"
+  },
+  "key": "d090a89b18b0b3fb4931b373721cfc67c3284f2dffec2886a5e6b94412e8437c",
+  "params": {
+   "centroids": false,
+   "dtype": "float32",
+   "resample": "32k",
+   "surf_euclidean": false,
+   "version": 1
+  },
+  "script": "prep1_1_parc_distmat.py"
+ },
+ "fsLR/spin": {
+  "inputs": {
+   "parcellation/Schaefer1000Parcels7Networks/fsLR/parc-Schaefer1000Parcels7Networks_space-fsLR_hemi-L.label.gii.gz": "1f42b9b899dfd1c01b7f7f7529ab4061e7362407da0f018d9aaf87d9111ef497",
+   "parcellation/Schaefer1000Parcels7Networks/fsLR/parc-Schaefer1000Parcels7Networks_space-fsLR_hemi-R.label.gii.gz": "4bff34fb7d3ba8c7ae811c460d4d30b7ab13e4f792e3002f367c4626a9a12c6f"
+  },
+  "key": "1c6654f7a1ee6597de37c54a543f4f359be13846f1c362e5a4f48fc40121cd66",
+  "params": {
+   "batch_size": 100,
+   "dtype": "float16",
+   "n_perm": 10000,
+   "normalize": true,
+   "seed": 42,
+   "version": 1
+  },
+  "script": "prep1_2_parc_spinmat.py"
+ },
+ "fsaverage/dist": {
+  "inputs": {
+   "parcellation/Schaefer1000Parcels7Networks/fsaverage/parc-Schaefer1000Parcels7Networks_space-fsaverage_hemi-L.label.gii.gz": "9b84600287221fe33fd589cec1f3524ef77bb91a56e1e05499ce2e4187e7f93c",
+   "parcellation/Schaefer1000Parcels7Networks/fsaverage/parc-Schaefer1000Parcels7Networks_space-fsaverage_hemi-R.label.gii.gz": "b57b8178c8f1cbfe828f7b471cdb3e859c960bf7726bce69f9094aaaa35d6acf"
+  },
+  "key": "2068891921950d5197d5db97de252dbe3acd6f520993735f35ff02d6b3a157d7",
+  "params": {
+   "centroids": false,
+   "dtype": "float32",
+   "resample": "41k",
+   "surf_euclidean": false,
+   "version": 1
+  },
+  "script": "prep1_1_parc_distmat.py"
+ },
+ "fsaverage/spin": {
+  "inputs": {
+   "parcellation/Schaefer1000Parcels7Networks/fsaverage/parc-Schaefer1000Parcels7Networks_space-fsaverage_hemi-L.label.gii.gz": "9b84600287221fe33fd589cec1f3524ef77bb91a56e1e05499ce2e4187e7f93c",
+   "parcellation/Schaefer1000Parcels7Networks/fsaverage/parc-Schaefer1000Parcels7Networks_space-fsaverage_hemi-R.label.gii.gz": "b57b8178c8f1cbfe828f7b471cdb3e859c960bf7726bce69f9094aaaa35d6acf"
+  },
+  "key": "0083bd181f323d27828f00d13c9a333ebab56624bc3c491b4b174dda2e6d957e",
+  "params": {
+   "batch_size": 100,
+   "dtype": "float16",
+   "n_perm": 10000,
+   "normalize": true,
+   "seed": 42,
+   "version": 1
+  },
+  "script": "prep1_2_parc_spinmat.py"
+ }
+}

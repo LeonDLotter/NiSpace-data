@@ -3,7 +3,6 @@
 from pathlib import Path
 import numpy as np
 import pandas as pd
-from neuromaps import transforms
 import nibabel as nib
 
 wd = Path(__file__).parent.parent
@@ -12,7 +11,8 @@ print(f"Working dir: {wd}")
 # import NiSpace functions
 from nispace.datasets import fetch_reference, reference_lib
 from nispace.io import load_img
-from nispace.stats.misc import residuals 
+from nispace.stats.misc import residuals
+from nispace.transform import surf_to_surf
 
 # nispace data path 
 nispace_source_data_path = wd
@@ -81,11 +81,7 @@ for m, fn in HCP_MAPS.items():
     (map_fslr,) = [v["surface"] for v in split_cifti(hcp_dir / fn).values()]
 
     # fsLR -> fsaverage 41k
-    map_fsa = transforms.fslr_to_fsaverage(
-        data=map_fslr,
-        target_density="41k",
-        method="linear",
-    )
+    map_fsa = surf_to_surf(map_fslr, "fsLR", "fsaverage", den_to="41k", method="linear")
 
     # save
     save_dir = nispace_source_data_path / "reference" / "cortexfeatures" / "map" / m
@@ -103,15 +99,11 @@ for m in reference_lib["cortexfeatures"]["map"]:
         continue
     print("Processing map:", m)
 
-    # get transforms
+    # source space (nispace transforms with hash-managed templates, not ~/neuromaps-data)
     if "fsaverageOriginal" in reference_lib["cortexfeatures"]["map"][m]:
         source_space = "fsaverageOriginal"
-        transform_to_fslr = transforms.fsaverage_to_fslr
-        transform_to_fsaverage = transforms.fsaverage_to_fsaverage
     elif "fsLROriginal" in reference_lib["cortexfeatures"]["map"][m]:
         source_space = "fsLROriginal"
-        transform_to_fslr = transforms.fslr_to_fslr
-        transform_to_fsaverage = transforms.fslr_to_fsaverage
     else:
         raise ValueError(f"Neither fsaverageOriginal nor fsLROriginal found for map {m}")
     
@@ -126,23 +118,24 @@ for m in reference_lib["cortexfeatures"]["map"]:
         raise ValueError(f"More than two files found for {m} in fsLR: {fp}")
     
     # transform to fsLR and fsaverage
-    for target_space, transform_to_target, target_density in [
-        ("fsLR", transform_to_fslr, "32k"), 
-        ("fsaverage", transform_to_fsaverage, "41k")
-    ]:
+    for target_space, target_density in [("fsLR", "32k"), ("fsaverage", "41k")]:
         print(f"Transforming {m} to {target_space}...")
-        
+
         # hemispheres
         hemi = ["L", "R"] if len(fp) == 2 else [fp[0].name.split("hemi-")[1].split(".")[0]]
-        
+
         # transform
-        map_target = transform_to_target(
-            data=load_img(fp),
-            target_density=target_density,
+        map_target = surf_to_surf(
+            tuple(fp) if len(fp) == 2 else fp[0],
+            source_space.replace("Original", ""),
+            target_space,
+            den_to=target_density,
             method="linear",
-            hemi=hemi
+            hemi=hemi,
         )
-        
+        if len(hemi) == 1:
+            map_target = (map_target,)
+
         # save
         save_dir = nispace_source_data_path / "reference" / "cortexfeatures"/ "map" / m
         save_dir.mkdir(parents=True, exist_ok=True)

@@ -1,0 +1,92 @@
+{
+ "MNI152NLin2009cAsym/dist": {
+  "inputs": {
+   "parcellation/Destrieux/MNI152NLin2009cAsym/parc-Destrieux_space-MNI152NLin2009cAsym.label.nii.gz": "f507969ea9c2b23f797f7056bd02db1b6488c2a4bb4fde27e8bfc0d8b6700cea"
+  },
+  "key": "689aeaa07504957fd1362e5f7c7b873dc055e64afb2be87b29aa5a6847c25344",
+  "params": {
+   "centroids": false,
+   "dtype": "float32",
+   "resample": 2,
+   "surf_euclidean": false,
+   "version": 1
+  },
+  "script": "prep1_1_parc_distmat.py"
+ },
+ "MNI152NLin6Asym/dist": {
+  "inputs": {
+   "parcellation/Destrieux/MNI152NLin6Asym/parc-Destrieux_space-MNI152NLin6Asym.label.nii.gz": "8dec262679fd740138cec14dc6f94172c0e953b14429cd5ed80b94351b1896b2"
+  },
+  "key": "f8c00e4593fa74cf2e6b2527ecb20e27daaebc688e0ea6b8d6ab6d320da267c1",
+  "params": {
+   "centroids": false,
+   "dtype": "float32",
+   "resample": 2,
+   "surf_euclidean": false,
+   "version": 1
+  },
+  "script": "prep1_1_parc_distmat.py"
+ },
+ "fsLR/dist": {
+  "inputs": {
+   "parcellation/Destrieux/fsLR/parc-Destrieux_space-fsLR_hemi-L.label.gii.gz": "161d8ea0d0835763cde69ea8c8ab143c1f89f6dfa6b91c468dab23d2925ae59b",
+   "parcellation/Destrieux/fsLR/parc-Destrieux_space-fsLR_hemi-R.label.gii.gz": "6a937cd01514b438fe66585ec32f0ac36e341b1fb3a7dedf7749614e202446c1"
+  },
+  "key": "c8a8d8b2908dfc806b5ae69b55c3417d107e3e3f2912279cb35e2a4ce2eaaf26",
+  "params": {
+   "centroids": false,
+   "dtype": "float32",
+   "resample": "32k",
+   "surf_euclidean": false,
+   "version": 1
+  },
+  "script": "prep1_1_parc_distmat.py"
+ },
+ "fsLR/spin": {
+  "inputs": {
+   "parcellation/Destrieux/fsLR/parc-Destrieux_space-fsLR_hemi-L.label.gii.gz": "161d8ea0d0835763cde69ea8c8ab143c1f89f6dfa6b91c468dab23d2925ae59b",
+   "parcellation/Destrieux/fsLR/parc-Destrieux_space-fsLR_hemi-R.label.gii.gz": "6a937cd01514b438fe66585ec32f0ac36e341b1fb3a7dedf7749614e202446c1"
+  },
+  "key": "7a688b352cced83277c2bc3662a7a4ea01d9e9e2c7097a67fd08542af4706165",
+  "params": {
+   "batch_size": 100,
+   "dtype": "float16",
+   "n_perm": 10000,
+   "normalize": true,
+   "seed": 42,
+   "version": 1
+  },
+  "script": "prep1_2_parc_spinmat.py"
+ },
+ "fsaverage/dist": {
+  "inputs": {
+   "parcellation/Destrieux/fsaverage/parc-Destrieux_space-fsaverage_hemi-L.label.gii.gz": "44b97d1c8dbea54e8e2c3323a2284c266ebf960f3b27b139c348d9a94b6dd01a",
+   "parcellation/Destrieux/fsaverage/parc-Destrieux_space-fsaverage_hemi-R.label.gii.gz": "3eeca35a198dc77960d273c2d4b5a8dbc14fbf3d813805e18fa846878797b3cc"
+  },
+  "key": "37acf180d7418d9a241fbcb5e2eb2326dbf332eb99559828dcf5f3051358ada9",
+  "params": {
+   "centroids": false,
+   "dtype": "float32",
+   "resample": "41k",
+   "surf_euclidean": false,
+   "version": 1
+  },
+  "script": "prep1_1_parc_distmat.py"
+ },
+ "fsaverage/spin": {
+  "inputs": {
+   "parcellation/Destrieux/fsaverage/parc-Destrieux_space-fsaverage_hemi-L.label.gii.gz": "44b97d1c8dbea54e8e2c3323a2284c266ebf960f3b27b139c348d9a94b6dd01a",
+   "parcellation/Destrieux/fsaverage/parc-Destrieux_space-fsaverage_hemi-R.label.gii.gz": "3eeca35a198dc77960d273c2d4b5a8dbc14fbf3d813805e18fa846878797b3cc"
+  },
+  "key": "ec9e350440884ad94192ea29bf709b73d2964d2ebd42591b335b84ffe3b1af12",
+  "params": {
+   "batch_size": 100,
+   "dtype": "float16",
+   "n_perm": 10000,
+   "normalize": true,
+   "seed": 42,
+   "version": 1
+  },
+  "script": "prep1_2_parc_spinmat.py"
+ }
+}

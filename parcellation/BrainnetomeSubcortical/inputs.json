@@ -1,0 +1,30 @@
+{
+ "MNI152NLin2009cAsym/dist": {
+  "inputs": {
+   "parcellation/BrainnetomeSubcortical/MNI152NLin2009cAsym/parc-BrainnetomeSubcortical_space-MNI152NLin2009cAsym.label.nii.gz": "d558223c12591c9fd22b2ecf392508ea72e0ebc88dfc49f3d18186831853231c"
+  },
+  "key": "3c3d1e8694222ce91a2ed7e7dfefc943b13e98dde39cf96f17edc3cea31925e3",
+  "params": {
+   "centroids": false,
+   "dtype": "float32",
+   "resample": 2,
+   "surf_euclidean": false,
+   "version": 1
+  },
+  "script": "prep1_1_parc_distmat.py"
+ },
+ "MNI152NLin6Asym/dist": {
+  "inputs": {
+   "parcellation/BrainnetomeSubcortical/MNI152NLin6Asym/parc-BrainnetomeSubcortical_space-MNI152NLin6Asym.label.nii.gz": "2b3ed8af1abf1cb728763dab1deb89bedb2d6cdb7daa5062480785a76946d1bd"
+  },
+  "key": "79e7d6298a74713a1b48e6b40cbe4426303fb28e077ac6505cbdcc6c5fee6f84",
+  "params": {
+   "centroids": false,
+   "dtype": "float32",
+   "resample": 2,
+   "surf_euclidean": false,
+   "version": 1
+  },
+  "script": "prep1_1_parc_distmat.py"
+ }
+}

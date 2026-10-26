@@ -9,7 +9,7 @@ from neuromaps import transforms
 wd = Path(__file__).parent.parent
 print(f"Working dir: {wd}")
 
-from nispace.transforms import mni_to_mni
+from nispace.transform import mni_to_mni
 from nispace.utils.utils_datasets import download
 
 nispace_source_data_path = wd
@@ -20,8 +20,10 @@ dataset = "celltypes-pak2024"
 # source: Pak et al., 2024, eLife — https://doi.org/10.7554/eLife.89368
 # maps: https://github.com/neuropm-lab/cellmaps (CC BY 4.0, added on our request 2026-09-28;
 # permission: _archive/usage_permission/Pak2024_permission.pdf)
-# The maps are on the SPM 1.5mm MNI grid (121x145x121); their GM mask is ~identical to AAL2
-# (Dice 0.96) -> treated as MNI152NLin6Asym, same as AAL in prep1_0_parc.py.
+# The maps are on the SPM 1.5mm MNI grid (121x145x121, SPM-TPM frame); their GM mask is ~identical to AAL2
+# (Dice 0.96). Pak 2024 methods: values were predicted at the MNI coordinates of the AAL GM voxels from the AHBA sample
+# MNI coordinates ("ICBM152 template") -> values are in ICBM152/MNI152 space (only the support is AAL/Colin27-shaped)
+# -> treated as MNI152NLin6Asym (checked 2026-10-24).
 
 GH_BASE_URL = "https://raw.githubusercontent.com/neuropm-lab/cellmaps/9f97684e8cf2b8196e5b13c11d1001236aec2665"
 

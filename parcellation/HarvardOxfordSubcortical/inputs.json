@@ -1,0 +1,30 @@
+{
+ "MNI152NLin2009cAsym/dist": {
+  "inputs": {
+   "parcellation/HarvardOxfordSubcortical/MNI152NLin2009cAsym/parc-HarvardOxfordSubcortical_space-MNI152NLin2009cAsym.label.nii.gz": "c0b1906e83d7170c4bc1a27d2cb7ed20230d139a0a46e4c1c62704a6e19c57b1"
+  },
+  "key": "b5bc26f0cefead898d0bcdd4f78303fb976d181ee098c84bb4196f8b690963c5",
+  "params": {
+   "centroids": false,
+   "dtype": "float32",
+   "resample": 2,
+   "surf_euclidean": false,
+   "version": 1
+  },
+  "script": "prep1_1_parc_distmat.py"
+ },
+ "MNI152NLin6Asym/dist": {
+  "inputs": {
+   "parcellation/HarvardOxfordSubcortical/MNI152NLin6Asym/parc-HarvardOxfordSubcortical_space-MNI152NLin6Asym.label.nii.gz": "1369dfafbe915d6aeea9ee3d431be47023e5895c0a4ebe3741cbb0216c3ed9b6"
+  },
+  "key": "9293d9158a95f49af0e2e369242bbaae6128a1b86fcfac02460de4d8fd0ac50d",
+  "params": {
+   "centroids": false,
+   "dtype": "float32",
+   "resample": 2,
+   "surf_euclidean": false,
+   "version": 1
+  },
+  "script": "prep1_1_parc_distmat.py"
+ }
+}

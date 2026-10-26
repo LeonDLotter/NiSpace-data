@@ -13,9 +13,11 @@ import templateflow.api as tflow
 wd = Path(__file__).parent.parent
 print(f"Working dir: {wd}")
 
-from nispace.transforms import mni_to_mni
+import hashlib
+import tarfile
+from nispace.transform import mni_to_mni
 from nispace.utils.utils_datasets import download
-from neuromaps.datasets import fetch_fslr, fetch_fsaverage
+from nispace.utils.utils_transforms import barycentric_weights
 from utils import tflow_get
 
 nispace_data_path = wd
@@ -210,12 +212,95 @@ def get_gii_ext(src_path):
     return "gii"
 
 
+# Surface atlases come from the neuromaps OSF tarballs, pinned by file ID and md5 (from neuromaps' osf.json,
+# commit f0ed67c), NOT from the local ~/neuromaps-data cache: neuromaps never re-verifies cached files, and caches
+# from before neuromaps PR #92 (2023) hold broken fsLR 4k/8k right-hemisphere medial-wall masks.
+NEUROMAPS_OSF = {
+    ("fsLR", "4k"):        ("4mw3a", "63eadf00cb544b03fa9e6f00", "72b7b17d389a04774ca6fd4ca28b4087"),
+    ("fsLR", "8k"):        ("4mw3a", "63eadef9b3fed60444e3434f", "a1226aee262475e23d2cc37b84ef261d"),
+    ("fsLR", "32k"):       ("4mw3a", "60b684b53a6df1021bd4df2d", "7932b4418f63d28935b5adf67150b16f"),
+    ("fsLR", "164k"):      ("4mw3a", "60b684b9cb2a5e01fd68c115", "e86a2e9d998e07d621e8f31f0205bf3e"),
+    ("fsaverage", "3k"):   ("4mw3a", "60b684ac9096b7021c63d9c5", "019dbf849671f5bed5a42476e5359997"),
+    ("fsaverage", "10k"):  ("4mw3a", "60b684ab9096b7021b63cf6b", "c61384c271ee2e6b5449222281137414"),
+    ("fsaverage", "41k"):  ("4mw3a", "60b684aecb2a5e01fc68b7e1", "0cc48e9d5d5bb0216502888c954805fd"),
+    ("fsaverage", "164k"): ("4mw3a", "60b684b2cb2a5e01e968c918", "f4969a33b8cd88e46821ef581e492282"),
+    ("regfusion", ""):     ("4mw3a", "60b684c03a6df1020ed525f6", "8e6c4679366031d44b030e9566e101a0"),
+}
+neuromaps_archive = nispace_data_path / "_archive" / "neuromaps_atlases"
+
+
+def fetch_neuromaps_tarball(atlas, density=""):
+    """Download (once) + md5-check + extract a pinned neuromaps atlas tarball; return its atlas dir."""
+    project, file_id, md5 = NEUROMAPS_OSF[(atlas, density)]
+    name = f"{atlas}{density}"
+    tar_path = neuromaps_archive / f"{name}.tar.gz"
+    out_dir = neuromaps_archive / name
+    if not tar_path.exists():
+        neuromaps_archive.mkdir(parents=True, exist_ok=True)
+        download(f"https://files.osf.io/v1/resources/{project}/providers/osfstorage/{file_id}", tar_path)
+    got = hashlib.md5(tar_path.read_bytes()).hexdigest()
+    assert got == md5, f"md5 mismatch for {tar_path.name}: {got} != {md5}"
+    if not out_dir.exists():
+        with tarfile.open(tar_path) as tar:
+            tar.extractall(out_dir, filter="data") if hasattr(tarfile, "data_filter") else tar.extractall(out_dir)
+    return out_dir / "atlases" / atlas
+
+
+def neuromaps_surface_files(space, density):
+    """{desc: (L, R)} of the neuromaps atlas files for one space/density (same descs as neuromaps' fetchers)."""
+    atlas_dir = fetch_neuromaps_tarball(space, density)
+    surfs = ["midthickness", "inflated", "veryinflated", "sphere"] if space == "fsLR" else \
+            ["white", "pial", "inflated", "sphere"]
+    names = {s: f"{s}.surf.gii" for s in surfs}
+    names.update(medial="desc-nomedialwall_dparc.label.gii", sulc="desc-sulc_midthickness.shape.gii",
+                 vaavg="desc-vaavg_midthickness.shape.gii")
+    files = {}
+    for desc, suffix in names.items():
+        pair = tuple(atlas_dir / f"tpl-{space}_den-{density}_hemi-{h}_{suffix}" for h in ("L", "R"))
+        if all(p.exists() for p in pair):  # veryinflated only exists for fsLR 32k/164k
+            files[desc] = pair
+    # fsLR sphere registered to fsaverage: needed for fsLR <-> fsaverage transforms
+    if space == "fsLR":
+        files["sphere_space-fsaverage"] = tuple(
+            atlas_dir / f"tpl-fsLR_space-fsaverage_den-{density}_hemi-{h}_sphere.surf.gii" for h in ("L", "R"))
+    return files
+
+
+def write_regfusion_meshes(space, density, sphere_files):
+    """Registration fusion (Wu et al. 2018, via neuromaps) vertex positions in MNI152NLin6Asym as GIFTI meshes
+    (coordinates + the faces of that density). neuromaps provides no fsLR 4k/8k tables: those are derived from
+    the fsLR 32k table by barycentric resampling of the coordinates on the fsLR spheres (as wb_command
+    -surface-resample does), i.e. the mapping is composed a priori."""
+    rf_dir = fetch_neuromaps_tarball("regfusion")
+    out = []
+    for h, sphere_file in zip(("L", "R"), sphere_files):
+        coords_sph, faces = [d.data for d in nib.load(sphere_file).darrays]
+        table = rf_dir / f"tpl-MNI152_space-{space}_den-{density}_hemi-{h}_regfusion.txt"
+        if table.exists():
+            coords = np.loadtxt(table)
+        else:
+            assert space == "fsLR", f"no regfusion table for {space} {density}"
+            sph_32k = fetch_neuromaps_tarball("fsLR", "32k") / f"tpl-fsLR_den-32k_hemi-{h}_sphere.surf.gii"
+            c32, f32 = [d.data for d in nib.load(sph_32k).darrays]
+            coords = barycentric_weights(c32, f32, coords_sph) @ np.loadtxt(
+                rf_dir / f"tpl-MNI152_space-fsLR_den-32k_hemi-{h}_regfusion.txt")
+        assert len(coords) == len(coords_sph)
+        gii = nib.GiftiImage(darrays=[
+            nib.gifti.GiftiDataArray(coords.astype(np.float32), intent="NIFTI_INTENT_POINTSET"),
+            nib.gifti.GiftiDataArray(faces.astype(np.int32), intent="NIFTI_INTENT_TRIANGLE"),
+        ])
+        tmp = nispace_data_path / "_archive" / "neuromaps_atlases" / f"regfusion_{space}_{density}_{h}.surf.gii"
+        gii.to_filename(tmp)
+        out.append(tmp)
+    return tuple(out)
+
+
 def copy_and_register(space, density, atlas):
-    """Copy neuromaps surface files to nispace-data and return template.json sub-dict."""
+    """Copy surface files {desc: (L, R)} to nispace-data and return template.json sub-dict."""
     entries = {}
     for desc, files in atlas.items():
         entries[desc] = {}
-        for hemi, src in [("L", Path(str(files.L))), ("R", Path(str(files.R)))]:
+        for hemi, src in zip(("L", "R"), map(Path, files)):
             ext = get_gii_ext(src)
             dst_name = f"tpl-{space}_desc-{desc}_res-{density}_hemi-{hemi}.{ext}"
             dst = nispace_data_path / "template" / space / "map" / desc / dst_name
@@ -338,7 +423,8 @@ print("\n=== fsLR ===")
 template_json["fsLR"] = {}
 for density in FSLR_DENSITIES:
     print(f"\nfsLR {density}:")
-    atlas = fetch_fslr(density=density)
+    atlas = neuromaps_surface_files("fsLR", density)
+    atlas["regfusion_space-MNI152NLin6Asym"] = write_regfusion_meshes("fsLR", density, atlas["sphere"])
     template_json["fsLR"][density] = copy_and_register("fsLR", density, atlas)
 
 # %% fsaverage — all densities from neuromaps, stored in nispace-data
@@ -347,7 +433,8 @@ print("\n=== fsaverage ===")
 template_json["fsaverage"] = {}
 for density in FSAVERAGE_DENSITIES:
     print(f"\nfsaverage {density}:")
-    atlas = fetch_fsaverage(density=density)
+    atlas = neuromaps_surface_files("fsaverage", density)
+    atlas["regfusion_space-MNI152NLin6Asym"] = write_regfusion_meshes("fsaverage", density, atlas["sphere"])
     template_json["fsaverage"][density] = copy_and_register("fsaverage", density, atlas)
 
 # %% Write template.yaml per space

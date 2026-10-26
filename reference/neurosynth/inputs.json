@@ -1,0 +1,488 @@
+{
+ "AALCortical": {
+  "inputs": {
+   "neurosynth/term_maps": "858c3e1e302dfd691660f6c4fa16b6a4fceaadd2c7b9fed4373e38686e24f11c",
+   "parcellation/AALCortical/MNI152NLin6Asym/parc-AALCortical_space-MNI152NLin6Asym.label.nii.gz": "539b97ff5a297d86f531d34be42a02462ee340b72131ee9253728b16de3d8277",
+   "parcellation/AALCortical/MNI152NLin6Asym/parc-AALCortical_space-MNI152NLin6Asym.label.txt": "5f959e18a0a50fbfc9efb0b9eac78b2092b4c292277ab729b3db54542bff3117"
+  },
+  "key": "e7ff0cba80bdb329b4cb23bef40be71af8f44d60a11c34c99c2647a08d3211b0",
+  "params": {
+   "kwargs": {
+    "background_value": false,
+    "min_fraction_valid_datapoints": null,
+    "min_num_valid_datapoints": null,
+    "report_background_parcels": false
+   },
+   "version": 1
+  },
+  "script": "prep3_09_ref_neurosynth.py"
+ },
+ "AALSubcortical": {
+  "inputs": {
+   "neurosynth/term_maps": "858c3e1e302dfd691660f6c4fa16b6a4fceaadd2c7b9fed4373e38686e24f11c",
+   "parcellation/AALSubcortical/MNI152NLin6Asym/parc-AALSubcortical_space-MNI152NLin6Asym.label.nii.gz": "0f7e1af0cccd499330405d52ef06279ca66d1f1d640c4fd92e39270aab520623",
+   "parcellation/AALSubcortical/MNI152NLin6Asym/parc-AALSubcortical_space-MNI152NLin6Asym.label.txt": "33f852abd1f3ff5f8c81fcfb697d694f42f7a0327fa35f560aa3f0e030eafef2"
+  },
+  "key": "098677ef52dc2fcc0ae2c4cb8d6b00d004c72e47c2ad9fc144658084a1b3fb5f",
+  "params": {
+   "kwargs": {
+    "background_value": false,
+    "min_fraction_valid_datapoints": null,
+    "min_num_valid_datapoints": null,
+    "report_background_parcels": false
+   },
+   "version": 1
+  },
+  "script": "prep3_09_ref_neurosynth.py"
+ },
+ "Aseg": {
+  "inputs": {
+   "neurosynth/term_maps": "858c3e1e302dfd691660f6c4fa16b6a4fceaadd2c7b9fed4373e38686e24f11c",
+   "parcellation/Aseg/MNI152NLin6Asym/parc-Aseg_space-MNI152NLin6Asym.label.nii.gz": "5fc1bac02b381fd1c4d3a35184a8d4e9324d8af50ddee99a57698edaa05731f3",
+   "parcellation/Aseg/MNI152NLin6Asym/parc-Aseg_space-MNI152NLin6Asym.label.txt": "df1c6d737c1c33f1c3a4e3492164fca8f46a89b632203c457d8d38e1670bc3b7"
+  },
+  "key": "5d45fd85dffe1a041cc0c6badf530556cd8c4b26bd437d34787b94e1e4f535fe",
+  "params": {
+   "kwargs": {
+    "background_value": false,
+    "min_fraction_valid_datapoints": null,
+    "min_num_valid_datapoints": null,
+    "report_background_parcels": false
+   },
+   "version": 1
+  },
+  "script": "prep3_09_ref_neurosynth.py"
+ },
+ "BrainnetomeCortical": {
+  "inputs": {
+   "neurosynth/term_maps": "858c3e1e302dfd691660f6c4fa16b6a4fceaadd2c7b9fed4373e38686e24f11c",
+   "parcellation/BrainnetomeCortical/MNI152NLin6Asym/parc-BrainnetomeCortical_space-MNI152NLin6Asym.label.nii.gz": "5d4bb05331d18c60b5ec88d88a645535c663db3002769bf0628c118cd7cb7b6e",
+   "parcellation/BrainnetomeCortical/MNI152NLin6Asym/parc-BrainnetomeCortical_space-MNI152NLin6Asym.label.txt": "9a1c4ed5e07dcf995b8ac6cbe9bc1933f70b29fb0ad54b38623996e6d3a8a588"
+  },
+  "key": "992216635bdb93f7b33d7935d2f652bede926bcbf4e0456e5b8547439ff681ea",
+  "params": {
+   "kwargs": {
+    "background_value": false,
+    "min_fraction_valid_datapoints": null,
+    "min_num_valid_datapoints": null,
+    "report_background_parcels": false
+   },
+   "version": 1
+  },
+  "script": "prep3_09_ref_neurosynth.py"
+ },
+ "BrainnetomeSubcortical": {
+  "inputs": {
+   "neurosynth/term_maps": "858c3e1e302dfd691660f6c4fa16b6a4fceaadd2c7b9fed4373e38686e24f11c",
+   "parcellation/BrainnetomeSubcortical/MNI152NLin6Asym/parc-BrainnetomeSubcortical_space-MNI152NLin6Asym.label.nii.gz": "2b3ed8af1abf1cb728763dab1deb89bedb2d6cdb7daa5062480785a76946d1bd",
+   "parcellation/BrainnetomeSubcortical/MNI152NLin6Asym/parc-BrainnetomeSubcortical_space-MNI152NLin6Asym.label.txt": "b1018035e281405fc6a617da199d58282e297b10651897f4ade49659d9ce5f83"
+  },
+  "key": "bd432eb51105a194c65762eb0d6558288f718b17d1399556f4dd299aa450e620",
+  "params": {
+   "kwargs": {
+    "background_value": false,
+    "min_fraction_valid_datapoints": null,
+    "min_num_valid_datapoints": null,
+    "report_background_parcels": false
+   },
+   "version": 1
+  },
+  "script": "prep3_09_ref_neurosynth.py"
+ },
+ "DesikanKilliany": {
+  "inputs": {
+   "neurosynth/term_maps": "858c3e1e302dfd691660f6c4fa16b6a4fceaadd2c7b9fed4373e38686e24f11c",
+   "parcellation/DesikanKilliany/MNI152NLin6Asym/parc-DesikanKilliany_space-MNI152NLin6Asym.label.nii.gz": "c2059247e177500d1efb401014a12148b3c99b7219e7475cf194940178129cc9",
+   "parcellation/DesikanKilliany/MNI152NLin6Asym/parc-DesikanKilliany_space-MNI152NLin6Asym.label.txt": "1de37ace51df05bbd46fc6eb7ce00998100f5bc3b98bd7566003b1db2f6b11aa"
+  },
+  "key": "cee7d28ee34aed068dd5d42553b426351bb0c62849fad6927613d759f9ecff30",
+  "params": {
+   "kwargs": {
+    "background_value": false,
+    "min_fraction_valid_datapoints": null,
+    "min_num_valid_datapoints": null,
+    "report_background_parcels": false
+   },
+   "version": 1
+  },
+  "script": "prep3_09_ref_neurosynth.py"
+ },
+ "DesikanKillianyTourville": {
+  "inputs": {
+   "neurosynth/term_maps": "858c3e1e302dfd691660f6c4fa16b6a4fceaadd2c7b9fed4373e38686e24f11c",
+   "parcellation/DesikanKillianyTourville/MNI152NLin6Asym/parc-DesikanKillianyTourville_space-MNI152NLin6Asym.label.nii.gz": "bc8e480e7cc1e076c7773eb677194c7907f088bbe0ef1fcd80627baf7315fb4d",
+   "parcellation/DesikanKillianyTourville/MNI152NLin6Asym/parc-DesikanKillianyTourville_space-MNI152NLin6Asym.label.txt": "de3434a5cb4a38b6468fe4ae3a57dedaa2d9e4aa48ece72039e45d3c57fcbd5d"
+  },
+  "key": "b75a97fd233815137cea2a847688c6c96db629eb55e1894d2b17f3d0c47e0dee",
+  "params": {
+   "kwargs": {
+    "background_value": false,
+    "min_fraction_valid_datapoints": null,
+    "min_num_valid_datapoints": null,
+    "report_background_parcels": false
+   },
+   "version": 1
+  },
+  "script": "prep3_09_ref_neurosynth.py"
+ },
+ "Destrieux": {
+  "inputs": {
+   "neurosynth/term_maps": "858c3e1e302dfd691660f6c4fa16b6a4fceaadd2c7b9fed4373e38686e24f11c",
+   "parcellation/Destrieux/MNI152NLin6Asym/parc-Destrieux_space-MNI152NLin6Asym.label.nii.gz": "8dec262679fd740138cec14dc6f94172c0e953b14429cd5ed80b94351b1896b2",
+   "parcellation/Destrieux/MNI152NLin6Asym/parc-Destrieux_space-MNI152NLin6Asym.label.txt": "cd1e38a1553913a6f8b3f8b75ae6cc9bafcaf03bd1d26e56e65391906fd4315d"
+  },
+  "key": "09508b5ac7da52167b9a6944387fc612afa9fa140fedd0bb19e64232b16193b3",
+  "params": {
+   "kwargs": {
+    "background_value": false,
+    "min_fraction_valid_datapoints": null,
+    "min_num_valid_datapoints": null,
+    "report_background_parcels": false
+   },
+   "version": 1
+  },
+  "script": "prep3_09_ref_neurosynth.py"
+ },
+ "Glasser": {
+  "inputs": {
+   "neurosynth/term_maps": "858c3e1e302dfd691660f6c4fa16b6a4fceaadd2c7b9fed4373e38686e24f11c",
+   "parcellation/Glasser/MNI152NLin6Asym/parc-Glasser_space-MNI152NLin6Asym.label.nii.gz": "53bbd186943d62c6ea56f30deee468016600e83187d32582c596dfc343680993",
+   "parcellation/Glasser/MNI152NLin6Asym/parc-Glasser_space-MNI152NLin6Asym.label.txt": "12eef3e3728a2e559ccf4d11429edbfcea10f6099fe639b48ef47c3305dacd56"
+  },
+  "key": "546705e323d4a00be2fbc6140e42b6c68b8706cbcfbb2307e1e985a37903dcff",
+  "params": {
+   "kwargs": {
+    "background_value": false,
+    "min_fraction_valid_datapoints": null,
+    "min_num_valid_datapoints": null,
+    "report_background_parcels": false
+   },
+   "version": 1
+  },
+  "script": "prep3_09_ref_neurosynth.py"
+ },
+ "HarvardOxfordCortical": {
+  "inputs": {
+   "neurosynth/term_maps": "858c3e1e302dfd691660f6c4fa16b6a4fceaadd2c7b9fed4373e38686e24f11c",
+   "parcellation/HarvardOxfordCortical/MNI152NLin6Asym/parc-HarvardOxfordCortical_space-MNI152NLin6Asym.label.nii.gz": "ebcb126c4d0aaf58cf33b588d376df3435836587cf5fc14005502aa33f062be2",
+   "parcellation/HarvardOxfordCortical/MNI152NLin6Asym/parc-HarvardOxfordCortical_space-MNI152NLin6Asym.label.txt": "4c87849f154f2915e87fa97ee46fbf3cbfe0465f81c7894825a8cec190bda319"
+  },
+  "key": "17633ca389d4e45ffec38dfbf3202a851cdae8437b1f32548989fd3178e68260",
+  "params": {
+   "kwargs": {
+    "background_value": false,
+    "min_fraction_valid_datapoints": null,
+    "min_num_valid_datapoints": null,
+    "report_background_parcels": false
+   },
+   "version": 1
+  },
+  "script": "prep3_09_ref_neurosynth.py"
+ },
+ "HarvardOxfordSubcortical": {
+  "inputs": {
+   "neurosynth/term_maps": "858c3e1e302dfd691660f6c4fa16b6a4fceaadd2c7b9fed4373e38686e24f11c",
+   "parcellation/HarvardOxfordSubcortical/MNI152NLin6Asym/parc-HarvardOxfordSubcortical_space-MNI152NLin6Asym.label.nii.gz": "1369dfafbe915d6aeea9ee3d431be47023e5895c0a4ebe3741cbb0216c3ed9b6",
+   "parcellation/HarvardOxfordSubcortical/MNI152NLin6Asym/parc-HarvardOxfordSubcortical_space-MNI152NLin6Asym.label.txt": "cd067c21868fa0b456af40e0fb42d122947feb732916d843767ce8340ab30abe"
+  },
+  "key": "ade00eaa61a24a71621fa822786b9fe334c35a5cf94ac5ccecf813bbbff468e3",
+  "params": {
+   "kwargs": {
+    "background_value": false,
+    "min_fraction_valid_datapoints": null,
+    "min_num_valid_datapoints": null,
+    "report_background_parcels": false
+   },
+   "version": 1
+  },
+  "script": "prep3_09_ref_neurosynth.py"
+ },
+ "Schaefer1000Parcels17Networks": {
+  "inputs": {
+   "neurosynth/term_maps": "858c3e1e302dfd691660f6c4fa16b6a4fceaadd2c7b9fed4373e38686e24f11c",
+   "parcellation/Schaefer1000Parcels17Networks/MNI152NLin6Asym/parc-Schaefer1000Parcels17Networks_space-MNI152NLin6Asym.label.nii.gz": "90820b09cae6f8186f28a7156f07685c8cd74ca15e5998c9d4c7446222f714da",
+   "parcellation/Schaefer1000Parcels17Networks/MNI152NLin6Asym/parc-Schaefer1000Parcels17Networks_space-MNI152NLin6Asym.label.txt": "2d94bce47a3f368881b410e58a1632f48d590300cf43edf8ac92395aa63de643"
+  },
+  "key": "8330823f47d248149e34056d1dec1135db0807fa565a6c98d306c379b04e04aa",
+  "params": {
+   "kwargs": {
+    "background_value": false,
+    "min_fraction_valid_datapoints": null,
+    "min_num_valid_datapoints": null,
+    "report_background_parcels": false
+   },
+   "version": 1
+  },
+  "script": "prep3_09_ref_neurosynth.py"
+ },
+ "Schaefer1000Parcels7Networks": {
+  "inputs": {
+   "neurosynth/term_maps": "858c3e1e302dfd691660f6c4fa16b6a4fceaadd2c7b9fed4373e38686e24f11c",
+   "parcellation/Schaefer1000Parcels7Networks/MNI152NLin6Asym/parc-Schaefer1000Parcels7Networks_space-MNI152NLin6Asym.label.nii.gz": "90f400612a9c1ede09cdeb361411f65ad04493943c4cb567ac0c3ba30316e7b1",
+   "parcellation/Schaefer1000Parcels7Networks/MNI152NLin6Asym/parc-Schaefer1000Parcels7Networks_space-MNI152NLin6Asym.label.txt": "e2f6678cacb2964418f9125120aa0596aac1ab6d36b8ac84556a3c4d4a5a47e8"
+  },
+  "key": "4a4be1be42401bc1c7f490b366c476ae6366df6afbb88549ad04d985d63309b1",
+  "params": {
+   "kwargs": {
+    "background_value": false,
+    "min_fraction_valid_datapoints": null,
+    "min_num_valid_datapoints": null,
+    "report_background_parcels": false
+   },
+   "version": 1
+  },
+  "script": "prep3_09_ref_neurosynth.py"
+ },
+ "Schaefer100Parcels17Networks": {
+  "inputs": {
+   "neurosynth/term_maps": "858c3e1e302dfd691660f6c4fa16b6a4fceaadd2c7b9fed4373e38686e24f11c",
+   "parcellation/Schaefer100Parcels17Networks/MNI152NLin6Asym/parc-Schaefer100Parcels17Networks_space-MNI152NLin6Asym.label.nii.gz": "7f2570ff8a480218ce2f7c3703f8667f02f8c5cf7cb077953a1274ee1be2e0d1",
+   "parcellation/Schaefer100Parcels17Networks/MNI152NLin6Asym/parc-Schaefer100Parcels17Networks_space-MNI152NLin6Asym.label.txt": "90e9a8e1a7f93390b0199a97dbc157500ac09b16d304b25bbb234b1d69ffef7a"
+  },
+  "key": "02f2d44bac5fdfd38c4630eb78573ae034d48365fc18b397482b508c443b00e2",
+  "params": {
+   "kwargs": {
+    "background_value": false,
+    "min_fraction_valid_datapoints": null,
+    "min_num_valid_datapoints": null,
+    "report_background_parcels": false
+   },
+   "version": 1
+  },
+  "script": "prep3_09_ref_neurosynth.py"
+ },
+ "Schaefer100Parcels7Networks": {
+  "inputs": {
+   "neurosynth/term_maps": "858c3e1e302dfd691660f6c4fa16b6a4fceaadd2c7b9fed4373e38686e24f11c",
+   "parcellation/Schaefer100Parcels7Networks/MNI152NLin6Asym/parc-Schaefer100Parcels7Networks_space-MNI152NLin6Asym.label.nii.gz": "9d176c8923c7afbfa078f7ea53c9350bbdb24b7345dc6c22abc214450c6d0549",
+   "parcellation/Schaefer100Parcels7Networks/MNI152NLin6Asym/parc-Schaefer100Parcels7Networks_space-MNI152NLin6Asym.label.txt": "40cf1079a6b478700a3103fe23cb774e46e14ede8f54d590cc6f4916d7308b58"
+  },
+  "key": "9e73a7c4a7df54a3de920256d37e6d59d4c1317db0204281be834adf3c7e6ce4",
+  "params": {
+   "kwargs": {
+    "background_value": false,
+    "min_fraction_valid_datapoints": null,
+    "min_num_valid_datapoints": null,
+    "report_background_parcels": false
+   },
+   "version": 1
+  },
+  "script": "prep3_09_ref_neurosynth.py"
+ },
+ "Schaefer200Parcels17Networks": {
+  "inputs": {
+   "neurosynth/term_maps": "858c3e1e302dfd691660f6c4fa16b6a4fceaadd2c7b9fed4373e38686e24f11c",
+   "parcellation/Schaefer200Parcels17Networks/MNI152NLin6Asym/parc-Schaefer200Parcels17Networks_space-MNI152NLin6Asym.label.nii.gz": "235a37fc37d58159b220dbfc4e5fa6857746504011d7de0a46b236ec4fc6ad92",
+   "parcellation/Schaefer200Parcels17Networks/MNI152NLin6Asym/parc-Schaefer200Parcels17Networks_space-MNI152NLin6Asym.label.txt": "0e74b3aff17611773ea02438e5c91b5211c168ae91885da26fe4649184a643ec"
+  },
+  "key": "e89f8ecaec992d4909accd3d3dede573f7509dd4edb66603ef84e6ec54a12084",
+  "params": {
+   "kwargs": {
+    "background_value": false,
+    "min_fraction_valid_datapoints": null,
+    "min_num_valid_datapoints": null,
+    "report_background_parcels": false
+   },
+   "version": 1
+  },
+  "script": "prep3_09_ref_neurosynth.py"
+ },
+ "Schaefer200Parcels7Networks": {
+  "inputs": {
+   "neurosynth/term_maps": "858c3e1e302dfd691660f6c4fa16b6a4fceaadd2c7b9fed4373e38686e24f11c",
+   "parcellation/Schaefer200Parcels7Networks/MNI152NLin6Asym/parc-Schaefer200Parcels7Networks_space-MNI152NLin6Asym.label.nii.gz": "5fe2778ebed6e7e6ed8a4f24be17773a02a5e5110c0f996a3b4067a3e8f6ae5f",
+   "parcellation/Schaefer200Parcels7Networks/MNI152NLin6Asym/parc-Schaefer200Parcels7Networks_space-MNI152NLin6Asym.label.txt": "5fb7e239d3bf421749cb55a272adaa81b70f60a29834e170e2fab3a68e96d2cc"
+  },
+  "key": "fbbaee9ce10c186853012900383544a83748bec31922bb42f49ce500b823326c",
+  "params": {
+   "kwargs": {
+    "background_value": false,
+    "min_fraction_valid_datapoints": null,
+    "min_num_valid_datapoints": null,
+    "report_background_parcels": false
+   },
+   "version": 1
+  },
+  "script": "prep3_09_ref_neurosynth.py"
+ },
+ "Schaefer400Parcels17Networks": {
+  "inputs": {
+   "neurosynth/term_maps": "858c3e1e302dfd691660f6c4fa16b6a4fceaadd2c7b9fed4373e38686e24f11c",
+   "parcellation/Schaefer400Parcels17Networks/MNI152NLin6Asym/parc-Schaefer400Parcels17Networks_space-MNI152NLin6Asym.label.nii.gz": "a5ea60a9744e9f669fa051e761885d604b6404d8d9ded9ff289baec39c00a8c2",
+   "parcellation/Schaefer400Parcels17Networks/MNI152NLin6Asym/parc-Schaefer400Parcels17Networks_space-MNI152NLin6Asym.label.txt": "a2d866041ca27a95c67780bafff99520483b676bdc546fd30d724da9da990ac7"
+  },
+  "key": "8f88db8f0367525f98af58fb2c35d26775005e4326dd3ad1ab8db09e52004b74",
+  "params": {
+   "kwargs": {
+    "background_value": false,
+    "min_fraction_valid_datapoints": null,
+    "min_num_valid_datapoints": null,
+    "report_background_parcels": false
+   },
+   "version": 1
+  },
+  "script": "prep3_09_ref_neurosynth.py"
+ },
+ "Schaefer400Parcels7Networks": {
+  "inputs": {
+   "neurosynth/term_maps": "858c3e1e302dfd691660f6c4fa16b6a4fceaadd2c7b9fed4373e38686e24f11c",
+   "parcellation/Schaefer400Parcels7Networks/MNI152NLin6Asym/parc-Schaefer400Parcels7Networks_space-MNI152NLin6Asym.label.nii.gz": "6b2b967e7512edddef4bf5a172884d772c268c76d8a12a2b15753a82e0ece3bb",
+   "parcellation/Schaefer400Parcels7Networks/MNI152NLin6Asym/parc-Schaefer400Parcels7Networks_space-MNI152NLin6Asym.label.txt": "86e26d7c4119e995b58c72ebd8adbcd7f87bb591c2831018d73e5866297d5983"
+  },
+  "key": "76671e11e2138c454e794c1943ed3b5a9c278e038c6a01b105535986f50b50c0",
+  "params": {
+   "kwargs": {
+    "background_value": false,
+    "min_fraction_valid_datapoints": null,
+    "min_num_valid_datapoints": null,
+    "report_background_parcels": false
+   },
+   "version": 1
+  },
+  "script": "prep3_09_ref_neurosynth.py"
+ },
+ "TianS1": {
+  "inputs": {
+   "neurosynth/term_maps": "858c3e1e302dfd691660f6c4fa16b6a4fceaadd2c7b9fed4373e38686e24f11c",
+   "parcellation/TianS1/MNI152NLin6Asym/parc-TianS1_space-MNI152NLin6Asym.label.nii.gz": "aa4c98963ed54b3c70e1d725ce40368ae51e20ff05f3a3e2794f821d20557d73",
+   "parcellation/TianS1/MNI152NLin6Asym/parc-TianS1_space-MNI152NLin6Asym.label.txt": "ba7f8983d7c6784a1bc2ac6edcc19be6dc88107a21b179727adcaa68acf6f9ab"
+  },
+  "key": "d6cd4bec367f5cc8861ed23d4a68b1bb697ccd2264aec23ea095e66c8c52e8f2",
+  "params": {
+   "kwargs": {
+    "background_value": false,
+    "min_fraction_valid_datapoints": null,
+    "min_num_valid_datapoints": null,
+    "report_background_parcels": false
+   },
+   "version": 1
+  },
+  "script": "prep3_09_ref_neurosynth.py"
+ },
+ "TianS2": {
+  "inputs": {
+   "neurosynth/term_maps": "858c3e1e302dfd691660f6c4fa16b6a4fceaadd2c7b9fed4373e38686e24f11c",
+   "parcellation/TianS2/MNI152NLin6Asym/parc-TianS2_space-MNI152NLin6Asym.label.nii.gz": "088461600ae071585782c233314cc597f72affeb55010e09d8f0e06d852015eb",
+   "parcellation/TianS2/MNI152NLin6Asym/parc-TianS2_space-MNI152NLin6Asym.label.txt": "c1a1e73115200d1019ac32bf6ba4a1ce19f96c9f2bdfe969a29d089b99e9d945"
+  },
+  "key": "0315a9b462bfc1debbca9947dd49e5978c6b9e6ecd16301938074ab857aaa9c1",
+  "params": {
+   "kwargs": {
+    "background_value": false,
+    "min_fraction_valid_datapoints": null,
+    "min_num_valid_datapoints": null,
+    "report_background_parcels": false
+   },
+   "version": 1
+  },
+  "script": "prep3_09_ref_neurosynth.py"
+ },
+ "TianS3": {
+  "inputs": {
+   "neurosynth/term_maps": "858c3e1e302dfd691660f6c4fa16b6a4fceaadd2c7b9fed4373e38686e24f11c",
+   "parcellation/TianS3/MNI152NLin6Asym/parc-TianS3_space-MNI152NLin6Asym.label.nii.gz": "66bb5f1b6f6499859f0e2492a74632a68ccc6c3e276c8da1d505ffd24490dab4",
+   "parcellation/TianS3/MNI152NLin6Asym/parc-TianS3_space-MNI152NLin6Asym.label.txt": "34d6a1eadd144a28225a144993bb9b38ae04994713ad9525add84b6a9a292337"
+  },
+  "key": "7864a64f11694ea9f222a142558a602ec3a70a1849725825998e17598d44d80b",
+  "params": {
+   "kwargs": {
+    "background_value": false,
+    "min_fraction_valid_datapoints": null,
+    "min_num_valid_datapoints": null,
+    "report_background_parcels": false
+   },
+   "version": 1
+  },
+  "script": "prep3_09_ref_neurosynth.py"
+ },
+ "TianS4": {
+  "inputs": {
+   "neurosynth/term_maps": "858c3e1e302dfd691660f6c4fa16b6a4fceaadd2c7b9fed4373e38686e24f11c",
+   "parcellation/TianS4/MNI152NLin6Asym/parc-TianS4_space-MNI152NLin6Asym.label.nii.gz": "f51079aa35e05f27e235daf8bb00f59b67d247759bd583e9b5f8e985a5f52723",
+   "parcellation/TianS4/MNI152NLin6Asym/parc-TianS4_space-MNI152NLin6Asym.label.txt": "64feda604ef42b94449853b329894de2681b83d56e36b37d16fff476d7848856"
+  },
+  "key": "0dc5209795c4549f26176c3a83e02126b69eac26443af4a125382cb13ccf3e56",
+  "params": {
+   "kwargs": {
+    "background_value": false,
+    "min_fraction_valid_datapoints": null,
+    "min_num_valid_datapoints": null,
+    "report_background_parcels": false
+   },
+   "version": 1
+  },
+  "script": "prep3_09_ref_neurosynth.py"
+ },
+ "Yan100": {
+  "inputs": {
+   "neurosynth/term_maps": "858c3e1e302dfd691660f6c4fa16b6a4fceaadd2c7b9fed4373e38686e24f11c",
+   "parcellation/Yan100/MNI152NLin6Asym/parc-Yan100_space-MNI152NLin6Asym.label.nii.gz": "73491c7626f35a04b0f01adaee9d74e4048a71b9d486dbff59b70362e3de3ffb",
+   "parcellation/Yan100/MNI152NLin6Asym/parc-Yan100_space-MNI152NLin6Asym.label.txt": "fd2017d6677d979e6ef4e5deb209cfdeb50e5e47c3d45384ae9cc6782ebbf82a"
+  },
+  "key": "52ecad076eb86edf420c1230d0003dbf71b37627e9572255d1ce9522856d11cc",
+  "params": {
+   "kwargs": {
+    "background_value": false,
+    "min_fraction_valid_datapoints": null,
+    "min_num_valid_datapoints": null,
+    "report_background_parcels": false
+   },
+   "version": 1
+  },
+  "script": "prep3_09_ref_neurosynth.py"
+ },
+ "Yan1000": {
+  "inputs": {
+   "neurosynth/term_maps": "858c3e1e302dfd691660f6c4fa16b6a4fceaadd2c7b9fed4373e38686e24f11c",
+   "parcellation/Yan1000/MNI152NLin6Asym/parc-Yan1000_space-MNI152NLin6Asym.label.nii.gz": "93d059e6f7bc5e1eed7b85d317d14675e5f2b1a98ef6aa7eb8da3fbd8c26f426",
+   "parcellation/Yan1000/MNI152NLin6Asym/parc-Yan1000_space-MNI152NLin6Asym.label.txt": "261b344fa61ece01039314604ed89dc46e2c52089b464d1c2dccc9ad1afb5835"
+  },
+  "key": "93054d119300ab7c56f47123ec90833d1df9b52fe1414a0d78a292ec51cc2868",
+  "params": {
+   "kwargs": {
+    "background_value": false,
+    "min_fraction_valid_datapoints": null,
+    "min_num_valid_datapoints": null,
+    "report_background_parcels": false
+   },
+   "version": 1
+  },
+  "script": "prep3_09_ref_neurosynth.py"
+ },
+ "Yan200": {
+  "inputs": {
+   "neurosynth/term_maps": "858c3e1e302dfd691660f6c4fa16b6a4fceaadd2c7b9fed4373e38686e24f11c",
+   "parcellation/Yan200/MNI152NLin6Asym/parc-Yan200_space-MNI152NLin6Asym.label.nii.gz": "289b29d17a0e5a1f62b2f39cfaab874624bed74ae7b1cdebc6a70e341e901b97",
+   "parcellation/Yan200/MNI152NLin6Asym/parc-Yan200_space-MNI152NLin6Asym.label.txt": "4301c40baa63334ad1b6badf73170ce7e0b1d0c4f4687a22a5a68852d5abf3f0"
+  },
+  "key": "a0dbc3ebb9f7138d04ca2809d4720ec83bb194da956cb198d87157ce6ee3f771",
+  "params": {
+   "kwargs": {
+    "background_value": false,
+    "min_fraction_valid_datapoints": null,
+    "min_num_valid_datapoints": null,
+    "report_background_parcels": false
+   },
+   "version": 1
+  },
+  "script": "prep3_09_ref_neurosynth.py"
+ },
+ "Yan400": {
+  "inputs": {
+   "neurosynth/term_maps": "858c3e1e302dfd691660f6c4fa16b6a4fceaadd2c7b9fed4373e38686e24f11c",
+   "parcellation/Yan400/MNI152NLin6Asym/parc-Yan400_space-MNI152NLin6Asym.label.nii.gz": "586ba98465effaa2f3887a7849a587b78e6744528b76b019e57fec983bf9abd5",
+   "parcellation/Yan400/MNI152NLin6Asym/parc-Yan400_space-MNI152NLin6Asym.label.txt": "ba79d60de9a91a204f99bd1a7c176a02f94352069d90415c2e0d025b3f48bcfe"
+  },
+  "key": "15e3649312323d4a90e084989a117f88566e5c0b5c7ecfdd93a940f2d313493e",
+  "params": {
+   "kwargs": {
+    "background_value": false,
+    "min_fraction_valid_datapoints": null,
+    "min_num_valid_datapoints": null,
+    "report_background_parcels": false
+   },
+   "version": 1
+  },
+  "script": "prep3_09_ref_neurosynth.py"
+ }
+}

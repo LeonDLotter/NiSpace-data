@@ -36,7 +36,11 @@ from nispace.utils.utils_datasets import download
 
 # local utils
 sys.path.insert(0, str(Path(__file__).parent))
-from utils import load_parc_lists, load_parc, load_parc_labels, DATASET_PARCELLATE_KWARGS, save_csv_gz
+from utils import (load_parc_lists, load_parc, load_parc_labels, DATASET_PARCELLATE_KWARGS, save_csv_gz,
+                   parc_files, InputStamps)
+
+# bump when the parcellation step changes (invalidates all neurosynth tables)
+TAB_VERSION = 1
 
 # nispace data path
 nispace_source_data_path = wd
@@ -179,8 +183,21 @@ if not all([fp.exists() for fp in map_paths]):
     raise FileNotFoundError(f"Some maps do not exist: {map_paths}")
 
 # iterate nispace parcellations — all have MNI152NLin6Asym
+# skip those whose parcellation, term maps, and settings are unchanged
+stamps = InputStamps.for_dataset("neurosynth")
+stamps.warn_orphans(PARCS)
 for parc in PARCS:
     print(parc)
+    out_path = nispace_source_data_path / "reference" / "neurosynth" / "tab" / f"dset-neurosynth_parc-{parc}.csv.gz"
+    stamp = stamps.check(
+        parc,
+        files=parc_files(wd, parc, "MNI152NLin6Asym"),
+        groups={"neurosynth/term_maps": map_paths},
+        params={"version": TAB_VERSION, "kwargs": DATASET_PARCELLATE_KWARGS["neurosynth"]},
+        outputs=[out_path],
+    )
+    if stamp is None:
+        continue
 
     parc_space  = "MNI152NLin6Asym"
     parc_img    = load_parc(wd, parc, parc_space)
@@ -213,7 +230,10 @@ for parc in PARCS:
     print("Data shape:", data.shape)
     
     # save
-    save_csv_gz(data, nispace_source_data_path / "reference" / "neurosynth" / "tab" / f"dset-neurosynth_parc-{parc}.csv.gz")
+    save_csv_gz(data, out_path)
+    stamps.write(parc, stamp)
+
+stamps.summary()
 
 
 # %% Collections

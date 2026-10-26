@@ -1,0 +1,92 @@
+{
+ "MNI152NLin2009cAsym/dist": {
+  "inputs": {
+   "parcellation/AALCortical/MNI152NLin2009cAsym/parc-AALCortical_space-MNI152NLin2009cAsym.label.nii.gz": "4e44c757d9666cbfc56bd6c88c2fbf09a0bc7c3b4c60122660aa46d5e256d846"
+  },
+  "key": "5a2cda5b0986b478f4953d9122581bfc3351b1673e8bdb31052a4ac99ee30a5d",
+  "params": {
+   "centroids": false,
+   "dtype": "float32",
+   "resample": 2,
+   "surf_euclidean": false,
+   "version": 1
+  },
+  "script": "prep1_1_parc_distmat.py"
+ },
+ "MNI152NLin6Asym/dist": {
+  "inputs": {
+   "parcellation/AALCortical/MNI152NLin6Asym/parc-AALCortical_space-MNI152NLin6Asym.label.nii.gz": "539b97ff5a297d86f531d34be42a02462ee340b72131ee9253728b16de3d8277"
+  },
+  "key": "6687ca1cfb0073b07ad3e70352cde6c16c237bbac06f8db7cdb7d8c32451a597",
+  "params": {
+   "centroids": false,
+   "dtype": "float32",
+   "resample": 2,
+   "surf_euclidean": false,
+   "version": 1
+  },
+  "script": "prep1_1_parc_distmat.py"
+ },
+ "fsLR/dist": {
+  "inputs": {
+   "parcellation/AALCortical/fsLR/parc-AALCortical_space-fsLR_hemi-L.label.gii.gz": "67b36a2effe8c30f601ab1cb19ac497eb3720cabd8f7904f8495058fca6a26ef",
+   "parcellation/AALCortical/fsLR/parc-AALCortical_space-fsLR_hemi-R.label.gii.gz": "e2165c989b6763c5ed25b76f51e4a0a3ef5856a8925dfc57b3186675647bd4f1"
+  },
+  "key": "7c7b62815330d1d5f44192c0234d2273a6d435983dfbb458f2eb75bd18c1c455",
+  "params": {
+   "centroids": false,
+   "dtype": "float32",
+   "resample": "32k",
+   "surf_euclidean": false,
+   "version": 1
+  },
+  "script": "prep1_1_parc_distmat.py"
+ },
+ "fsLR/spin": {
+  "inputs": {
+   "parcellation/AALCortical/fsLR/parc-AALCortical_space-fsLR_hemi-L.label.gii.gz": "67b36a2effe8c30f601ab1cb19ac497eb3720cabd8f7904f8495058fca6a26ef",
+   "parcellation/AALCortical/fsLR/parc-AALCortical_space-fsLR_hemi-R.label.gii.gz": "e2165c989b6763c5ed25b76f51e4a0a3ef5856a8925dfc57b3186675647bd4f1"
+  },
+  "key": "ebda41e0abc4a9ce64394dc6e8d6e5c14a8709ff8843a5da12b2588ae9b107f1",
+  "params": {
+   "batch_size": 100,
+   "dtype": "float16",
+   "n_perm": 10000,
+   "normalize": true,
+   "seed": 42,
+   "version": 1
+  },
+  "script": "prep1_2_parc_spinmat.py"
+ },
+ "fsaverage/dist": {
+  "inputs": {
+   "parcellation/AALCortical/fsaverage/parc-AALCortical_space-fsaverage_hemi-L.label.gii.gz": "89c647a06b719c8056c795f2f9e1d33945060c0aa00a446bc524842d6e954ca6",
+   "parcellation/AALCortical/fsaverage/parc-AALCortical_space-fsaverage_hemi-R.label.gii.gz": "f4df7861bfd1da33aa7e7149a67f52201e775223723d2f07c8c6417c32c652b5"
+  },
+  "key": "d0c4062184321cf3f345420c785ee7ea3065f9442ceabab22a2f4a26e39a195a",
+  "params": {
+   "centroids": false,
+   "dtype": "float32",
+   "resample": "41k",
+   "surf_euclidean": false,
+   "version": 1
+  },
+  "script": "prep1_1_parc_distmat.py"
+ },
+ "fsaverage/spin": {
+  "inputs": {
+   "parcellation/AALCortical/fsaverage/parc-AALCortical_space-fsaverage_hemi-L.label.gii.gz": "89c647a06b719c8056c795f2f9e1d33945060c0aa00a446bc524842d6e954ca6",
+   "parcellation/AALCortical/fsaverage/parc-AALCortical_space-fsaverage_hemi-R.label.gii.gz": "f4df7861bfd1da33aa7e7149a67f52201e775223723d2f07c8c6417c32c652b5"
+  },
+  "key": "a87115537b359bee192ff6fee3b6659e0765fdb162bccb927a82443dc8ff4afb",
+  "params": {
+   "batch_size": 100,
+   "dtype": "float16",
+   "n_perm": 10000,
+   "normalize": true,
+   "seed": 42,
+   "version": 1
+  },
+  "script": "prep1_2_parc_spinmat.py"
+ }
+}

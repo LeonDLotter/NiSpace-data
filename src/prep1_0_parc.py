@@ -18,7 +18,7 @@ from utils import tflow_get
 # import NiSpace functions
 from nispace.utils.utils import relabel_nifti_parc
 from nispace.utils.utils_datasets import download, download_file
-from nispace.transforms import mni_to_mni
+from nispace.transform import mni_to_mni
 from nispace.datasets import template_lib
 from nispace.plotting import brainplot
 
@@ -945,15 +945,13 @@ save_parc(
 # Source: _archive/AAL2/... (local, not uploaded to repo)
 # Downloaded from https://www.gin.cnrs.fr/fr/outils/aal/ on 20. Jan 2026
 # direct download link: https://www.gin.cnrs.fr/wp-content/uploads/aal2_for_SPM12.tar.gz
+# AAL is drawn on the MNI single-subject template (Colin27, SPM's single_subj_T1) -> source space
+# MNIColin27 (99.3 % of AAL2 voxels lie inside the MNIColin27 brain mask vs ~95 % for MNI152NLin6Asym)
 print("AALCortical and AALSubcortical")
 doi = "10.1016/j.neuroimage.2015.07.075"
 
-# MNI152NLin6Asym ----------------------------------------------------------------------------------
-space = "MNI152NLin6Asym"
-print(space)
-
 # load parc
-parc = images.load_nifti(wd / "_archive" / "AAL2" / "atlas" / "AAL2.nii")
+parc_colin27 = images.load_nifti(wd / "_archive" / "AAL2" / "atlas" / "AAL2.nii")
 
 # load labels (here dataframe with label and idx columns)
 labels_df = pd.read_csv(wd / "_archive" / "AAL2" / "aal2.nii.txt", header=None, index_col=0, sep=r"\s+")
@@ -974,50 +972,30 @@ labels_df.label = [f"hemi-{l[-1]}_lab-{l[:-2].replace('_', '+').replace(' ', '+'
 labels_df["level"] = np.where(labels_df.label.str.contains(
     r"Hippocampus|Amygdala|Caudate|Putamen|Pallidum|Thalamus"), "subcortex", "cortex")
 
-# resample parc
-parc = resample_to_template(parc, space)
-
-# create parcellations
+# cortex/subcortex label indices
 labels_idc_cx = labels_df[(labels_df.level=="cortex") & labels_df.label.str.contains("hemi-L")].index.tolist() + \
     labels_df[(labels_df.level=="cortex") & labels_df.label.str.contains("hemi-R")].index.tolist()
 labels_idc_sc = labels_df[(labels_df.level=="subcortex") & labels_df.label.str.contains("hemi-L")].index.tolist() + \
     labels_df[(labels_df.level=="subcortex") & labels_df.label.str.contains("hemi-R")].index.tolist()
 labels_cx = labels_df.loc[labels_idc_cx].label.tolist()
 labels_sc = labels_df.loc[labels_idc_sc].label.tolist()
-parc_cx = relabel_nifti_parc(parc, new_order=labels_df.loc[labels_idc_cx].idx.tolist())
-parc_sc = relabel_nifti_parc(parc, new_order=labels_df.loc[labels_idc_sc].idx.tolist(), new_labels=range(1, len(labels_sc) + 1))
 
-# create parcellations
-for name, parc, labels, level in [
-    ("AALCortical", parc_cx, labels_cx, "cortex"),
-    ("AALSubcortical", parc_sc, labels_sc, "subcortex")
-]:
-    
-    # save
-    save_parc(
-        parc=parc, name=name, space=space, labels=labels,
-        level=level, symmetric=True, license="GNU GPL", doi=doi,
-    )
+# MNI152NLin6Asym & MNI152NLin2009cAsym: transform from MNIColin27 directly (one interpolation each)
+for space in ["MNI152NLin6Asym", "MNI152NLin2009cAsym"]:
+    print(space)
+    parc = mni_to_mni(parc_colin27, mni_from="MNIColin27", mni_to=space, order=0, res=1)
+    parc = resample_to_template(parc, space)  # identity, ensures template header
+    parc_cx = relabel_nifti_parc(parc, new_order=labels_df.loc[labels_idc_cx].idx.tolist())
+    parc_sc = relabel_nifti_parc(parc, new_order=labels_df.loc[labels_idc_sc].idx.tolist(), new_labels=range(1, len(labels_sc) + 1))
 
-
-# MNI152NLin2009cAsym ------------------------------------------------------------------------------
-space = "MNI152NLin2009cAsym"
-print(space)
-
-for name, labels, level in [
-    ("AALCortical",    labels_cx, "cortex"),
-    ("AALSubcortical", labels_sc, "subcortex"),
-]:
-    parc = mni_to_mni(
-        img=wd / "parcellation" / name / "MNI152NLin6Asym" / f"parc-{name}_space-MNI152NLin6Asym.label.nii.gz",
-        mni_from="MNI152NLin6Asym",
-        mni_to="MNI152NLin2009cAsym",
-        order=0,
-    )
-    save_parc(
-        parc=parc, name=name, space=space, labels=labels,
-        level=level, symmetric=True, license="GNU GPL", doi=doi,
-    )
+    for name, parc_lvl, labels, level in [
+        ("AALCortical", parc_cx, labels_cx, "cortex"),
+        ("AALSubcortical", parc_sc, labels_sc, "subcortex")
+    ]:
+        save_parc(
+            parc=parc_lvl, name=name, space=space, labels=labels,
+            level=level, symmetric=True, license="GNU GPL", doi=doi,
+        )
 
 # fsaverage & fsLR (AALCortical only) --------------------------------------------------------------
 name = "AALCortical"

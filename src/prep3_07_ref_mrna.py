@@ -15,6 +15,7 @@ wd = Path(__file__).parent.parent
 print(f"Working dir: {wd}")
 
 # Abagen
+import abagen
 from abagen import get_expression_data, keep_stable_genes
 
 # Nispace
@@ -23,7 +24,7 @@ from nispace.utils.utils_datasets import download
 
 # local utils
 sys.path.insert(0, str(Path(__file__).parent))
-from utils import load_parc_lists, save_csv_gz
+from utils import load_parc_lists, save_csv_gz, parc_files, InputStamps
 
 # nispace data path
 nispace_source_data_path = wd
@@ -36,7 +37,7 @@ print("PARCS_SC:", PARCS_SC)
 # %% mRNA tabulated data ---------------------------------------------------------------------------
 
 # settings
-overwrite = True  # set True to recompute stability atlas and gene filter
+TAB_VERSION = 1  # bump when the extraction changes (invalidates all mrna tables + stability filter)
 stab_voxel_size = 8
 corr_threshold = 0.2
 n_jobs_extraction = 2
@@ -150,7 +151,16 @@ def par_fun(parc):
 stab_atlas_path = nispace_source_data_path / "reference" / "mrna" / "tab" / "_stability_atlas.nii.gz"
 stab_repro_path = nispace_source_data_path / "reference" / "mrna" / "tab" / "dset-mrna_reproducibility.csv.gz"
 
-if not stab_repro_path.exists() or overwrite:
+stamps = InputStamps.for_dataset("mrna")
+stamp_stab = stamps.check(
+    "_stability",
+    files=(parc_files(wd, "Schaefer100Parcels7Networks", "MNI152NLin6Asym")
+           + parc_files(wd, "TianS1", "MNI152NLin6Asym")),
+    params={"version": TAB_VERSION, "abagen": abagen.__version__, "voxel_size": stab_voxel_size,
+            "corr_threshold": corr_threshold},
+    outputs=[stab_repro_path],
+)
+if stamp_stab:
     stab_img, stab_info = build_stability_atlas(wd)
     nib.save(stab_img, stab_atlas_path)
 
@@ -180,6 +190,7 @@ if not stab_repro_path.exists() or overwrite:
     stability.name = "reproducibility"
     stability.index.name = "map"
     save_csv_gz(stability, stab_repro_path)
+    stamps.write("_stability", stamp_stab)
 else:
     stability = pd.read_csv(stab_repro_path, index_col=0).squeeze()
 
@@ -190,14 +201,29 @@ print(f"Global stable genes: {len(genes_to_extract)}")
 
 # %% Run par_fun for each parcellation
 
-# parcellations
+# parcellations: only those whose inputs changed (incl. the stable-gene filter)
 print(f"{len(PARCS)} parcellations: {PARCS}")
+stamps.warn_orphans(PARCS + ["_stability"])
+todo = {}
+for parc in PARCS:
+    stamp = stamps.check(
+        parc,
+        files=parc_files(wd, parc, "MNI152NLin6Asym") + [stab_repro_path],
+        params={"version": TAB_VERSION, "abagen": abagen.__version__, "corr_threshold": corr_threshold,
+                "subcortex": parc in PARCS_SC},
+        outputs=[nispace_source_data_path / "reference" / "mrna" / "tab" / f"dset-mrna_parc-{parc}.csv.gz"],
+    )
+    if stamp:
+        todo[parc] = stamp
 
-# Run in parallel
+# Run in parallel; stamps are written by the main process once all tables are saved
 Parallel(n_jobs=n_jobs_extraction)(
     delayed(par_fun)(parc)
-    for parc in tqdm(PARCS)
+    for parc in tqdm(todo)
 )
+for parc, stamp in todo.items():
+    stamps.write(parc, stamp)
+stamps.summary()
 
 
 # %% Collections

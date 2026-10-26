@@ -1,0 +1,30 @@
+{
+ "MNI152NLin2009cAsym/dist": {
+  "inputs": {
+   "parcellation/Aseg/MNI152NLin2009cAsym/parc-Aseg_space-MNI152NLin2009cAsym.label.nii.gz": "caceccb78bfb993fd2d73217db6ad686964c138a347afb826bba85e02090cd62"
+  },
+  "key": "780c44267280784186fcc93e85a021b47dade33f8bd86a8b36bc381018f1900c",
+  "params": {
+   "centroids": false,
+   "dtype": "float32",
+   "resample": 2,
+   "surf_euclidean": false,
+   "version": 1
+  },
+  "script": "prep1_1_parc_distmat.py"
+ },
+ "MNI152NLin6Asym/dist": {
+  "inputs": {
+   "parcellation/Aseg/MNI152NLin6Asym/parc-Aseg_space-MNI152NLin6Asym.label.nii.gz": "5fc1bac02b381fd1c4d3a35184a8d4e9324d8af50ddee99a57698edaa05731f3"
+  },
+  "key": "d3c4827e502d95ec5c90faebd3aa6e4ea388ec4cc3ff1be495d0c8a6e0396272",
+  "params": {
+   "centroids": false,
+   "dtype": "float32",
+   "resample": 2,
+   "surf_euclidean": false,
+   "version": 1
+  },
+  "script": "prep1_1_parc_distmat.py"
+ }
+}

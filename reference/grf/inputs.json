@@ -1,0 +1,812 @@
+{
+ "AALCortical": {
+  "inputs": {
+   "parcellation/AALCortical/MNI152NLin6Asym/parc-AALCortical_space-MNI152NLin6Asym.label.nii.gz": "539b97ff5a297d86f531d34be42a02462ee340b72131ee9253728b16de3d8277",
+   "parcellation/AALCortical/MNI152NLin6Asym/parc-AALCortical_space-MNI152NLin6Asym.label.txt": "5f959e18a0a50fbfc9efb0b9eac78b2092b4c292277ab729b3db54542bff3117"
+  },
+  "key": "4dbfb161534be75402d4759636f3398fa84ad440db7dba6cd20eb3a574671aaa",
+  "params": {
+   "alphas": [
+    0.0,
+    1.0,
+    2.0,
+    3.0
+   ],
+   "kwargs": {
+    "background_value": false,
+    "min_fraction_valid_datapoints": null,
+    "min_num_valid_datapoints": null,
+    "report_background_parcels": false
+   },
+   "n_grf": {
+    "0.0": 10000,
+    "1.0": 10000,
+    "2.0": 10000,
+    "3.0": 10000
+   },
+   "space": "MNI152NLin6Asym",
+   "version": 1
+  },
+  "script": "prep3_11_ref_grf.py"
+ },
+ "AALSubcortical": {
+  "inputs": {
+   "parcellation/AALSubcortical/MNI152NLin6Asym/parc-AALSubcortical_space-MNI152NLin6Asym.label.nii.gz": "0f7e1af0cccd499330405d52ef06279ca66d1f1d640c4fd92e39270aab520623",
+   "parcellation/AALSubcortical/MNI152NLin6Asym/parc-AALSubcortical_space-MNI152NLin6Asym.label.txt": "33f852abd1f3ff5f8c81fcfb697d694f42f7a0327fa35f560aa3f0e030eafef2"
+  },
+  "key": "7dcb445c661a8b400d4b813e541c8975f42e74f76ff55eba9f4b0753eb32c2f2",
+  "params": {
+   "alphas": [
+    0.0,
+    1.0,
+    2.0,
+    3.0
+   ],
+   "kwargs": {
+    "background_value": false,
+    "min_fraction_valid_datapoints": null,
+    "min_num_valid_datapoints": null,
+    "report_background_parcels": false
+   },
+   "n_grf": {
+    "0.0": 10000,
+    "1.0": 10000,
+    "2.0": 10000,
+    "3.0": 10000
+   },
+   "space": "MNI152NLin6Asym",
+   "version": 1
+  },
+  "script": "prep3_11_ref_grf.py"
+ },
+ "Aseg": {
+  "inputs": {
+   "parcellation/Aseg/MNI152NLin6Asym/parc-Aseg_space-MNI152NLin6Asym.label.nii.gz": "5fc1bac02b381fd1c4d3a35184a8d4e9324d8af50ddee99a57698edaa05731f3",
+   "parcellation/Aseg/MNI152NLin6Asym/parc-Aseg_space-MNI152NLin6Asym.label.txt": "df1c6d737c1c33f1c3a4e3492164fca8f46a89b632203c457d8d38e1670bc3b7"
+  },
+  "key": "4ae195f51abe5425e6272e1bae3aed34b75412df951507f7788900e7c7e5dc1b",
+  "params": {
+   "alphas": [
+    0.0,
+    1.0,
+    2.0,
+    3.0
+   ],
+   "kwargs": {
+    "background_value": false,
+    "min_fraction_valid_datapoints": null,
+    "min_num_valid_datapoints": null,
+    "report_background_parcels": false
+   },
+   "n_grf": {
+    "0.0": 10000,
+    "1.0": 10000,
+    "2.0": 10000,
+    "3.0": 10000
+   },
+   "space": "MNI152NLin6Asym",
+   "version": 1
+  },
+  "script": "prep3_11_ref_grf.py"
+ },
+ "BrainnetomeCortical": {
+  "inputs": {
+   "parcellation/BrainnetomeCortical/MNI152NLin6Asym/parc-BrainnetomeCortical_space-MNI152NLin6Asym.label.nii.gz": "5d4bb05331d18c60b5ec88d88a645535c663db3002769bf0628c118cd7cb7b6e",
+   "parcellation/BrainnetomeCortical/MNI152NLin6Asym/parc-BrainnetomeCortical_space-MNI152NLin6Asym.label.txt": "9a1c4ed5e07dcf995b8ac6cbe9bc1933f70b29fb0ad54b38623996e6d3a8a588"
+  },
+  "key": "3f3588c93f6a41e477ada1dd2f74d16c8e98315ca8bb33fd922f33ac5de4fe97",
+  "params": {
+   "alphas": [
+    0.0,
+    1.0,
+    2.0,
+    3.0
+   ],
+   "kwargs": {
+    "background_value": false,
+    "min_fraction_valid_datapoints": null,
+    "min_num_valid_datapoints": null,
+    "report_background_parcels": false
+   },
+   "n_grf": {
+    "0.0": 10000,
+    "1.0": 10000,
+    "2.0": 10000,
+    "3.0": 10000
+   },
+   "space": "MNI152NLin6Asym",
+   "version": 1
+  },
+  "script": "prep3_11_ref_grf.py"
+ },
+ "BrainnetomeSubcortical": {
+  "inputs": {
+   "parcellation/BrainnetomeSubcortical/MNI152NLin6Asym/parc-BrainnetomeSubcortical_space-MNI152NLin6Asym.label.nii.gz": "2b3ed8af1abf1cb728763dab1deb89bedb2d6cdb7daa5062480785a76946d1bd",
+   "parcellation/BrainnetomeSubcortical/MNI152NLin6Asym/parc-BrainnetomeSubcortical_space-MNI152NLin6Asym.label.txt": "b1018035e281405fc6a617da199d58282e297b10651897f4ade49659d9ce5f83"
+  },
+  "key": "a6fac8362cf179095732069eb520b664ded7d1c34fe7bea3a7a14329196cb610",
+  "params": {
+   "alphas": [
+    0.0,
+    1.0,
+    2.0,
+    3.0
+   ],
+   "kwargs": {
+    "background_value": false,
+    "min_fraction_valid_datapoints": null,
+    "min_num_valid_datapoints": null,
+    "report_background_parcels": false
+   },
+   "n_grf": {
+    "0.0": 10000,
+    "1.0": 10000,
+    "2.0": 10000,
+    "3.0": 10000
+   },
+   "space": "MNI152NLin6Asym",
+   "version": 1
+  },
+  "script": "prep3_11_ref_grf.py"
+ },
+ "DesikanKilliany": {
+  "inputs": {
+   "parcellation/DesikanKilliany/MNI152NLin6Asym/parc-DesikanKilliany_space-MNI152NLin6Asym.label.nii.gz": "c2059247e177500d1efb401014a12148b3c99b7219e7475cf194940178129cc9",
+   "parcellation/DesikanKilliany/MNI152NLin6Asym/parc-DesikanKilliany_space-MNI152NLin6Asym.label.txt": "1de37ace51df05bbd46fc6eb7ce00998100f5bc3b98bd7566003b1db2f6b11aa"
+  },
+  "key": "634779d1f8034a8fc799f7c2a90f15370d1662b6ae01cd9f874f2e00756886ad",
+  "params": {
+   "alphas": [
+    0.0,
+    1.0,
+    2.0,
+    3.0
+   ],
+   "kwargs": {
+    "background_value": false,
+    "min_fraction_valid_datapoints": null,
+    "min_num_valid_datapoints": null,
+    "report_background_parcels": false
+   },
+   "n_grf": {
+    "0.0": 10000,
+    "1.0": 10000,
+    "2.0": 10000,
+    "3.0": 10000
+   },
+   "space": "MNI152NLin6Asym",
+   "version": 1
+  },
+  "script": "prep3_11_ref_grf.py"
+ },
+ "DesikanKillianyTourville": {
+  "inputs": {
+   "parcellation/DesikanKillianyTourville/MNI152NLin6Asym/parc-DesikanKillianyTourville_space-MNI152NLin6Asym.label.nii.gz": "bc8e480e7cc1e076c7773eb677194c7907f088bbe0ef1fcd80627baf7315fb4d",
+   "parcellation/DesikanKillianyTourville/MNI152NLin6Asym/parc-DesikanKillianyTourville_space-MNI152NLin6Asym.label.txt": "de3434a5cb4a38b6468fe4ae3a57dedaa2d9e4aa48ece72039e45d3c57fcbd5d"
+  },
+  "key": "177b655a13c3855c1af8899ae89196a5d9c6333a584bc86c617fe87b2a1f1547",
+  "params": {
+   "alphas": [
+    0.0,
+    1.0,
+    2.0,
+    3.0
+   ],
+   "kwargs": {
+    "background_value": false,
+    "min_fraction_valid_datapoints": null,
+    "min_num_valid_datapoints": null,
+    "report_background_parcels": false
+   },
+   "n_grf": {
+    "0.0": 10000,
+    "1.0": 10000,
+    "2.0": 10000,
+    "3.0": 10000
+   },
+   "space": "MNI152NLin6Asym",
+   "version": 1
+  },
+  "script": "prep3_11_ref_grf.py"
+ },
+ "Destrieux": {
+  "inputs": {
+   "parcellation/Destrieux/MNI152NLin6Asym/parc-Destrieux_space-MNI152NLin6Asym.label.nii.gz": "8dec262679fd740138cec14dc6f94172c0e953b14429cd5ed80b94351b1896b2",
+   "parcellation/Destrieux/MNI152NLin6Asym/parc-Destrieux_space-MNI152NLin6Asym.label.txt": "cd1e38a1553913a6f8b3f8b75ae6cc9bafcaf03bd1d26e56e65391906fd4315d"
+  },
+  "key": "3bc3649db7031f82d37f808bc52b2b8effc8ef369546a36fdf0f384a92220fdd",
+  "params": {
+   "alphas": [
+    0.0,
+    1.0,
+    2.0,
+    3.0
+   ],
+   "kwargs": {
+    "background_value": false,
+    "min_fraction_valid_datapoints": null,
+    "min_num_valid_datapoints": null,
+    "report_background_parcels": false
+   },
+   "n_grf": {
+    "0.0": 10000,
+    "1.0": 10000,
+    "2.0": 10000,
+    "3.0": 10000
+   },
+   "space": "MNI152NLin6Asym",
+   "version": 1
+  },
+  "script": "prep3_11_ref_grf.py"
+ },
+ "Glasser": {
+  "inputs": {
+   "parcellation/Glasser/MNI152NLin6Asym/parc-Glasser_space-MNI152NLin6Asym.label.nii.gz": "53bbd186943d62c6ea56f30deee468016600e83187d32582c596dfc343680993",
+   "parcellation/Glasser/MNI152NLin6Asym/parc-Glasser_space-MNI152NLin6Asym.label.txt": "12eef3e3728a2e559ccf4d11429edbfcea10f6099fe639b48ef47c3305dacd56"
+  },
+  "key": "d66fc16ad99fd9a3f7dd40f5d1aabf1edbf67ac64ea90fad112c489ad52763f9",
+  "params": {
+   "alphas": [
+    0.0,
+    1.0,
+    2.0,
+    3.0
+   ],
+   "kwargs": {
+    "background_value": false,
+    "min_fraction_valid_datapoints": null,
+    "min_num_valid_datapoints": null,
+    "report_background_parcels": false
+   },
+   "n_grf": {
+    "0.0": 10000,
+    "1.0": 10000,
+    "2.0": 10000,
+    "3.0": 10000
+   },
+   "space": "MNI152NLin6Asym",
+   "version": 1
+  },
+  "script": "prep3_11_ref_grf.py"
+ },
+ "HarvardOxfordCortical": {
+  "inputs": {
+   "parcellation/HarvardOxfordCortical/MNI152NLin6Asym/parc-HarvardOxfordCortical_space-MNI152NLin6Asym.label.nii.gz": "ebcb126c4d0aaf58cf33b588d376df3435836587cf5fc14005502aa33f062be2",
+   "parcellation/HarvardOxfordCortical/MNI152NLin6Asym/parc-HarvardOxfordCortical_space-MNI152NLin6Asym.label.txt": "4c87849f154f2915e87fa97ee46fbf3cbfe0465f81c7894825a8cec190bda319"
+  },
+  "key": "ccd8d7a340f146979188f545ef3c4e56066adec4914deda71f7d7446e0f3b714",
+  "params": {
+   "alphas": [
+    0.0,
+    1.0,
+    2.0,
+    3.0
+   ],
+   "kwargs": {
+    "background_value": false,
+    "min_fraction_valid_datapoints": null,
+    "min_num_valid_datapoints": null,
+    "report_background_parcels": false
+   },
+   "n_grf": {
+    "0.0": 10000,
+    "1.0": 10000,
+    "2.0": 10000,
+    "3.0": 10000
+   },
+   "space": "MNI152NLin6Asym",
+   "version": 1
+  },
+  "script": "prep3_11_ref_grf.py"
+ },
+ "HarvardOxfordSubcortical": {
+  "inputs": {
+   "parcellation/HarvardOxfordSubcortical/MNI152NLin6Asym/parc-HarvardOxfordSubcortical_space-MNI152NLin6Asym.label.nii.gz": "1369dfafbe915d6aeea9ee3d431be47023e5895c0a4ebe3741cbb0216c3ed9b6",
+   "parcellation/HarvardOxfordSubcortical/MNI152NLin6Asym/parc-HarvardOxfordSubcortical_space-MNI152NLin6Asym.label.txt": "cd067c21868fa0b456af40e0fb42d122947feb732916d843767ce8340ab30abe"
+  },
+  "key": "879e887ac40cbd2718638043133f3935fa0fec16d24d5bcffc8e58b556fb17e7",
+  "params": {
+   "alphas": [
+    0.0,
+    1.0,
+    2.0,
+    3.0
+   ],
+   "kwargs": {
+    "background_value": false,
+    "min_fraction_valid_datapoints": null,
+    "min_num_valid_datapoints": null,
+    "report_background_parcels": false
+   },
+   "n_grf": {
+    "0.0": 10000,
+    "1.0": 10000,
+    "2.0": 10000,
+    "3.0": 10000
+   },
+   "space": "MNI152NLin6Asym",
+   "version": 1
+  },
+  "script": "prep3_11_ref_grf.py"
+ },
+ "Schaefer1000Parcels17Networks": {
+  "inputs": {
+   "parcellation/Schaefer1000Parcels17Networks/MNI152NLin6Asym/parc-Schaefer1000Parcels17Networks_space-MNI152NLin6Asym.label.nii.gz": "90820b09cae6f8186f28a7156f07685c8cd74ca15e5998c9d4c7446222f714da",
+   "parcellation/Schaefer1000Parcels17Networks/MNI152NLin6Asym/parc-Schaefer1000Parcels17Networks_space-MNI152NLin6Asym.label.txt": "2d94bce47a3f368881b410e58a1632f48d590300cf43edf8ac92395aa63de643"
+  },
+  "key": "5e1785fa8a42c9f7b19ee122637fe9b1a876f4c3bd0a4e1ea6ed86174132ac76",
+  "params": {
+   "alphas": [
+    0.0,
+    1.0,
+    2.0,
+    3.0
+   ],
+   "kwargs": {
+    "background_value": false,
+    "min_fraction_valid_datapoints": null,
+    "min_num_valid_datapoints": null,
+    "report_background_parcels": false
+   },
+   "n_grf": {
+    "0.0": 10000,
+    "1.0": 10000,
+    "2.0": 10000,
+    "3.0": 10000
+   },
+   "space": "MNI152NLin6Asym",
+   "version": 1
+  },
+  "script": "prep3_11_ref_grf.py"
+ },
+ "Schaefer1000Parcels7Networks": {
+  "inputs": {
+   "parcellation/Schaefer1000Parcels7Networks/MNI152NLin6Asym/parc-Schaefer1000Parcels7Networks_space-MNI152NLin6Asym.label.nii.gz": "90f400612a9c1ede09cdeb361411f65ad04493943c4cb567ac0c3ba30316e7b1",
+   "parcellation/Schaefer1000Parcels7Networks/MNI152NLin6Asym/parc-Schaefer1000Parcels7Networks_space-MNI152NLin6Asym.label.txt": "e2f6678cacb2964418f9125120aa0596aac1ab6d36b8ac84556a3c4d4a5a47e8"
+  },
+  "key": "8a9303171a74eca2291e4857833c08902f1fa4892a9d08cc5863c98f3ea27e93",
+  "params": {
+   "alphas": [
+    0.0,
+    1.0,
+    2.0,
+    3.0
+   ],
+   "kwargs": {
+    "background_value": false,
+    "min_fraction_valid_datapoints": null,
+    "min_num_valid_datapoints": null,
+    "report_background_parcels": false
+   },
+   "n_grf": {
+    "0.0": 10000,
+    "1.0": 10000,
+    "2.0": 10000,
+    "3.0": 10000
+   },
+   "space": "MNI152NLin6Asym",
+   "version": 1
+  },
+  "script": "prep3_11_ref_grf.py"
+ },
+ "Schaefer100Parcels17Networks": {
+  "inputs": {
+   "parcellation/Schaefer100Parcels17Networks/MNI152NLin6Asym/parc-Schaefer100Parcels17Networks_space-MNI152NLin6Asym.label.nii.gz": "7f2570ff8a480218ce2f7c3703f8667f02f8c5cf7cb077953a1274ee1be2e0d1",
+   "parcellation/Schaefer100Parcels17Networks/MNI152NLin6Asym/parc-Schaefer100Parcels17Networks_space-MNI152NLin6Asym.label.txt": "90e9a8e1a7f93390b0199a97dbc157500ac09b16d304b25bbb234b1d69ffef7a"
+  },
+  "key": "be23c04db2b1db2b0cfbf968c2d0ded6bd3910c3427a50a3fef08b33085a2feb",
+  "params": {
+   "alphas": [
+    0.0,
+    1.0,
+    2.0,
+    3.0
+   ],
+   "kwargs": {
+    "background_value": false,
+    "min_fraction_valid_datapoints": null,
+    "min_num_valid_datapoints": null,
+    "report_background_parcels": false
+   },
+   "n_grf": {
+    "0.0": 10000,
+    "1.0": 10000,
+    "2.0": 10000,
+    "3.0": 10000
+   },
+   "space": "MNI152NLin6Asym",
+   "version": 1
+  },
+  "script": "prep3_11_ref_grf.py"
+ },
+ "Schaefer100Parcels7Networks": {
+  "inputs": {
+   "parcellation/Schaefer100Parcels7Networks/MNI152NLin6Asym/parc-Schaefer100Parcels7Networks_space-MNI152NLin6Asym.label.nii.gz": "9d176c8923c7afbfa078f7ea53c9350bbdb24b7345dc6c22abc214450c6d0549",
+   "parcellation/Schaefer100Parcels7Networks/MNI152NLin6Asym/parc-Schaefer100Parcels7Networks_space-MNI152NLin6Asym.label.txt": "40cf1079a6b478700a3103fe23cb774e46e14ede8f54d590cc6f4916d7308b58"
+  },
+  "key": "aadae06c32e50ffaf85f69b54364623afa8a3f83a1dc6961352f7d4d9d6bf22a",
+  "params": {
+   "alphas": [
+    0.0,
+    1.0,
+    2.0,
+    3.0
+   ],
+   "kwargs": {
+    "background_value": false,
+    "min_fraction_valid_datapoints": null,
+    "min_num_valid_datapoints": null,
+    "report_background_parcels": false
+   },
+   "n_grf": {
+    "0.0": 10000,
+    "1.0": 10000,
+    "2.0": 10000,
+    "3.0": 10000
+   },
+   "space": "MNI152NLin6Asym",
+   "version": 1
+  },
+  "script": "prep3_11_ref_grf.py"
+ },
+ "Schaefer200Parcels17Networks": {
+  "inputs": {
+   "parcellation/Schaefer200Parcels17Networks/MNI152NLin6Asym/parc-Schaefer200Parcels17Networks_space-MNI152NLin6Asym.label.nii.gz": "235a37fc37d58159b220dbfc4e5fa6857746504011d7de0a46b236ec4fc6ad92",
+   "parcellation/Schaefer200Parcels17Networks/MNI152NLin6Asym/parc-Schaefer200Parcels17Networks_space-MNI152NLin6Asym.label.txt": "0e74b3aff17611773ea02438e5c91b5211c168ae91885da26fe4649184a643ec"
+  },
+  "key": "63863a3d15c0bcba67a65962f552acfb5a2ec94bfd6e65a7cf1c0848895208b7",
+  "params": {
+   "alphas": [
+    0.0,
+    1.0,
+    2.0,
+    3.0
+   ],
+   "kwargs": {
+    "background_value": false,
+    "min_fraction_valid_datapoints": null,
+    "min_num_valid_datapoints": null,
+    "report_background_parcels": false
+   },
+   "n_grf": {
+    "0.0": 10000,
+    "1.0": 10000,
+    "2.0": 10000,
+    "3.0": 10000
+   },
+   "space": "MNI152NLin6Asym",
+   "version": 1
+  },
+  "script": "prep3_11_ref_grf.py"
+ },
+ "Schaefer200Parcels7Networks": {
+  "inputs": {
+   "parcellation/Schaefer200Parcels7Networks/MNI152NLin6Asym/parc-Schaefer200Parcels7Networks_space-MNI152NLin6Asym.label.nii.gz": "5fe2778ebed6e7e6ed8a4f24be17773a02a5e5110c0f996a3b4067a3e8f6ae5f",
+   "parcellation/Schaefer200Parcels7Networks/MNI152NLin6Asym/parc-Schaefer200Parcels7Networks_space-MNI152NLin6Asym.label.txt": "5fb7e239d3bf421749cb55a272adaa81b70f60a29834e170e2fab3a68e96d2cc"
+  },
+  "key": "9aef8f9fe359eeb60a2d87857136515d752b61f59b8219dc145526f5958645c8",
+  "params": {
+   "alphas": [
+    0.0,
+    1.0,
+    2.0,
+    3.0
+   ],
+   "kwargs": {
+    "background_value": false,
+    "min_fraction_valid_datapoints": null,
+    "min_num_valid_datapoints": null,
+    "report_background_parcels": false
+   },
+   "n_grf": {
+    "0.0": 10000,
+    "1.0": 10000,
+    "2.0": 10000,
+    "3.0": 10000
+   },
+   "space": "MNI152NLin6Asym",
+   "version": 1
+  },
+  "script": "prep3_11_ref_grf.py"
+ },
+ "Schaefer400Parcels17Networks": {
+  "inputs": {
+   "parcellation/Schaefer400Parcels17Networks/MNI152NLin6Asym/parc-Schaefer400Parcels17Networks_space-MNI152NLin6Asym.label.nii.gz": "a5ea60a9744e9f669fa051e761885d604b6404d8d9ded9ff289baec39c00a8c2",
+   "parcellation/Schaefer400Parcels17Networks/MNI152NLin6Asym/parc-Schaefer400Parcels17Networks_space-MNI152NLin6Asym.label.txt": "a2d866041ca27a95c67780bafff99520483b676bdc546fd30d724da9da990ac7"
+  },
+  "key": "69c8cbd91b50a6c956dd0f44b49aec29e2bb2bdb60a1e26f32aa5c5799704b46",
+  "params": {
+   "alphas": [
+    0.0,
+    1.0,
+    2.0,
+    3.0
+   ],
+   "kwargs": {
+    "background_value": false,
+    "min_fraction_valid_datapoints": null,
+    "min_num_valid_datapoints": null,
+    "report_background_parcels": false
+   },
+   "n_grf": {
+    "0.0": 10000,
+    "1.0": 10000,
+    "2.0": 10000,
+    "3.0": 10000
+   },
+   "space": "MNI152NLin6Asym",
+   "version": 1
+  },
+  "script": "prep3_11_ref_grf.py"
+ },
+ "Schaefer400Parcels7Networks": {
+  "inputs": {
+   "parcellation/Schaefer400Parcels7Networks/MNI152NLin6Asym/parc-Schaefer400Parcels7Networks_space-MNI152NLin6Asym.label.nii.gz": "6b2b967e7512edddef4bf5a172884d772c268c76d8a12a2b15753a82e0ece3bb",
+   "parcellation/Schaefer400Parcels7Networks/MNI152NLin6Asym/parc-Schaefer400Parcels7Networks_space-MNI152NLin6Asym.label.txt": "86e26d7c4119e995b58c72ebd8adbcd7f87bb591c2831018d73e5866297d5983"
+  },
+  "key": "14bc35087ac20419d0da91a9903b01b400f4cc4642abfb2350fea4a8f926dd37",
+  "params": {
+   "alphas": [
+    0.0,
+    1.0,
+    2.0,
+    3.0
+   ],
+   "kwargs": {
+    "background_value": false,
+    "min_fraction_valid_datapoints": null,
+    "min_num_valid_datapoints": null,
+    "report_background_parcels": false
+   },
+   "n_grf": {
+    "0.0": 10000,
+    "1.0": 10000,
+    "2.0": 10000,
+    "3.0": 10000
+   },
+   "space": "MNI152NLin6Asym",
+   "version": 1
+  },
+  "script": "prep3_11_ref_grf.py"
+ },
+ "TianS1": {
+  "inputs": {
+   "parcellation/TianS1/MNI152NLin6Asym/parc-TianS1_space-MNI152NLin6Asym.label.nii.gz": "aa4c98963ed54b3c70e1d725ce40368ae51e20ff05f3a3e2794f821d20557d73",
+   "parcellation/TianS1/MNI152NLin6Asym/parc-TianS1_space-MNI152NLin6Asym.label.txt": "ba7f8983d7c6784a1bc2ac6edcc19be6dc88107a21b179727adcaa68acf6f9ab"
+  },
+  "key": "0f829543d2ee62b627b121d8ff87431248ce602a2ad97dbf20d99e35886c78fb",
+  "params": {
+   "alphas": [
+    0.0,
+    1.0,
+    2.0,
+    3.0
+   ],
+   "kwargs": {
+    "background_value": false,
+    "min_fraction_valid_datapoints": null,
+    "min_num_valid_datapoints": null,
+    "report_background_parcels": false
+   },
+   "n_grf": {
+    "0.0": 10000,
+    "1.0": 10000,
+    "2.0": 10000,
+    "3.0": 10000
+   },
+   "space": "MNI152NLin6Asym",
+   "version": 1
+  },
+  "script": "prep3_11_ref_grf.py"
+ },
+ "TianS2": {
+  "inputs": {
+   "parcellation/TianS2/MNI152NLin6Asym/parc-TianS2_space-MNI152NLin6Asym.label.nii.gz": "088461600ae071585782c233314cc597f72affeb55010e09d8f0e06d852015eb",
+   "parcellation/TianS2/MNI152NLin6Asym/parc-TianS2_space-MNI152NLin6Asym.label.txt": "c1a1e73115200d1019ac32bf6ba4a1ce19f96c9f2bdfe969a29d089b99e9d945"
+  },
+  "key": "3a97640ab3202514305c291d7e38b608c64cf4fff020c3ebd997eb84b4809931",
+  "params": {
+   "alphas": [
+    0.0,
+    1.0,
+    2.0,
+    3.0
+   ],
+   "kwargs": {
+    "background_value": false,
+    "min_fraction_valid_datapoints": null,
+    "min_num_valid_datapoints": null,
+    "report_background_parcels": false
+   },
+   "n_grf": {
+    "0.0": 10000,
+    "1.0": 10000,
+    "2.0": 10000,
+    "3.0": 10000
+   },
+   "space": "MNI152NLin6Asym",
+   "version": 1
+  },
+  "script": "prep3_11_ref_grf.py"
+ },
+ "TianS3": {
+  "inputs": {
+   "parcellation/TianS3/MNI152NLin6Asym/parc-TianS3_space-MNI152NLin6Asym.label.nii.gz": "66bb5f1b6f6499859f0e2492a74632a68ccc6c3e276c8da1d505ffd24490dab4",
+   "parcellation/TianS3/MNI152NLin6Asym/parc-TianS3_space-MNI152NLin6Asym.label.txt": "34d6a1eadd144a28225a144993bb9b38ae04994713ad9525add84b6a9a292337"
+  },
+  "key": "c0ab0b508f969d9e07894a79f10b67ae760b823727ba62f4bcdf9606f2a91b8c",
+  "params": {
+   "alphas": [
+    0.0,
+    1.0,
+    2.0,
+    3.0
+   ],
+   "kwargs": {
+    "background_value": false,
+    "min_fraction_valid_datapoints": null,
+    "min_num_valid_datapoints": null,
+    "report_background_parcels": false
+   },
+   "n_grf": {
+    "0.0": 10000,
+    "1.0": 10000,
+    "2.0": 10000,
+    "3.0": 10000
+   },
+   "space": "MNI152NLin6Asym",
+   "version": 1
+  },
+  "script": "prep3_11_ref_grf.py"
+ },
+ "TianS4": {
+  "inputs": {
+   "parcellation/TianS4/MNI152NLin6Asym/parc-TianS4_space-MNI152NLin6Asym.label.nii.gz": "f51079aa35e05f27e235daf8bb00f59b67d247759bd583e9b5f8e985a5f52723",
+   "parcellation/TianS4/MNI152NLin6Asym/parc-TianS4_space-MNI152NLin6Asym.label.txt": "64feda604ef42b94449853b329894de2681b83d56e36b37d16fff476d7848856"
+  },
+  "key": "dd76a110ee404487b61384f60cef03f781f7f2e4fb853fb130e0549251b295f1",
+  "params": {
+   "alphas": [
+    0.0,
+    1.0,
+    2.0,
+    3.0
+   ],
+   "kwargs": {
+    "background_value": false,
+    "min_fraction_valid_datapoints": null,
+    "min_num_valid_datapoints": null,
+    "report_background_parcels": false
+   },
+   "n_grf": {
+    "0.0": 10000,
+    "1.0": 10000,
+    "2.0": 10000,
+    "3.0": 10000
+   },
+   "space": "MNI152NLin6Asym",
+   "version": 1
+  },
+  "script": "prep3_11_ref_grf.py"
+ },
+ "Yan100": {
+  "inputs": {
+   "parcellation/Yan100/MNI152NLin6Asym/parc-Yan100_space-MNI152NLin6Asym.label.nii.gz": "73491c7626f35a04b0f01adaee9d74e4048a71b9d486dbff59b70362e3de3ffb",
+   "parcellation/Yan100/MNI152NLin6Asym/parc-Yan100_space-MNI152NLin6Asym.label.txt": "fd2017d6677d979e6ef4e5deb209cfdeb50e5e47c3d45384ae9cc6782ebbf82a"
+  },
+  "key": "d8a6a86fe6b97ba5d970573b52d72d311902874d8b9e989349406fe8eb1eeb38",
+  "params": {
+   "alphas": [
+    0.0,
+    1.0,
+    2.0,
+    3.0
+   ],
+   "kwargs": {
+    "background_value": false,
+    "min_fraction_valid_datapoints": null,
+    "min_num_valid_datapoints": null,
+    "report_background_parcels": false
+   },
+   "n_grf": {
+    "0.0": 10000,
+    "1.0": 10000,
+    "2.0": 10000,
+    "3.0": 10000
+   },
+   "space": "MNI152NLin6Asym",
+   "version": 1
+  },
+  "script": "prep3_11_ref_grf.py"
+ },
+ "Yan1000": {
+  "inputs": {
+   "parcellation/Yan1000/MNI152NLin6Asym/parc-Yan1000_space-MNI152NLin6Asym.label.nii.gz": "93d059e6f7bc5e1eed7b85d317d14675e5f2b1a98ef6aa7eb8da3fbd8c26f426",
+   "parcellation/Yan1000/MNI152NLin6Asym/parc-Yan1000_space-MNI152NLin6Asym.label.txt": "261b344fa61ece01039314604ed89dc46e2c52089b464d1c2dccc9ad1afb5835"
+  },
+  "key": "3cae4400cdcb14e4be6e2e260411680ec16038efa45ab2f0eb553778f460d7ed",
+  "params": {
+   "alphas": [
+    0.0,
+    1.0,
+    2.0,
+    3.0
+   ],
+   "kwargs": {
+    "background_value": false,
+    "min_fraction_valid_datapoints": null,
+    "min_num_valid_datapoints": null,
+    "report_background_parcels": false
+   },
+   "n_grf": {
+    "0.0": 10000,
+    "1.0": 10000,
+    "2.0": 10000,
+    "3.0": 10000
+   },
+   "space": "MNI152NLin6Asym",
+   "version": 1
+  },
+  "script": "prep3_11_ref_grf.py"
+ },
+ "Yan200": {
+  "inputs": {
+   "parcellation/Yan200/MNI152NLin6Asym/parc-Yan200_space-MNI152NLin6Asym.label.nii.gz": "289b29d17a0e5a1f62b2f39cfaab874624bed74ae7b1cdebc6a70e341e901b97",
+   "parcellation/Yan200/MNI152NLin6Asym/parc-Yan200_space-MNI152NLin6Asym.label.txt": "4301c40baa63334ad1b6badf73170ce7e0b1d0c4f4687a22a5a68852d5abf3f0"
+  },
+  "key": "a04fb8aa88ca12b96e8e868703cb1c3a93a61f0ba5e1542c005fc31f30fc5d1c",
+  "params": {
+   "alphas": [
+    0.0,
+    1.0,
+    2.0,
+    3.0
+   ],
+   "kwargs": {
+    "background_value": false,
+    "min_fraction_valid_datapoints": null,
+    "min_num_valid_datapoints": null,
+    "report_background_parcels": false
+   },
+   "n_grf": {
+    "0.0": 10000,
+    "1.0": 10000,
+    "2.0": 10000,
+    "3.0": 10000
+   },
+   "space": "MNI152NLin6Asym",
+   "version": 1
+  },
+  "script": "prep3_11_ref_grf.py"
+ },
+ "Yan400": {
+  "inputs": {
+   "parcellation/Yan400/MNI152NLin6Asym/parc-Yan400_space-MNI152NLin6Asym.label.nii.gz": "586ba98465effaa2f3887a7849a587b78e6744528b76b019e57fec983bf9abd5",
+   "parcellation/Yan400/MNI152NLin6Asym/parc-Yan400_space-MNI152NLin6Asym.label.txt": "ba79d60de9a91a204f99bd1a7c176a02f94352069d90415c2e0d025b3f48bcfe"
+  },
+  "key": "903568cd2e4884bdd4c063db1cc356d063b2a82deb032cc379afce1b922b4aa6",
+  "params": {
+   "alphas": [
+    0.0,
+    1.0,
+    2.0,
+    3.0
+   ],
+   "kwargs": {
+    "background_value": false,
+    "min_fraction_valid_datapoints": null,
+    "min_num_valid_datapoints": null,
+    "report_background_parcels": false
+   },
+   "n_grf": {
+    "0.0": 10000,
+    "1.0": 10000,
+    "2.0": 10000,
+    "3.0": 10000
+   },
+   "space": "MNI152NLin6Asym",
+   "version": 1
+  },
+  "script": "prep3_11_ref_grf.py"
+ }
+}

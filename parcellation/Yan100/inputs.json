@@ -1,0 +1,92 @@
+{
+ "MNI152NLin2009cAsym/dist": {
+  "inputs": {
+   "parcellation/Yan100/MNI152NLin2009cAsym/parc-Yan100_space-MNI152NLin2009cAsym.label.nii.gz": "222f3396e7b81c5cdc444dd01ee988596cb02513b0faeca6acb64bc1dbfdcd60"
+  },
+  "key": "e239ac91363e82afad27a575b488cfe593a213f77b08ef1c40a5961def7832fa",
+  "params": {
+   "centroids": false,
+   "dtype": "float32",
+   "resample": 2,
+   "surf_euclidean": false,
+   "version": 1
+  },
+  "script": "prep1_1_parc_distmat.py"
+ },
+ "MNI152NLin6Asym/dist": {
+  "inputs": {
+   "parcellation/Yan100/MNI152NLin6Asym/parc-Yan100_space-MNI152NLin6Asym.label.nii.gz": "73491c7626f35a04b0f01adaee9d74e4048a71b9d486dbff59b70362e3de3ffb"
+  },
+  "key": "099c0afb097e72ad8c1ca47169f585f170bc4c33584c6434df57db7bdbefd989",
+  "params": {
+   "centroids": false,
+   "dtype": "float32",
+   "resample": 2,
+   "surf_euclidean": false,
+   "version": 1
+  },
+  "script": "prep1_1_parc_distmat.py"
+ },
+ "fsLR/dist": {
+  "inputs": {
+   "parcellation/Yan100/fsLR/parc-Yan100_space-fsLR_hemi-L.label.gii.gz": "c1a3a9a044245a1185d937716ac112fe7b3077712cf773f4a5c0f4a61a0cf69f",
+   "parcellation/Yan100/fsLR/parc-Yan100_space-fsLR_hemi-R.label.gii.gz": "21f23a92cc3bfd2b4bf07caf247cc052ee42c543196984b849b48ee12dba2545"
+  },
+  "key": "769c87d7afa3836d07172ccfdf2f3327702d2d78a1da60804a61904f6f7a251e",
+  "params": {
+   "centroids": false,
+   "dtype": "float32",
+   "resample": "32k",
+   "surf_euclidean": false,
+   "version": 1
+  },
+  "script": "prep1_1_parc_distmat.py"
+ },
+ "fsLR/spin": {
+  "inputs": {
+   "parcellation/Yan100/fsLR/parc-Yan100_space-fsLR_hemi-L.label.gii.gz": "c1a3a9a044245a1185d937716ac112fe7b3077712cf773f4a5c0f4a61a0cf69f",
+   "parcellation/Yan100/fsLR/parc-Yan100_space-fsLR_hemi-R.label.gii.gz": "21f23a92cc3bfd2b4bf07caf247cc052ee42c543196984b849b48ee12dba2545"
+  },
+  "key": "295a386df85375e91a2de1a3c9807be5a829c3c148097e7a2680087a20cdcef5",
+  "params": {
+   "batch_size": 100,
+   "dtype": "float16",
+   "n_perm": 10000,
+   "normalize": true,
+   "seed": 42,
+   "version": 1
+  },
+  "script": "prep1_2_parc_spinmat.py"
+ },
+ "fsaverage/dist": {
+  "inputs": {
+   "parcellation/Yan100/fsaverage/parc-Yan100_space-fsaverage_hemi-L.label.gii.gz": "4f5db7c8bb65de49cae79f56c58c668c44915962016b2ac65d41476960372c8c",
+   "parcellation/Yan100/fsaverage/parc-Yan100_space-fsaverage_hemi-R.label.gii.gz": "22ac8f93d3f36bfade0449599d5304b4f05cb52e1752537c1fc130bdf24972b7"
+  },
+  "key": "819f5bf3b0ee26254e750bf539b38a554b43e60a9d7918d790db67aaa1333d75",
+  "params": {
+   "centroids": false,
+   "dtype": "float32",
+   "resample": "41k",
+   "surf_euclidean": false,
+   "version": 1
+  },
+  "script": "prep1_1_parc_distmat.py"
+ },
+ "fsaverage/spin": {
+  "inputs": {
+   "parcellation/Yan100/fsaverage/parc-Yan100_space-fsaverage_hemi-L.label.gii.gz": "4f5db7c8bb65de49cae79f56c58c668c44915962016b2ac65d41476960372c8c",
+   "parcellation/Yan100/fsaverage/parc-Yan100_space-fsaverage_hemi-R.label.gii.gz": "22ac8f93d3f36bfade0449599d5304b4f05cb52e1752537c1fc130bdf24972b7"
+  },
+  "key": "cf7aa4cb997978dfbd33c3a4998925de9da0cf1345191cab1d202a1208c93b55",
+  "params": {
+   "batch_size": 100,
+   "dtype": "float16",
+   "n_perm": 10000,
+   "normalize": true,
+   "seed": 42,
+   "version": 1
+  },
+  "script": "prep1_2_parc_spinmat.py"
+ }
+}
