@@ -29,7 +29,10 @@ PARCS, PARCS_CX, PARCS_SC = load_parc_lists(wd)
 print("PARCS:", PARCS)
 
 # %% Build ENIGMA acAN signal volume (MNI152NLin2009cAsym)
-# enigmathick/surf: estimated cortical volume (DesikanKilliany) + SubVol (Aseg) for dx-an_subtype-acAN_pub-walton2022
+# cortical volume effect (DesikanKilliany) + SubVol (Aseg) for dx-an_subtype-acAN_pub-walton2022.
+# Cortical volume = thickness x area, so relative changes (and approximately the effect sizes) add:
+# d_volume ~ d_thickness + d_area. Multiplying the two d maps would flip the sign of the
+# (mostly negative) effects.
 
 SPACE = "MNI152NLin2009cAsym"
 ENIGMA_AN = "dx-an_subtype-acAN_pub-walton2022"
@@ -38,7 +41,7 @@ ref_base_path = f"{wd}/reference/%s/tab/dset-%s_parc-%s.csv.gz"
 
 enigma_dk = (
     pd.read_csv(ref_base_path % ("enigmathick", "enigmathick", "DesikanKilliany"), index_col=0).loc[[ENIGMA_AN]]
-    * pd.read_csv(ref_base_path % ("enigmaarea", "enigmaarea", "DesikanKilliany"), index_col=0).loc[[ENIGMA_AN]]
+    + pd.read_csv(ref_base_path % ("enigmaarea", "enigmaarea", "DesikanKilliany"), index_col=0).loc[[ENIGMA_AN]]
 )
 enigma_aseg = pd.read_csv(ref_base_path % ("enigmathick", "enigmathick", "Aseg"), index_col=0).loc[[ENIGMA_AN]]
 
